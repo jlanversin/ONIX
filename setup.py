@@ -20,6 +20,7 @@ def main():
         url='http://jdtdl.mycpanel.princeton.edu/',
         license=license,
         packages=find_packages(exclude=('docs', 'graphs', 'notes', 'papers', 'test', 'test_nouveau')),
+        package_data = {'openbu':['data/default_libs/*', 'data/isomeric_data/eaf-2010-multiplicities/*']}
     )
 
     setup(**metadata)

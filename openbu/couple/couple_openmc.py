@@ -69,6 +69,8 @@ class Couple_openmc(object):
 		# This is the path set in OpenMC for the hdf5 point-wise cross sections
 		self._cross_sections_path = None
 
+		self._openmc_bin_path = None
+
 		# Old way of defaulting MC_input_path to cwd
 		# if args:
 		# 	self._MC_input_path = arg[0]
@@ -355,7 +357,9 @@ class Couple_openmc(object):
 		# For some reasons, this does not work on the cluster (della)
 		# On della, we need to explicitly define the absolute path to the bin we want to use
 		# Right now a temporary path that depends on my installation is used
-		openmc.calculate_volumes(cwd = pre_run_path, openmc_exec='/tigress/jdtdl/openmc/py3-mpi-190324/bin/openmc')
+
+		#openmc.calculate_volumes(cwd = pre_run_path, openmc_exec='/tigress/jdtdl/openmc/py3-mpi-190324/bin/openmc')
+		openmc.calculate_volumes(cwd = pre_run_path, openmc_exec=self.openmc_bin_path)
 		#openmc.run()
 
 		# Read and set initial nuclides dict
@@ -990,6 +994,16 @@ class Couple_openmc(object):
 
 		self._inactive = inactive
 
+	@property
+	def openmc_bin_path(self):
+
+		return self._openmc_bin_path
+
+	@openmc_bin_path.setter
+	def openmc_bin_path(self, openmc_bin_path):
+
+		self._openmc_bin_path = openmc_bin_path
+
 	def run_openmc(self):
 
 		# New material xml file needs to be written with zero dens nuclides
@@ -1001,13 +1015,13 @@ class Couple_openmc(object):
 		# Settings xml files needs to be written
 		self.export_settings_to_xml()
 
-		openpc_bin_path = '/tigress/jdtdl/openmc/py3-mpi-190324/bin/openmc'
+		#openmc_bin_path = '/tigress/jdtdl/openmc/py3-mpi-190324/bin/openmc'
 		#openpc_bin_path = '/tigress/mkutt/openmc/py3-mpi/bin/openmc'
 
 		if self.MPI == 'on':
-			openmc.run(mpi_args=[self._exec, '-n', self._tasks], openmc_exec = openpc_bin_path)
+			openmc.run(mpi_args=[self._exec, '-n', self._tasks], openmc_exec = self.openmc_bin_path)
 		else:
-			openmc.run(openmc_exec = openpc_bin_path)
+			openmc.run(openmc_exec = self.openmc_bin_path)
 
 		self._set_statepoint()
 		self._set_updated_summary()
