@@ -509,9 +509,9 @@ class Cell(object):
 
 		new_pow_dens = flux*(fission_energy_rate*conv_Mev_J) # W/cm3 = kW/l
 
-		print ('new_pow_dens',new_pow_dens)
+		#print ('new_pow_dens',new_pow_dens)
 
-		# return new_pow_dens
+		return new_pow_dens
 
 	# Update flux from power density in each cell at each substep
 	def _update_flux(self, pow_dens):

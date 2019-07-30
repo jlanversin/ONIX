@@ -1210,7 +1210,7 @@ class Couple_openmc(object):
 			# to have flux in cm.s you need to divide by volule of the cell
 			flux = FMF*MC_flux/bucell.vol
 			pow_dens = bucell._update_pow_dens(flux)
-
+			print ('initial', pow_dens)
 			bucell_sequence._set_step_flux(flux)
 			bucell_sequence._set_step_pow_dens(pow_dens)
 
@@ -1228,7 +1228,6 @@ class Couple_openmc(object):
 			MC_flux = bucell_sequence.current_MC_flux
 			flux = FMF*MC_flux
 			pow_dens = bucell._update_pow_dens(flux)
-
 			bucell_sequence._set_initial_flux(flux)
 			bucell_sequence._set_initial_pow_dens(pow_dens)
 

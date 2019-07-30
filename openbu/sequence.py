@@ -1,5 +1,6 @@
 import openbu.utils as utils
 from . import data
+import numpy
 
 class Sequence(object):
 
@@ -400,6 +401,9 @@ class Sequence(object):
         # substeps length is s-1
         substeps = self.substeps(s-1)
         time_subintvl = self.get_time_subintvl(s, 0) # Since d is the user default unit, each time substep has the same length
+        print (time_subintvl)
+        print (bu_sec_conv_factor)
+        print (pow_dens)
         bucell_bu_subintvl_val = time_subintvl*bu_sec_conv_factor*pow_dens
         bucell_bu_substep_val = bucell_bu_subintvl_val + self.current_bucell_bu
         self._set_substep_bucell_bu(bucell_bu_substep_val, ss)
@@ -739,11 +743,12 @@ class Sequence(object):
     # be the one to update the current kinf
     def _set_step_kinf(self, kinf):
 
-        # If this is the fist step
-        if self.current_kinf == None:
-            self.kinf_seq = [kinf]
-        else:
+        # If kinf from previous cycles have already been stored
+        if isinstance(self.current_kinf, numpy.ndarray):
             self._append_kinf_seq(kinf)
+        # If this is the fist step
+        elif self.current_kinf == None:
+            self.kinf_seq = [kinf]
 
         self.current_kinf = kinf
 
