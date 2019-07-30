@@ -11,9 +11,9 @@ from . import list_and_dict
 # Default libraries path
 
 default_atm_mass_lib_path = os.path.join(os.path.dirname(__file__), 'default_libs/mass.mas12')
-default_decay_b_lib_path = os.path.join(os.path.dirname(__file__), 'default_libs/decay_lib')
+default_decay_b_lib_path = os.path.join(os.path.dirname(__file__), 'default_libs/decay_lib_reduced')
 default_xs_lib_path = os.path.join(os.path.dirname(__file__), 'default_libs/xs_lib')
-default_fy_lib_path = os.path.join(os.path.dirname(__file__), 'default_libs/fy_lib')
+default_fy_lib_path = os.path.join(os.path.dirname(__file__), 'default_libs/fy_lib_reduced')
 
 # Default libraries data
 
