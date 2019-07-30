@@ -602,10 +602,10 @@ class Cell(object):
 
 		# This command will find the absolute path of cell.py
 		# Since cell.py is located in openbu, the default library is just in __file__path + ./data/default_libs/decay_lib
-		__file__path = os.path.abspath(os.path.dirname(__file__))
+		#__file__path = os.path.abspath(os.path.dirname(__file__))
 
-		default_decay_lib_path = __file__path+ '/data/default_libs/decay_lib'
-
+		#default_decay_lib_path = __file__path+ '/data/default_libs/decay_lib'
+		default_decay_lib_path = data.default_decay_b_lib_path
 		#default_decay_lib_path = '/home/julien/Open-Burnup.dev/openbu/data/default_libs/decay_lib'
 
 		decay_b = data.read_lib_functions.read_decay_lib(default_decay_lib_path)
@@ -808,7 +808,9 @@ class Cell(object):
 		# Since cell.py is located in openbu, the default library is just in __file__path + ./data/default_libs/decay_lib
 		__file__path = os.path.abspath(os.path.dirname(__file__))
 
-		default_fy_lib_path = __file__path+ '/data/default_libs/fy_lib'
+		#default_fy_lib_path = __file__path+ '/data/default_libs/fy_lib'
+
+		default_fy_lib_path = data.default_fy_lib_path
 
 		#default_fy_lib_path = '/home/julien/Open-Burnup.dev/openbu/data/default_libs/fy_lib'
 

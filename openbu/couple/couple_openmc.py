@@ -1293,14 +1293,14 @@ class Couple_openmc(object):
 		# If no decay libs and fy libs have been set, set default libs
 		if self._decay_lib_set == 'no':
 			self.set_default_decay_lib()
-			print ('\n\n\n----  Default decay constants library set for system  ----\n')
+			print ('\n\n\n----  Default decay constants library set for system  ----\n---- {} ----'.format(data.default_decay_b_lib_path))
 		else:
 			print ('\n\n\n----  User defined path for decay library  ----\n\n')
 			print ('----  {}  ----\n\n\n'.format(self._decay_lib_path))
 		
 		if self._fy_lib_set == 'no':
 			self.set_default_fy_lib()
-			print ('\n\n\n----  Default fission yields library set for system  ----\n\n\n')
+			print ('\n\n\n----  Default fission yields library set for system  ----\n---- {} ----'.format(data.default_fy_lib_path))
 		else:
 			print ('\n\n\n----  User defined path for fission yields library ----\n\n')
 			print ('----  {}  ----\n\n\n'.format(self._fy_lib_path))
