@@ -471,7 +471,7 @@ class Couple_openmc(object):
 
 		system = self.system
 		sequence = system.sequence
-		sequence._set_step_kinf(kinf)
+		sequence._set_macrostep_kinf(kinf)
 	
 
 	@property
@@ -1150,14 +1150,14 @@ class Couple_openmc(object):
 		count = 1
 		for file_name in file_name_list:
 			nucl_name = file_name.replace('.h5', '')
-			#if nucl_name in ['Pm147', 'Am241']: # make it a shorter
-			nucl_path = cross_section_path+'/{}'.format(file_name)
-			xs_data = openmc.data.IncidentNeutron.from_hdf5(nucl_path)
-			ng_xs_data = xs_data[102].xs['294K']
-			print ('--- Sampling {} (n,gamma) point-wise cross section --- [{}/{}]'.format(nucl_name, count, total_count))
-			sampled_ng_xs_data = ng_xs_data(self.mg_energy_mid_points)
-			sampled_ng_cross_section_data[nucl_name] = sampled_ng_xs_data
-			count += 1
+			if nucl_name in ['Pm147', 'Am241']: # make it a shorter
+				nucl_path = cross_section_path+'/{}'.format(file_name)
+				xs_data = openmc.data.IncidentNeutron.from_hdf5(nucl_path)
+				ng_xs_data = xs_data[102].xs['294K']
+				print ('--- Sampling {} (n,gamma) point-wise cross section --- [{}/{}]'.format(nucl_name, count, total_count))
+				sampled_ng_xs_data = ng_xs_data(self.mg_energy_mid_points)
+				sampled_ng_cross_section_data[nucl_name] = sampled_ng_xs_data
+				count += 1
 		end = time.time()
 		print('\n Time to sample cross sections: {}'.format(end - start))
 
@@ -1211,8 +1211,8 @@ class Couple_openmc(object):
 			flux = FMF*MC_flux/bucell.vol
 			pow_dens = bucell._update_pow_dens(flux)
 			print ('initial', pow_dens)
-			bucell_sequence._set_step_flux(flux)
-			bucell_sequence._set_step_pow_dens(pow_dens)
+			bucell_sequence._set_macrostep_flux(flux)
+			bucell_sequence._set_macrostep_pow_dens(pow_dens)
 
 	# Normalize the flux in each cell with the FMF after each openmc calculation
 	# Calculate the power of each cell from the normalized flux
@@ -1343,7 +1343,8 @@ class Couple_openmc(object):
 		# This should be somewhere else but for now it is done here
 		system.zam_order_passlist()
 
-		steps_number = sequence.steps_number
+		#steps_number = sequence.steps_number
+		steps_number = sequence.macrosteps_number
 		# Shift loop from 1 in order to align loop s and step indexes
 		for s in range(1, steps_number+1):
 

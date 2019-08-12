@@ -65,8 +65,8 @@ def burn_cell(bucell, s, mode):
     passlist = bucell.passlist
     sequence = bucell.sequence
     flux_approximation = sequence.flux_approximation
-    # substeps is of length s-1
-    substeps = sequence.substeps(s-1)
+    # microsteps_number is of length s-1
+    microsteps_number = sequence.microsteps_number(s-1)
     
     B = mb._get_xs_mat(passlist)
     C = mb._get_decay_mat(passlist)
@@ -77,17 +77,17 @@ def burn_cell(bucell, s, mode):
     mb._print_all_mat_to_text(B, C, bucell, s)
 
     if flux_approximation == 'iv':
-        for i in range(substeps):
-            N = burn_substep(bucell, B, C, N, s, i, substeps, mode)
+        for i in range(microsteps_number):
+            N = burn_substep(bucell, B, C, N, s, i, microsteps_number, mode)
     elif flux_approximation == 'pc':
-        for i in range(substeps):
-            burn_substep_pc(bucell, B, C, N, s, i, substeps, mode)
+        for i in range(microsteps_number):
+            burn_substep_pc(bucell, B, C, N, s, i, microsteps_number, mode)
     elif flux_approximation == 'me':
-        for i in range(substeps):
-            burn_substep_pcME4(bucell, B, C, N, s, i, substeps, mode)
+        for i in range(microsteps_number):
+            burn_substep_pcME4(bucell, B, C, N, s, i, microsteps_number, mode)
 
     bucell._set_step_dens()
-    sequence._set_step_bucell_bu()
+    sequence._set_macrostep_bucell_bu()
 
     # At the end of this burn sequence, the flux and power
 

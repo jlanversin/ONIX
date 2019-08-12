@@ -1069,7 +1069,7 @@ class Cell(object):
 		flux_subseq = sequence.flux_subseq_mat[s]
 		pow_dens_subseq = sequence.pow_dens_subseq_mat[s]
 		# substeps length is s-1
-		substeps = sequence.substeps(s-1)
+		substeps = sequence.microsteps_number(s-1)
 
 		file_name = cell_folder_path + '/subdens'
 
@@ -1146,7 +1146,7 @@ class Cell(object):
 		txt += '{:<10}'.format('TIME')
 		txt += '{:^13}'.format(time_subseq_mat[0][0]/(24*3600))# in days
 		for s in range(steps_number):
-			substeps_number = sequence.substeps(s)
+			substeps_number = sequence.microsteps_number(s)
 			for ss in range(substeps_number):
 				txt += '{:<13.5E}'.format(time_subseq_mat[s+1][ss]/(24*3600))# in days
 
@@ -1159,7 +1159,7 @@ class Cell(object):
 		txt += '{:<10}'.format('SYS BU')
 		txt += '{:^13}'.format(system_bu_subseq_mat[0][0])
 		for s in range(steps_number):
-			substeps_number = sequence.substeps(s)
+			substeps_number = sequence.microsteps_number(s)
 			for ss in range(substeps_number):
 				txt += '{:<13.5E}'.format(system_bu_subseq_mat[s+1][ss])
 
@@ -1168,7 +1168,7 @@ class Cell(object):
 		txt += '{:<10}'.format('CELL BU')
 		txt += '{:^13}'.format(bucell_bu_subseq_mat[0][0])
 		for s in range(steps_number):
-			substeps_number = sequence.substeps(s)
+			substeps_number = sequence.microsteps_number(s)
 			for ss in range(substeps_number):
 				txt += '{:<13.5E}'.format(bucell_bu_subseq_mat[s+1][ss])
 
@@ -1177,7 +1177,7 @@ class Cell(object):
 		txt += '{:<10}'.format('FLUX')
 		txt += '{:^13}'.format('')
 		for s in range(steps_number):
-			substeps_number = sequence.substeps(s)
+			substeps_number = sequence.microsteps_number(s)
 			for ss in range(substeps_number):
 				txt += '{:<13.5E}'.format(flux_subseq_mat[s+1][ss])
 
@@ -1186,7 +1186,7 @@ class Cell(object):
 		txt += '{:<10}'.format('POW DENS')
 		txt += '{:^13}'.format('')
 		for s in range(steps_number):
-			substeps_number = sequence.substeps(s)
+			substeps_number = sequence.microsteps_number(s)
 			for ss in range(substeps_number):
 				txt += '{:<13.5E}'.format(pow_dens_subseq_mat[s+1][ss])
 
@@ -1195,7 +1195,7 @@ class Cell(object):
 		txt += '{:<10}'.format('POW')
 		txt += '{:^13}'.format('')
 		for s in range(steps_number):
-			substeps_number = sequence.substeps(s)
+			substeps_number = sequence.microsteps_number(s)
 			for ss in range(substeps_number):
 				txt += '{:<13.5E}'.format(pow_dens_subseq_mat[s+1][ss]*self.vol*1E-3)
 
@@ -1209,7 +1209,7 @@ class Cell(object):
 			init_dens = nucl.dens_seq[0]
 			txt += '{:<13.5E}'.format(init_dens)
 			for s in range(steps_number):
-				substeps_number = sequence.substeps(s)
+				substeps_number = sequence.microsteps_number(s)
 				for ss in range(substeps_number):
 					dens = nucl.dens_subseq_mat[s+1]
 					txt += '{:<13.5E}'.format(dens[ss])
@@ -1631,10 +1631,10 @@ class Cell(object):
 	def _set_MC_tallies(self, mc_nuclide_densities, flux_tally, flux_spectrum_tally, rxn_rate_tally, sampled_isomeric_branching_data, sampled_ng_cross_section_data, xs_mode, s):
 
 		MC_flux = flux_tally.mean[0][0][0]
-		self.sequence._set_step_MC_flux(MC_flux)
+		self.sequence._set_macrostep_MC_flux(MC_flux)
 
 		flux_spectrum = [x[0][0] for x in flux_spectrum_tally.mean]
-		self.sequence._set_step_flux_spectrum(flux_spectrum)
+		self.sequence._set_macrostep_flux_spectrum(flux_spectrum)
 
 		self._set_step_isomeric_branching_ratio(flux_spectrum, sampled_isomeric_branching_data, sampled_ng_cross_section_data)
 
@@ -1700,7 +1700,7 @@ class Cell(object):
 				isomeric_branching_ratio[nucl]['(n,gamma)'] = numerator_ground/denominator
 				isomeric_branching_ratio[nucl]['(n,gamma)X'] = numerator_excited/denominator
 
-		self.sequence._set_step_isomeric_branching_ratio(isomeric_branching_ratio)
+		self.sequence._set_macrostep_isomeric_branching_ratio(isomeric_branching_ratio)
 		
 
 	def _set_allreacs_dic(self, s, ss, ssn):

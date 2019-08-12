@@ -157,8 +157,8 @@ class Stand_alone(object):
 		for bucell in bucell_list:
 			bucell_sequence = bucell.sequence
 			pow_dens = bucell._update_pow_dens(system_flux)
-			bucell_sequence._set_step_flux(system_flux)
-			bucell_sequence._set_step_pow_dens(pow_dens)
+			bucell_sequence._set_macrostep_flux(system_flux)
+			bucell_sequence._set_macrostep_pow_dens(pow_dens)
 
 
 	def burn(self):
@@ -194,9 +194,9 @@ class Stand_alone(object):
 		# This should be somewhere else but for now it is done here
 		system.zam_order_passlist()
 
-		steps_number = sequence.steps_number
+		macrosteps_number = sequence.macrosteps_number
 		# Shift loop from 1 in order to align loop s and step indexes
-		for s in range(1, steps_number+1):
+		for s in range(1, macrosteps_number+1):
 
 			print ('\n\n\n\n====== STEP {}======\n\n\n\n'.format(s))
 			sequence.gen_step_folder(s)
