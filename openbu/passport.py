@@ -165,8 +165,8 @@ class Passport(object):
 
         zamid = self._zamid
 
-        decay_a = d.decay_a[zamid]
-        decay_b = d.decay_b[zamid]
+        decay_a = d.default_decay_lib_a[zamid]
+        decay_b = d.default_decay_lib_b[zamid]
 
         self.decay_a = decay_a
         self.decay_b = decay_b
@@ -262,7 +262,7 @@ class Passport(object):
         If the nuclide for which the fission yields data are being loaded is not a fission product,
         the error *Not_a_Fission_Product* will be raised"""
 
-        if self.FAM == 'ACT':
+        if self.get_FAM() == 'ACT':
             raise Not_a_Fission_Product("{} is not a FP and can't be given fission yields".format(self._zamid))
 
         zamid = self._zamid
@@ -752,7 +752,10 @@ class Passport(object):
 
         self._sorted_allreacs_tuple_mat.append(self.current_sorted_allreacs_tuple_list)
 
+    @property
+    def pikachu(self):
 
+        return 'PIKA PIKA !'
 
 
 class Incorrect_nuc_id(Exception):
@@ -774,4 +777,56 @@ class XS_not_yet_set(Exception):
 class No_fission_XS(Exception):
     """Raise when the user tries to access fission XS for a nuclide which fission XS have not been set yet """
     pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

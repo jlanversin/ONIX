@@ -65,9 +65,11 @@ def read_nuclide_reac_rank(nuclide, step, path):
 
 	return [destruction, production]
 
-def plot_bucell_nuclide_network(nuclide, step, path, threshold):
+def plot_bucell_nuclide_network(nuclide, step, path, cell, threshold):
 
-	file = open(path, 'r')
+	path_to_rank = path +'/output_summary/cell_{}_reacs_rank'.format(cell)
+
+	file = open(path_to_rank, 'r')
 	lines = file.readlines()
 
 	zamid = name_to_zamid(nuclide)
@@ -173,12 +175,29 @@ def plot_bucell_nuclide_network(nuclide, step, path, threshold):
 
 	plt.show()
 
+def plot_nuclide_dens_from_passport(bucell, nuclide):
+
+	sequence = bucell.sequence
+	time_seq = sequence.time_seq.copy()
+	dens_seq = nuclide.dens_seq 
+
+	time_seq = [i/(24*3600) for i in time_seq]# time_seq is in seconds
+
+	plt.figure(1)
+	plt.plot(time_seq, dens_seq, color = 'orange', marker = 'o')
+	plt.xlabel('Time [day]')
+	plt.ylabel('Density [atm/cm3]')
+	plt.grid()
+	plt.title('{} {} density evolution'.format(bucell.name, nuclide.name))
+
+	plt.show()
+
 def plot_nuclide_dens(bucell, nuclide):
 
-	path = os.getcwd() +'/{}_subdens'.format(bucell)
+	path = os.getcwd() +'/{}_dens'.format(bucell)
 
 	time_seq = read_time_seq(path)
-	dens_seq = read_dens(path)
+	dens_seq = read_dens(nuclide, path)
 
 	plt.figure(1)
 	plt.plot(time_seq, dens_seq, color = 'orange', marker = 'o')
@@ -189,10 +208,12 @@ def plot_nuclide_dens(bucell, nuclide):
 
 	plt.show()
 
-def plot_nuclide_dens_from_path(bucell, nuclide, path):
+def plot_nuclide_dens_from_path(bucell, nuclide, path_to_simulation):
+
+	path = path_to_simulation + '/output_summary/{}_dens'.format(bucell)
 
 	time_seq = read_time_seq(path)
-	dens_seq = read_dens(path)
+	dens_seq = read_dens(nuclide, path)
 
 	plt.figure(1)
 	plt.plot(time_seq, dens_seq, color = 'orange', marker = 'o')
@@ -263,7 +284,7 @@ def plot_xs_time_evolution_from_path(bucell, nuclide, xs_name, path):
 	plt.figure(1)
 	plt.plot(time_seq, xs_seq, color = 'teal', marker = 'o')
 
-	plt.xlabel('Time in Days')
+	plt.xlabel('Time in days')
 	plt.ylabel('Eff. XS in barn')
 	plt.legend()
 	plt.grid()
@@ -275,9 +296,9 @@ def plot_xs_bu_evolution_from_path(bucell_list, nuclide, xs_name, path):
 
 	index = 0
 	for bucell in bucell_list:
-		path_xs = path +'/{}_xs_lib'.format(bucell)
+		path_xs = path +'/output_summary/{}_xs_lib'.format(bucell)
 
-		xs_seq = read_xs_seq(nuclide, xs_name,path_xs)
+		xs_seq = read_xs_seq(nuclide, xs_name, path, bucell)
 
 		marker_list = ['x', '+', 'o', '*', '^', 's']
 		color_list = ['r', 'b', 'g', 'k', 'brown', 'orange']
@@ -297,7 +318,7 @@ def plot_xs_bu_evolution_from_path(bucell_list, nuclide, xs_name, path):
 
 	plt.show()
 
-# Compare xs evolution for the same nuclide, for various xs for various different runs
+# Compare xs evolution for the same nuclide, for various xs for different runs
 def compare_xs_bu_evolution_from_path(bucell, nuclide, xs_name_list, path_list, name_list):
 
 	bu_seq_list = []
@@ -338,6 +359,21 @@ def compare_xs_bu_evolution_from_path(bucell, nuclide, xs_name_list, path_list, 
 	plt.legend()
 	plt.show()
 
+def plot_kinf_from_path(path_to_simulation):
+
+	path = path_to_simulation + '/output_summary/kinf'
+
+	time_seq = read_time_seq(path)
+	kinf_seq = read_kinf_seq(path)
+
+	plt.figure(1)
+	plt.plot(time_seq, kinf_seq)
+	plt.xlabel('Time [day]')
+	plt.ylabel('kinf')
+	plt.grid()
+	plt.title('kinf evolution')
+
+	plt.show()	
 
 def plot_flux(bucell):
 
@@ -355,7 +391,9 @@ def plot_flux(bucell):
 
 	plt.show()
 
-def plot_flux_from_path(bucell, path):
+def plot_flux_from_path(bucell, path_to_simulation):
+
+	path = path_to_simulation + '/output_summary/{}_dens'.format(bucell)
 
 	time_seq = read_time_seq(path)
 	flux_seq = read_flux(path)
@@ -389,8 +427,8 @@ def plot_flux_spectrum_bu_evolution_from_path(bucell_list, steps_list, path):
 			index += 1
 
 
-		plt.xlabel('BU in MWd/kg')
-		plt.ylabel('Eff. XS in barn')
+		plt.xlabel('eV')
+		plt.ylabel('Neutron spectrum')
 		plt.legend()
 		plt.grid()
 		plt.title('neutron spectrum in cell {} for steps {} '.format(bucell, steps_list))
@@ -401,7 +439,7 @@ def plot_lethargy_spectrum_bu_evolution_from_path(bucell_list, steps_list, path)
 
 	bucell_index = 0
 	for bucell in bucell_list:
-		path_flux_spectrum = path +'/{}_flux_spectrum'.format(bucell)
+		path_flux_spectrum = path +'/output_summary/{}_flux_spectrum'.format(bucell)
 
 		flux_spectrum_list = read_flux_spectrum(path_flux_spectrum, steps_list)
 
@@ -427,6 +465,8 @@ def plot_lethargy_spectrum_bu_evolution_from_path(bucell_list, steps_list, path)
 		plt.grid()
 		plt.title('neutron spectrum in cell {} for steps {} '.format(bucell, steps_list))
 		
+		bucell_index += 1
+
 	plt.show()
 
 def plot_xs_dens_flux(bucell, xs_nuclide, xs_name, dens_nuclide, xs_path, dens_path):
@@ -499,6 +539,20 @@ def read_bu_seq(path):
 
 	return bu_seq
 
+def read_kinf_seq(path):
+
+	kinf_file = open(path, 'r')
+
+	lines = kinf_file.readlines()
+
+	for line in lines:
+		if line != '\n':
+			if line.split()[0] == 'K-INF':
+				kinf_seq = [float(x) for x in line.split()[1:]]
+				break
+
+	return kinf_seq
+
 
 def read_flux(path):
 
@@ -532,7 +586,7 @@ def read_flux_subseq(path):
 
 def get_fluence_seq(path, cell):
 
-	dens_file = path +'/{}_dens'.format(cell)
+	dens_file = path +'/output_summary/{}_dens'.format(cell)
 
 	flux_seq = read_flux(dens_file)
 	time_seq = read_time_seq(dens_file)
@@ -598,7 +652,7 @@ def get_fluence_subseq_until_time(path, cell, final_time):
 def get_extra_fluence_from_time(path, cell, time):
 
 	step = find_step_from_time(path, cell, time)
-	dens_file = path +'/{}_dens'.format(cell)
+	dens_file = path +'/output_summary/{}_dens'.format(cell)
 	# flux seq has an added zero at the beginning of the arry
 	flux = read_flux(dens_file)[step+1]
 	previous_time_point = read_time_seq(dens_file)[step]
@@ -626,7 +680,7 @@ def get_extra_subfluence_from_time(path, cell, time):
 
 def find_step_from_time(path, cell, time):
 
-	dens_file = path +'/{}_dens'.format(cell)
+	dens_file = path +'/output_summary/{}_dens'.format(cell)
 	time_seq = read_time_seq(dens_file)
 
 	step = 0
@@ -837,7 +891,7 @@ def interpolation_between_two_points(pair1, pair2, x):
 
 def read_xs_seq(nuclide, xs_name, path, cell):
 
-	path = path + '/{}_xs_lib'.format(cell)
+	path = path + '/output_summary/{}_xs_lib'.format(cell)
 
 	zamid = name_to_zamid(nuclide)
 	xs_name_found = 'no'
@@ -874,9 +928,10 @@ def read_xs_seq(nuclide, xs_name, path, cell):
 
 def get_time_averaged_xs(nuclide, xs_name, path, cell):
 
-	xs_seq = read_xs_seq(nuclide, xs_name, path, cell)
 	xs_lib_path = path + '/{}_dens'.format(cell)
-	time_seq = read_time_seq(xs_lib_path)
+	xs_seq = read_xs_seq(nuclide, xs_name, xs_lib_path, cell)
+	dens_path = path + '/{}_dens'.format(cell)
+	time_seq = read_time_seq(dens_path)
 	tot_time = time_seq[-1]
 
 	av_xs = 0
@@ -935,9 +990,11 @@ def get_tot_xs(nuclide, path, cell):
 
 
 # This method list all nuclides that are present in xs lib
-def read_xs_nucl(xs_lib_file_path):
+def read_xs_nucl(path, bucell):
 
-	xs_lib_file = open(xs_lib_file_path)
+	path = path +'/output_summary/{}_xs_lib'.format(bucell)
+
+	xs_lib_file = open(path)
 
 	lines = xs_lib_file.readlines()
 

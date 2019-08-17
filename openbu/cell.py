@@ -1137,7 +1137,7 @@ class Cell(object):
 		bucell_bu_subseq_mat = sequence.bucell_bu_subseq_mat
 		flux_subseq_mat = sequence.flux_subseq_mat
 		pow_dens_subseq_mat = sequence.pow_dens_subseq_mat
-		steps_number = sequence.steps_number
+		steps_number = sequence.macrosteps_number
 		file_name = summary_path + '/{}_subdens'.format(cell_name)
 
 		write_file = open(file_name, 'w')
@@ -1231,7 +1231,7 @@ class Cell(object):
 		bucell_bu_seq = sequence.bucell_bu_seq
 		flux_seq = sequence.flux_seq
 		pow_dens_seq = sequence.pow_dens_seq
-		steps_number = sequence.steps_number
+		steps_number = sequence.macrosteps_number
 		file_name = summary_path + '/{}_dens'.format(cell_name)
 
 		write_file = open(file_name, 'w')

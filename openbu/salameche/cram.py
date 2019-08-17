@@ -41,7 +41,6 @@ def CRAM16(At,N_0):
 		term1 = At - theta[i]*np.identity(np.shape(At)[0])
 		term2 = alpha[i]*N_0
 		_N += np.linalg.solve(term1,term2)
-	 #   print _N[1240] U-231
 		
 	N = 2*_N.real
 	N = N + alpha_0*N_0

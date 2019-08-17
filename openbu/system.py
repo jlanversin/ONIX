@@ -57,7 +57,7 @@ class System(object):
 				result = bucell
 		
 		if result ==  None:
-			raise Cell_name_not_found('Cell named {} has not been found in system no. {}'.format(name, self.id))
+			raise Cell_name_not_found('BUCell named {} has not been found in system no. {}'.format(name, self.id))
 
 		return result
 
@@ -290,7 +290,7 @@ class System(object):
 		time_seq = sequence.time_seq
 		system_bu_seq = sequence.system_bu_seq
 		kinf_seq = sequence.kinf_seq
-		steps_number = sequence.steps_number
+		steps_number = sequence.macrosteps_number
 
 		txt = ''
 		txt += '{:<12}'.format('TIME')

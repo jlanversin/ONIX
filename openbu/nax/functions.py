@@ -14,7 +14,7 @@ class Batch(object):
 
 	def __init__(self, path):
 
-		self._path = path
+		self._path = path +'/output_summary'
 
 	@property
 	def path(self):
@@ -202,20 +202,36 @@ def review_selected_ratio_candidates(NAX_cell, operation_history, path, selected
 		# plot_ng_chain_ratio_derivative_history(ratio_evolution, ratio_derivative_dict, history_mid_fluence, combine_indexes)
 
 
+def plot_pu_prod(fuel_cell, NAX_cell, operation_history, path, scale_up_factor = None):
+
+	pu_prod_history_matrix_list = get_pu_prod_history_matrix_list(operation_history, fuel_cell, NAX_cell)
+	concatenated_pu_prod_history_matrix = concatenate_pu_prod_history_matrix(pu_prod_history_matrix_list)
+	concatenated_pu_cum_prod_history_matrix = concatenate_pu_cum_prod_history_matrix(pu_prod_history_matrix_list)
+
+	concatenated_history_fluence = concatenate_history_fluence_from_pu_prod_matrix_list(pu_prod_history_matrix_list)
+	batch_break_indexes = locate_batch_break_from_pu_prod_matrix_list(pu_prod_history_matrix_list)
+
+	mass_pu_prod_history_matrix = convert_density_to_mass(concatenated_pu_prod_history_matrix, path, fuel_cell, scale_up_factor = scale_up_factor)
+	mass_pu_cum_prod_history_matrix = convert_density_to_mass(concatenated_pu_cum_prod_history_matrix, path, fuel_cell, scale_up_factor = scale_up_factor)
+
+	plot_mass_pu_prod_against_fluence(mass_pu_prod_history_matrix, concatenated_history_fluence, batch_break_indexes = batch_break_indexes)
+	plot_mass_pu_cum_prod_against_fluence(mass_pu_cum_prod_history_matrix, concatenated_history_fluence, batch_break_indexes = batch_break_indexes)
+
 
 # The fact that it depends on step is troulbesome
 # If the xs of a nuclide is non-zero initially, I dont think it is possible that it just goes to zero during the operation
-def list_NAX_ng_chain_from_output(path_to_output, cell, step):
+def list_NAX_ng_chain_from_output(path, cell, step):
 
 	NAX_z_list = d.NAX_z_list
 	z_chain_dict = {}
 
 	# This method should detect which decay lib was used in the run
 	# This is not impplemented yet and here ENDFVIII decay is set
-	decay_path ='/home/julien/Open-Burnup.dev/openbu/data/other_libs/ENDFVIII/decay_lib'
-	decay_dict = d.read_decay_lib(decay_path)
+	#decay_path ='/home/julien/Open-Burnup.dev/openbu/data/other_libs/ENDFVIII/decay_lib'
+	#decay_dict = d.read_decay_lib(decay_path)
+	decay_dict = d.default_decay_lib_b
 
-	xs_lib_nucl_list = utils.read_xs_nucl(path_to_output+'/{}_xs_lib'.format(cell))
+	xs_lib_nucl_list = utils.read_xs_nucl(path, cell)
 
 	# This part list the nuclides with z that exist in the xs lib and create lists of chain starting with the first non-zero isotopes
 	# It also remove nuclide with decay constant that are too big
@@ -253,7 +269,8 @@ def list_NAX_ng_chain_from_output(path_to_output, cell, step):
 					# This guy is candidate to be first nuclide in chain
 
 					# Here we test if its ng cross section is non-zero for step
-					nucl_ng_seq = utils.read_xs_seq(name,'(n,gamma)',path_to_output, cell)
+					#path_to_xs = path_to_output+'/{}_xs_lib'.format(cell)
+					nucl_ng_seq = utils.read_xs_seq(name,'(n,gamma)',path, cell)
 					step_ng = nucl_ng_seq[step]
 
 					# If this isotope has a zero ng xs, it can't be first nuclide in chain
@@ -297,7 +314,7 @@ def list_NAX_ng_chain_from_output(path_to_output, cell, step):
 						continue
 
 
-					precursor_xs_seq = utils.read_xs_seq(ng_precursor_name,'(n,gamma)',path_to_output,cell)
+					precursor_xs_seq = utils.read_xs_seq(ng_precursor_name,'(n,gamma)',path,cell)
 					precursor_step_xs = precursor_xs_seq[step]
 					# If ng precursor has 0 ng xs, remove nuclide
 					# This create a hole and thus a new chain
@@ -496,7 +513,7 @@ def get_history_matrix_list(operation_history, chain, cell):
 
 	return history_matrix_list
 
-def pu_prod_history_matrix_list(operation_history, fuel_cell, NAX_cell):
+def get_pu_prod_history_matrix_list(operation_history, fuel_cell, NAX_cell):
 
 	pu_prod_history_matrix_list = []
 
@@ -548,9 +565,10 @@ def concatenate_pu_cum_prod_history_matrix(pu_prod_history_matrix_list):
 	return pu_cum_prod_history_matrix
 
 # Convert number density to kg. Can be scaled up to the whole system
-def convert_density_to_mass(concatenate_pu_prod_history_matrix, path, fuel_cell, scale_up_factor = None):
+def convert_density_to_mass(concatenated_pu_prod_history_matrix, path, fuel_cell, scale_up_factor = None):
 
 	NA = d.NA
+	path = path + '/output_summary'
 	vol = utils.read_BUCell_vol(path, fuel_cell)
 
 	mass_pu_prod_history_matrix = []
@@ -565,7 +583,7 @@ def convert_density_to_mass(concatenate_pu_prod_history_matrix, path, fuel_cell,
 	for i in range(len(Pu_isotopes_name)):
 
 		atm_mass = Pu_isotopes_mass[i]
-		dens_seq = concatenate_pu_prod_history_matrix[i]
+		dens_seq = concatenated_pu_prod_history_matrix[i]
 		if scale_up_factor != None:
 			mass_seq = [x*1E24*vol*atm_mass*scale_up_factor*1E-3/NA for x in dens_seq]
 		else:
@@ -1468,65 +1486,61 @@ def plot_mass_pu_prod_against_fluence(mass_pu_prod_history_matrix, concatenate_h
 	# tot Pu mass at each batch break point
 	batch_break_pu = [round(tot_pu_seq[i], 1) for i in batch_break_indexes]
 
-	# # Print end of batch enrichment of each pu isotope
-	# for j in range(len(batch_break_indexes)):
-	# 	index = batch_break_indexes[j]
-	# 	print ('batch N', j)
-	# 	for i in range(len(mass_pu_prod_history_matrix)):
-	# 		pu_isotope_dens = mass_pu_prod_history_matrix[i][index]
-	# 		pu_isotope_fraction = pu_isotope_dens/batch_break_pu[j]
-	# 		print (Pu_isotopes[i], pu_isotope_fraction*100)
+	#ax2 = ax1.twinx()
 
-	# quit()
-	
-	ax2 = ax1.twinx()
-
-	for i in range(len(batch_break_indexes)):
-		index = batch_break_indexes[i]
-		if i < 2:
-			batch_fluence_seq = concatenate_history_fluence[:index +1]
-			batch_tot_pu_line = [round(tot_pu_seq[index ], 1) for x in range(len(batch_fluence_seq))]
-			ax1.plot(batch_fluence_seq,batch_tot_pu_line, linestyle = '--', color ='darkgrey')
-		else:
-			batch_fluence_seq = concatenate_history_fluence[index:] + [2.37E22]
-			batch_tot_pu_line = [round(tot_pu_seq[index ], 1) for x in range(len(batch_fluence_seq))]
-			ax2.plot(batch_fluence_seq,batch_tot_pu_line, linestyle = '--', color ='darkgrey')
+	# for i in range(len(batch_break_indexes)):
+	# 	index = batch_break_indexes[i]
+	# 	# if i < 2:
+	# 	# 	batch_fluence_seq = concatenate_history_fluence[:index +1]
+	# 	# 	batch_tot_pu_line = [round(tot_pu_seq[index ], 1) for x in range(len(batch_fluence_seq))]
+	# 	# 	ax1.plot(batch_fluence_seq,batch_tot_pu_line, linestyle = '--', color ='darkgrey')
+	# 	# else:
+	# 	# 	batch_fluence_seq = concatenate_history_fluence[index:] + [2.37E22]
+	# 	# 	batch_tot_pu_line = [round(tot_pu_seq[index ], 1) for x in range(len(batch_fluence_seq))]
+	# 	# 	ax2.plot(batch_fluence_seq,batch_tot_pu_line, linestyle = '--', color ='darkgrey')
+	# 	batch_fluence_seq = concatenate_history_fluence[:index +1]
+	# 	batch_tot_pu_line = [round(tot_pu_seq[index ], 1) for x in range(len(batch_fluence_seq))]
+	# 	ax1.plot(batch_fluence_seq,batch_tot_pu_line, linestyle = '--', color ='darkgrey')
 
 	previous_index = 0
 	for i in range(len(batch_break_indexes)):
 		index = batch_break_indexes[i]
 		batch_fluence_seq = concatenate_history_fluence[previous_index:index+1]
 		batch_tot_pu = tot_pu_seq[previous_index:index+1]
-		if i<2:
-			ax1.plot(batch_fluence_seq, batch_tot_pu, linestyle = '-', color ='orange')
-		else:
-			ax2.plot(batch_fluence_seq, batch_tot_pu, linestyle = '-', color ='orange')
+		# if i<2:
+		# 	ax1.plot(batch_fluence_seq, batch_tot_pu, linestyle = '-', color ='orange')
+		# else:
+		# 	ax2.plot(batch_fluence_seq, batch_tot_pu, linestyle = '-', color ='orange')
+		ax1.plot(batch_fluence_seq, batch_tot_pu, linestyle = '-', color ='orange')
 		previous_index = index+1
 
+	max_fluence = max(concatenate_history_fluence)
+
 	ax1.set_ylabel('Mass [kg]', fontsize=16)
-	ax2.set_ylabel('Mass [kg]', fontsize=16)
+	#ax2.set_ylabel('Mass [kg]', fontsize=16)
 	ax1.set_yticks([0, batch_break_pu[0], batch_break_pu[1]])
 	ax1.set_xlabel('Fluence [neutrons cm$^{-2}$]', fontsize=16)
-	ax1.set_xlim(left = 0, right= 2.37E22)
-	ax1.set_ylim(bottom = 0,top = 31)
-	ax2.set_ylim(bottom = 0, top = 31)
-	ax2.yaxis.tick_right()
-	ax2.set_yticks([0, batch_break_pu[2], batch_break_pu[3]])
+	ax1.set_xlim(left = 0, right = max_fluence)
+	# ax1.set_ylim(bottom = 0,top = 31)
+	# ax2.set_ylim(bottom = 0, top = 31)
+	#ax2.yaxis.tick_right()
+	#ax2.set_yticks([0, batch_break_pu[2], batch_break_pu[3]])
 	#ax.yaxis.get_offset_text().set_fontsize(15)
 	ax1.xaxis.get_offset_text().set_fontsize(15)
 	#plt.ticklabel_format(style='sci', axis='y',scilimits=(0,0))
 	# ax1.grid()
 	# ax2.grid()
 	ax1.tick_params(labelsize=15)
-	ax2.tick_params(labelsize=15)
+	#ax2.tick_params(labelsize=15)
 	#plt.legend(prop={'size': 12})
 
-	# Put these fraking Shutdown dates on the top
+	# Put these freaking Shutdown dates on the top
 	ax3 = ax1.twiny()
-	ax3.set_xlim(left = 0, right= 2.37E22)
+	ax3.set_xlim(left = 0, right= max_fluence)
 	ax3.set_xticks(batch_break_fluence)
 	ax3.tick_params(labelsize=11)
-	ax3.set_xticklabels(['Shutdown\nApril 1994', 'Shutdown\nApril 2005', 'Shutdown\nJuly 2007', 'Shutdown\nOctober 2015'])
+	#ax3.set_xticklabels(['Shutdown\nApril 1994', 'Shutdown\nApril 2005', 'Shutdown\nJuly 2007', 'Shutdown\nOctober 2015'])
+	#ax3.set_xticklabels(['Shutdown\nApril 1994', 'Shutdown\nApril 2005', 'Shutdown\nJuly 2007', 'Shutdown\nOctober 2015'])
 
 	plt.show()
 
@@ -1542,11 +1556,6 @@ def plot_mass_pu_cum_prod_against_fluence(mass_pu_prod_history_matrix, concatena
 		for j in range(len(mass_pu_prod_history_matrix)):
 			tot_pu += mass_pu_prod_history_matrix[j][i]
 		tot_pu_seq.append(tot_pu)
-
-	print (tot_pu_seq)
-	print ('\n\n')
-	print (concatenate_history_fluence)
-	quit()
 
 	f, ax1 = plt.subplots()
 	# for i in range(len(Pu_isotopes)):
@@ -1568,11 +1577,12 @@ def plot_mass_pu_cum_prod_against_fluence(mass_pu_prod_history_matrix, concatena
 	# 	batch_tot_pu_line = [round(tot_pu_seq[i],1) for x in range(len(batch_fluence_seq))]
 	# 	ax1.plot(batch_fluence_seq,batch_tot_pu_line, linestyle = '--', color ='darkgrey')
 
+	max_fluence = max(concatenate_history_fluence)
 
 	ax1.set_ylabel('Mass [kg]', fontsize=16)
 	ax1.set_xlabel('Fluence [neutrons cm$^{-2}$]', fontsize=16)
-	ax1.set_xlim(left = 0, right= 2.37E22)
-	ax1.set_ylim(bottom = 0,top = 31)
+	ax1.set_xlim(left = 0, right= max_fluence)
+	#ax1.set_ylim(bottom = 0,top = 31)
 	#ax.yaxis.get_offset_text().set_fontsize(15)
 	ax1.set_yticks([0] + batch_break_cum_pu)
 	ax1.xaxis.get_offset_text().set_fontsize(15)
@@ -1582,11 +1592,11 @@ def plot_mass_pu_cum_prod_against_fluence(mass_pu_prod_history_matrix, concatena
 
 	# Put these freaking Shutdown dates on the top
 	ax3 = ax1.twiny()
-	ax3.set_xlim(left = 0, right= 2.37E22)
+	ax3.set_xlim(left = 0, right= max_fluence)
 	#ax3.set_xlim(ax1.get_xlim())
 	ax3.set_xticks(batch_break_fluence)
 	ax3.tick_params(labelsize=11)
-	ax3.set_xticklabels(['Shutdown\nApril 1994', 'Shutdown\nApril 2005', 'Shutdown\nJuly 2007', 'Shutdown\nOctober 2015'])
+	#ax3.set_xticklabels(['Shutdown\nApril 1994', 'Shutdown\nApril 2005', 'Shutdown\nJuly 2007', 'Shutdown\nOctober 2015'])
 
 	#plt.legend(prop={'size': 12})
 	plt.show()
