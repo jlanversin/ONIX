@@ -14,11 +14,16 @@ class Batch(object):
 
 	def __init__(self, path):
 
-		self._path = path +'/output_summary'
+		self._path = path
+		self._path_output = path +'/output_summary'
 
 	@property
 	def path(self):
 		return self._path
+
+	@property
+	def path_output(self):
+		return self._path_output
 
 	@property
 	def ng_xs_seq_dict(self):
@@ -477,7 +482,7 @@ def bateman_step_solution_matrix(chain, abun, batch, cell, dphi, EFPD):
 # The fluence in pu_prod_matrix should be the fluence of the NAX material, not of the fissile material
 def pu_prod_matrix(batch, fuel_cell, NAX_cell, EFPD):
 
-	path = batch.path
+	path = batch.path_output
 
 	fluence_subseq = utils.get_fluence_subseq_until_time(path, NAX_cell, EFPD)
 
