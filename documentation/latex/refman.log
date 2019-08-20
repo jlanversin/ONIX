@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.8)  20 AUG 2019 12:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.8)  20 AUG 2019 14:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -23,21 +23,6 @@ File: bk10.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-(/usr/local/texlive/2019/texmf-dist/tex/latex/base/ifthen.sty
-Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
-)
-(/usr/local/texlive/2019/texmf-dist/tex/latex/tools/array.sty
-Rollback for package 'array' requested -> date 2016-10-06.
-         Best approximation is the release introduced on 2016-10-06.
-
-(/usr/local/texlive/2019/texmf-dist/tex/latex/tools/array-2016-10-06.sty
-Package: array 2016/10/06 v2.4d Tabular extension package (FMi)
-\col@sep=\dimen103
-\extrarowheight=\dimen104
-\NC@list=\toks14
-\extratabsurround=\skip43
-\backup@length=\skip44
-))
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/fixltx2e.sty
 Package: fixltx2e 2016/12/29 v2.1a fixes to LaTeX (obsolete)
 Applying: [2015/01/01] Old fixltx2e package on input line 46.
@@ -52,27 +37,40 @@ Already applied: [0000/00/00] Old fixltx2e package on input line 53.
 Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
 \calc@Acount=\count89
 \calc@Bcount=\count90
-\calc@Adimen=\dimen105
-\calc@Bdimen=\dimen106
-\calc@Askip=\skip45
-\calc@Bskip=\skip46
+\calc@Adimen=\dimen103
+\calc@Bdimen=\dimen104
+\calc@Askip=\skip43
+\calc@Bskip=\skip44
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
 \calc@Ccount=\count91
-\calc@Cskip=\skip47
+\calc@Cskip=\skip45
 ) (./doxygen.sty
 Package: doxygen 
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/alltt.sty
 Package: alltt 1997/06/16 v2.0g defines alltt environment
 )
+(/usr/local/texlive/2019/texmf-dist/tex/latex/tools/array.sty
+Package: array 2018/12/30 v2.4k Tabular extension package (FMi)
+\col@sep=\dimen105
+\ar@mcellbox=\box27
+\extrarowheight=\dimen106
+\NC@list=\toks14
+\extratabsurround=\skip46
+\backup@length=\skip47
+\ar@cellbox=\box28
+)
 (/usr/local/texlive/2019/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count92
 \float@exts=\toks15
-\float@box=\box27
+\float@box=\box29
 \@float@everytoks=\toks16
-\@floatcapt=\box28
+\@floatcapt=\box30
+)
+(/usr/local/texlive/2019/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 )
 (/usr/local/texlive/2019/texmf-dist/tex/latex/tools/verbatim.sty
 Package: verbatim 2014/10/28 v1.5q LaTeX2e package for verbatim enhancements
@@ -107,31 +105,30 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 )
-(./longtable_doxygen.sty
-Package: longtable_doxygen 2014/10/28 v4.11 Multi-page Table package (DPC) - fr
-ozen version for doxygen
+(/usr/local/texlive/2019/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)+ FMi change
 \LTleft=\skip49
 \LTright=\skip50
 \LTpre=\skip51
 \LTpost=\skip52
 \LTchunksize=\count94
 \LTcapwidth=\dimen107
-\LT@head=\box29
-\LT@firsthead=\box30
-\LT@foot=\box31
-\LT@lastfoot=\box32
+\LT@head=\box31
+\LT@firsthead=\box32
+\LT@foot=\box33
+\LT@lastfoot=\box34
 \LT@cols=\count95
 \LT@rows=\count96
 \c@LT@tables=\count97
 \c@LT@chunks=\count98
 \LT@p@ftn=\toks20
-) (./tabu_doxygen.sty
-Package: tabu_doxygen 2011/02/26 v2.8 - flexible LaTeX tabulars (FC), frozen ve
-rsion for doxygen
+)
+(/usr/local/texlive/2019/texmf-dist/tex/latex/tabu/tabu.sty
+Package: tabu 2019/01/11 v2.9 - flexible LaTeX tabulars (FC+tabu-fixed)
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/varwidth/varwidth.sty
 Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
-\@vwid@box=\box33
+\@vwid@box=\box35
 \sift@deathcycles=\count99
 \@vwid@loff=\dimen108
 \@vwid@roff=\dimen109
@@ -153,26 +150,11 @@ Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \tabustrutrule=\dimen118
 \tabu@thebody=\toks21
 \tabu@footnotes=\toks22
-\tabu@box=\box34
-\tabu@arstrutbox=\box35
-\tabu@hleads=\box36
-\tabu@vleads=\box37
+\tabu@box=\box36
+\tabu@arstrutbox=\box37
+\tabu@hleads=\box38
+\tabu@vleads=\box39
 \tabu@cellskip=\skip53
-)
-(/usr/local/texlive/2019/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
-Package: fancyvrb 2019/01/15
-
-Style option: `fancyvrb' v3.2a <2019/01/15> (tvz)
-(/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/keyval.sty
-Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
-\KV@toks@=\toks23
-)
-\FV@CodeLineNo=\count106
-\FV@InFile=\read2
-\FV@TabBox=\box38
-\c@FancyVerbLine=\count107
-\FV@StepNumber=\count108
-\FV@OutFile=\write3
 )
 (/usr/local/texlive/2019/texmf-dist/tex/latex/tools/tabularx.sty
 Package: tabularx 2016/02/03 v2.11b `tabularx' package (DPC)
@@ -181,29 +163,18 @@ Package: tabularx 2016/02/03 v2.11b `tabularx' package (DPC)
 \TX@old@col=\dimen121
 \TX@target=\dimen122
 \TX@delta=\dimen123
-\TX@cols=\count109
-\TX@ftn=\toks24
+\TX@cols=\count106
+\TX@ftn=\toks23
 )
 (/usr/local/texlive/2019/texmf-dist/tex/latex/multirow/multirow.sty
 Package: multirow 2019/01/01 v2.4 Span multiple rows of a table
 \multirow@colwidth=\skip54
-\multirow@cntb=\count110
+\multirow@cntb=\count107
 \multirow@dima=\skip55
 \bigstrutjot=\dimen124
 )
-(/usr/local/texlive/2019/texmf-dist/tex/latex/hanging/hanging.sty
-Package: hanging 2009/09/02 v1.2b hanging paragraphs and punctuation
-\h@ngcommawd=\skip56
-\h@ngfstopwd=\skip57
-\h@ngquotewd=\skip58
-\h@ngdquotewd=\skip59
-\h@ngquerywd=\skip60
-\h@ngexclwd=\skip61
-\h@ngcolonwd=\skip62
-\h@ngscolonwd=\skip63
-)
-(/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/ifpdf.sty
-Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
+\xrefbox=\box40
+\xreflength=\skip56
 )
 (/usr/local/texlive/2019/texmf-dist/tex/latex/adjustbox/adjustbox.sty
 Package: adjustbox 2019/01/04 v1.2 Adjusting TeX boxes (trim, clip, ...)
@@ -213,10 +184,11 @@ Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
 
 (/usr/local/texlive/2019/texmf-dist/tex/generic/xkeyval/xkeyval.tex
 (/usr/local/texlive/2019/texmf-dist/tex/generic/xkeyval/xkvutils.tex
-\XKV@toks=\toks25
-\XKV@tempa@toks=\toks26
-)
-\XKV@depth=\count111
+\XKV@toks=\toks24
+\XKV@tempa@toks=\toks25
+
+(/usr/local/texlive/2019/texmf-dist/tex/generic/xkeyval/keyval.tex))
+\XKV@depth=\count108
 File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
 ))
 (/usr/local/texlive/2019/texmf-dist/tex/latex/adjustbox/adjcalc.sty
@@ -245,7 +217,7 @@ Package graphics Info: Driver file: pdftex.def on input line 99.
 )
 (/usr/local/texlive/2019/texmf-dist/tex/latex/collectbox/collectbox.sty
 Package: collectbox 2012/05/17 v0.4b Collect macro arguments as boxes
-\collectedbox=\box39
+\collectedbox=\box41
 )
 \tc@llx=\dimen127
 \tc@lly=\dimen128
@@ -267,95 +239,45 @@ File: tc-pdftex.def 2019/01/04 v2.2 Clipping driver for pdftex
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/ifoddpage/ifoddpage.sty
 Package: ifoddpage 2016/04/23 v1.1 Conditionals for odd/even page detection
-\c@checkoddpage=\count112
+\c@checkoddpage=\count109
 ))
-(/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/amssymb.sty
-Package: amssymb 2013/01/14 v3.01 AMS font symbols
-
-(/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/amsfonts.sty
-Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
-\@emptytoks=\toks27
-\symAMSa=\mathgroup4
-\symAMSb=\mathgroup5
-LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
-(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-))
-(/usr/local/texlive/2019/texmf-dist/tex/latex/stackengine/stackengine.sty
-Package: stackengine 2017/02/13 v4.01\ Stacking text and objects in convenient 
-ways
-
-(/usr/local/texlive/2019/texmf-dist/tex/latex/etoolbox/etoolbox.sty
-Package: etoolbox 2018/08/19 v2.5f e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count113
-)
-(/usr/local/texlive/2019/texmf-dist/tex/generic/listofitems/listofitems.sty
-(/usr/local/texlive/2019/texmf-dist/tex/generic/listofitems/listofitems.tex
-\loi_cnt_foreach_nest=\count114
-\loi_nestcnt=\count115
-)
-Package: listofitems 2019/03/03 v1.61 Grab items in lists using user-specified 
-sep char (CT)
-)
-\c@@stackindex=\count116
-\@boxshift=\skip64
-\stack@tmplength=\skip65
-\temp@stkl=\skip66
-\@stackedboxwidth=\skip67
-\@addedbox=\box40
-\@anchorbox=\box41
-\stackedbox=\box42
-\@centerbox=\box43
-\c@ROWcellindex@=\count117
-)
-(/usr/local/texlive/2019/texmf-dist/tex/generic/ulem/ulem.sty
-\UL@box=\box44
-\UL@hyphenbox=\box45
-\UL@skip=\skip68
-\UL@hook=\toks28
-\UL@height=\dimen139
-\UL@pe=\count118
-\UL@pixel=\dimen140
-\ULC@box=\box46
-Package: ulem 2012/05/18
-\ULdepth=\dimen141
-)
-\xrefbox=\box47
-\xreflength=\skip69
-\CodeWidthChar=\skip70
-\CodeHeightChar=\skip71
-\DoxyCodeWidth=\skip72
-)
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2018/08/11 v1.3c Input encoding file
-\inpenc@prehook=\toks29
-\inpenc@posthook=\toks30
+\inpenc@prehook=\toks26
+\inpenc@posthook=\toks27
 )
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/makeidx.sty
 Package: makeidx 2014/09/29 v1.0m Standard LaTeX package
 )
 (/usr/local/texlive/2019/texmf-dist/tex/latex/tools/multicol.sty
 Package: multicol 2018/12/27 v1.8v multicolumn formatting (FMi)
-\c@tracingmulticols=\count119
-\mult@box=\box48
-\multicol@leftmargin=\dimen142
-\c@unbalance=\count120
-\c@collectmore=\count121
-\doublecol@number=\count122
-\multicoltolerance=\count123
-\multicolpretolerance=\count124
-\full@width=\dimen143
-\page@free=\dimen144
-\premulticols=\dimen145
-\postmulticols=\dimen146
-\multicolsep=\skip73
-\multicolbaselineskip=\skip74
-\partial@page=\box49
-\last@line=\box50
-\maxbalancingoverflow=\dimen147
-\mult@rightbox=\box51
-\mult@grightbox=\box52
-\mult@gfirstbox=\box53
-\mult@firstbox=\box54
+\c@tracingmulticols=\count110
+\mult@box=\box42
+\multicol@leftmargin=\dimen139
+\c@unbalance=\count111
+\c@collectmore=\count112
+\doublecol@number=\count113
+\multicoltolerance=\count114
+\multicolpretolerance=\count115
+\full@width=\dimen140
+\page@free=\dimen141
+\premulticols=\dimen142
+\postmulticols=\dimen143
+\multicolsep=\skip57
+\multicolbaselineskip=\skip58
+\partial@page=\box43
+\last@line=\box44
+\maxbalancingoverflow=\dimen144
+\mult@rightbox=\box45
+\mult@grightbox=\box46
+\mult@gfirstbox=\box47
+\mult@firstbox=\box48
+\@tempa=\box49
+\@tempa=\box50
+\@tempa=\box51
+\@tempa=\box52
+\@tempa=\box53
+\@tempa=\box54
 \@tempa=\box55
 \@tempa=\box56
 \@tempa=\box57
@@ -367,20 +289,14 @@ Package: multicol 2018/12/27 v1.8v multicolumn formatting (FMi)
 \@tempa=\box63
 \@tempa=\box64
 \@tempa=\box65
-\@tempa=\box66
-\@tempa=\box67
-\@tempa=\box68
-\@tempa=\box69
-\@tempa=\box70
-\@tempa=\box71
-\c@columnbadness=\count125
-\c@finalcolumnbadness=\count126
-\last@try=\dimen148
-\multicolovershoot=\dimen149
-\multicolundershoot=\dimen150
-\mult@nat@firstbox=\box72
-\colbreak@box=\box73
-\mc@col@check@num=\count127
+\c@columnbadness=\count116
+\c@finalcolumnbadness=\count117
+\last@try=\dimen145
+\multicolovershoot=\dimen146
+\multicolundershoot=\dimen147
+\mult@nat@firstbox=\box66
+\colbreak@box=\box67
+\mc@col@check@num=\count118
 )
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/textcomp.sty
 Package: textcomp 2018/08/11 v2.0j Standard LaTeX package
@@ -541,12 +457,9 @@ Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
 )
 (/usr/local/texlive/2019/texmf-dist/tex/latex/wasysym/wasysym.sty
 Package: wasysym 2003/10/30 v2.0 Wasy-2 symbol support package
-\symwasy=\mathgroup6
+\symwasy=\mathgroup4
 LaTeX Font Info:    Overwriting symbol font `wasy' in version `bold'
 (Font)                  U/wasy/m/n --> U/wasy/b/n on input line 90.
-)
-(/usr/local/texlive/2019/texmf-dist/tex/generic/ifxetex/ifxetex.sty
-Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2018/08/11 v2.0j Standard LaTeX package
@@ -561,6 +474,17 @@ Package: helvet 2005/04/12 PSNFSS-v9.2a (WaS)
 (/usr/local/texlive/2019/texmf-dist/tex/latex/psnfss/courier.sty
 Package: courier 2005/04/12 PSNFSS-v9.2a (WaS) 
 )
+(/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks28
+\symAMSa=\mathgroup5
+\symAMSb=\mathgroup6
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
 (/usr/local/texlive/2019/texmf-dist/tex/latex/sectsty/sectsty.sty
 Package: sectsty 2002/02/25 v2.0.2 Commands to change all sectional heading sty
 les
@@ -568,100 +492,94 @@ les
 (/usr/local/texlive/2019/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2018/04/16 v5.8 Page Geometry
 
+(/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
+)
 (/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/ifvtex.sty
 Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
 Package ifvtex Info: VTeX not detected.
 )
-\Gm@cnth=\count128
-\Gm@cntv=\count129
-\c@Gm@tempcnt=\count130
-\Gm@bindingoffset=\dimen151
-\Gm@wd@mp=\dimen152
-\Gm@odd@mp=\dimen153
-\Gm@even@mp=\dimen154
-\Gm@layoutwidth=\dimen155
-\Gm@layoutheight=\dimen156
-\Gm@layouthoffset=\dimen157
-\Gm@layoutvoffset=\dimen158
-\Gm@dimlist=\toks31
+(/usr/local/texlive/2019/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+\Gm@cnth=\count119
+\Gm@cntv=\count120
+\c@Gm@tempcnt=\count121
+\Gm@bindingoffset=\dimen148
+\Gm@wd@mp=\dimen149
+\Gm@odd@mp=\dimen150
+\Gm@even@mp=\dimen151
+\Gm@layoutwidth=\dimen152
+\Gm@layoutheight=\dimen153
+\Gm@layouthoffset=\dimen154
+\Gm@layoutvoffset=\dimen155
+\Gm@dimlist=\toks29
 )
 (/usr/local/texlive/2019/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
 Package: fancyhdr 2019/01/31 v3.10 Extensive control of page headers and footer
 s
-\f@nch@headwidth=\skip75
-\f@nch@O@elh=\skip76
-\f@nch@O@erh=\skip77
-\f@nch@O@olh=\skip78
-\f@nch@O@orh=\skip79
-\f@nch@O@elf=\skip80
-\f@nch@O@erf=\skip81
-\f@nch@O@olf=\skip82
-\f@nch@O@orf=\skip83
+\f@nch@headwidth=\skip59
+\f@nch@O@elh=\skip60
+\f@nch@O@erh=\skip61
+\f@nch@O@olh=\skip62
+\f@nch@O@orh=\skip63
+\f@nch@O@elf=\skip64
+\f@nch@O@erf=\skip65
+\f@nch@O@olf=\skip66
+\f@nch@O@orf=\skip67
 )
 (/usr/local/texlive/2019/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
-\bibhang=\skip84
-\bibsep=\skip85
+\bibhang=\skip68
+\bibsep=\skip69
 LaTeX Info: Redefining \cite on input line 694.
-\c@NAT@ctr=\count131
+\c@NAT@ctr=\count122
 )
 (/usr/local/texlive/2019/texmf-dist/tex/latex/tocloft/tocloft.sty
 Package: tocloft 2017/08/31 v2.3i parameterised ToC, etc., typesetting
 Package tocloft Info: The document has chapter divisions on input line 51.
-\cftparskip=\skip86
-\cftbeforetoctitleskip=\skip87
-\cftaftertoctitleskip=\skip88
-\cftbeforepartskip=\skip89
-\cftpartnumwidth=\skip90
-\cftpartindent=\skip91
-\cftbeforechapskip=\skip92
-\cftchapindent=\skip93
-\cftchapnumwidth=\skip94
-\cftbeforesecskip=\skip95
-\cftsecindent=\skip96
-\cftsecnumwidth=\skip97
-\cftbeforesubsecskip=\skip98
-\cftsubsecindent=\skip99
-\cftsubsecnumwidth=\skip100
-\cftbeforesubsubsecskip=\skip101
-\cftsubsubsecindent=\skip102
-\cftsubsubsecnumwidth=\skip103
-\cftbeforeparaskip=\skip104
-\cftparaindent=\skip105
-\cftparanumwidth=\skip106
-\cftbeforesubparaskip=\skip107
-\cftsubparaindent=\skip108
-\cftsubparanumwidth=\skip109
-\cftbeforeloftitleskip=\skip110
-\cftafterloftitleskip=\skip111
-\cftbeforefigskip=\skip112
-\cftfigindent=\skip113
-\cftfignumwidth=\skip114
-\c@lofdepth=\count132
-\c@lotdepth=\count133
-\cftbeforelottitleskip=\skip115
-\cftafterlottitleskip=\skip116
-\cftbeforetabskip=\skip117
-\cfttabindent=\skip118
-\cfttabnumwidth=\skip119
+\cftparskip=\skip70
+\cftbeforetoctitleskip=\skip71
+\cftaftertoctitleskip=\skip72
+\cftbeforepartskip=\skip73
+\cftpartnumwidth=\skip74
+\cftpartindent=\skip75
+\cftbeforechapskip=\skip76
+\cftchapindent=\skip77
+\cftchapnumwidth=\skip78
+\cftbeforesecskip=\skip79
+\cftsecindent=\skip80
+\cftsecnumwidth=\skip81
+\cftbeforesubsecskip=\skip82
+\cftsubsecindent=\skip83
+\cftsubsecnumwidth=\skip84
+\cftbeforesubsubsecskip=\skip85
+\cftsubsubsecindent=\skip86
+\cftsubsubsecnumwidth=\skip87
+\cftbeforeparaskip=\skip88
+\cftparaindent=\skip89
+\cftparanumwidth=\skip90
+\cftbeforesubparaskip=\skip91
+\cftsubparaindent=\skip92
+\cftsubparanumwidth=\skip93
+\cftbeforeloftitleskip=\skip94
+\cftafterloftitleskip=\skip95
+\cftbeforefigskip=\skip96
+\cftfigindent=\skip97
+\cftfignumwidth=\skip98
+\c@lofdepth=\count123
+\c@lotdepth=\count124
+\cftbeforelottitleskip=\skip99
+\cftafterlottitleskip=\skip100
+\cftbeforetabskip=\skip101
+\cfttabindent=\skip102
+\cfttabnumwidth=\skip103
 )
-\@indexfile=\write4
-\openout4 = `refman.idx'.
+\@indexfile=\write3
+\openout3 = `refman.idx'.
 
 
 Writing index file refman.idx
-
-(/usr/local/texlive/2019/texmf-dist/tex/latex/newunicodechar/newunicodechar.sty
-Package: newunicodechar 2018/04/08 v1.2 Defining Unicode characters
-)
-
-Package newunicodechar Warning: Redefining Unicode character on input line 112.
-
-
-
-Package newunicodechar Warning: Redefining Unicode character on input line 113.
-
-
 (/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2018/11/30 v6.88e Hypertext links for LaTeX
 
@@ -699,6 +617,7 @@ Package: letltxmacro 2016/05/16 v1.5 Let assignment for LaTeX macros (HO)
 Package: hopatch 2016/05/16 v1.3 Wrapper for package hooks (HO)
 Package: xcolor-patch 2016/05/16 xcolor patch
 Package: atveryend 2016/05/16 v1.9 Hooks at the very end of document (HO)
+Package atveryend Info: \enddocument detected (standard20110627).
 Package: atbegshi 2016/06/09 v1.18 At begin shipout hook (HO)
 Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
 Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
@@ -709,16 +628,16 @@ Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
 (/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
 )
-\@linkdim=\dimen159
-\Hy@linkcounter=\count134
-\Hy@pagecounter=\count135
+\@linkdim=\dimen156
+\Hy@linkcounter=\count125
+\Hy@pagecounter=\count126
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2018/11/30 v6.88e Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
 )
-\Hy@SavedSpaceFactor=\count136
+\Hy@SavedSpaceFactor=\count127
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/latexconfig/hyperref.cfg
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
@@ -739,17 +658,17 @@ Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 82.
 ))
-\c@Hy@tempcnt=\count137
+\c@Hy@tempcnt=\count128
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip10
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 5125.
-\XeTeXLinkMargin=\dimen160
-\Fld@menulength=\count138
-\Field@Width=\dimen161
-\Fld@charsize=\dimen162
+\XeTeXLinkMargin=\dimen157
+\Fld@menulength=\count129
+\Field@Width=\dimen158
+\Fld@charsize=\dimen159
 Package hyperref Info: Hyper figures OFF on input line 6380.
 Package hyperref Info: Link nesting OFF on input line 6385.
 Package hyperref Info: Hyper index ON on input line 6388.
@@ -759,20 +678,20 @@ Package hyperref Info: Link coloring with OCG OFF on input line 6405.
 Package hyperref Info: PDF/A mode OFF on input line 6410.
 LaTeX Info: Redefining \ref on input line 6450.
 LaTeX Info: Redefining \pageref on input line 6454.
-\Hy@abspage=\count139
-\c@Item=\count140
-\c@Hfootnote=\count141
+\Hy@abspage=\count130
+\c@Item=\count131
+\c@Hfootnote=\count132
 )
 Package hyperref Info: Driver: hpdftex.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/hpdftex.def
 File: hpdftex.def 2018/11/30 v6.88e Hyperref driver for pdfTeX
-\Fld@listcount=\count142
-\c@bookmark@seq@number=\count143
-\Hy@SectionHShift=\skip120
+\Fld@listcount=\count133
+\c@bookmark@seq@number=\count134
+\Hy@SectionHShift=\skip104
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 131.
-Package hyperref Info: Option `unicode' set `true' on input line 131.
+Package hyperref Info: Option `colorlinks' set `true' on input line 105.
+Package hyperref Info: Option `unicode' set `true' on input line 105.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/puenc.def
 File: puenc.def 2018/11/30 v6.88e Hyperref: PDF Unicode definition (HO)
@@ -785,16 +704,16 @@ Package: caption 2018/10/06 v3.3-154 Customizing captions (AR)
 (/usr/local/texlive/2019/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2018/09/12 v1.8c caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 64.
-\captionmargin=\dimen163
-\captionmargin@=\dimen164
-\captionwidth=\dimen165
-\caption@tempdima=\dimen166
-\caption@indent=\dimen167
-\caption@parindent=\dimen168
-\caption@hangindent=\dimen169
+\captionmargin=\dimen160
+\captionmargin@=\dimen161
+\captionwidth=\dimen162
+\caption@tempdima=\dimen163
+\caption@indent=\dimen164
+\caption@parindent=\dimen165
+\caption@hangindent=\dimen166
 )
-\c@caption@flags=\count144
-\c@ContinuedFloat=\count145
+\c@caption@flags=\count135
+\c@ContinuedFloat=\count136
 Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: longtable package is loaded.
@@ -802,61 +721,53 @@ Package caption Info: longtable package is loaded.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/caption/ltcaption.sty
 Package: ltcaption 2018/08/26 v1.4-95 longtable captions (AR)
 ))
-(/usr/local/texlive/2019/texmf-dist/tex/latex/etoc/etoc.sty
-Package: etoc 2019/03/09 v1.09 Completely customisable TOCs (JFB)
-\Etoc@toctoks=\toks32
-\c@etoc@tocid=\count146
-\c@etoc@tocdepth=\count147
-\etoc@framed@titlebox=\box74
-\etoc@framed@contentsbox=\box75
-) (./refman.aux)
+(./refman.aux)
 \openout1 = `refman.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 146.
-LaTeX Font Info:    ... okay on input line 146.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 146.
-LaTeX Font Info:    ... okay on input line 146.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 146.
-LaTeX Font Info:    ... okay on input line 146.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 146.
-LaTeX Font Info:    ... okay on input line 146.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 146.
-LaTeX Font Info:    ... okay on input line 146.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 146.
-LaTeX Font Info:    ... okay on input line 146.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 146.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 146.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 117.
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 117.
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 117.
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 117.
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 117.
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 117.
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 117.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 117.
 
-
-(/usr/local/texlive/2019/texmf-dist/tex/latex/base/ts1cmr.fd
+ (/usr/local/texlive/2019/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 146.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 146.
-LaTeX Font Info:    ... okay on input line 146.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 146.
-LaTeX Font Info:    ... okay on input line 146.
-LaTeX Font Info:    Try loading font information for T1+phv on input line 146.
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 117.
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 117.
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 117.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 8.99994pt on input line 146.
+(Font)              scaled to size 8.99994pt on input line 117.
 
 (/usr/local/texlive/2019/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count148
-\scratchdimen=\dimen170
-\scratchbox=\box76
-\nofMPsegments=\count149
-\nofMParguments=\count150
-\everyMPshowfont=\toks33
-\MPscratchCnt=\count151
-\MPscratchDim=\dimen171
-\MPnumerator=\count152
-\makeMPintoPDFobject=\count153
-\everyMPtoPDFconversion=\toks34
+\scratchcounter=\count137
+\scratchdimen=\dimen167
+\scratchbox=\box68
+\nofMPsegments=\count138
+\nofMParguments=\count139
+\everyMPshowfont=\toks30
+\MPscratchCnt=\count140
+\MPscratchDim=\dimen168
+\MPnumerator=\count141
+\makeMPintoPDFobject=\count142
+\everyMPtoPDFconversion=\toks31
 ) (/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
 
@@ -908,105 +819,110 @@ e
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\AtBeginShipoutBox=\box77
-Package backref Info: ** backref set up for natbib ** on input line 146.
-Package hyperref Info: Link coloring ON on input line 146.
+\AtBeginShipoutBox=\box69
+Package backref Info: ** backref set up for natbib ** on input line 117.
+Package hyperref Info: Link coloring ON on input line 117.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 
 (/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count154
+\c@section@level=\count143
 )
-LaTeX Info: Redefining \ref on input line 146.
-LaTeX Info: Redefining \pageref on input line 146.
-LaTeX Info: Redefining \nameref on input line 146.
+LaTeX Info: Redefining \ref on input line 117.
+LaTeX Info: Redefining \pageref on input line 117.
+LaTeX Info: Redefining \nameref on input line 117.
 
 (./refman.out) (./refman.out)
-\@outlinefile=\write5
-\openout5 = `refman.out'.
+\@outlinefile=\write4
+\openout4 = `refman.out'.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-\Etoc@tf=\read3
-Package hyperref Info: Option `pageanchor' set `false' on input line 152.
-Package hyperref Info: Option `bookmarksnumbered' set `true' on input line 152.
+Package hyperref Info: Option `pageanchor' set `false' on input line 123.
+Package hyperref Info: Option `bookmarksnumbered' set `true' on input line 123.
 
-Package hyperref Info: Option `unicode' set `true' on input line 152.
+Package hyperref Info: Option `unicode' set `true' on input line 123.
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 12.9599pt on input line 157.
+(Font)              scaled to size 12.9599pt on input line 128.
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 10.79993pt on input line 159.
+(Font)              scaled to size 10.79993pt on input line 130.
  [1
 
 
 {/usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2
 
 ]
-\tf@toc=\write6
-\openout6 = `refman.toc'.
-
-LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 165.
+LaTeX Font Info:    Font shape `T1/phv/m/n' will be
+(Font)              scaled to size 22.39185pt on input line 135.
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <24.88> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 135.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 8.99994pt on input line 165.
-LaTeX Font Info:    Try loading font information for U+msa on input line 165.
-
-(/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Try loading font information for U+msb on input line 165.
-
-(/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-LaTeX Font Info:    Try loading font information for U+wasy on input line 165.
+(Font)              scaled to size 22.39185pt on input line 135.
+LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
+(Font)              scaled to size 22.39185pt on input line 135.
+ (./refman.toc
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 1.
+LaTeX Font Info:    Font shape `T1/phv/b/n' will be
+(Font)              scaled to size 8.99994pt on input line 1.
+LaTeX Font Info:    Try loading font information for U+wasy on input line 1.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/wasysym/uwasy.fd
 File: uwasy.fd 2003/10/30 v2.0 Wasy-2 symbol font definitions
 )
+LaTeX Font Info:    Try loading font information for U+msa on input line 1.
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 1.
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 6.29996pt on input line 165.
+(Font)              scaled to size 6.29996pt on input line 8.
+ [1
+
+]
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <7> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 165.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 67.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 6.29996pt on input line 165.
- [1] [2]
+(Font)              scaled to size 6.29996pt on input line 67.
+ [2]
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 7.19995pt on input line 165.
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 165.
+(Font)              scaled to size 7.19995pt on input line 88.
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 88.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
-) [3] [4
+) [3])
+\tf@toc=\write5
+\openout5 = `refman.toc'.
 
-]
-Package hyperref Info: Option `pageanchor' set `true' on input line 167.
+ [4]
+Package hyperref Info: Option `pageanchor' set `true' on input line 138.
 
 Chapter 1.
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 18.66588pt on input line 170.
+(Font)              scaled to size 18.66588pt on input line 141.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <20.74> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 170.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 141.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 18.66588pt on input line 170.
+(Font)              scaled to size 18.66588pt on input line 141.
 LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
-(Font)              scaled to size 18.66588pt on input line 170.
-LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 22.39185pt on input line 170.
-LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <24.88> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 170.
-LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 22.39185pt on input line 170.
-LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
-(Font)              scaled to size 22.39185pt on input line 170.
+(Font)              scaled to size 18.66588pt on input line 141.
 (./namespaces.tex
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
 (Font)              Font shape `T1/phv/b/n' tried instead on input line 1.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 (Font)              scaled to size 12.9599pt on input line 1.
+LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
+(Font)              scaled to size 12.9599pt on input line 1.
 ) [1
+
 
 ] [2
 
@@ -1021,9 +937,13 @@ Chapter 3.
 ]
 Chapter 4.
 (./namespaceopenbu_1_1passlist.tex
+LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
+(Font)              scaled to size 6.29996pt on input line 1.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
 (Font)              Font shape `T1/phv/b/n' tried instead on input line 3.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
+(Font)              scaled to size 10.79993pt on input line 3.
+LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
 (Font)              scaled to size 10.79993pt on input line 3.
 LaTeX Font Info:    Try loading font information for TS1+phv on input line 6.
 
@@ -1035,6 +955,8 @@ LaTeX Font Info:    Font shape `TS1/phv/m/n' will be
 )
 (./namespaceopenbu_1_1passport.tex) (./namespaceopenbu_1_1salameche_1_1cram.tex
 [7]
+LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
+(Font)              scaled to size 8.99994pt on input line 14.
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <8> not available
 (Font)              Font shape `T1/pcr/m/sl' tried instead on input line 15.
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <7> not available
@@ -1051,349 +973,146 @@ e the solution of the matricial depletion equation
 ]
 Chapter 5.
 (./classopenbu_1_1nax_1_1functions_1_1_batch.tex
-Package epstopdf Info: Source file: <classopenbu_1_1nax_1_1functions_1_1_batch.
-eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3764 bytes
-(epstopdf)             Output file: <classopenbu_1_1nax_1_1functions_1_1_batch-
-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:05
-(epstopdf)                    size: 4664 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1nax_1_1func
-tions_1_1_batch-eps-converted-to.pdf classopenbu_1_1nax_1_1functions_1_1_batch.
-eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1nax_1_1functions_1_1_batch-eps-converted-to.pdf>
-<classopenbu_1_1nax_1_1functions_1_1_batch-eps-converted-to.pdf, id=850, 501.87
-5pt x 743.51776pt>
-File: classopenbu_1_1nax_1_1functions_1_1_batch-eps-converted-to.pdf Graphic fi
-le (type pdf)
-<use classopenbu_1_1nax_1_1functions_1_1_batch-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1nax_1_1functions_1_1_batch-eps-converte
-d-to.pdf  used on input line 6.
+<classopenbu_1_1nax_1_1functions_1_1_batch.pdf, id=850, 501.875pt x 743.51776pt
+>
+File: classopenbu_1_1nax_1_1functions_1_1_batch.pdf Graphic file (type pdf)
+<use classopenbu_1_1nax_1_1functions_1_1_batch.pdf>
+Package pdftex.def Info: classopenbu_1_1nax_1_1functions_1_1_batch.pdf  used on
+ input line 6.
 (pdftex.def)             Requested size: 38.40479pt x 56.9055pt.
-) (./classopenbu_1_1cell_1_1_cell.tex
-Package epstopdf Info: Source file: <classopenbu_1_1cell_1_1_cell.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3762 bytes
-(epstopdf)             Output file: <classopenbu_1_1cell_1_1_cell-eps-converted
--to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:05
-(epstopdf)                    size: 4399 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1cell_1_1_ce
-ll-eps-converted-to.pdf classopenbu_1_1cell_1_1_cell.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1cell_1_1_cell-eps-converted-to.pdf>
-<classopenbu_1_1cell_1_1_cell-eps-converted-to.pdf, id=856, 501.875pt x 743.517
-76pt>
-File: classopenbu_1_1cell_1_1_cell-eps-converted-to.pdf Graphic file (type pdf)
-
-<use classopenbu_1_1cell_1_1_cell-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1cell_1_1_cell-eps-converted-to.pdf  use
-d on input line 6.
+)
+(./classopenbu_1_1cell_1_1_cell.tex
+<classopenbu_1_1cell_1_1_cell.pdf, id=851, 501.875pt x 743.51776pt>
+File: classopenbu_1_1cell_1_1_cell.pdf Graphic file (type pdf)
+<use classopenbu_1_1cell_1_1_cell.pdf>
+Package pdftex.def Info: classopenbu_1_1cell_1_1_cell.pdf  used on input line 6
+.
 (pdftex.def)             Requested size: 38.40479pt x 56.9055pt.
- [11])
+ [11 <./classopenbu_1_1nax_1_1functions_1_1_batch.pdf> <./classopenbu_1_1cell_1
+_1_cell.pdf>])
 (./classopenbu_1_1system_1_1_cell__name__not__found.tex
-Package epstopdf Info: Source file: <classopenbu_1_1system_1_1_cell__name__not_
-_found.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3798 bytes
-(epstopdf)             Output file: <classopenbu_1_1system_1_1_cell__name__not_
-_found-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:06
-(epstopdf)                    size: 5424 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1system_1_1_
-cell__name__not__found-eps-converted-to.pdf classopenbu_1_1system_1_1_cell__nam
-e__not__found.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1system_1_1_cell__name__not__found-eps-converted-to.pdf>
-<classopenbu_1_1system_1_1_cell__name__not__found-eps-converted-to.pdf, id=870,
- 501.875pt x 282.74634pt>
-File: classopenbu_1_1system_1_1_cell__name__not__found-eps-converted-to.pdf Gra
-phic file (type pdf)
-<use classopenbu_1_1system_1_1_cell__name__not__found-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1system_1_1_cell__name__not__found-eps-c
-onverted-to.pdf  used on input line 6.
+<classopenbu_1_1system_1_1_cell__name__not__found.pdf, id=870, 501.875pt x 282.
+74634pt>
+File: classopenbu_1_1system_1_1_cell__name__not__found.pdf Graphic file (type p
+df)
+<use classopenbu_1_1system_1_1_cell__name__not__found.pdf>
+Package pdftex.def Info: classopenbu_1_1system_1_1_cell__name__not__found.pdf  
+used on input line 6.
 (pdftex.def)             Requested size: 101.00117pt x 56.9055pt.
 )
 (./classopenbu_1_1couple_1_1couple__openmc_1_1_couple__openmc.tex
-Package epstopdf Info: Source file: <classopenbu_1_1couple_1_1couple__openmc_1_
-1_couple__openmc.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3780 bytes
-(epstopdf)             Output file: <classopenbu_1_1couple_1_1couple__openmc_1_
-1_couple__openmc-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:06
-(epstopdf)                    size: 4920 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1couple_1_1c
-ouple__openmc_1_1_couple__openmc-eps-converted-to.pdf classopenbu_1_1couple_1_1
-couple__openmc_1_1_couple__openmc.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1couple_1_1couple__openmc_1_1_couple__openmc-eps-converted-to
-.pdf>
-<classopenbu_1_1couple_1_1couple__openmc_1_1_couple__openmc-eps-converted-to.pd
-f, id=876, 501.875pt x 361.71133pt>
-File: classopenbu_1_1couple_1_1couple__openmc_1_1_couple__openmc-eps-converted-
-to.pdf Graphic file (type pdf)
-<use classopenbu_1_1couple_1_1couple__openmc_1_1_couple__openmc-eps-converted-t
-o.pdf>
+<classopenbu_1_1couple_1_1couple__openmc_1_1_couple__openmc.pdf, id=871, 501.87
+5pt x 361.71133pt>
+File: classopenbu_1_1couple_1_1couple__openmc_1_1_couple__openmc.pdf Graphic fi
+le (type pdf)
+<use classopenbu_1_1couple_1_1couple__openmc_1_1_couple__openmc.pdf>
 Package pdftex.def Info: classopenbu_1_1couple_1_1couple__openmc_1_1_couple__op
-enmc-eps-converted-to.pdf  used on input line 6.
+enmc.pdf  used on input line 6.
 (pdftex.def)             Requested size: 78.95383pt x 56.9055pt.
- [12])
+ [12 <./classopenbu_1_1system_1_1_cell__name__not__found.pdf>])
 (./classopenbu_1_1utils_1_1reactions__class_1_1decay__lib.tex
-Package epstopdf Info: Source file: <classopenbu_1_1utils_1_1reactions__class_1
-_1decay__lib.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3772 bytes
-(epstopdf)             Output file: <classopenbu_1_1utils_1_1reactions__class_1
-_1decay__lib-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:07
-(epstopdf)                    size: 4727 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1utils_1_1re
-actions__class_1_1decay__lib-eps-converted-to.pdf classopenbu_1_1utils_1_1react
-ions__class_1_1decay__lib.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1utils_1_1reactions__class_1_1decay__lib-eps-converted-to.pdf
->
-<classopenbu_1_1utils_1_1reactions__class_1_1decay__lib-eps-converted-to.pdf, i
-d=896, 501.875pt x 535.33pt>
-File: classopenbu_1_1utils_1_1reactions__class_1_1decay__lib-eps-converted-to.p
-df Graphic file (type pdf)
-<use classopenbu_1_1utils_1_1reactions__class_1_1decay__lib-eps-converted-to.pd
-f>
+<classopenbu_1_1utils_1_1reactions__class_1_1decay__lib.pdf, id=891, 501.875pt 
+x 535.33pt>
+File: classopenbu_1_1utils_1_1reactions__class_1_1decay__lib.pdf Graphic file (
+type pdf)
+<use classopenbu_1_1utils_1_1reactions__class_1_1decay__lib.pdf>
 Package pdftex.def Info: classopenbu_1_1utils_1_1reactions__class_1_1decay__lib
--eps-converted-to.pdf  used on input line 6.
+.pdf  used on input line 6.
 (pdftex.def)             Requested size: 53.34552pt x 56.9055pt.
- [13])
+ [13 <./classopenbu_1_1couple_1_1couple__openmc_1_1_couple__openmc.pdf>])
 (./classopenbu_1_1utils_1_1functions_1_1_empty__argument.tex
-Package epstopdf Info: Source file: <classopenbu_1_1utils_1_1functions_1_1_empt
-y__argument.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3788 bytes
-(epstopdf)             Output file: <classopenbu_1_1utils_1_1functions_1_1_empt
-y__argument-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:07
-(epstopdf)                    size: 5463 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1utils_1_1fu
-nctions_1_1_empty__argument-eps-converted-to.pdf classopenbu_1_1utils_1_1functi
-ons_1_1_empty__argument.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1utils_1_1functions_1_1_empty__argument-eps-converted-to.pdf>
-<classopenbu_1_1utils_1_1functions_1_1_empty__argument-eps-converted-to.pdf, id
-=915, 501.875pt x 355.30743pt>
-File: classopenbu_1_1utils_1_1functions_1_1_empty__argument-eps-converted-to.pd
-f Graphic file (type pdf)
-<use classopenbu_1_1utils_1_1functions_1_1_empty__argument-eps-converted-to.pdf
->
-Package pdftex.def Info: classopenbu_1_1utils_1_1functions_1_1_empty__argument-
-eps-converted-to.pdf  used on input line 6.
+<classopenbu_1_1utils_1_1functions_1_1_empty__argument.pdf, id=910, 501.875pt x
+ 355.30743pt>
+File: classopenbu_1_1utils_1_1functions_1_1_empty__argument.pdf Graphic file (t
+ype pdf)
+<use classopenbu_1_1utils_1_1functions_1_1_empty__argument.pdf>
+Package pdftex.def Info: classopenbu_1_1utils_1_1functions_1_1_empty__argument.
+pdf  used on input line 6.
 (pdftex.def)             Requested size: 80.37822pt x 56.9055pt.
 )
 (./classopenbu_1_1utils_1_1reactions__class_1_1_empty__data.tex
-Package epstopdf Info: Source file: <classopenbu_1_1utils_1_1reactions__class_1
-_1_empty__data.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3780 bytes
-(epstopdf)             Output file: <classopenbu_1_1utils_1_1reactions__class_1
-_1_empty__data-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:07
-(epstopdf)                    size: 5171 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1utils_1_1re
-actions__class_1_1_empty__data-eps-converted-to.pdf classopenbu_1_1utils_1_1rea
-ctions__class_1_1_empty__data.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1utils_1_1reactions__class_1_1_empty__data-eps-converted-to.p
-df>
-<classopenbu_1_1utils_1_1reactions__class_1_1_empty__data-eps-converted-to.pdf,
- id=921, 501.875pt x 472.3547pt>
-File: classopenbu_1_1utils_1_1reactions__class_1_1_empty__data-eps-converted-to
-.pdf Graphic file (type pdf)
-<use classopenbu_1_1utils_1_1reactions__class_1_1_empty__data-eps-converted-to.
-pdf>
+<classopenbu_1_1utils_1_1reactions__class_1_1_empty__data.pdf, id=911, 501.875p
+t x 472.3547pt>
+File: classopenbu_1_1utils_1_1reactions__class_1_1_empty__data.pdf Graphic file
+ (type pdf)
+<use classopenbu_1_1utils_1_1reactions__class_1_1_empty__data.pdf>
 Package pdftex.def Info: classopenbu_1_1utils_1_1reactions__class_1_1_empty__da
-ta-eps-converted-to.pdf  used on input line 6.
+ta.pdf  used on input line 6.
 (pdftex.def)             Requested size: 60.4598pt x 56.9055pt.
 )
-(./classopenbu_1_1utils_1_1reactions__class_1_1fy__lib.tex
-Package epstopdf Info: Source file: <classopenbu_1_1utils_1_1reactions__class_1
-_1fy__lib.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3766 bytes
-(epstopdf)             Output file: <classopenbu_1_1utils_1_1reactions__class_1
-_1fy__lib-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:08
-(epstopdf)                    size: 4565 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1utils_1_1re
-actions__class_1_1fy__lib-eps-converted-to.pdf classopenbu_1_1utils_1_1reaction
-s__class_1_1fy__lib.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1utils_1_1reactions__class_1_1fy__lib-eps-converted-to.pdf>
-<classopenbu_1_1utils_1_1reactions__class_1_1fy__lib-eps-converted-to.pdf, id=9
-27, 501.875pt x 743.51776pt>
-File: classopenbu_1_1utils_1_1reactions__class_1_1fy__lib-eps-converted-to.pdf 
-Graphic file (type pdf)
-<use classopenbu_1_1utils_1_1reactions__class_1_1fy__lib-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1utils_1_1reactions__class_1_1fy__lib-ep
-s-converted-to.pdf  used on input line 6.
+(./classopenbu_1_1utils_1_1reactions__class_1_1fy__lib.tex [14 <./classopenbu_1
+_1utils_1_1reactions__class_1_1decay__lib.pdf> <./classopenbu_1_1utils_1_1funct
+ions_1_1_empty__argument.pdf> <./classopenbu_1_1utils_1_1reactions__class_1_1_e
+mpty__data.pdf>]
+<classopenbu_1_1utils_1_1reactions__class_1_1fy__lib.pdf, id=936, 501.875pt x 7
+43.51776pt>
+File: classopenbu_1_1utils_1_1reactions__class_1_1fy__lib.pdf Graphic file (typ
+e pdf)
+<use classopenbu_1_1utils_1_1reactions__class_1_1fy__lib.pdf>
+Package pdftex.def Info: classopenbu_1_1utils_1_1reactions__class_1_1fy__lib.pd
+f  used on input line 6.
 (pdftex.def)             Requested size: 38.40479pt x 56.9055pt.
- [14])
-(./classopenbu_1_1passport_1_1_incorrect__nuc__id.tex
-Package epstopdf Info: Source file: <classopenbu_1_1passport_1_1_incorrect__nuc
-__id.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3792 bytes
-(epstopdf)             Output file: <classopenbu_1_1passport_1_1_incorrect__nuc
-__id-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:08
-(epstopdf)                    size: 4997 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1passport_1_
-1_incorrect__nuc__id-eps-converted-to.pdf classopenbu_1_1passport_1_1_incorrect
-__nuc__id.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1passport_1_1_incorrect__nuc__id-eps-converted-to.pdf>
-<classopenbu_1_1passport_1_1_incorrect__nuc__id-eps-converted-to.pdf, id=942, 5
-01.875pt x 346.1231pt>
-File: classopenbu_1_1passport_1_1_incorrect__nuc__id-eps-converted-to.pdf Graph
-ic file (type pdf)
-<use classopenbu_1_1passport_1_1_incorrect__nuc__id-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1passport_1_1_incorrect__nuc__id-eps-con
-verted-to.pdf  used on input line 6.
+) (./classopenbu_1_1passport_1_1_incorrect__nuc__id.tex
+<classopenbu_1_1passport_1_1_incorrect__nuc__id.pdf, id=937, 501.875pt x 346.12
+31pt>
+File: classopenbu_1_1passport_1_1_incorrect__nuc__id.pdf Graphic file (type pdf
+)
+<use classopenbu_1_1passport_1_1_incorrect__nuc__id.pdf>
+Package pdftex.def Info: classopenbu_1_1passport_1_1_incorrect__nuc__id.pdf  us
+ed on input line 6.
 (pdftex.def)             Requested size: 82.50713pt x 56.9055pt.
 )
 (./classopenbu_1_1cell_1_1_initial__nucl__not__in___nucl__set.tex
-Package epstopdf Info: Source file: <classopenbu_1_1cell_1_1_initial__nucl__not
-__in___nucl__set.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3816 bytes
-(epstopdf)             Output file: <classopenbu_1_1cell_1_1_initial__nucl__not
-__in___nucl__set-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:09
-(epstopdf)                    size: 5250 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1cell_1_1_in
-itial__nucl__not__in___nucl__set-eps-converted-to.pdf classopenbu_1_1cell_1_1_i
-nitial__nucl__not__in___nucl__set.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1cell_1_1_initial__nucl__not__in___nucl__set-eps-converted-to
-.pdf>
-<classopenbu_1_1cell_1_1_initial__nucl__not__in___nucl__set-eps-converted-to.pd
-f, id=948, 501.875pt x 226.83746pt>
-File: classopenbu_1_1cell_1_1_initial__nucl__not__in___nucl__set-eps-converted-
-to.pdf Graphic file (type pdf)
-<use classopenbu_1_1cell_1_1_initial__nucl__not__in___nucl__set-eps-converted-t
-o.pdf>
+<classopenbu_1_1cell_1_1_initial__nucl__not__in___nucl__set.pdf, id=938, 501.87
+5pt x 226.83746pt>
+File: classopenbu_1_1cell_1_1_initial__nucl__not__in___nucl__set.pdf Graphic fi
+le (type pdf)
+<use classopenbu_1_1cell_1_1_initial__nucl__not__in___nucl__set.pdf>
 Package pdftex.def Info: classopenbu_1_1cell_1_1_initial__nucl__not__in___nucl_
-_set-eps-converted-to.pdf  used on input line 6.
+_set.pdf  used on input line 6.
 (pdftex.def)             Requested size: 125.89728pt x 56.9055pt.
- [15])
+ [15 <./classopenbu_1_1utils_1_1reactions__class_1_1fy__lib.pdf> <./classopenbu
+_1_1passport_1_1_incorrect__nuc__id.pdf>])
 (./classopenbu_1_1cell_1_1_initial__nucl__not__set.tex
-Package epstopdf Info: Source file: <classopenbu_1_1cell_1_1_initial__nucl__not
-__set.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3800 bytes
-(epstopdf)             Output file: <classopenbu_1_1cell_1_1_initial__nucl__not
-__set-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:09
-(epstopdf)                    size: 5128 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1cell_1_1_in
-itial__nucl__not__set-eps-converted-to.pdf classopenbu_1_1cell_1_1_initial__nuc
-l__not__set.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1cell_1_1_initial__nucl__not__set-eps-converted-to.pdf>
-<classopenbu_1_1cell_1_1_initial__nucl__not__set-eps-converted-to.pdf, id=962, 
-501.875pt x 316.1411pt>
-File: classopenbu_1_1cell_1_1_initial__nucl__not__set-eps-converted-to.pdf Grap
-hic file (type pdf)
-<use classopenbu_1_1cell_1_1_initial__nucl__not__set-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1cell_1_1_initial__nucl__not__set-eps-co
-nverted-to.pdf  used on input line 6.
+<classopenbu_1_1cell_1_1_initial__nucl__not__set.pdf, id=957, 501.875pt x 316.1
+411pt>
+File: classopenbu_1_1cell_1_1_initial__nucl__not__set.pdf Graphic file (type pd
+f)
+<use classopenbu_1_1cell_1_1_initial__nucl__not__set.pdf>
+Package pdftex.def Info: classopenbu_1_1cell_1_1_initial__nucl__not__set.pdf  u
+sed on input line 6.
 (pdftex.def)             Requested size: 90.33359pt x 56.9055pt.
 )
 (./classopenbu_1_1couple_1_1couple__openmc_1_1_initial__nuclides__not__in__nucl
 ide__list.tex
-Package epstopdf Info: Source file: <classopenbu_1_1couple_1_1couple__openmc_1_
-1_initial__nuclides__not__in__nuclide__list.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3832 bytes
-(epstopdf)             Output file: <classopenbu_1_1couple_1_1couple__openmc_1_
-1_initial__nuclides__not__in__nuclide__list-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:10
-(epstopdf)                    size: 5258 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1couple_1_1c
-ouple__openmc_1_1_initial__nuclides__not__in__nuclide__list-eps-converted-to.pd
-f classopenbu_1_1couple_1_1couple__openmc_1_1_initial__nuclides__not__in__nucli
-de__list.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1couple_1_1couple__openmc_1_1_initial__nuclides__not__in__nuc
-lide__list-eps-converted-to.pdf>
 <classopenbu_1_1couple_1_1couple__openmc_1_1_initial__nuclides__not__in__nuclid
-e__list-eps-converted-to.pdf, id=968, 501.875pt x 187.62094pt>
+e__list.pdf, id=958, 501.875pt x 187.62094pt>
 File: classopenbu_1_1couple_1_1couple__openmc_1_1_initial__nuclides__not__in__n
-uclide__list-eps-converted-to.pdf Graphic file (type pdf)
+uclide__list.pdf Graphic file (type pdf)
 <use classopenbu_1_1couple_1_1couple__openmc_1_1_initial__nuclides__not__in__nu
-clide__list-eps-converted-to.pdf>
+clide__list.pdf>
 Package pdftex.def Info: classopenbu_1_1couple_1_1couple__openmc_1_1_initial__n
-uclides__not__in__nuclide__list-eps-converted-to.pdf  used on input line 6.
+uclides__not__in__nuclide__list.pdf  used on input line 6.
 (pdftex.def)             Requested size: 152.21777pt x 56.9055pt.
-)
-(./classopenbu_1_1input_1_1_input.tex
-Package epstopdf Info: Source file: <classopenbu_1_1input_1_1_input.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3764 bytes
-(epstopdf)             Output file: <classopenbu_1_1input_1_1_input-eps-convert
-ed-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:10
-(epstopdf)                    size: 4617 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1input_1_1_i
-nput-eps-converted-to.pdf classopenbu_1_1input_1_1_input.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1input_1_1_input-eps-converted-to.pdf>
-<classopenbu_1_1input_1_1_input-eps-converted-to.pdf, id=974, 501.875pt x 743.5
-1776pt>
-File: classopenbu_1_1input_1_1_input-eps-converted-to.pdf Graphic file (type pd
-f)
-<use classopenbu_1_1input_1_1_input-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1input_1_1_input-eps-converted-to.pdf  u
-sed on input line 6.
+) (./classopenbu_1_1input_1_1_input.tex [16 <./classopenbu_1_1cell_1_1_initial_
+_nucl__not__in___nucl__set.pdf> <./classopenbu_1_1cell_1_1_initial__nucl__not__
+set.pdf> <./classopenbu_1_1couple_1_1couple__openmc_1_1_initial__nuclides__not_
+_in__nuclide__list.pdf>]
+<classopenbu_1_1input_1_1_input.pdf, id=982, 501.875pt x 743.51776pt>
+File: classopenbu_1_1input_1_1_input.pdf Graphic file (type pdf)
+<use classopenbu_1_1input_1_1_input.pdf>
+Package pdftex.def Info: classopenbu_1_1input_1_1_input.pdf  used on input line
+ 6.
 (pdftex.def)             Requested size: 38.40479pt x 56.9055pt.
- [16] [17])
-(./classopenbu_1_1utils_1_1functions_1_1_midpoint_normalize.tex
-Package epstopdf Info: Source file: <classopenbu_1_1utils_1_1functions_1_1_midp
-oint_normalize.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3794 bytes
-(epstopdf)             Output file: <classopenbu_1_1utils_1_1functions_1_1_midp
-oint_normalize-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:11
-(epstopdf)                    size: 5086 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1utils_1_1fu
-nctions_1_1_midpoint_normalize-eps-converted-to.pdf classopenbu_1_1utils_1_1fun
-ctions_1_1_midpoint_normalize.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1utils_1_1functions_1_1_midpoint_normalize-eps-converted-to.p
-df>
-<classopenbu_1_1utils_1_1functions_1_1_midpoint_normalize-eps-converted-to.pdf,
- id=1000, 501.875pt x 323.78966pt>
-File: classopenbu_1_1utils_1_1functions_1_1_midpoint_normalize-eps-converted-to
-.pdf Graphic file (type pdf)
-<use classopenbu_1_1utils_1_1functions_1_1_midpoint_normalize-eps-converted-to.
-pdf>
+ [17 <./classopenbu_1_1input_1_1_input.pdf>]) (./classopenbu_1_1utils_1_1functi
+ons_1_1_midpoint_normalize.tex
+<classopenbu_1_1utils_1_1functions_1_1_midpoint_normalize.pdf, id=1000, 501.875
+pt x 323.78966pt>
+File: classopenbu_1_1utils_1_1functions_1_1_midpoint_normalize.pdf Graphic file
+ (type pdf)
+<use classopenbu_1_1utils_1_1functions_1_1_midpoint_normalize.pdf>
 Package pdftex.def Info: classopenbu_1_1utils_1_1functions_1_1_midpoint_normali
-ze-eps-converted-to.pdf  used on input line 6.
+ze.pdf  used on input line 6.
 (pdftex.def)             Requested size: 88.20468pt x 56.9055pt.
 
 Overfull \hbox (53.55621pt too wide) in paragraph at lines 14--14
@@ -1402,222 +1121,96 @@ ther side from a prescribed midpoint value)
  []
 
 ) (./classopenbu_1_1passlist_1_1_neg__decay.tex
-Package epstopdf Info: Source file: <classopenbu_1_1passlist_1_1_neg__decay.eps
->
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3778 bytes
-(epstopdf)             Output file: <classopenbu_1_1passlist_1_1_neg__decay-eps
--converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:12
-(epstopdf)                    size: 5317 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1passlist_1_
-1_neg__decay-eps-converted-to.pdf classopenbu_1_1passlist_1_1_neg__decay.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1passlist_1_1_neg__decay-eps-converted-to.pdf>
-<classopenbu_1_1passlist_1_1_neg__decay-eps-converted-to.pdf, id=1006, 501.875p
-t x 472.3547pt>
-File: classopenbu_1_1passlist_1_1_neg__decay-eps-converted-to.pdf Graphic file 
-(type pdf)
-<use classopenbu_1_1passlist_1_1_neg__decay-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1passlist_1_1_neg__decay-eps-converted-t
-o.pdf  used on input line 6.
+<classopenbu_1_1passlist_1_1_neg__decay.pdf, id=1001, 501.875pt x 472.3547pt>
+File: classopenbu_1_1passlist_1_1_neg__decay.pdf Graphic file (type pdf)
+<use classopenbu_1_1passlist_1_1_neg__decay.pdf>
+Package pdftex.def Info: classopenbu_1_1passlist_1_1_neg__decay.pdf  used on in
+put line 6.
 (pdftex.def)             Requested size: 60.4598pt x 56.9055pt.
- [18])
+ [18 <./classopenbu_1_1utils_1_1functions_1_1_midpoint_normalize.pdf>])
 (./classopenbu_1_1passlist_1_1_neg__xs.tex
-Package epstopdf Info: Source file: <classopenbu_1_1passlist_1_1_neg__xs.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3772 bytes
-(epstopdf)             Output file: <classopenbu_1_1passlist_1_1_neg__xs-eps-co
-nverted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:13
-(epstopdf)                    size: 5064 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1passlist_1_
-1_neg__xs-eps-converted-to.pdf classopenbu_1_1passlist_1_1_neg__xs.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1passlist_1_1_neg__xs-eps-converted-to.pdf>
-<classopenbu_1_1passlist_1_1_neg__xs-eps-converted-to.pdf, id=1019, 501.875pt x
- 535.33pt>
-File: classopenbu_1_1passlist_1_1_neg__xs-eps-converted-to.pdf Graphic file (ty
-pe pdf)
-<use classopenbu_1_1passlist_1_1_neg__xs-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1passlist_1_1_neg__xs-eps-converted-to.p
-df  used on input line 6.
+<classopenbu_1_1passlist_1_1_neg__xs.pdf, id=1014, 501.875pt x 535.33pt>
+File: classopenbu_1_1passlist_1_1_neg__xs.pdf Graphic file (type pdf)
+<use classopenbu_1_1passlist_1_1_neg__xs.pdf>
+Package pdftex.def Info: classopenbu_1_1passlist_1_1_neg__xs.pdf  used on input
+ line 6.
 (pdftex.def)             Requested size: 53.34552pt x 56.9055pt.
-) (./classopenbu_1_1passport_1_1_no__fission___x_s.tex
-Package epstopdf Info: Source file: <classopenbu_1_1passport_1_1_no__fission___
-x_s.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3786 bytes
-(epstopdf)             Output file: <classopenbu_1_1passport_1_1_no__fission___
-x_s-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:14
-(epstopdf)                    size: 5266 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1passport_1_
-1_no__fission___x_s-eps-converted-to.pdf classopenbu_1_1passport_1_1_no__fissio
-n___x_s.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1passport_1_1_no__fission___x_s-eps-converted-to.pdf>
-<classopenbu_1_1passport_1_1_no__fission___x_s-eps-converted-to.pdf, id=1025, 5
-01.875pt x 389.80632pt>
-File: classopenbu_1_1passport_1_1_no__fission___x_s-eps-converted-to.pdf Graphi
-c file (type pdf)
-<use classopenbu_1_1passport_1_1_no__fission___x_s-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1passport_1_1_no__fission___x_s-eps-conv
-erted-to.pdf  used on input line 6.
+)
+(./classopenbu_1_1passport_1_1_no__fission___x_s.tex
+<classopenbu_1_1passport_1_1_no__fission___x_s.pdf, id=1015, 501.875pt x 389.80
+632pt>
+File: classopenbu_1_1passport_1_1_no__fission___x_s.pdf Graphic file (type pdf)
+
+<use classopenbu_1_1passport_1_1_no__fission___x_s.pdf>
+Package pdftex.def Info: classopenbu_1_1passport_1_1_no__fission___x_s.pdf  use
+d on input line 6.
 (pdftex.def)             Requested size: 73.26395pt x 56.9055pt.
- [19]
+ [19 <./classopenbu_1_1passlist_1_1_neg__decay.pdf> <./classopenbu_1_1passlist_
+1_1_neg__xs.pdf>]
 Overfull \hbox (19.95619pt too wide) in paragraph at lines 12--12
 []\T1/pcr/m/n/8 Raise when the user tries to access fission XS for a nuclide wh
 ich fission XS have not been set yet 
  []
 
 ) (./classopenbu_1_1passport_1_1_not__a___fission___product.tex
-Package epstopdf Info: Source file: <classopenbu_1_1passport_1_1_not__a___fissi
-on___product.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3802 bytes
-(epstopdf)             Output file: <classopenbu_1_1passport_1_1_not__a___fissi
-on___product-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:15
-(epstopdf)                    size: 5512 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1passport_1_
-1_not__a___fission___product-eps-converted-to.pdf classopenbu_1_1passport_1_1_n
-ot__a___fission___product.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1passport_1_1_not__a___fission___product-eps-converted-to.pdf
->
-<classopenbu_1_1passport_1_1_not__a___fission___product-eps-converted-to.pdf, i
-d=1040, 501.875pt x 265.89337pt>
-File: classopenbu_1_1passport_1_1_not__a___fission___product-eps-converted-to.p
-df Graphic file (type pdf)
-<use classopenbu_1_1passport_1_1_not__a___fission___product-eps-converted-to.pd
-f>
+<classopenbu_1_1passport_1_1_not__a___fission___product.pdf, id=1035, 501.875pt
+ x 265.89337pt>
+File: classopenbu_1_1passport_1_1_not__a___fission___product.pdf Graphic file (
+type pdf)
+<use classopenbu_1_1passport_1_1_not__a___fission___product.pdf>
 Package pdftex.def Info: classopenbu_1_1passport_1_1_not__a___fission___product
--eps-converted-to.pdf  used on input line 6.
+.pdf  used on input line 6.
 (pdftex.def)             Requested size: 107.40324pt x 56.9055pt.
 )
 (./classopenbu_1_1passport_1_1_nuc__xs__not__found.tex
-Package epstopdf Info: Source file: <classopenbu_1_1passport_1_1_nuc__xs__not__
-found.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3792 bytes
-(epstopdf)             Output file: <classopenbu_1_1passport_1_1_nuc__xs__not__
-found-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:15
-(epstopdf)                    size: 5166 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1passport_1_
-1_nuc__xs__not__found-eps-converted-to.pdf classopenbu_1_1passport_1_1_nuc__xs_
-_not__found.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1passport_1_1_nuc__xs__not__found-eps-converted-to.pdf>
-<classopenbu_1_1passport_1_1_nuc__xs__not__found-eps-converted-to.pdf, id=1046,
- 501.875pt x 321.2pt>
-File: classopenbu_1_1passport_1_1_nuc__xs__not__found-eps-converted-to.pdf Grap
-hic file (type pdf)
-<use classopenbu_1_1passport_1_1_nuc__xs__not__found-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1passport_1_1_nuc__xs__not__found-eps-co
-nverted-to.pdf  used on input line 6.
+<classopenbu_1_1passport_1_1_nuc__xs__not__found.pdf, id=1036, 501.875pt x 321.
+2pt>
+File: classopenbu_1_1passport_1_1_nuc__xs__not__found.pdf Graphic file (type pd
+f)
+<use classopenbu_1_1passport_1_1_nuc__xs__not__found.pdf>
+Package pdftex.def Info: classopenbu_1_1passport_1_1_nuc__xs__not__found.pdf  u
+sed on input line 6.
 (pdftex.def)             Requested size: 88.90921pt x 56.9055pt.
- [20])
-(./classopenbu_1_1passlist_1_1_nuc__xs__not__found.tex
-Package epstopdf Info: Source file: <classopenbu_1_1passlist_1_1_nuc__xs__not__
-found.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3792 bytes
-(epstopdf)             Output file: <classopenbu_1_1passlist_1_1_nuc__xs__not__
-found-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:15
-(epstopdf)                    size: 5166 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1passlist_1_
-1_nuc__xs__not__found-eps-converted-to.pdf classopenbu_1_1passlist_1_1_nuc__xs_
-_not__found.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1passlist_1_1_nuc__xs__not__found-eps-converted-to.pdf>
-<classopenbu_1_1passlist_1_1_nuc__xs__not__found-eps-converted-to.pdf, id=1058,
- 501.875pt x 321.2pt>
-File: classopenbu_1_1passlist_1_1_nuc__xs__not__found-eps-converted-to.pdf Grap
-hic file (type pdf)
-<use classopenbu_1_1passlist_1_1_nuc__xs__not__found-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1passlist_1_1_nuc__xs__not__found-eps-co
-nverted-to.pdf  used on input line 6.
+ [20 <./classopenbu_1_1passport_1_1_no__fission___x_s.pdf> <./classopenbu_1_1pa
+ssport_1_1_not__a___fission___product.pdf>]) (./classopenbu_1_1passlist_1_1_nuc
+__xs__not__found.tex
+<classopenbu_1_1passlist_1_1_nuc__xs__not__found.pdf, id=1053, 501.875pt x 321.
+2pt>
+File: classopenbu_1_1passlist_1_1_nuc__xs__not__found.pdf Graphic file (type pd
+f)
+<use classopenbu_1_1passlist_1_1_nuc__xs__not__found.pdf>
+Package pdftex.def Info: classopenbu_1_1passlist_1_1_nuc__xs__not__found.pdf  u
+sed on input line 6.
 (pdftex.def)             Requested size: 88.90921pt x 56.9055pt.
 )
 (./classopenbu_1_1cell_1_1_nucl__set__not__in___lib__nucl.tex
-Package epstopdf Info: Source file: <classopenbu_1_1cell_1_1_nucl__set__not__in
-___lib__nucl.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3808 bytes
-(epstopdf)             Output file: <classopenbu_1_1cell_1_1_nucl__set__not__in
-___lib__nucl-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:16
-(epstopdf)                    size: 5177 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1cell_1_1_nu
-cl__set__not__in___lib__nucl-eps-converted-to.pdf classopenbu_1_1cell_1_1_nucl_
-_set__not__in___lib__nucl.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1cell_1_1_nucl__set__not__in___lib__nucl-eps-converted-to.pdf
->
-<classopenbu_1_1cell_1_1_nucl__set__not__in___lib__nucl-eps-converted-to.pdf, i
-d=1064, 501.875pt x 243.32907pt>
-File: classopenbu_1_1cell_1_1_nucl__set__not__in___lib__nucl-eps-converted-to.p
-df Graphic file (type pdf)
-<use classopenbu_1_1cell_1_1_nucl__set__not__in___lib__nucl-eps-converted-to.pd
-f>
+<classopenbu_1_1cell_1_1_nucl__set__not__in___lib__nucl.pdf, id=1054, 501.875pt
+ x 243.32907pt>
+File: classopenbu_1_1cell_1_1_nucl__set__not__in___lib__nucl.pdf Graphic file (
+type pdf)
+<use classopenbu_1_1cell_1_1_nucl__set__not__in___lib__nucl.pdf>
 Package pdftex.def Info: classopenbu_1_1cell_1_1_nucl__set__not__in___lib__nucl
--eps-converted-to.pdf  used on input line 6.
+.pdf  used on input line 6.
 (pdftex.def)             Requested size: 117.36629pt x 56.9055pt.
 )
-(./classopenbu_1_1cell_1_1_nuclide__list__redundant.tex
-Package epstopdf Info: Source file: <classopenbu_1_1cell_1_1_nuclide__list__red
-undant.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3804 bytes
-(epstopdf)             Output file: <classopenbu_1_1cell_1_1_nuclide__list__red
-undant-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:16
-(epstopdf)                    size: 5389 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1cell_1_1_nu
-clide__list__redundant-eps-converted-to.pdf classopenbu_1_1cell_1_1_nuclide__li
-st__redundant.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1cell_1_1_nuclide__list__redundant-eps-converted-to.pdf>
-<classopenbu_1_1cell_1_1_nuclide__list__redundant-eps-converted-to.pdf, id=1070
-, 501.875pt x 269.46672pt>
-File: classopenbu_1_1cell_1_1_nuclide__list__redundant-eps-converted-to.pdf Gra
-phic file (type pdf)
-<use classopenbu_1_1cell_1_1_nuclide__list__redundant-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1cell_1_1_nuclide__list__redundant-eps-c
-onverted-to.pdf  used on input line 6.
+(./classopenbu_1_1cell_1_1_nuclide__list__redundant.tex [21 <./classopenbu_1_1p
+assport_1_1_nuc__xs__not__found.pdf> <./classopenbu_1_1passlist_1_1_nuc__xs__no
+t__found.pdf> <./classopenbu_1_1cell_1_1_nucl__set__not__in___lib__nucl.pdf>]
+<classopenbu_1_1cell_1_1_nuclide__list__redundant.pdf, id=1078, 501.875pt x 269
+.46672pt>
+File: classopenbu_1_1cell_1_1_nuclide__list__redundant.pdf Graphic file (type p
+df)
+<use classopenbu_1_1cell_1_1_nuclide__list__redundant.pdf>
+Package pdftex.def Info: classopenbu_1_1cell_1_1_nuclide__list__redundant.pdf  
+used on input line 6.
 (pdftex.def)             Requested size: 105.97887pt x 56.9055pt.
- [21])
+)
 (./classopenbu_1_1passlist_1_1_passlist.tex
-Package epstopdf Info: Source file: <classopenbu_1_1passlist_1_1_passlist.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3770 bytes
-(epstopdf)             Output file: <classopenbu_1_1passlist_1_1_passlist-eps-c
-onverted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:17
-(epstopdf)                    size: 4727 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1passlist_1_
-1_passlist-eps-converted-to.pdf classopenbu_1_1passlist_1_1_passlist.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1passlist_1_1_passlist-eps-converted-to.pdf>
-<classopenbu_1_1passlist_1_1_passlist-eps-converted-to.pdf, id=1084, 501.875pt 
-x 647.57933pt>
-File: classopenbu_1_1passlist_1_1_passlist-eps-converted-to.pdf Graphic file (t
-ype pdf)
-<use classopenbu_1_1passlist_1_1_passlist-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1passlist_1_1_passlist-eps-converted-to.
-pdf  used on input line 6.
+<classopenbu_1_1passlist_1_1_passlist.pdf, id=1079, 501.875pt x 647.57933pt>
+File: classopenbu_1_1passlist_1_1_passlist.pdf Graphic file (type pdf)
+<use classopenbu_1_1passlist_1_1_passlist.pdf>
+Package pdftex.def Info: classopenbu_1_1passlist_1_1_passlist.pdf  used on inpu
+t line 6.
 (pdftex.def)             Requested size: 44.09468pt x 56.9055pt.
 
 Overfull \hbox (43.9562pt too wide) in paragraph at lines 21--21
@@ -1625,64 +1218,37 @@ Overfull \hbox (43.9562pt too wide) in paragraph at lines 21--21
 ere entries are the zamid of the nuclides 
  []
 
-[22]
+[22 <./classopenbu_1_1cell_1_1_nuclide__list__redundant.pdf> <./classopenbu_1_1
+passlist_1_1_passlist.pdf>]
 Overfull \hbox (43.9562pt too wide) in paragraph at lines 28--28
 []\T1/pcr/m/n/8 Convert the list of passport into a dictionnary of passports wh
 ere entries are the zamid of the nuclides 
  []
 
 [23]) (./classopenbu_1_1cell_1_1_passlist__not__defined.tex
-Package epstopdf Info: Source file: <classopenbu_1_1cell_1_1_passlist__not__def
-ined.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3800 bytes
-(epstopdf)             Output file: <classopenbu_1_1cell_1_1_passlist__not__def
-ined-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:17
-(epstopdf)                    size: 5318 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1cell_1_1_pa
-sslist__not__defined-eps-converted-to.pdf classopenbu_1_1cell_1_1_passlist__not
-__defined.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1cell_1_1_passlist__not__defined-eps-converted-to.pdf>
-<classopenbu_1_1cell_1_1_passlist__not__defined-eps-converted-to.pdf, id=1109, 
-501.875pt x 297.41112pt>
-File: classopenbu_1_1cell_1_1_passlist__not__defined-eps-converted-to.pdf Graph
-ic file (type pdf)
-<use classopenbu_1_1cell_1_1_passlist__not__defined-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1cell_1_1_passlist__not__defined-eps-con
-verted-to.pdf  used on input line 6.
+<classopenbu_1_1cell_1_1_passlist__not__defined.pdf, id=1109, 501.875pt x 297.4
+1112pt>
+File: classopenbu_1_1cell_1_1_passlist__not__defined.pdf Graphic file (type pdf
+)
+<use classopenbu_1_1cell_1_1_passlist__not__defined.pdf>
+Package pdftex.def Info: classopenbu_1_1cell_1_1_passlist__not__defined.pdf  us
+ed on input line 6.
 (pdftex.def)             Requested size: 96.02348pt x 56.9055pt.
 )
 (./classopenbu_1_1passport_1_1_passport.tex
-Package epstopdf Info: Source file: <classopenbu_1_1passport_1_1_passport.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3770 bytes
-(epstopdf)             Output file: <classopenbu_1_1passport_1_1_passport-eps-c
-onverted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:18
-(epstopdf)                    size: 4818 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1passport_1_
-1_passport-eps-converted-to.pdf classopenbu_1_1passport_1_1_passport.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1passport_1_1_passport-eps-converted-to.pdf>
-<classopenbu_1_1passport_1_1_passport-eps-converted-to.pdf, id=1115, 501.875pt 
-x 581.88394pt>
-File: classopenbu_1_1passport_1_1_passport-eps-converted-to.pdf Graphic file (t
-ype pdf)
-<use classopenbu_1_1passport_1_1_passport-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1passport_1_1_passport-eps-converted-to.
-pdf  used on input line 6.
+<classopenbu_1_1passport_1_1_passport.pdf, id=1110, 501.875pt x 581.88394pt>
+File: classopenbu_1_1passport_1_1_passport.pdf Graphic file (type pdf)
+<use classopenbu_1_1passport_1_1_passport.pdf>
+Package pdftex.def Info: classopenbu_1_1passport_1_1_passport.pdf  used on inpu
+t line 6.
 (pdftex.def)             Requested size: 49.08002pt x 56.9055pt.
-
+ [24 <./classopenbu_1_1cell_1_1_passlist__not__defined.pdf>]
 Overfull \hbox (72.75623pt too wide) in paragraph at lines 17--17
 []\T1/pcr/m/n/8 passport stores all the relevant data of indivudual nuclides an
 d offers methods to extract information on them 
  []
 
-[24]
+
 Overfull \hbox (187.9563pt too wide) in paragraph at lines 19--19
 []   \T1/pcr/m/n/8 The passport class is individually instantiated for each nuc
 lide. It contains two types of information: constant and variable data.[] 
@@ -1748,238 +1314,141 @@ Overfull \hbox (77.55623pt too wide) in paragraph at lines 45--45
 ute values and percent fractions) of the nuclide[] 
  []
 
-[25]
-LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <8> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 70.
-LaTeX Font Info:    Font shape `T1/phv/b/n' will be
+[25 <./classopenbu_1_1passport_1_1_passport.pdf>]
+LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
 (Font)              scaled to size 7.19995pt on input line 70.
-LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <8> not available
-(Font)              Font shape `T1/pcr/b/n' tried instead on input line 70.
- [26] [27] [28] [29]) (./classopenbu_1_1sequence_1_1_sequence.tex
-Package epstopdf Info: Source file: <classopenbu_1_1sequence_1_1_sequence.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3770 bytes
-(epstopdf)             Output file: <classopenbu_1_1sequence_1_1_sequence-eps-c
-onverted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:18
-(epstopdf)                    size: 4671 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1sequence_1_
-1_sequence-eps-converted-to.pdf classopenbu_1_1sequence_1_1_sequence.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1sequence_1_1_sequence-eps-converted-to.pdf>
-<classopenbu_1_1sequence_1_1_sequence-eps-converted-to.pdf, id=1175, 501.875pt 
-x 528.2937pt>
-File: classopenbu_1_1sequence_1_1_sequence-eps-converted-to.pdf Graphic file (t
-ype pdf)
-<use classopenbu_1_1sequence_1_1_sequence-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1sequence_1_1_sequence-eps-converted-to.
-pdf  used on input line 6.
+
+
+LaTeX Font Warning: Font shape `T1/pcr/bc/n' undefined
+(Font)              using `T1/pcr/m/n' instead on input line 70.
+
+[26] [27] [28] [29]) (./classopenbu_1_1sequence_1_1_sequence.tex
+<classopenbu_1_1sequence_1_1_sequence.pdf, id=1174, 501.875pt x 528.2937pt>
+File: classopenbu_1_1sequence_1_1_sequence.pdf Graphic file (type pdf)
+<use classopenbu_1_1sequence_1_1_sequence.pdf>
+Package pdftex.def Info: classopenbu_1_1sequence_1_1_sequence.pdf  used on inpu
+t line 6.
 (pdftex.def)             Requested size: 54.05771pt x 56.9055pt.
- [30])
+ [30 <./classopenbu_1_1sequence_1_1_sequence.pdf>])
 (./classopenbu_1_1standalone_1_1_stand__alone.tex
-Package epstopdf Info: Source file: <classopenbu_1_1standalone_1_1_stand__alone
-.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3776 bytes
-(epstopdf)             Output file: <classopenbu_1_1standalone_1_1_stand__alone
--eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:19
-(epstopdf)                    size: 4825 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1standalone_
-1_1_stand__alone-eps-converted-to.pdf classopenbu_1_1standalone_1_1_stand__alon
-e.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1standalone_1_1_stand__alone-eps-converted-to.pdf>
-<classopenbu_1_1standalone_1_1_stand__alone-eps-converted-to.pdf, id=1192, 501.
-875pt x 446.10666pt>
-File: classopenbu_1_1standalone_1_1_stand__alone-eps-converted-to.pdf Graphic f
-ile (type pdf)
-<use classopenbu_1_1standalone_1_1_stand__alone-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1standalone_1_1_stand__alone-eps-convert
-ed-to.pdf  used on input line 6.
+<classopenbu_1_1standalone_1_1_stand__alone.pdf, id=1191, 501.875pt x 446.10666
+pt>
+File: classopenbu_1_1standalone_1_1_stand__alone.pdf Graphic file (type pdf)
+<use classopenbu_1_1standalone_1_1_stand__alone.pdf>
+Package pdftex.def Info: classopenbu_1_1standalone_1_1_stand__alone.pdf  used o
+n input line 6.
 (pdftex.def)             Requested size: 64.01309pt x 56.9055pt.
 )
 (./classopenbu_1_1sequence_1_1_step__0.tex
-Package epstopdf Info: Source file: <classopenbu_1_1sequence_1_1_step__0.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3772 bytes
-(epstopdf)             Output file: <classopenbu_1_1sequence_1_1_step__0-eps-co
-nverted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:19
-(epstopdf)                    size: 4914 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1sequence_1_
-1_step__0-eps-converted-to.pdf classopenbu_1_1sequence_1_1_step__0.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1sequence_1_1_step__0-eps-converted-to.pdf>
-<classopenbu_1_1sequence_1_1_step__0-eps-converted-to.pdf, id=1198, 501.875pt x
- 535.33pt>
-File: classopenbu_1_1sequence_1_1_step__0-eps-converted-to.pdf Graphic file (ty
-pe pdf)
-<use classopenbu_1_1sequence_1_1_step__0-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1sequence_1_1_step__0-eps-converted-to.p
-df  used on input line 6.
+<classopenbu_1_1sequence_1_1_step__0.pdf, id=1192, 501.875pt x 535.33pt>
+File: classopenbu_1_1sequence_1_1_step__0.pdf Graphic file (type pdf)
+<use classopenbu_1_1sequence_1_1_step__0.pdf>
+Package pdftex.def Info: classopenbu_1_1sequence_1_1_step__0.pdf  used on input
+ line 6.
 (pdftex.def)             Requested size: 53.34552pt x 56.9055pt.
- [31])
-(./classopenbu_1_1couple_1_1couple__openmc_1_1_s_t_o_p.tex
-Package epstopdf Info: Source file: <classopenbu_1_1couple_1_1couple__openmc_1_
-1_s_t_o_p.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3768 bytes
-(epstopdf)             Output file: <classopenbu_1_1couple_1_1couple__openmc_1_
-1_s_t_o_p-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:21
-(epstopdf)                    size: 5061 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1couple_1_1c
-ouple__openmc_1_1_s_t_o_p-eps-converted-to.pdf classopenbu_1_1couple_1_1couple_
-_openmc_1_1_s_t_o_p.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1couple_1_1couple__openmc_1_1_s_t_o_p-eps-converted-to.pdf>
-<classopenbu_1_1couple_1_1couple__openmc_1_1_s_t_o_p-eps-converted-to.pdf, id=1
-214, 501.875pt x 535.33pt>
-File: classopenbu_1_1couple_1_1couple__openmc_1_1_s_t_o_p-eps-converted-to.pdf 
-Graphic file (type pdf)
-<use classopenbu_1_1couple_1_1couple__openmc_1_1_s_t_o_p-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1couple_1_1couple__openmc_1_1_s_t_o_p-ep
-s-converted-to.pdf  used on input line 6.
+ [31 <./classopenbu_1_1standalone_1_1_stand__alone.pdf>]) (./classopenbu_1_1cou
+ple_1_1couple__openmc_1_1_s_t_o_p.tex
+<classopenbu_1_1couple_1_1couple__openmc_1_1_s_t_o_p.pdf, id=1208, 501.875pt x 
+535.33pt>
+File: classopenbu_1_1couple_1_1couple__openmc_1_1_s_t_o_p.pdf Graphic file (typ
+e pdf)
+<use classopenbu_1_1couple_1_1couple__openmc_1_1_s_t_o_p.pdf>
+Package pdftex.def Info: classopenbu_1_1couple_1_1couple__openmc_1_1_s_t_o_p.pd
+f  used on input line 6.
 (pdftex.def)             Requested size: 53.34552pt x 56.9055pt.
-)
-(./classopenbu_1_1system_1_1_system.tex
-Package epstopdf Info: Source file: <classopenbu_1_1system_1_1_system.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3766 bytes
-(epstopdf)             Output file: <classopenbu_1_1system_1_1_system-eps-conve
-rted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:22
-(epstopdf)                    size: 4787 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1system_1_1_
-system-eps-converted-to.pdf classopenbu_1_1system_1_1_system.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1system_1_1_system-eps-converted-to.pdf>
-<classopenbu_1_1system_1_1_system-eps-converted-to.pdf, id=1220, 501.875pt x 66
-9.17pt>
-File: classopenbu_1_1system_1_1_system-eps-converted-to.pdf Graphic file (type 
-pdf)
-<use classopenbu_1_1system_1_1_system-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1system_1_1_system-eps-converted-to.pdf 
- used on input line 6.
+) (./classopenbu_1_1system_1_1_system.tex
+<classopenbu_1_1system_1_1_system.pdf, id=1209, 501.875pt x 669.17pt>
+File: classopenbu_1_1system_1_1_system.pdf Graphic file (type pdf)
+<use classopenbu_1_1system_1_1_system.pdf>
+Package pdftex.def Info: classopenbu_1_1system_1_1_system.pdf  used on input li
+ne 6.
 (pdftex.def)             Requested size: 42.67795pt x 56.9055pt.
- [32])
+ [32 <./classopenbu_1_1sequence_1_1_step__0.pdf> <./classopenbu_1_1couple_1_1co
+uple__openmc_1_1_s_t_o_p.pdf> <./classopenbu_1_1system_1_1_system.pdf>])
 (./classopenbu_1_1utils_1_1reactions__class_1_1xs__lib.tex
-Package epstopdf Info: Source file: <classopenbu_1_1utils_1_1reactions__class_1
-_1xs__lib.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3766 bytes
-(epstopdf)             Output file: <classopenbu_1_1utils_1_1reactions__class_1
-_1xs__lib-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:22
-(epstopdf)                    size: 4622 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1utils_1_1re
-actions__class_1_1xs__lib-eps-converted-to.pdf classopenbu_1_1utils_1_1reaction
-s__class_1_1xs__lib.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1utils_1_1reactions__class_1_1xs__lib-eps-converted-to.pdf>
-<classopenbu_1_1utils_1_1reactions__class_1_1xs__lib-eps-converted-to.pdf, id=1
-233, 501.875pt x 743.51776pt>
-File: classopenbu_1_1utils_1_1reactions__class_1_1xs__lib-eps-converted-to.pdf 
-Graphic file (type pdf)
-<use classopenbu_1_1utils_1_1reactions__class_1_1xs__lib-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1utils_1_1reactions__class_1_1xs__lib-ep
-s-converted-to.pdf  used on input line 6.
+<classopenbu_1_1utils_1_1reactions__class_1_1xs__lib.pdf, id=1232, 501.875pt x 
+743.51776pt>
+File: classopenbu_1_1utils_1_1reactions__class_1_1xs__lib.pdf Graphic file (typ
+e pdf)
+<use classopenbu_1_1utils_1_1reactions__class_1_1xs__lib.pdf>
+Package pdftex.def Info: classopenbu_1_1utils_1_1reactions__class_1_1xs__lib.pd
+f  used on input line 6.
 (pdftex.def)             Requested size: 38.40479pt x 56.9055pt.
 )
 (./classopenbu_1_1utils_1_1data__processor_1_1xs__name__not__found.tex
-Package epstopdf Info: Source file: <classopenbu_1_1utils_1_1data__processor_1_
-1xs__name__not__found.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3794 bytes
-(epstopdf)             Output file: <classopenbu_1_1utils_1_1data__processor_1_
-1xs__name__not__found-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:23
-(epstopdf)                    size: 5382 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1utils_1_1da
-ta__processor_1_1xs__name__not__found-eps-converted-to.pdf classopenbu_1_1utils
-_1_1data__processor_1_1xs__name__not__found.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1utils_1_1data__processor_1_1xs__name__not__found-eps-convert
-ed-to.pdf>
-<classopenbu_1_1utils_1_1data__processor_1_1xs__name__not__found-eps-converted-
-to.pdf, id=1239, 501.875pt x 304.16637pt>
-File: classopenbu_1_1utils_1_1data__processor_1_1xs__name__not__found-eps-conve
-rted-to.pdf Graphic file (type pdf)
-<use classopenbu_1_1utils_1_1data__processor_1_1xs__name__not__found-eps-conver
-ted-to.pdf>
+<classopenbu_1_1utils_1_1data__processor_1_1xs__name__not__found.pdf, id=1233, 
+501.875pt x 304.16637pt>
+File: classopenbu_1_1utils_1_1data__processor_1_1xs__name__not__found.pdf Graph
+ic file (type pdf)
+<use classopenbu_1_1utils_1_1data__processor_1_1xs__name__not__found.pdf>
 Package pdftex.def Info: classopenbu_1_1utils_1_1data__processor_1_1xs__name__n
-ot__found-eps-converted-to.pdf  used on input line 6.
+ot__found.pdf  used on input line 6.
 (pdftex.def)             Requested size: 93.89456pt x 56.9055pt.
 
 Overfull \hbox (19.95619pt too wide) in paragraph at lines 12--12
-[]\T1/pcr/m/n/8 Raise when the user tries to access fission XS for a nuclide wh
-ich fission XS have not been set yet 
+[]\T1/pcr/bc/n/8 Raise when the user tries to access fission XS for a nuclide w
+hich fission XS have not been set yet 
  []
 
 ) (./classopenbu_1_1passport_1_1_x_s__not__yet__set.tex
-Package epstopdf Info: Source file: <classopenbu_1_1passport_1_1_x_s__not__yet_
-_set.eps>
-(epstopdf)                    date: 2019-08-20 12:22:11
-(epstopdf)                    size: 3788 bytes
-(epstopdf)             Output file: <classopenbu_1_1passport_1_1_x_s__not__yet_
-_set-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-08-20 12:26:23
-(epstopdf)                    size: 5201 bytes
-(epstopdf)             Command: <repstopdf --outfile=classopenbu_1_1passport_1_
-1_x_s__not__yet__set-eps-converted-to.pdf classopenbu_1_1passport_1_1_x_s__not_
-_yet__set.eps>
-(epstopdf)             \includegraphics on input line 6.
-Package epstopdf Info: Output file is already uptodate.
- <./classopenbu_1_1passport_1_1_x_s__not__yet__set-eps-converted-to.pdf>
-<classopenbu_1_1passport_1_1_x_s__not__yet__set-eps-converted-to.pdf, id=1245, 
-501.875pt x 371.75888pt>
-File: classopenbu_1_1passport_1_1_x_s__not__yet__set-eps-converted-to.pdf Graph
-ic file (type pdf)
-<use classopenbu_1_1passport_1_1_x_s__not__yet__set-eps-converted-to.pdf>
-Package pdftex.def Info: classopenbu_1_1passport_1_1_x_s__not__yet__set-eps-con
-verted-to.pdf  used on input line 6.
+<classopenbu_1_1passport_1_1_x_s__not__yet__set.pdf, id=1234, 501.875pt x 371.7
+5888pt>
+File: classopenbu_1_1passport_1_1_x_s__not__yet__set.pdf Graphic file (type pdf
+)
+<use classopenbu_1_1passport_1_1_x_s__not__yet__set.pdf>
+Package pdftex.def Info: classopenbu_1_1passport_1_1_x_s__not__yet__set.pdf  us
+ed on input line 6.
 (pdftex.def)             Requested size: 76.81725pt x 56.9055pt.
- [33]) [34] (./refman.ind
+ [33 <./classopenbu_1_1utils_1_1reactions__class_1_1xs__lib.pdf> <./classopenbu
+_1_1utils_1_1data__processor_1_1xs__name__not__found.pdf>]) [34 <./classopenbu_
+1_1passport_1_1_x_s__not__yet__set.pdf>] (./refman.ind
+Underfull \hbox (badness 10000) in paragraph at lines 12--14
+[]| \T1/phv/m/n/10 openbu[]::couple[]::couple[]_[]openmc[]::[]Couple[]_[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 33--35
+[]| \T1/phv/m/n/10 openbu[]::couple[]::couple[]_[]openmc[]::[]Couple[]_[]
+ []
+
 [35
 
 
 
 ] [36])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 226.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 226.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 197.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 197.
  (./refman.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 226.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 226.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 197.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 197.
 Package rerunfilecheck Info: File `refman.out' has not changed.
-(rerunfilecheck)             Checksum: A40103CAF9DF4BED82A6E9926FCBC549;25670.
+(rerunfilecheck)             Checksum: 879100458AC94427476B843549B969DC;25668.
+
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 197.
  ) 
 Here is how much of TeX's memory you used:
- 17095 strings out of 492616
- 265067 string characters out of 6129482
- 379141 words of memory out of 5000000
- 20345 multiletter control sequences out of 15000+600000
- 46733 words of font info for 61 fonts, out of 8000000 for 9000
+ 15503 strings out of 492616
+ 239684 string characters out of 6129482
+ 330602 words of memory out of 5000000
+ 18802 multiletter control sequences out of 15000+600000
+ 53640 words of font info for 63 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 53i,15n,92p,1426b,499s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 53i,16n,92p,1426b,497s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
-exlive/2019/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/local/texlive/2
-019/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2019/texm
-f-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/local/texlive/2019/texmf-dist/
-fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2019/texmf-dist/fonts/t
-ype1/urw/helvetic/uhvb8ac.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/u
-rw/helvetic/uhvr8a.pfb>
-Output written on refman.pdf (42 pages, 203350 bytes).
+exlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/tex
+live/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texli
+ve/2019/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2019/
+texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/local/texlive/2019/texmf-d
+ist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2019/texmf-dist/fon
+ts/type1/urw/helvetic/uhvb8ac.pfb></usr/local/texlive/2019/texmf-dist/fonts/typ
+e1/urw/helvetic/uhvr8a.pfb>
+Output written on refman.pdf (42 pages, 219077 bytes).
 PDF statistics:
- 1487 PDF objects out of 1728 (max. 8388607)
- 1357 compressed objects within 14 object streams
+ 1491 PDF objects out of 1728 (max. 8388607)
+ 1360 compressed objects within 14 object streams
  320 named destinations out of 1000 (max. 500000)
  1134 words of extra memory for PDF output out of 10000 (max. 10000000)
 
