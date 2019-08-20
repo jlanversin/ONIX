@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['xs',['xs',['../namespacebuild__text__mat.html#ae0f5e82ee31a657ad8312b0ed1851438',1,'build_text_mat']]],
+  ['xs_5fdic',['xs_dic',['../namespacefind__isomeric__branching.html#a7e78dcfc87121f836b11dd36ac2a4102',1,'find_isomeric_branching']]],
+  ['xs_5fenergy_5fbin',['xs_energy_bin',['../namespacexs__flux__folder.html#a26665b954650cd6e0d35e40ce31f8272',1,'xs_flux_folder']]],
+  ['xs_5fenergy_5findex',['xs_energy_index',['../namespacexs__flux__folder.html#a1ecd39a968380c44899d5b9b5a8e6c15',1,'xs_flux_folder']]],
+  ['xs_5ffile',['xs_file',['../namespacebuild__text__mat.html#ad890076e7be719b82e0343e67f342a5f',1,'build_text_mat']]],
+  ['xs_5fkey',['xs_key',['../namespaceopenbu_1_1data_1_1list__and__dict.html#a6a837a2e08d7ff6bccdad790ff8d8ef0',1,'openbu::data::list_and_dict']]],
+  ['xs_5flib',['xs_lib',['../namespaceconv__xslib.html#a18a9031da670a071c181d0a67c97f703',1,'conv_xslib']]],
+  ['xs_5flib_5fheader',['xs_lib_header',['../namespaceopenbu_1_1utils_1_1printer.html#a32bf9a4ee9842df0bae1bce2a566401f',1,'openbu::utils::printer']]],
+  ['xs_5flib_5fobject_5fname_5fdict',['xs_lib_object_name_dict',['../namespaceopenbu_1_1data_1_1list__and__dict.html#a41516eb0affbc8e8d45226793b61f955',1,'openbu::data::list_and_dict']]],
+  ['xs_5fline',['xs_line',['../namespacebuild__text__mat.html#a76620b34edb9d2b0854e9475ce833530',1,'build_text_mat']]],
+  ['xs_5fmode',['xs_mode',['../classopenbu_1_1couple_1_1couple__openmc_1_1_couple__openmc.html#a4547404e7e502ab6b505c8014571b284',1,'openbu::couple::couple_openmc::Couple_openmc']]],
+  ['xs_5fnucl',['xs_nucl',['../namespacebuild__text__mat.html#a1de21b819e89964a475e357b2550b384',1,'build_text_mat']]],
+  ['xs_5fparent',['xs_parent',['../namespacebuild__text__mat.html#a6e0e9bc0d90c344a59d35022f8d7ff4e',1,'build_text_mat']]],
+  ['xs_5fpoint',['xs_point',['../namespacexs__flux__folder.html#ad23e37c918e1b934cc17014bec232135',1,'xs_flux_folder']]],
+  ['xs_5fprod_5ffroms_5ftos',['xs_prod_fromS_toS',['../namespaceopenbu_1_1data_1_1list__and__dict.html#aab501c5121bce38f8a087f2737561257',1,'openbu::data::list_and_dict']]],
+  ['xs_5fprod_5ffroms_5ftox',['xs_prod_fromS_toX',['../namespaceopenbu_1_1data_1_1list__and__dict.html#a7fd6f6e0689a672923538ded03b6a9bd',1,'openbu::data::list_and_dict']]],
+  ['xs_5fprod_5ffromx_5ftos',['xs_prod_fromX_toS',['../namespaceopenbu_1_1data_1_1list__and__dict.html#ad17f4c5f4693ca03a652fa37420b541d',1,'openbu::data::list_and_dict']]],
+  ['xs_5fprod_5ffromx_5ftox',['xs_prod_fromX_toX',['../namespaceopenbu_1_1data_1_1list__and__dict.html#a3a0e5e3af6548f64059547e2c0b8c2ac',1,'openbu::data::list_and_dict']]],
+  ['xs_5fseq',['xs_seq',['../classopenbu_1_1passport_1_1_passport.html#aecb67bbea706f6dc18e1eca8dbef71e9',1,'openbu::passport::Passport']]],
+  ['xs_5fval',['xs_val',['../namespacebuild__text__mat.html#a95830f5cf6c0b56aad51495435573a10',1,'build_text_mat']]]
+];
