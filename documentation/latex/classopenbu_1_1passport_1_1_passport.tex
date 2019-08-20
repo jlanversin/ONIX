@@ -1,0 +1,212 @@
+\hypertarget{classopenbu_1_1passport_1_1_passport}{}\doxysection{Passport Class Reference}
+\label{classopenbu_1_1passport_1_1_passport}\index{Passport@{Passport}}
+Inheritance diagram for Passport\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classopenbu_1_1passport_1_1_passport}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\doxysubsection*{Public Attributes}
+\doxysubsection*{Private Member Functions}
+\doxysubsection*{Private Attributes}
+\doxysubsection*{Static Private Attributes}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}passport stores all the relevant data of indivudual nuclides and offers methods to extract information on them
+
+   The passport class is individually instantiated for each nuclide. It contains two types of information: constant and variable data.
+   Constant data, such as the atomic mass, decay constant or the element's family (actinide, fission product) do not change over the course of a simulation.
+   Variable data such as cross sections or fission yields do vary during a simulation and need thus to be updated regularly during a simulation.
+   Some of the data are created at the time of the instantiation of the class for a nuclide such as the element's family or the nuclide's
+   neutron reaction daughters. Other type of data, typically large in size such as cross sections and decay constants, are to be explicitly set or loaded.
+   A setter method will enable any script that reads the data source to set this data for the passport of a specific nuclide. This is the method used within
+   the code of Open-Burnup to set the data for a list of passports. The other way to explicitly set the data is to use the loader method. This method will
+   go to the data source itself, read the data and set it for the passport of a specific nuclide. This method is envision to be used by the user as a
+   user-friendly way to get information on individual nuclides.
+
+   Attributes:
+       * **decay_a:** returns the absolute value of the decay constants of the nuclide
+       * **decay_b:** returns the percent fraction value of the decay constants of the nuclide
+       * **fy:** returns the value of fission yields in percent
+       * **mass:** returns the atomic mass of the nuclide
+       * **xs:** returns the absolute value of cross sections for the nuclide
+       * **FAM:** returns the family group name of the nuclide
+       * **xs_relatives:** returns neutron reaction's daughter nuclides' id
+       * **decay_relatives:** returns decay reaction's daughter nuclides' id
+
+   Methods:
+       * **set_mass():** set the atomic mass of the nuclide
+       * **set_decay():** set the decay constants (both absolute values and percent fractions) of the nuclide
+       * **set_xs():** set the cross sections of the nuclide
+       * **set_fy():** set the fission yields of the nuclide
+       * **load_mass():** load the atomic mass of the nuclide
+       * **load_decay():** load the decay constants (both absolute values and percent fractions) of the nuclide
+       * **load_mass():** load the cross sections of the nuclide
+       * **load_mass():** load the fission yields of the nuclide
+       * **get__zamid():** returns the zzaaam id of the nuclide
+       * **get_nuc_name():** returns the name of the nuclide\end{DoxyVerb}
+ 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a1d13e38c1df92265a6b65961522978e9}\label{classopenbu_1_1passport_1_1_passport_a1d13e38c1df92265a6b65961522978e9}} 
+\index{Passport@{Passport}!\_set\_initial\_dens@{\_set\_initial\_dens}}
+\index{\_set\_initial\_dens@{\_set\_initial\_dens}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{\_set\_initial\_dens()}{\_set\_initial\_dens()}}
+{\footnotesize\ttfamily def \+\_\+set\+\_\+initial\+\_\+dens (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{new\+\_\+dens }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\begin{DoxyVerb}set new dens to current dens and append to dens_seqor\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a3f7ead3ec8497f2dea2c5b4a8efb3064}\label{classopenbu_1_1passport_1_1_passport_a3f7ead3ec8497f2dea2c5b4a8efb3064}} 
+\index{Passport@{Passport}!\_set\_state@{\_set\_state}}
+\index{\_set\_state@{\_set\_state}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{\_set\_state()}{\_set\_state()}}
+{\footnotesize\ttfamily def \+\_\+set\+\_\+state (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\begin{DoxyVerb}Returns the state of the nuclide (excited or ground state)\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_aae6f90e1f0871cddaad54d66a6bd6529}\label{classopenbu_1_1passport_1_1_passport_aae6f90e1f0871cddaad54d66a6bd6529}} 
+\index{Passport@{Passport}!current\_dens@{current\_dens}}
+\index{current\_dens@{current\_dens}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{current\_dens()}{current\_dens()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily def current\+\_\+dens (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the density of the nuclide in atom per cm^3\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a2e640e060087e64c0e938f17b6c3653e}\label{classopenbu_1_1passport_1_1_passport_a2e640e060087e64c0e938f17b6c3653e}} 
+\index{Passport@{Passport}!current\_dens@{current\_dens}}
+\index{current\_dens@{current\_dens}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{current\_dens()}{current\_dens()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily def current\+\_\+dens (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{new\+\_\+dens }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}set the density of the nuclide in atom per cm^3\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a555c209d9b1ea0fcc30cb14a259342f4}\label{classopenbu_1_1passport_1_1_passport_a555c209d9b1ea0fcc30cb14a259342f4}} 
+\index{Passport@{Passport}!current\_xs@{current\_xs}}
+\index{current\_xs@{current\_xs}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{current\_xs()}{current\_xs()}}
+{\footnotesize\ttfamily def current\+\_\+xs (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the cross sections data of the nuclide\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ab9d903431dc1a815d57cb09912e41e58}\label{classopenbu_1_1passport_1_1_passport_ab9d903431dc1a815d57cb09912e41e58}} 
+\index{Passport@{Passport}!decay\_a@{decay\_a}}
+\index{decay\_a@{decay\_a}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{decay\_a()}{decay\_a()}}
+{\footnotesize\ttfamily def decay\+\_\+a (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the absolute values of the decay constant of the nuclide\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ade7165602b6bcdee1ed9b7256170379b}\label{classopenbu_1_1passport_1_1_passport_ade7165602b6bcdee1ed9b7256170379b}} 
+\index{Passport@{Passport}!decay\_b@{decay\_b}}
+\index{decay\_b@{decay\_b}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{decay\_b()}{decay\_b()}}
+{\footnotesize\ttfamily def decay\+\_\+b (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the fraction percent values of the decay constant of the nuclide\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_afe7a50b1cfeb99651932d201b32e1eac}\label{classopenbu_1_1passport_1_1_passport_afe7a50b1cfeb99651932d201b32e1eac}} 
+\index{Passport@{Passport}!decay\_child@{decay\_child}}
+\index{decay\_child@{decay\_child}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{decay\_child()}{decay\_child()}}
+{\footnotesize\ttfamily def decay\+\_\+child (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the decay reactions' daughter products\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a036610ac850c29ffb1e5172cff7c679a}\label{classopenbu_1_1passport_1_1_passport_a036610ac850c29ffb1e5172cff7c679a}} 
+\index{Passport@{Passport}!decay\_parent@{decay\_parent}}
+\index{decay\_parent@{decay\_parent}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{decay\_parent()}{decay\_parent()}}
+{\footnotesize\ttfamily def decay\+\_\+parent (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the decay reactions' daughter products\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a8b75ace3008810461600cc7df511303b}\label{classopenbu_1_1passport_1_1_passport_a8b75ace3008810461600cc7df511303b}} 
+\index{Passport@{Passport}!fy@{fy}}
+\index{fy@{fy}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{fy()}{fy()}}
+{\footnotesize\ttfamily def fy (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the fission yields data in percent\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_aa1146a83b02f1768536bf28e3f5776ea}\label{classopenbu_1_1passport_1_1_passport_aa1146a83b02f1768536bf28e3f5776ea}} 
+\index{Passport@{Passport}!get\_a@{get\_a}}
+\index{get\_a@{get\_a}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{get\_a()}{get\_a()}}
+{\footnotesize\ttfamily def get\+\_\+a (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the mass number of the nuclide\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_aa75b75b6a9d2a68e6a592e7353044edb}\label{classopenbu_1_1passport_1_1_passport_aa75b75b6a9d2a68e6a592e7353044edb}} 
+\index{Passport@{Passport}!get\_z@{get\_z}}
+\index{get\_z@{get\_z}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{get\_z()}{get\_z()}}
+{\footnotesize\ttfamily def get\+\_\+z (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the atomic number of the nuclide\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ab6f7c3af79510d2bf012aa1a483a6cf8}\label{classopenbu_1_1passport_1_1_passport_ab6f7c3af79510d2bf012aa1a483a6cf8}} 
+\index{Passport@{Passport}!load\_decay@{load\_decay}}
+\index{load\_decay@{load\_decay}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{load\_decay()}{load\_decay()}}
+{\footnotesize\ttfamily def load\+\_\+decay (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load the decay constant value of the nuclide
+
+This method directly fetches the decay constant values from the source data and automatically set
+of the passport object\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a3fd9b285c12428f2f1021f6fa498d27b}\label{classopenbu_1_1passport_1_1_passport_a3fd9b285c12428f2f1021f6fa498d27b}} 
+\index{Passport@{Passport}!load\_fy@{load\_fy}}
+\index{load\_fy@{load\_fy}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{load\_fy()}{load\_fy()}}
+{\footnotesize\ttfamily def load\+\_\+fy (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load the fission yields data of the nuclide
+
+This method directly fetches the fission yields data from the source data and automatically set
+of the passport object
+
+If the nuclide for which the fission yields data are being loaded is not a fission product,
+the error *Not_a_Fission_Product* will be raised\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a791d705e172d19c0cdc181960287cc78}\label{classopenbu_1_1passport_1_1_passport_a791d705e172d19c0cdc181960287cc78}} 
+\index{Passport@{Passport}!load\_mass@{load\_mass}}
+\index{load\_mass@{load\_mass}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{load\_mass()}{load\_mass()}}
+{\footnotesize\ttfamily def load\+\_\+mass (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load the atomic mass of the nuclide in gram
+
+This method directly fetches the atomic mass from the source data and automatically set
+of the passport object\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a1687aea883b9cdececdb7b88b659cd5c}\label{classopenbu_1_1passport_1_1_passport_a1687aea883b9cdececdb7b88b659cd5c}} 
+\index{Passport@{Passport}!load\_xs@{load\_xs}}
+\index{load\_xs@{load\_xs}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{load\_xs()}{load\_xs()}}
+{\footnotesize\ttfamily def load\+\_\+xs (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load the cross sections data of the nuclide
+
+This method directly fetches the cross sections data from the source data and automatically set
+of the passport object\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a69ae279139576858c6ca4dc9f5912717}\label{classopenbu_1_1passport_1_1_passport_a69ae279139576858c6ca4dc9f5912717}} 
+\index{Passport@{Passport}!mass@{mass}}
+\index{mass@{mass}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{mass()}{mass()}}
+{\footnotesize\ttfamily def mass (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Return the atomic mass of the nuclide in gram\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ae04c67eded9e7f018b551d4be5d36f2c}\label{classopenbu_1_1passport_1_1_passport_ae04c67eded9e7f018b551d4be5d36f2c}} 
+\index{Passport@{Passport}!set\_decay@{set\_decay}}
+\index{set\_decay@{set\_decay}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{set\_decay()}{set\_decay()}}
+{\footnotesize\ttfamily def set\+\_\+decay (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{decay\+\_\+a,  }\item[{}]{decay\+\_\+b }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Set the absolute and fracional values of the decay constant of the nuclide\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_af0b4eabf69455a1ace31fadfc437695b}\label{classopenbu_1_1passport_1_1_passport_af0b4eabf69455a1ace31fadfc437695b}} 
+\index{Passport@{Passport}!xs\_child@{xs\_child}}
+\index{xs\_child@{xs\_child}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{xs\_child()}{xs\_child()}}
+{\footnotesize\ttfamily def xs\+\_\+child (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the neutron reactions' daughter products\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a0f25e060e526ebc2db82f4769504a0b4}\label{classopenbu_1_1passport_1_1_passport_a0f25e060e526ebc2db82f4769504a0b4}} 
+\index{Passport@{Passport}!xs\_parent@{xs\_parent}}
+\index{xs\_parent@{xs\_parent}!Passport@{Passport}}
+\doxysubsubsection{\texorpdfstring{xs\_parent()}{xs\_parent()}}
+{\footnotesize\ttfamily def xs\+\_\+parent (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the neutron reactions' daughter products\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+passport.\+py\end{DoxyCompactItemize}
