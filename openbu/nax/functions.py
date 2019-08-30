@@ -39,6 +39,7 @@ class Batch(object):
 		ng_xs_seq_dict = {}
 		tot_xs_seq_dict= {}
 		for nuclide in nuclide_list:
+			#print (self.path)
 			ng_xs_seq_dict[nuclide] = utils.read_xs_seq(nuclide, '(n,gamma)', self.path, cell)
 			tot_xs_seq_dict[nuclide] = utils.get_tot_xs(nuclide, self.path, cell)
 
@@ -1033,6 +1034,7 @@ def plot_chain_fluence_relative_error_history(ratio_evolution, fluence_derivativ
 
 def plot_selected_fluence_relative_error_history(selected_list, selected_ratio_dict, selected_fluence_derivative_dict, history_mid_fluence, sampled_index, ratio_uncertainty, cut_off=None, batch_break_indexes= None):
 
+	plt.style.use('dark_background')
 
 	ratio_name_list = selected_list
 	sampled_history_fluence = sample_data_with_sample_indexes(sampled_index, history_mid_fluence)
@@ -1130,7 +1132,7 @@ def plot_selected_fluence_relative_error_history(selected_list, selected_ratio_d
 
 
 	plt.ylabel('Fluence relative error', fontsize=16)
-	plt.grid()
+	ax.grid(color = 'dimgray')
 	ax.yaxis.get_offset_text().set_fontsize(16)
 	ax.xaxis.get_offset_text().set_fontsize(16)
 	plt.legend(prop={'size': 12})
@@ -1263,6 +1265,7 @@ def plot_ng_chain_ratio_history(chain, ratio_evolution, history_fluence):
 def plot_selected_ratio_history(selected_list, selected_ratio_dict, history_fluence, batch_break_indexes=None):
 
 	ratio_name_list = selected_list
+	plt.style.use('dark_background')
 
 	f, ax = plt.subplots()
 	for i in range(len(ratio_name_list)):
@@ -1290,9 +1293,10 @@ def plot_selected_ratio_history(selected_list, selected_ratio_dict, history_flue
 	ax.yaxis.get_offset_text().set_fontsize(16)
 	ax.xaxis.get_offset_text().set_fontsize(16)
 	plt.ticklabel_format(style='sci', axis='y',scilimits=(0,0))
-	ax.grid()
+	ax.grid(color = 'dimgray')
 	plt.tick_params(labelsize=15)
-	#plt.legend(prop={'size': 12})
+	ax.set_ylim(bottom = 0, top=3.1)
+	plt.legend(prop={'size': 12})
 
 	# Put these freaking Shutdown dates on the top
 	ax3 = ax.twiny()

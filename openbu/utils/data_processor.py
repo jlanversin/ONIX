@@ -1239,6 +1239,7 @@ def plot_matrix_from_compressed_matrix(path, step, cell):
 
 def plot_matrix_bysign_from_compressed_matrix(path, step, cell):
 
+	plt.style.use('dark_background')
 	path_to_xs = path +'/step_{}'.format(step) +'/{}_cell'.format(cell) +'/matrix/xs_mat'
 	path_to_decay = path +'/step_{}'.format(step) +'/{}_cell'.format(cell) +'/matrix/decay_mat'
 	file_xs = open(path_to_xs, 'r')
@@ -1267,9 +1268,9 @@ def plot_matrix_bysign_from_compressed_matrix(path, step, cell):
 			current_x_vect_xs .append(elt_index)
 			current_line_xs.append(elt_val_xs)
 		if i == len(lines_xs)-1:
-			plt.scatter(current_x_vect_xs , current_line_xs , marker='s', color = 'r', s = size, label = 'Production Terms')
+			plt.scatter(current_x_vect_xs , current_line_xs , marker='s', color = 'orange', s = size, label = 'Production Terms')
 		else:
-			plt.scatter(current_x_vect_xs , current_line_xs , marker='s', color = 'r', s = size)
+			plt.scatter(current_x_vect_xs , current_line_xs , marker='s', color = 'orange', s = size)
 		line_elt_decay = line_decay.split(':')[1]
 		elts_decay = line_elt_decay.split(',')[:-1] # Last element empty because of last coma in each line
 		current_line_decay = []
@@ -1281,25 +1282,25 @@ def plot_matrix_bysign_from_compressed_matrix(path, step, cell):
 			current_x_vect_decay.append(elt_index)
 			current_line_decay.append(elt_val_decay)
 		if i == len(lines_xs)-1:	
-			plt.scatter(current_x_vect_decay , current_line_decay , marker='s', color = 'r', s = size)
+			plt.scatter(current_x_vect_decay , current_line_decay , marker='s', color = 'orange', s = size)
 		else:
-			plt.scatter(current_x_vect_decay , current_line_decay , marker='s', color = 'r', s = size)
+			plt.scatter(current_x_vect_decay , current_line_decay , marker='s', color = 'orange', s = size)
 		#mat.append(current_line)
 		count += 1
 
 	# cover diag elt
 	for i in range(len(lines_xs)):
 		if i == 0:
-			plt.scatter([i], [i],  marker='s', color = 'k', s = size, label = 'Destruction Terms')
+			plt.scatter([i], [i],  marker='s', color = 'orange', s = size, label = 'Destruction Terms')
 		else:
-			plt.scatter([i], [i],  marker='s', color = 'k', s = size)
+			plt.scatter([i], [i],  marker='s', color = 'orange', s = size)
 	file_xs.close()
 	file_decay.close()
 	plt.gca().invert_yaxis()
 	plt.ylabel('Row index')
 	plt.xlabel('Column index')
-	plt.legend()
-	plt.grid()
+	#plt.legend()
+	plt.grid(color = 'dimgray')
 	plt.show()
 
 
