@@ -11,16 +11,16 @@ def main():
         license = f.read()
 
     metadata = dict(
-        name='Open-Burnup',
+        name='ONIX',
         version='0.1.0',
-        description='Open Source depletion code',
+        description='Open-source depletion code',
         long_description=readme,
         author='Julien de Troullioud de Lanversin',
-        author_email='jdtdl@princeton.edu',
-        url='http://jdtdl.mycpanel.princeton.edu/',
+        author_email='jdtdl@stanford.edu',
+        #url='http://jdtdl.mycpanel.princeton.edu/',
         license=license,
         packages=find_packages(exclude=('docs', 'graphs', 'notes', 'papers', 'test', 'test_nouveau')),
-        package_data = {'openbu':['data/default_libs/*', 'data/other_libs/argonne/*', 'data/other_libs/ENDFVIII/*','data/other_libs/jeff33/*','data/isomeric_data/eaf-2010-multiplicities/*']}
+        package_data = {'onix':['data/default_libs/*', 'data/other_libs/argonne/*', 'data/other_libs/ENDFVIII/*','data/other_libs/jeff33/*','data/isomeric_data/eaf-2010-multiplicities/*']}
 
     )
 

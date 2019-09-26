@@ -1,0 +1,3 @@
+Default libraries are ENDF/B-VIII libraries.
+
+xs_lib is a constant one-group cross section library taken from VVER simulation output with OpenBU coupled version.
