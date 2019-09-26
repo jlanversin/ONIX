@@ -1,0 +1,36 @@
+\hypertarget{namespaceread__fy}{}\section{read\+\_\+fy Namespace Reference}
+\label{namespaceread__fy}\index{read\+\_\+fy@{read\+\_\+fy}}
+\subsection*{Variables}
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{namespaceread__fy_ae33b16d23d970509cd2b5f2c059d087f}\label{namespaceread__fy_ae33b16d23d970509cd2b5f2c059d087f}} 
+\index{read\+\_\+fy@{read\+\_\+fy}!directory@{directory}}
+\index{directory@{directory}!read\+\_\+fy@{read\+\_\+fy}}
+\subsubsection{\texorpdfstring{directory}{directory}}
+{\footnotesize\ttfamily string directory = \textquotesingle{}E\+N\+DF-\/B-\/V\+I\+I\+I.\+0\+\_\+nfy\textquotesingle{}}
+
+\mbox{\Hypertarget{namespaceread__fy_af4ff71773d7b436c50e09e5b38175818}\label{namespaceread__fy_af4ff71773d7b436c50e09e5b38175818}} 
+\index{read\+\_\+fy@{read\+\_\+fy}!f@{f}}
+\index{f@{f}!read\+\_\+fy@{read\+\_\+fy}}
+\subsubsection{\texorpdfstring{f}{f}}
+{\footnotesize\ttfamily list f = \mbox{\hyperlink{namespaceread__fy_ae49a09f7c1e8876c2becb188c4c9d681}{files}}\mbox{[}3\mbox{]}}
+
+\mbox{\Hypertarget{namespaceread__fy_a58ed1f4fc05e40edea694d9f889da543}\label{namespaceread__fy_a58ed1f4fc05e40edea694d9f889da543}} 
+\index{read\+\_\+fy@{read\+\_\+fy}!file\+\_\+name@{file\+\_\+name}}
+\index{file\+\_\+name@{file\+\_\+name}!read\+\_\+fy@{read\+\_\+fy}}
+\subsubsection{\texorpdfstring{file\+\_\+name}{file\_name}}
+{\footnotesize\ttfamily file\+\_\+name = file.\+split(\textquotesingle{}\+\_\+\textquotesingle{})}
+
+\mbox{\Hypertarget{namespaceread__fy_ae49a09f7c1e8876c2becb188c4c9d681}\label{namespaceread__fy_ae49a09f7c1e8876c2becb188c4c9d681}} 
+\index{read\+\_\+fy@{read\+\_\+fy}!files@{files}}
+\index{files@{files}!read\+\_\+fy@{read\+\_\+fy}}
+\subsubsection{\texorpdfstring{files}{files}}
+{\footnotesize\ttfamily list files = \mbox{[}file for file in os.\+listdir(\mbox{\hyperlink{namespaceread__fy_ae33b16d23d970509cd2b5f2c059d087f}{directory}}) if \char`\"{}.endf\char`\"{} in file\mbox{]}}
+
+\mbox{\Hypertarget{namespaceread__fy_a0918c6a9e9f8b48812e163a27a50fe26}\label{namespaceread__fy_a0918c6a9e9f8b48812e163a27a50fe26}} 
+\index{read\+\_\+fy@{read\+\_\+fy}!nucl\+\_\+name@{nucl\+\_\+name}}
+\index{nucl\+\_\+name@{nucl\+\_\+name}!read\+\_\+fy@{read\+\_\+fy}}
+\subsubsection{\texorpdfstring{nucl\+\_\+name}{nucl\_name}}
+{\footnotesize\ttfamily nucl\+\_\+name = \mbox{\hyperlink{namespaceread__fy_a58ed1f4fc05e40edea694d9f889da543}{file\+\_\+name}}\mbox{[}1\mbox{]}+\mbox{\hyperlink{namespaceread__fy_a58ed1f4fc05e40edea694d9f889da543}{file\+\_\+name}}\mbox{[}2\mbox{]}}
+

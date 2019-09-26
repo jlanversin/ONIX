@@ -1,0 +1,782 @@
+\hypertarget{classopenbu_1_1passport_1_1_passport}{}\section{Passport Class Reference}
+\label{classopenbu_1_1passport_1_1_passport}\index{Passport@{Passport}}
+Inheritance diagram for Passport\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classopenbu_1_1passport_1_1_passport}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\subsection*{Public Attributes}
+\subsection*{Private Member Functions}
+\subsection*{Private Attributes}
+\subsection*{Static Private Attributes}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}passport stores all the relevant data of indivudual nuclides and offers methods to extract information on them
+
+   The passport class is individually instantiated for each nuclide. It contains two types of information: constant and variable data.
+   Constant data, such as the atomic mass, decay constant or the element's family (actinide, fission product) do not change over the course of a simulation.
+   Variable data such as cross sections or fission yields do vary during a simulation and need thus to be updated regularly during a simulation.
+   Some of the data are created at the time of the instantiation of the class for a nuclide such as the element's family or the nuclide's
+   neutron reaction daughters. Other type of data, typically large in size such as cross sections and decay constants, are to be explicitly set or loaded.
+   A setter method will enable any script that reads the data source to set this data for the passport of a specific nuclide. This is the method used within
+   the code of Open-Burnup to set the data for a list of passports. The other way to explicitly set the data is to use the loader method. This method will
+   go to the data source itself, read the data and set it for the passport of a specific nuclide. This method is envision to be used by the user as a
+   user-friendly way to get information on individual nuclides.
+
+   Attributes:
+       * **decay_a:** returns the absolute value of the decay constants of the nuclide
+       * **decay_b:** returns the percent fraction value of the decay constants of the nuclide
+       * **fy:** returns the value of fission yields in percent
+       * **mass:** returns the atomic mass of the nuclide
+       * **xs:** returns the absolute value of cross sections for the nuclide
+       * **FAM:** returns the family group name of the nuclide
+       * **xs_relatives:** returns neutron reaction's daughter nuclides' id
+       * **decay_relatives:** returns decay reaction's daughter nuclides' id
+
+   Methods:
+       * **set_mass():** set the atomic mass of the nuclide
+       * **set_decay():** set the decay constants (both absolute values and percent fractions) of the nuclide
+       * **set_xs():** set the cross sections of the nuclide
+       * **set_fy():** set the fission yields of the nuclide
+       * **load_mass():** load the atomic mass of the nuclide
+       * **load_decay():** load the decay constants (both absolute values and percent fractions) of the nuclide
+       * **load_mass():** load the cross sections of the nuclide
+       * **load_mass():** load the fission yields of the nuclide
+       * **get__zamid():** returns the zzaaam id of the nuclide
+       * **get_nuc_name():** returns the name of the nuclide\end{DoxyVerb}
+ 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a0f48da3093dc04d8220b6adcc74b4ff7}\label{classopenbu_1_1passport_1_1_passport_a0f48da3093dc04d8220b6adcc74b4ff7}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+init\+\_\+\+\_\+()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def \+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{nuc\+\_\+id }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_af046280ed7a48f6bff3090472ae512b6}\label{classopenbu_1_1passport_1_1_passport_af046280ed7a48f6bff3090472ae512b6}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+append\+\_\+dens\+\_\+seq@{\+\_\+append\+\_\+dens\+\_\+seq}}
+\index{\+\_\+append\+\_\+dens\+\_\+seq@{\+\_\+append\+\_\+dens\+\_\+seq}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+append\+\_\+dens\+\_\+seq()}{\_append\_dens\_seq()}}
+{\footnotesize\ttfamily def \+\_\+append\+\_\+dens\+\_\+seq (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{new\+\_\+dens }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_abfefc079330fc3c7716108b150a313cd}\label{classopenbu_1_1passport_1_1_passport_abfefc079330fc3c7716108b150a313cd}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+append\+\_\+dens\+\_\+subseq\+\_\+mat@{\+\_\+append\+\_\+dens\+\_\+subseq\+\_\+mat}}
+\index{\+\_\+append\+\_\+dens\+\_\+subseq\+\_\+mat@{\+\_\+append\+\_\+dens\+\_\+subseq\+\_\+mat}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+append\+\_\+dens\+\_\+subseq\+\_\+mat()}{\_append\_dens\_subseq\_mat()}}
+{\footnotesize\ttfamily def \+\_\+append\+\_\+dens\+\_\+subseq\+\_\+mat (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{new\+\_\+dens,  }\item[{}]{ss }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ad925be707f1a159e4d4737010ac96247}\label{classopenbu_1_1passport_1_1_passport_ad925be707f1a159e4d4737010ac96247}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+append\+\_\+xs\+\_\+seq@{\+\_\+append\+\_\+xs\+\_\+seq}}
+\index{\+\_\+append\+\_\+xs\+\_\+seq@{\+\_\+append\+\_\+xs\+\_\+seq}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+append\+\_\+xs\+\_\+seq()}{\_append\_xs\_seq()}}
+{\footnotesize\ttfamily def \+\_\+append\+\_\+xs\+\_\+seq (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{new\+\_\+xs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a0b7ab324a54b74944723d25c2d91676a}\label{classopenbu_1_1passport_1_1_passport_a0b7ab324a54b74944723d25c2d91676a}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+get\+\_\+decay\+\_\+prod\+\_\+from\+\_\+dic@{\+\_\+get\+\_\+decay\+\_\+prod\+\_\+from\+\_\+dic}}
+\index{\+\_\+get\+\_\+decay\+\_\+prod\+\_\+from\+\_\+dic@{\+\_\+get\+\_\+decay\+\_\+prod\+\_\+from\+\_\+dic}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+get\+\_\+decay\+\_\+prod\+\_\+from\+\_\+dic()}{\_get\_decay\_prod\_from\_dic()}}
+{\footnotesize\ttfamily def \+\_\+get\+\_\+decay\+\_\+prod\+\_\+from\+\_\+dic (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a65c4332b05523d1d60d951779f4c611f}\label{classopenbu_1_1passport_1_1_passport_a65c4332b05523d1d60d951779f4c611f}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+get\+\_\+decay\+\_\+prod\+\_\+to\+\_\+dic@{\+\_\+get\+\_\+decay\+\_\+prod\+\_\+to\+\_\+dic}}
+\index{\+\_\+get\+\_\+decay\+\_\+prod\+\_\+to\+\_\+dic@{\+\_\+get\+\_\+decay\+\_\+prod\+\_\+to\+\_\+dic}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+get\+\_\+decay\+\_\+prod\+\_\+to\+\_\+dic()}{\_get\_decay\_prod\_to\_dic()}}
+{\footnotesize\ttfamily def \+\_\+get\+\_\+decay\+\_\+prod\+\_\+to\+\_\+dic (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_aa0a90b7d8c25d065cc913e08a439ca4f}\label{classopenbu_1_1passport_1_1_passport_aa0a90b7d8c25d065cc913e08a439ca4f}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+get\+\_\+id\+\_\+input\+\_\+type@{\+\_\+get\+\_\+id\+\_\+input\+\_\+type}}
+\index{\+\_\+get\+\_\+id\+\_\+input\+\_\+type@{\+\_\+get\+\_\+id\+\_\+input\+\_\+type}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+get\+\_\+id\+\_\+input\+\_\+type()}{\_get\_id\_input\_type()}}
+{\footnotesize\ttfamily def \+\_\+get\+\_\+id\+\_\+input\+\_\+type (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{nuc\+\_\+id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_af05a69c9cc2ab9f8f3b2477a0861c753}\label{classopenbu_1_1passport_1_1_passport_af05a69c9cc2ab9f8f3b2477a0861c753}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+get\+\_\+xs\+\_\+prod\+\_\+from\+\_\+dic@{\+\_\+get\+\_\+xs\+\_\+prod\+\_\+from\+\_\+dic}}
+\index{\+\_\+get\+\_\+xs\+\_\+prod\+\_\+from\+\_\+dic@{\+\_\+get\+\_\+xs\+\_\+prod\+\_\+from\+\_\+dic}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+get\+\_\+xs\+\_\+prod\+\_\+from\+\_\+dic()}{\_get\_xs\_prod\_from\_dic()}}
+{\footnotesize\ttfamily def \+\_\+get\+\_\+xs\+\_\+prod\+\_\+from\+\_\+dic (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_aaaff6017b2d6e7065428e2e0fd022ed0}\label{classopenbu_1_1passport_1_1_passport_aaaff6017b2d6e7065428e2e0fd022ed0}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+get\+\_\+xs\+\_\+prod\+\_\+to\+\_\+dic@{\+\_\+get\+\_\+xs\+\_\+prod\+\_\+to\+\_\+dic}}
+\index{\+\_\+get\+\_\+xs\+\_\+prod\+\_\+to\+\_\+dic@{\+\_\+get\+\_\+xs\+\_\+prod\+\_\+to\+\_\+dic}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+get\+\_\+xs\+\_\+prod\+\_\+to\+\_\+dic()}{\_get\_xs\_prod\_to\_dic()}}
+{\footnotesize\ttfamily def \+\_\+get\+\_\+xs\+\_\+prod\+\_\+to\+\_\+dic (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a11475cb1eab8f6fc9eed629d796daab2}\label{classopenbu_1_1passport_1_1_passport_a11475cb1eab8f6fc9eed629d796daab2}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+overwrite\+\_\+xs@{\+\_\+overwrite\+\_\+xs}}
+\index{\+\_\+overwrite\+\_\+xs@{\+\_\+overwrite\+\_\+xs}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+overwrite\+\_\+xs()}{\_overwrite\_xs()}}
+{\footnotesize\ttfamily def \+\_\+overwrite\+\_\+xs (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{new\+\_\+xs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a8a23d80cd772e8c052bf72e3225aab38}\label{classopenbu_1_1passport_1_1_passport_a8a23d80cd772e8c052bf72e3225aab38}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+set\+\_\+all\+\_\+child@{\+\_\+set\+\_\+all\+\_\+child}}
+\index{\+\_\+set\+\_\+all\+\_\+child@{\+\_\+set\+\_\+all\+\_\+child}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+set\+\_\+all\+\_\+child()}{\_set\_all\_child()}}
+{\footnotesize\ttfamily def \+\_\+set\+\_\+all\+\_\+child (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a6c0deea3737cf63d8969b2b1ea74fe81}\label{classopenbu_1_1passport_1_1_passport_a6c0deea3737cf63d8969b2b1ea74fe81}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+set\+\_\+all\+\_\+parent@{\+\_\+set\+\_\+all\+\_\+parent}}
+\index{\+\_\+set\+\_\+all\+\_\+parent@{\+\_\+set\+\_\+all\+\_\+parent}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+set\+\_\+all\+\_\+parent()}{\_set\_all\_parent()}}
+{\footnotesize\ttfamily def \+\_\+set\+\_\+all\+\_\+parent (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a160dd3064597bef45d3cd2e3e47b44d0}\label{classopenbu_1_1passport_1_1_passport_a160dd3064597bef45d3cd2e3e47b44d0}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+set\+\_\+decaychild@{\+\_\+set\+\_\+decaychild}}
+\index{\+\_\+set\+\_\+decaychild@{\+\_\+set\+\_\+decaychild}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+set\+\_\+decaychild()}{\_set\_decaychild()}}
+{\footnotesize\ttfamily def \+\_\+set\+\_\+decaychild (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a4d35354a12b5f2bf935329526caec051}\label{classopenbu_1_1passport_1_1_passport_a4d35354a12b5f2bf935329526caec051}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+set\+\_\+decayparent@{\+\_\+set\+\_\+decayparent}}
+\index{\+\_\+set\+\_\+decayparent@{\+\_\+set\+\_\+decayparent}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+set\+\_\+decayparent()}{\_set\_decayparent()}}
+{\footnotesize\ttfamily def \+\_\+set\+\_\+decayparent (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ac5bd2665c34d1cc43d2484ab46e98d91}\label{classopenbu_1_1passport_1_1_passport_ac5bd2665c34d1cc43d2484ab46e98d91}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+set\+\_\+energy\+\_\+per\+\_\+fission@{\+\_\+set\+\_\+energy\+\_\+per\+\_\+fission}}
+\index{\+\_\+set\+\_\+energy\+\_\+per\+\_\+fission@{\+\_\+set\+\_\+energy\+\_\+per\+\_\+fission}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+set\+\_\+energy\+\_\+per\+\_\+fission()}{\_set\_energy\_per\_fission()}}
+{\footnotesize\ttfamily def \+\_\+set\+\_\+energy\+\_\+per\+\_\+fission (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a1d13e38c1df92265a6b65961522978e9}\label{classopenbu_1_1passport_1_1_passport_a1d13e38c1df92265a6b65961522978e9}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+set\+\_\+initial\+\_\+dens@{\+\_\+set\+\_\+initial\+\_\+dens}}
+\index{\+\_\+set\+\_\+initial\+\_\+dens@{\+\_\+set\+\_\+initial\+\_\+dens}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+set\+\_\+initial\+\_\+dens()}{\_set\_initial\_dens()}}
+{\footnotesize\ttfamily def \+\_\+set\+\_\+initial\+\_\+dens (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{new\+\_\+dens }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\begin{DoxyVerb}set new dens to current dens and append to dens_seqor\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a3f7ead3ec8497f2dea2c5b4a8efb3064}\label{classopenbu_1_1passport_1_1_passport_a3f7ead3ec8497f2dea2c5b4a8efb3064}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+set\+\_\+state@{\+\_\+set\+\_\+state}}
+\index{\+\_\+set\+\_\+state@{\+\_\+set\+\_\+state}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+set\+\_\+state()}{\_set\_state()}}
+{\footnotesize\ttfamily def \+\_\+set\+\_\+state (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\begin{DoxyVerb}Returns the state of the nuclide (excited or ground state)\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a3d1482af1a0782433c319b6423d12fe0}\label{classopenbu_1_1passport_1_1_passport_a3d1482af1a0782433c319b6423d12fe0}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+set\+\_\+step\+\_\+dens@{\+\_\+set\+\_\+step\+\_\+dens}}
+\index{\+\_\+set\+\_\+step\+\_\+dens@{\+\_\+set\+\_\+step\+\_\+dens}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+set\+\_\+step\+\_\+dens()}{\_set\_step\_dens()}}
+{\footnotesize\ttfamily def \+\_\+set\+\_\+step\+\_\+dens (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_af651f0f12d1afd84eb29820ac7d4f985}\label{classopenbu_1_1passport_1_1_passport_af651f0f12d1afd84eb29820ac7d4f985}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+set\+\_\+substep\+\_\+dens@{\+\_\+set\+\_\+substep\+\_\+dens}}
+\index{\+\_\+set\+\_\+substep\+\_\+dens@{\+\_\+set\+\_\+substep\+\_\+dens}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+set\+\_\+substep\+\_\+dens()}{\_set\_substep\_dens()}}
+{\footnotesize\ttfamily def \+\_\+set\+\_\+substep\+\_\+dens (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{dens,  }\item[{}]{ss }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_adc2bfba83a787889b7782b1076a5a182}\label{classopenbu_1_1passport_1_1_passport_adc2bfba83a787889b7782b1076a5a182}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+set\+\_\+xs@{\+\_\+set\+\_\+xs}}
+\index{\+\_\+set\+\_\+xs@{\+\_\+set\+\_\+xs}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+set\+\_\+xs()}{\_set\_xs()}}
+{\footnotesize\ttfamily def \+\_\+set\+\_\+xs (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{new\+\_\+xs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ab1f48981f6e2688f01f16dc7edaefd7e}\label{classopenbu_1_1passport_1_1_passport_ab1f48981f6e2688f01f16dc7edaefd7e}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+set\+\_\+xschild@{\+\_\+set\+\_\+xschild}}
+\index{\+\_\+set\+\_\+xschild@{\+\_\+set\+\_\+xschild}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+set\+\_\+xschild()}{\_set\_xschild()}}
+{\footnotesize\ttfamily def \+\_\+set\+\_\+xschild (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a9f4bbc6bfebd593cdc19402095e5a80e}\label{classopenbu_1_1passport_1_1_passport_a9f4bbc6bfebd593cdc19402095e5a80e}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+set\+\_\+xsparent@{\+\_\+set\+\_\+xsparent}}
+\index{\+\_\+set\+\_\+xsparent@{\+\_\+set\+\_\+xsparent}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+set\+\_\+xsparent()}{\_set\_xsparent()}}
+{\footnotesize\ttfamily def \+\_\+set\+\_\+xsparent (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a1716ac775eab21ed500d4b1c986271c1}\label{classopenbu_1_1passport_1_1_passport_a1716ac775eab21ed500d4b1c986271c1}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!all\+\_\+child@{all\+\_\+child}}
+\index{all\+\_\+child@{all\+\_\+child}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{all\+\_\+child()}{all\_child()}}
+{\footnotesize\ttfamily def all\+\_\+child (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a139613edb1a83409b0be4b33c19e6856}\label{classopenbu_1_1passport_1_1_passport_a139613edb1a83409b0be4b33c19e6856}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!all\+\_\+parent@{all\+\_\+parent}}
+\index{all\+\_\+parent@{all\+\_\+parent}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{all\+\_\+parent()}{all\_parent()}}
+{\footnotesize\ttfamily def all\+\_\+parent (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a2767a44be5929f97b9febb2eac93fe6b}\label{classopenbu_1_1passport_1_1_passport_a2767a44be5929f97b9febb2eac93fe6b}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!allreacs\+\_\+dic@{allreacs\+\_\+dic}}
+\index{allreacs\+\_\+dic@{allreacs\+\_\+dic}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{allreacs\+\_\+dic()}{allreacs\_dic()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily def allreacs\+\_\+dic (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a61f6f366c1c84d1fea165b305afbac0f}\label{classopenbu_1_1passport_1_1_passport_a61f6f366c1c84d1fea165b305afbac0f}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!allreacs\+\_\+dic@{allreacs\+\_\+dic}}
+\index{allreacs\+\_\+dic@{allreacs\+\_\+dic}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{allreacs\+\_\+dic()}{allreacs\_dic()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily def allreacs\+\_\+dic (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{allreacs\+\_\+dic }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ab5f078f517739813f56e0ca7e417ed9f}\label{classopenbu_1_1passport_1_1_passport_ab5f078f517739813f56e0ca7e417ed9f}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!allreacs\+\_\+dic\+\_\+list@{allreacs\+\_\+dic\+\_\+list}}
+\index{allreacs\+\_\+dic\+\_\+list@{allreacs\+\_\+dic\+\_\+list}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{allreacs\+\_\+dic\+\_\+list()}{allreacs\_dic\_list()}}
+{\footnotesize\ttfamily def allreacs\+\_\+dic\+\_\+list (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a95faa68dde6a0aca4f800911e0b60bfd}\label{classopenbu_1_1passport_1_1_passport_a95faa68dde6a0aca4f800911e0b60bfd}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!allreacs\+\_\+dic\+\_\+list\+\_\+append@{allreacs\+\_\+dic\+\_\+list\+\_\+append}}
+\index{allreacs\+\_\+dic\+\_\+list\+\_\+append@{allreacs\+\_\+dic\+\_\+list\+\_\+append}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{allreacs\+\_\+dic\+\_\+list\+\_\+append()}{allreacs\_dic\_list\_append()}}
+{\footnotesize\ttfamily def allreacs\+\_\+dic\+\_\+list\+\_\+append (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{allreacs\+\_\+dic }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a9e92212ca1755b033265f89e22182e6a}\label{classopenbu_1_1passport_1_1_passport_a9e92212ca1755b033265f89e22182e6a}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!append\+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list@{append\+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list}}
+\index{append\+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list@{append\+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{append\+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list()}{append\_current\_sorted\_allreacs\_tuple\_list()}}
+{\footnotesize\ttfamily def append\+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{sorted\+\_\+allreacs,  }\item[{}]{ss }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ac0a05241620821723f2416f8ecf90103}\label{classopenbu_1_1passport_1_1_passport_ac0a05241620821723f2416f8ecf90103}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!append\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat@{append\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat}}
+\index{append\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat@{append\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{append\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat()}{append\_sorted\_allreacs\_tuple\_mat()}}
+{\footnotesize\ttfamily def append\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a9d2583dc81ae3b1275f9d180a78fc923}\label{classopenbu_1_1passport_1_1_passport_a9d2583dc81ae3b1275f9d180a78fc923}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!creation\+\_\+dic@{creation\+\_\+dic}}
+\index{creation\+\_\+dic@{creation\+\_\+dic}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{creation\+\_\+dic()}{creation\_dic()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily def creation\+\_\+dic (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_aa353b36f4ee1b8d5bb0121970d173e2f}\label{classopenbu_1_1passport_1_1_passport_aa353b36f4ee1b8d5bb0121970d173e2f}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!creation\+\_\+dic@{creation\+\_\+dic}}
+\index{creation\+\_\+dic@{creation\+\_\+dic}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{creation\+\_\+dic()}{creation\_dic()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily def creation\+\_\+dic (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{creation\+\_\+dic }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_aae6f90e1f0871cddaad54d66a6bd6529}\label{classopenbu_1_1passport_1_1_passport_aae6f90e1f0871cddaad54d66a6bd6529}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!current\+\_\+dens@{current\+\_\+dens}}
+\index{current\+\_\+dens@{current\+\_\+dens}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{current\+\_\+dens()}{current\_dens()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily def current\+\_\+dens (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the density of the nuclide in atom per cm^3\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a2e640e060087e64c0e938f17b6c3653e}\label{classopenbu_1_1passport_1_1_passport_a2e640e060087e64c0e938f17b6c3653e}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!current\+\_\+dens@{current\+\_\+dens}}
+\index{current\+\_\+dens@{current\+\_\+dens}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{current\+\_\+dens()}{current\_dens()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily def current\+\_\+dens (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{new\+\_\+dens }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}set the density of the nuclide in atom per cm^3\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a1bcb51e5d9483412f7278c5072bf4ec0}\label{classopenbu_1_1passport_1_1_passport_a1bcb51e5d9483412f7278c5072bf4ec0}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list@{current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list}}
+\index{current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list@{current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list()}{current\_sorted\_allreacs\_tuple\_list()}}
+{\footnotesize\ttfamily def current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a555c209d9b1ea0fcc30cb14a259342f4}\label{classopenbu_1_1passport_1_1_passport_a555c209d9b1ea0fcc30cb14a259342f4}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!current\+\_\+xs@{current\+\_\+xs}}
+\index{current\+\_\+xs@{current\+\_\+xs}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{current\+\_\+xs()}{current\_xs()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily def current\+\_\+xs (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the cross sections data of the nuclide\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a049f1d5f3d5d8d3034890065469ead91}\label{classopenbu_1_1passport_1_1_passport_a049f1d5f3d5d8d3034890065469ead91}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!current\+\_\+xs@{current\+\_\+xs}}
+\index{current\+\_\+xs@{current\+\_\+xs}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{current\+\_\+xs()}{current\_xs()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily def current\+\_\+xs (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{new\+\_\+xs }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ab9d903431dc1a815d57cb09912e41e58}\label{classopenbu_1_1passport_1_1_passport_ab9d903431dc1a815d57cb09912e41e58}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!decay\+\_\+a@{decay\+\_\+a}}
+\index{decay\+\_\+a@{decay\+\_\+a}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{decay\+\_\+a()}{decay\_a()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily def decay\+\_\+a (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the absolute values of the decay constant of the nuclide\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a952434efbc4ab9e9cab4b67dc8ea9d76}\label{classopenbu_1_1passport_1_1_passport_a952434efbc4ab9e9cab4b67dc8ea9d76}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!decay\+\_\+a@{decay\+\_\+a}}
+\index{decay\+\_\+a@{decay\+\_\+a}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{decay\+\_\+a()}{decay\_a()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily def decay\+\_\+a (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{new\+\_\+decay\+\_\+a }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ade7165602b6bcdee1ed9b7256170379b}\label{classopenbu_1_1passport_1_1_passport_ade7165602b6bcdee1ed9b7256170379b}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!decay\+\_\+b@{decay\+\_\+b}}
+\index{decay\+\_\+b@{decay\+\_\+b}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{decay\+\_\+b()}{decay\_b()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily def decay\+\_\+b (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the fraction percent values of the decay constant of the nuclide\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a396bad6b882b6238fab0c996b75af583}\label{classopenbu_1_1passport_1_1_passport_a396bad6b882b6238fab0c996b75af583}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!decay\+\_\+b@{decay\+\_\+b}}
+\index{decay\+\_\+b@{decay\+\_\+b}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{decay\+\_\+b()}{decay\_b()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily def decay\+\_\+b (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{new\+\_\+decay\+\_\+b }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_afe7a50b1cfeb99651932d201b32e1eac}\label{classopenbu_1_1passport_1_1_passport_afe7a50b1cfeb99651932d201b32e1eac}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!decay\+\_\+child@{decay\+\_\+child}}
+\index{decay\+\_\+child@{decay\+\_\+child}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{decay\+\_\+child()}{decay\_child()}}
+{\footnotesize\ttfamily def decay\+\_\+child (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the decay reactions' daughter products\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a036610ac850c29ffb1e5172cff7c679a}\label{classopenbu_1_1passport_1_1_passport_a036610ac850c29ffb1e5172cff7c679a}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!decay\+\_\+parent@{decay\+\_\+parent}}
+\index{decay\+\_\+parent@{decay\+\_\+parent}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{decay\+\_\+parent()}{decay\_parent()}}
+{\footnotesize\ttfamily def decay\+\_\+parent (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the decay reactions' daughter products\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ab1f32d435c46a2f187aef2e679661d34}\label{classopenbu_1_1passport_1_1_passport_ab1f32d435c46a2f187aef2e679661d34}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!dens\+\_\+seq@{dens\+\_\+seq}}
+\index{dens\+\_\+seq@{dens\+\_\+seq}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{dens\+\_\+seq()}{dens\_seq()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily def dens\+\_\+seq (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a89118daf8cd881c084c6a84c8e2023bb}\label{classopenbu_1_1passport_1_1_passport_a89118daf8cd881c084c6a84c8e2023bb}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!dens\+\_\+seq@{dens\+\_\+seq}}
+\index{dens\+\_\+seq@{dens\+\_\+seq}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{dens\+\_\+seq()}{dens\_seq()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily def dens\+\_\+seq (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{new\+\_\+dens\+\_\+seq }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a45d0e7bcc1c8605bcde0fabdcde7e497}\label{classopenbu_1_1passport_1_1_passport_a45d0e7bcc1c8605bcde0fabdcde7e497}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!dens\+\_\+subseq\+\_\+mat@{dens\+\_\+subseq\+\_\+mat}}
+\index{dens\+\_\+subseq\+\_\+mat@{dens\+\_\+subseq\+\_\+mat}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{dens\+\_\+subseq\+\_\+mat()}{dens\_subseq\_mat()}}
+{\footnotesize\ttfamily def dens\+\_\+subseq\+\_\+mat (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ae67e37f676b0c6e378a14d0c15fed63b}\label{classopenbu_1_1passport_1_1_passport_ae67e37f676b0c6e378a14d0c15fed63b}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!destruction\+\_\+dic@{destruction\+\_\+dic}}
+\index{destruction\+\_\+dic@{destruction\+\_\+dic}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{destruction\+\_\+dic()}{destruction\_dic()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily def destruction\+\_\+dic (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ad7aa0504bf7738587a7c357dcb6538b4}\label{classopenbu_1_1passport_1_1_passport_ad7aa0504bf7738587a7c357dcb6538b4}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!destruction\+\_\+dic@{destruction\+\_\+dic}}
+\index{destruction\+\_\+dic@{destruction\+\_\+dic}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{destruction\+\_\+dic()}{destruction\_dic()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily def destruction\+\_\+dic (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{destruction\+\_\+dic }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a623dea2b16346bf135cf4592e1f100a6}\label{classopenbu_1_1passport_1_1_passport_a623dea2b16346bf135cf4592e1f100a6}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!fission\+\_\+child@{fission\+\_\+child}}
+\index{fission\+\_\+child@{fission\+\_\+child}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{fission\+\_\+child()}{fission\_child()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily def fission\+\_\+child (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a88cd042d2b8d037098e6cafda935f874}\label{classopenbu_1_1passport_1_1_passport_a88cd042d2b8d037098e6cafda935f874}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!fission\+\_\+child@{fission\+\_\+child}}
+\index{fission\+\_\+child@{fission\+\_\+child}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{fission\+\_\+child()}{fission\_child()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily def fission\+\_\+child (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{fission\+\_\+child }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a8038a15909eba6f8a8d8786839ffc2a3}\label{classopenbu_1_1passport_1_1_passport_a8038a15909eba6f8a8d8786839ffc2a3}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!fission\+\_\+E@{fission\+\_\+E}}
+\index{fission\+\_\+E@{fission\+\_\+E}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{fission\+\_\+\+E()}{fission\_E()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily def fission\+\_\+E (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ae2239daf423d29b5e6900eccc7e081b3}\label{classopenbu_1_1passport_1_1_passport_ae2239daf423d29b5e6900eccc7e081b3}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!fission\+\_\+E@{fission\+\_\+E}}
+\index{fission\+\_\+E@{fission\+\_\+E}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{fission\+\_\+\+E()}{fission\_E()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily def fission\+\_\+E (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{fission\+\_\+E }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a8b75ace3008810461600cc7df511303b}\label{classopenbu_1_1passport_1_1_passport_a8b75ace3008810461600cc7df511303b}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!fy@{fy}}
+\index{fy@{fy}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{fy()}{fy()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily def fy (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the fission yields data in percent\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a700d778b89d069238bc6f110866eb6f7}\label{classopenbu_1_1passport_1_1_passport_a700d778b89d069238bc6f110866eb6f7}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!fy@{fy}}
+\index{fy@{fy}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{fy()}{fy()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily def fy (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{new\+\_\+fy }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_aa1146a83b02f1768536bf28e3f5776ea}\label{classopenbu_1_1passport_1_1_passport_aa1146a83b02f1768536bf28e3f5776ea}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!get\+\_\+a@{get\+\_\+a}}
+\index{get\+\_\+a@{get\+\_\+a}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{get\+\_\+a()}{get\_a()}}
+{\footnotesize\ttfamily def get\+\_\+a (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the mass number of the nuclide\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_aba328bc672d47cf94e8b5848fd29b2e6}\label{classopenbu_1_1passport_1_1_passport_aba328bc672d47cf94e8b5848fd29b2e6}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!get\+\_\+all\+\_\+non0\+\_\+child@{get\+\_\+all\+\_\+non0\+\_\+child}}
+\index{get\+\_\+all\+\_\+non0\+\_\+child@{get\+\_\+all\+\_\+non0\+\_\+child}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{get\+\_\+all\+\_\+non0\+\_\+child()}{get\_all\_non0\_child()}}
+{\footnotesize\ttfamily def get\+\_\+all\+\_\+non0\+\_\+child (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ac56d773b8d5df4604054843a0f8d78b5}\label{classopenbu_1_1passport_1_1_passport_ac56d773b8d5df4604054843a0f8d78b5}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!get\+\_\+current\+\_\+dens\+\_\+subseq@{get\+\_\+current\+\_\+dens\+\_\+subseq}}
+\index{get\+\_\+current\+\_\+dens\+\_\+subseq@{get\+\_\+current\+\_\+dens\+\_\+subseq}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{get\+\_\+current\+\_\+dens\+\_\+subseq()}{get\_current\_dens\_subseq()}}
+{\footnotesize\ttfamily def get\+\_\+current\+\_\+dens\+\_\+subseq (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_aa985da06cd54b03137b9673ee889ae5b}\label{classopenbu_1_1passport_1_1_passport_aa985da06cd54b03137b9673ee889ae5b}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!get\+\_\+dens\+\_\+subseq@{get\+\_\+dens\+\_\+subseq}}
+\index{get\+\_\+dens\+\_\+subseq@{get\+\_\+dens\+\_\+subseq}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{get\+\_\+dens\+\_\+subseq()}{get\_dens\_subseq()}}
+{\footnotesize\ttfamily def get\+\_\+dens\+\_\+subseq (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{s }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a00ffe26b6e89fbe59f1ab1580505cebd}\label{classopenbu_1_1passport_1_1_passport_a00ffe26b6e89fbe59f1ab1580505cebd}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!get\+\_\+\+F\+AM@{get\+\_\+\+F\+AM}}
+\index{get\+\_\+\+F\+AM@{get\+\_\+\+F\+AM}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{get\+\_\+\+F\+A\+M()}{get\_FAM()}}
+{\footnotesize\ttfamily def get\+\_\+\+F\+AM (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_abe1a57a87b25188b1e44a69499d7ef70}\label{classopenbu_1_1passport_1_1_passport_abe1a57a87b25188b1e44a69499d7ef70}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!get\+\_\+natural\+\_\+abundance@{get\+\_\+natural\+\_\+abundance}}
+\index{get\+\_\+natural\+\_\+abundance@{get\+\_\+natural\+\_\+abundance}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{get\+\_\+natural\+\_\+abundance()}{get\_natural\_abundance()}}
+{\footnotesize\ttfamily def get\+\_\+natural\+\_\+abundance (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_aa75b75b6a9d2a68e6a592e7353044edb}\label{classopenbu_1_1passport_1_1_passport_aa75b75b6a9d2a68e6a592e7353044edb}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!get\+\_\+z@{get\+\_\+z}}
+\index{get\+\_\+z@{get\+\_\+z}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{get\+\_\+z()}{get\_z()}}
+{\footnotesize\ttfamily def get\+\_\+z (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the atomic number of the nuclide\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ab6f7c3af79510d2bf012aa1a483a6cf8}\label{classopenbu_1_1passport_1_1_passport_ab6f7c3af79510d2bf012aa1a483a6cf8}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!load\+\_\+decay@{load\+\_\+decay}}
+\index{load\+\_\+decay@{load\+\_\+decay}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{load\+\_\+decay()}{load\_decay()}}
+{\footnotesize\ttfamily def load\+\_\+decay (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load the decay constant value of the nuclide
+
+This method directly fetches the decay constant values from the source data and automatically set
+of the passport object\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a3fd9b285c12428f2f1021f6fa498d27b}\label{classopenbu_1_1passport_1_1_passport_a3fd9b285c12428f2f1021f6fa498d27b}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!load\+\_\+fy@{load\+\_\+fy}}
+\index{load\+\_\+fy@{load\+\_\+fy}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{load\+\_\+fy()}{load\_fy()}}
+{\footnotesize\ttfamily def load\+\_\+fy (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load the fission yields data of the nuclide
+
+This method directly fetches the fission yields data from the source data and automatically set
+of the passport object
+
+If the nuclide for which the fission yields data are being loaded is not a fission product,
+the error *Not_a_Fission_Product* will be raised\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a791d705e172d19c0cdc181960287cc78}\label{classopenbu_1_1passport_1_1_passport_a791d705e172d19c0cdc181960287cc78}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!load\+\_\+mass@{load\+\_\+mass}}
+\index{load\+\_\+mass@{load\+\_\+mass}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{load\+\_\+mass()}{load\_mass()}}
+{\footnotesize\ttfamily def load\+\_\+mass (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load the atomic mass of the nuclide in gram
+
+This method directly fetches the atomic mass from the source data and automatically set
+of the passport object\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a1687aea883b9cdececdb7b88b659cd5c}\label{classopenbu_1_1passport_1_1_passport_a1687aea883b9cdececdb7b88b659cd5c}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!load\+\_\+xs@{load\+\_\+xs}}
+\index{load\+\_\+xs@{load\+\_\+xs}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{load\+\_\+xs()}{load\_xs()}}
+{\footnotesize\ttfamily def load\+\_\+xs (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load the cross sections data of the nuclide
+
+This method directly fetches the cross sections data from the source data and automatically set
+of the passport object\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a69ae279139576858c6ca4dc9f5912717}\label{classopenbu_1_1passport_1_1_passport_a69ae279139576858c6ca4dc9f5912717}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!mass@{mass}}
+\index{mass@{mass}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{mass()}{mass()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily def mass (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Return the atomic mass of the nuclide in gram\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_af9495c31f61c9811206c6941dfa5acdf}\label{classopenbu_1_1passport_1_1_passport_af9495c31f61c9811206c6941dfa5acdf}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!mass@{mass}}
+\index{mass@{mass}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{mass()}{mass()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily def mass (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{new\+\_\+mass }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_abf06c609e589ebd44344b4f407f18c46}\label{classopenbu_1_1passport_1_1_passport_abf06c609e589ebd44344b4f407f18c46}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!name@{name}}
+\index{name@{name}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{name()}{name()}}
+{\footnotesize\ttfamily def name (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a9667b7f81c2ee24ce9e02df7e2d746ea}\label{classopenbu_1_1passport_1_1_passport_a9667b7f81c2ee24ce9e02df7e2d746ea}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!pikachu@{pikachu}}
+\index{pikachu@{pikachu}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{pikachu()}{pikachu()}}
+{\footnotesize\ttfamily def pikachu (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ae04c67eded9e7f018b551d4be5d36f2c}\label{classopenbu_1_1passport_1_1_passport_ae04c67eded9e7f018b551d4be5d36f2c}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!set\+\_\+decay@{set\+\_\+decay}}
+\index{set\+\_\+decay@{set\+\_\+decay}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{set\+\_\+decay()}{set\_decay()}}
+{\footnotesize\ttfamily def set\+\_\+decay (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{decay\+\_\+a,  }\item[{}]{decay\+\_\+b }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Set the absolute and fracional values of the decay constant of the nuclide\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a584a214ba07cb98d7fdc7e3af8297dee}\label{classopenbu_1_1passport_1_1_passport_a584a214ba07cb98d7fdc7e3af8297dee}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat@{sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat}}
+\index{sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat@{sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat()}{sorted\_allreacs\_tuple\_mat()}}
+{\footnotesize\ttfamily def sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a4e4917c4f5dd99968308d857ecd06e78}\label{classopenbu_1_1passport_1_1_passport_a4e4917c4f5dd99968308d857ecd06e78}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!state@{state}}
+\index{state@{state}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{state()}{state()}}
+{\footnotesize\ttfamily def state (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_af0b4eabf69455a1ace31fadfc437695b}\label{classopenbu_1_1passport_1_1_passport_af0b4eabf69455a1ace31fadfc437695b}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!xs\+\_\+child@{xs\+\_\+child}}
+\index{xs\+\_\+child@{xs\+\_\+child}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{xs\+\_\+child()}{xs\_child()}}
+{\footnotesize\ttfamily def xs\+\_\+child (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the neutron reactions' daughter products\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a0f25e060e526ebc2db82f4769504a0b4}\label{classopenbu_1_1passport_1_1_passport_a0f25e060e526ebc2db82f4769504a0b4}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!xs\+\_\+parent@{xs\+\_\+parent}}
+\index{xs\+\_\+parent@{xs\+\_\+parent}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{xs\+\_\+parent()}{xs\_parent()}}
+{\footnotesize\ttfamily def xs\+\_\+parent (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the neutron reactions' daughter products\end{DoxyVerb}
+ \mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a4df87781aceea25d30e01e7a2cfac1bb}\label{classopenbu_1_1passport_1_1_passport_a4df87781aceea25d30e01e7a2cfac1bb}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!xs\+\_\+seq@{xs\+\_\+seq}}
+\index{xs\+\_\+seq@{xs\+\_\+seq}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{xs\+\_\+seq()}{xs\_seq()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily def xs\+\_\+seq (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_acdee476337f5c41fa98065a3a6a6d926}\label{classopenbu_1_1passport_1_1_passport_acdee476337f5c41fa98065a3a6a6d926}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!xs\+\_\+seq@{xs\+\_\+seq}}
+\index{xs\+\_\+seq@{xs\+\_\+seq}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{xs\+\_\+seq()}{xs\_seq()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily def xs\+\_\+seq (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{new\+\_\+xs\+\_\+seq }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a7e732b6623ce1b65bd30b2ac917569cd}\label{classopenbu_1_1passport_1_1_passport_a7e732b6623ce1b65bd30b2ac917569cd}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!zamid@{zamid}}
+\index{zamid@{zamid}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{zamid()}{zamid()}}
+{\footnotesize\ttfamily def zamid (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a7279a3dd0e5979490406c8dfe63bee19}\label{classopenbu_1_1passport_1_1_passport_a7279a3dd0e5979490406c8dfe63bee19}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+\+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list@{\+\_\+\+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list}}
+\index{\+\_\+\+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list@{\+\_\+\+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list}{\_\_current\_sorted\_allreacs\_tuple\_list}}
+{\footnotesize\ttfamily \+\_\+\+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a41fd12ffb9cf647f006b0170c1d1525a}\label{classopenbu_1_1passport_1_1_passport_a41fd12ffb9cf647f006b0170c1d1525a}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+all\+\_\+child@{\+\_\+all\+\_\+child}}
+\index{\+\_\+all\+\_\+child@{\+\_\+all\+\_\+child}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+all\+\_\+child}{\_all\_child}}
+{\footnotesize\ttfamily \+\_\+all\+\_\+child\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_aa8ff716fb312cf29dfc0a0c13c3334b1}\label{classopenbu_1_1passport_1_1_passport_aa8ff716fb312cf29dfc0a0c13c3334b1}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+all\+\_\+parent@{\+\_\+all\+\_\+parent}}
+\index{\+\_\+all\+\_\+parent@{\+\_\+all\+\_\+parent}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+all\+\_\+parent}{\_all\_parent}}
+{\footnotesize\ttfamily \+\_\+all\+\_\+parent\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a13a7dedb73d7eb2eccd16862e4a45619}\label{classopenbu_1_1passport_1_1_passport_a13a7dedb73d7eb2eccd16862e4a45619}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+all\+\_\+reacs\+\_\+dic@{\+\_\+all\+\_\+reacs\+\_\+dic}}
+\index{\+\_\+all\+\_\+reacs\+\_\+dic@{\+\_\+all\+\_\+reacs\+\_\+dic}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+all\+\_\+reacs\+\_\+dic}{\_all\_reacs\_dic}}
+{\footnotesize\ttfamily \+\_\+all\+\_\+reacs\+\_\+dic\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ae552f24d64d5c781d429f1dc01cbaf32}\label{classopenbu_1_1passport_1_1_passport_ae552f24d64d5c781d429f1dc01cbaf32}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+allreacs\+\_\+dic@{\+\_\+allreacs\+\_\+dic}}
+\index{\+\_\+allreacs\+\_\+dic@{\+\_\+allreacs\+\_\+dic}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+allreacs\+\_\+dic}{\_allreacs\_dic}}
+{\footnotesize\ttfamily \+\_\+allreacs\+\_\+dic\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_afa2a314f3d28f6da9295b57a88472223}\label{classopenbu_1_1passport_1_1_passport_afa2a314f3d28f6da9295b57a88472223}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+allreacs\+\_\+dic\+\_\+list@{\+\_\+allreacs\+\_\+dic\+\_\+list}}
+\index{\+\_\+allreacs\+\_\+dic\+\_\+list@{\+\_\+allreacs\+\_\+dic\+\_\+list}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+allreacs\+\_\+dic\+\_\+list}{\_allreacs\_dic\_list}}
+{\footnotesize\ttfamily \+\_\+allreacs\+\_\+dic\+\_\+list\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a5815df15f6cb4ef6dcc4cd3b5a10890c}\label{classopenbu_1_1passport_1_1_passport_a5815df15f6cb4ef6dcc4cd3b5a10890c}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+creation\+\_\+dic@{\+\_\+creation\+\_\+dic}}
+\index{\+\_\+creation\+\_\+dic@{\+\_\+creation\+\_\+dic}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+creation\+\_\+dic}{\_creation\_dic}}
+{\footnotesize\ttfamily \+\_\+creation\+\_\+dic\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ae03738c60611b9dd77236cf2b72ff54b}\label{classopenbu_1_1passport_1_1_passport_ae03738c60611b9dd77236cf2b72ff54b}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+current\+\_\+dens@{\+\_\+current\+\_\+dens}}
+\index{\+\_\+current\+\_\+dens@{\+\_\+current\+\_\+dens}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+current\+\_\+dens}{\_current\_dens}}
+{\footnotesize\ttfamily \+\_\+current\+\_\+dens\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a28be3875dc0c309079cb3d4c1c18eadd}\label{classopenbu_1_1passport_1_1_passport_a28be3875dc0c309079cb3d4c1c18eadd}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+current\+\_\+dens\+\_\+subseq@{\+\_\+current\+\_\+dens\+\_\+subseq}}
+\index{\+\_\+current\+\_\+dens\+\_\+subseq@{\+\_\+current\+\_\+dens\+\_\+subseq}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+current\+\_\+dens\+\_\+subseq}{\_current\_dens\_subseq}}
+{\footnotesize\ttfamily \+\_\+current\+\_\+dens\+\_\+subseq\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a758bf0ae1653173b06435836392a57ea}\label{classopenbu_1_1passport_1_1_passport_a758bf0ae1653173b06435836392a57ea}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list@{\+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list}}
+\index{\+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list@{\+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list}{\_current\_sorted\_allreacs\_tuple\_list}}
+{\footnotesize\ttfamily \+\_\+current\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+list\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a8b5b76c45a2bdc317a03fd96a5d52b97}\label{classopenbu_1_1passport_1_1_passport_a8b5b76c45a2bdc317a03fd96a5d52b97}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+current\+\_\+xs@{\+\_\+current\+\_\+xs}}
+\index{\+\_\+current\+\_\+xs@{\+\_\+current\+\_\+xs}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+current\+\_\+xs}{\_current\_xs}}
+{\footnotesize\ttfamily \+\_\+current\+\_\+xs\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a1c2b24934d5eafbd256785b158a470a6}\label{classopenbu_1_1passport_1_1_passport_a1c2b24934d5eafbd256785b158a470a6}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+decay\+\_\+a@{\+\_\+decay\+\_\+a}}
+\index{\+\_\+decay\+\_\+a@{\+\_\+decay\+\_\+a}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+decay\+\_\+a}{\_decay\_a}}
+{\footnotesize\ttfamily \+\_\+decay\+\_\+a\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a74aadd383f9c57cbbfbb13289c5cc96f}\label{classopenbu_1_1passport_1_1_passport_a74aadd383f9c57cbbfbb13289c5cc96f}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+decay\+\_\+b@{\+\_\+decay\+\_\+b}}
+\index{\+\_\+decay\+\_\+b@{\+\_\+decay\+\_\+b}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+decay\+\_\+b}{\_decay\_b}}
+{\footnotesize\ttfamily \+\_\+decay\+\_\+b\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a39df14189d5e5fd6e33071bf858671b1}\label{classopenbu_1_1passport_1_1_passport_a39df14189d5e5fd6e33071bf858671b1}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+decay\+\_\+child@{\+\_\+decay\+\_\+child}}
+\index{\+\_\+decay\+\_\+child@{\+\_\+decay\+\_\+child}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+decay\+\_\+child}{\_decay\_child}}
+{\footnotesize\ttfamily \+\_\+decay\+\_\+child\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a9ec2a96624d23a8603f543884a497e11}\label{classopenbu_1_1passport_1_1_passport_a9ec2a96624d23a8603f543884a497e11}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+decay\+\_\+parent@{\+\_\+decay\+\_\+parent}}
+\index{\+\_\+decay\+\_\+parent@{\+\_\+decay\+\_\+parent}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+decay\+\_\+parent}{\_decay\_parent}}
+{\footnotesize\ttfamily \+\_\+decay\+\_\+parent\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a402a0d31f7a60018461d81717f6bc19a}\label{classopenbu_1_1passport_1_1_passport_a402a0d31f7a60018461d81717f6bc19a}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+dens\+\_\+seq@{\+\_\+dens\+\_\+seq}}
+\index{\+\_\+dens\+\_\+seq@{\+\_\+dens\+\_\+seq}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+dens\+\_\+seq}{\_dens\_seq}}
+{\footnotesize\ttfamily \+\_\+dens\+\_\+seq\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a933dd94036229949d5f2e7f162b3a4ea}\label{classopenbu_1_1passport_1_1_passport_a933dd94036229949d5f2e7f162b3a4ea}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+dens\+\_\+subseq\+\_\+mat@{\+\_\+dens\+\_\+subseq\+\_\+mat}}
+\index{\+\_\+dens\+\_\+subseq\+\_\+mat@{\+\_\+dens\+\_\+subseq\+\_\+mat}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+dens\+\_\+subseq\+\_\+mat}{\_dens\_subseq\_mat}}
+{\footnotesize\ttfamily \+\_\+dens\+\_\+subseq\+\_\+mat\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a05733620cc5f2e3983acf41f4476d48f}\label{classopenbu_1_1passport_1_1_passport_a05733620cc5f2e3983acf41f4476d48f}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+destruction\+\_\+dic@{\+\_\+destruction\+\_\+dic}}
+\index{\+\_\+destruction\+\_\+dic@{\+\_\+destruction\+\_\+dic}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+destruction\+\_\+dic}{\_destruction\_dic}}
+{\footnotesize\ttfamily \+\_\+destruction\+\_\+dic\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a3e3d297361271c8e3ed54dedea4088c6}\label{classopenbu_1_1passport_1_1_passport_a3e3d297361271c8e3ed54dedea4088c6}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+fission\+\_\+child@{\+\_\+fission\+\_\+child}}
+\index{\+\_\+fission\+\_\+child@{\+\_\+fission\+\_\+child}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+fission\+\_\+child}{\_fission\_child}}
+{\footnotesize\ttfamily \+\_\+fission\+\_\+child\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a8caf591542da2ad08160c3a6a69b51fa}\label{classopenbu_1_1passport_1_1_passport_a8caf591542da2ad08160c3a6a69b51fa}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+fission\+\_\+E@{\+\_\+fission\+\_\+E}}
+\index{\+\_\+fission\+\_\+E@{\+\_\+fission\+\_\+E}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+fission\+\_\+E}{\_fission\_E}}
+{\footnotesize\ttfamily \+\_\+fission\+\_\+E = None\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a47fe437d4dacfd52d3296390e1bd67f8}\label{classopenbu_1_1passport_1_1_passport_a47fe437d4dacfd52d3296390e1bd67f8}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+fy@{\+\_\+fy}}
+\index{\+\_\+fy@{\+\_\+fy}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+fy}{\_fy}}
+{\footnotesize\ttfamily \+\_\+fy\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ad95642ebdb67ca7c8f456b259e573684}\label{classopenbu_1_1passport_1_1_passport_ad95642ebdb67ca7c8f456b259e573684}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+mass@{\+\_\+mass}}
+\index{\+\_\+mass@{\+\_\+mass}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+mass}{\_mass}}
+{\footnotesize\ttfamily \+\_\+mass = None\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a705391f3be33314bd5788a28f7538642}\label{classopenbu_1_1passport_1_1_passport_a705391f3be33314bd5788a28f7538642}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+name@{\+\_\+name}}
+\index{\+\_\+name@{\+\_\+name}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+name}{\_name}}
+{\footnotesize\ttfamily \+\_\+name = None\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_af661bb00d1e4359d7b0146beb8650448}\label{classopenbu_1_1passport_1_1_passport_af661bb00d1e4359d7b0146beb8650448}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat@{\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat}}
+\index{\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat@{\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat}{\_sorted\_allreacs\_tuple\_mat}}
+{\footnotesize\ttfamily \+\_\+sorted\+\_\+allreacs\+\_\+tuple\+\_\+mat\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_af2c68ba768ed9c8eb4d3d419b5ab3065}\label{classopenbu_1_1passport_1_1_passport_af2c68ba768ed9c8eb4d3d419b5ab3065}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+state@{\+\_\+state}}
+\index{\+\_\+state@{\+\_\+state}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+state}{\_state}}
+{\footnotesize\ttfamily \+\_\+state\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a53623594bafacc66e4193f21e44d255d}\label{classopenbu_1_1passport_1_1_passport_a53623594bafacc66e4193f21e44d255d}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+xs\+\_\+child@{\+\_\+xs\+\_\+child}}
+\index{\+\_\+xs\+\_\+child@{\+\_\+xs\+\_\+child}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+xs\+\_\+child}{\_xs\_child}}
+{\footnotesize\ttfamily \+\_\+xs\+\_\+child\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a454ea584385e4917f914027a18aad362}\label{classopenbu_1_1passport_1_1_passport_a454ea584385e4917f914027a18aad362}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+xs\+\_\+parent@{\+\_\+xs\+\_\+parent}}
+\index{\+\_\+xs\+\_\+parent@{\+\_\+xs\+\_\+parent}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+xs\+\_\+parent}{\_xs\_parent}}
+{\footnotesize\ttfamily \+\_\+xs\+\_\+parent\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a284f1be349dd831277165a643b566d8f}\label{classopenbu_1_1passport_1_1_passport_a284f1be349dd831277165a643b566d8f}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+xs\+\_\+seq@{\+\_\+xs\+\_\+seq}}
+\index{\+\_\+xs\+\_\+seq@{\+\_\+xs\+\_\+seq}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+xs\+\_\+seq}{\_xs\_seq}}
+{\footnotesize\ttfamily \+\_\+xs\+\_\+seq\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a918d0379bf56bdd587c43a4442ee9964}\label{classopenbu_1_1passport_1_1_passport_a918d0379bf56bdd587c43a4442ee9964}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!\+\_\+zamid@{\+\_\+zamid}}
+\index{\+\_\+zamid@{\+\_\+zamid}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{\+\_\+zamid}{\_zamid}}
+{\footnotesize\ttfamily \+\_\+zamid = None\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ac5e6148c2d0fc2efb7a88b825d0f86c4}\label{classopenbu_1_1passport_1_1_passport_ac5e6148c2d0fc2efb7a88b825d0f86c4}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!current\+\_\+dens@{current\+\_\+dens}}
+\index{current\+\_\+dens@{current\+\_\+dens}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{current\+\_\+dens}{current\_dens}}
+{\footnotesize\ttfamily current\+\_\+dens}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a8476026bbd78d859f5c6641e9ac5f0b8}\label{classopenbu_1_1passport_1_1_passport_a8476026bbd78d859f5c6641e9ac5f0b8}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!current\+\_\+xs@{current\+\_\+xs}}
+\index{current\+\_\+xs@{current\+\_\+xs}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{current\+\_\+xs}{current\_xs}}
+{\footnotesize\ttfamily current\+\_\+xs}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a0b9add3453add52166a65b1ad335a39a}\label{classopenbu_1_1passport_1_1_passport_a0b9add3453add52166a65b1ad335a39a}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!decay\+\_\+a@{decay\+\_\+a}}
+\index{decay\+\_\+a@{decay\+\_\+a}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{decay\+\_\+a}{decay\_a}}
+{\footnotesize\ttfamily decay\+\_\+a}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ab58f7b3a2d6bd6c1a8672a3d8c7b579e}\label{classopenbu_1_1passport_1_1_passport_ab58f7b3a2d6bd6c1a8672a3d8c7b579e}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!decay\+\_\+b@{decay\+\_\+b}}
+\index{decay\+\_\+b@{decay\+\_\+b}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{decay\+\_\+b}{decay\_b}}
+{\footnotesize\ttfamily decay\+\_\+b}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a4129eb6bf3bc94be2b0cd37d8da9c7d0}\label{classopenbu_1_1passport_1_1_passport_a4129eb6bf3bc94be2b0cd37d8da9c7d0}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!dens\+\_\+seq@{dens\+\_\+seq}}
+\index{dens\+\_\+seq@{dens\+\_\+seq}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{dens\+\_\+seq}{dens\_seq}}
+{\footnotesize\ttfamily dens\+\_\+seq}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_a4e2abd7539ca7b6d47a7f4c882e3a2a5}\label{classopenbu_1_1passport_1_1_passport_a4e2abd7539ca7b6d47a7f4c882e3a2a5}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!get\+\_\+\+F\+AM@{get\+\_\+\+F\+AM}}
+\index{get\+\_\+\+F\+AM@{get\+\_\+\+F\+AM}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{get\+\_\+\+F\+AM}{get\_FAM}}
+{\footnotesize\ttfamily get\+\_\+\+F\+AM}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_ad09c9619d23fa50337bd87628d5b5228}\label{classopenbu_1_1passport_1_1_passport_ad09c9619d23fa50337bd87628d5b5228}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!nuc\+\_\+id@{nuc\+\_\+id}}
+\index{nuc\+\_\+id@{nuc\+\_\+id}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{nuc\+\_\+id}{nuc\_id}}
+{\footnotesize\ttfamily nuc\+\_\+id}
+
+\mbox{\Hypertarget{classopenbu_1_1passport_1_1_passport_aecb67bbea706f6dc18e1eca8dbef71e9}\label{classopenbu_1_1passport_1_1_passport_aecb67bbea706f6dc18e1eca8dbef71e9}} 
+\index{openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}!xs\+\_\+seq@{xs\+\_\+seq}}
+\index{xs\+\_\+seq@{xs\+\_\+seq}!openbu\+::passport\+::\+Passport@{openbu\+::passport\+::\+Passport}}
+\subsubsection{\texorpdfstring{xs\+\_\+seq}{xs\_seq}}
+{\footnotesize\ttfamily xs\+\_\+seq}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/\+Users/mouginot/work/app/\+Open\+B\+U/openbu/\mbox{\hyperlink{passport_8py}{passport.\+py}}\end{DoxyCompactItemize}
