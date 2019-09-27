@@ -5,40 +5,13 @@ from . import data as d
 from .utils import functions as fct
 
 class Passport(object):
-    """passport stores all the relevant data of indivudual nuclides and offers methods to extract information on them
+    """passport stores all the relevant data of indivudual nuclides and offers methods to extract information on them.
 
        The passport class is individually instantiated for each nuclide. It contains two types of information: constant and variable data.
-       Constant data, such as the atomic mass, decay constant or the element's family (actinide, fission product) do not change over the course of a simulation.
-       Variable data such as cross sections or fission yields do vary during a simulation and need thus to be updated regularly during a simulation.
+       Constant data, such as the atomic mass, decay constant or the element's familyn (actinide or fission products) do not change over the course of a simulation.
+       Variable data such as cross sections or fission yields do vary during a simulation and need to be updated regularly during a simulation.
        Some of the data are created at the time of the instantiation of the class for a nuclide such as the element's family or the nuclide's
        neutron reaction daughters. Other type of data, typically large in size such as cross sections and decay constants, are to be explicitly set or loaded.
-       A setter method will enable any script that reads the data source to set this data for the passport of a specific nuclide. This is the method used within
-       the code of Open-Burnup to set the data for a list of passports. The other way to explicitly set the data is to use the loader method. This method will
-       go to the data source itself, read the data and set it for the passport of a specific nuclide. This method is envision to be used by the user as a
-       user-friendly way to get information on individual nuclides.
-
-       Attributes:
-           * **decay_a:** returns the absolute value of the decay constants of the nuclide
-           * **decay_b:** returns the percent fraction value of the decay constants of the nuclide
-           * **fy:** returns the value of fission yields in percent
-           * **mass:** returns the atomic mass of the nuclide
-           * **xs:** returns the absolute value of cross sections for the nuclide
-           * **FAM:** returns the family group name of the nuclide
-           * **xs_relatives:** returns neutron reaction's daughter nuclides' id
-           * **decay_relatives:** returns decay reaction's daughter nuclides' id
-
-       Methods:
-           * **set_mass():** set the atomic mass of the nuclide
-           * **set_decay():** set the decay constants (both absolute values and percent fractions) of the nuclide
-           * **set_xs():** set the cross sections of the nuclide
-           * **set_fy():** set the fission yields of the nuclide
-           * **load_mass():** load the atomic mass of the nuclide
-           * **load_decay():** load the decay constants (both absolute values and percent fractions) of the nuclide
-           * **load_mass():** load the cross sections of the nuclide
-           * **load_mass():** load the fission yields of the nuclide
-           * **get__zamid():** returns the zzaaam id of the nuclide
-           * **get_nuc_name():** returns the name of the nuclide
-
     """
     _mass = None
     _fission_E = None
@@ -102,15 +75,16 @@ class Passport(object):
 
     @mass.setter
     def mass(self, new_mass):
+        """ Sets the atomic mass of the nuclide in gram"""
 
         self._mass = new_mass    
 
     # Passport instantiation will read and extract by itself mass for the corresponding nuclide
     def load_mass(self):
-        """Load the atomic mass of the nuclide in gram
+        """Load the atomic mass of the nuclide in gram.
 
-        This method directly fetches the atomic mass from the source data and automatically set
-        of the passport object"""
+        This method directly fetches the atomic mass from the mass library and automatically set it
+        to the passport object"""
 
         zamid = self._zamid
         zaid = zamid[:-1]
@@ -144,23 +118,24 @@ class Passport(object):
 
     @decay_a.setter
     def decay_a(self, new_decay_a):
+        """Sets the absolute values of the decay constant of the nuclide"""
 
         self._decay_a =  new_decay_a
 
     @decay_b.setter
     def decay_b(self, new_decay_b):
-
+        """Sets the fraction percent values of the decay constant of the nuclide"""
         self._decay_b =  new_decay_b
 
     def set_decay(self, decay_a, decay_b):
-        """Set the absolute and fracional values of the decay constant of the nuclide"""
+        """Sets the absolute and fracional values of the decay constant of the nuclide"""
         self.decay_a =  decay_a
         self.decay_b =  decay_b
 
     def load_decay(self):
-        """Load the decay constant value of the nuclide
+        """Load the decay constant value of the nuclide.
 
-        This method directly fetches the decay constant values from the source data and automatically set
+        This method directly fetches the decay constant values (absolute and fractional) from the decay library and automatically set
         of the passport object"""
 
         zamid = self._zamid
@@ -172,36 +147,36 @@ class Passport(object):
         self.decay_b = decay_b
 
 
-
-
     @property
     def current_xs(self):
-        """Returns the cross sections data of the nuclide"""
+        """Returns the current cross sections dictionnary of the nuclide"""
         if self._current_xs is None:
             pass  # define exception for undefined variable
         return self._current_xs
 
     @current_xs.setter
     def current_xs(self, new_xs):
-        
+        """Sets the current cross sections dictionnary of the nuclide"""
         self._current_xs = new_xs
 
     @property
     def xs_seq(self):
-
+        """Returns the sequence of cross section dictionnaries of the nuclide"""
         return self._xs_seq
 
     @xs_seq.setter
     def xs_seq(self, new_xs_seq):
-
+        """Sets the sequence of cross section dictionnaries of the nuclide"""
         self._xs_seq = new_xs_seq
 
     def _append_xs_seq(self, new_xs):
-
+        """Appends a new cross section dictionnary to the sequence of cross section dictionnaries"""
         self._xs_seq.append(new_xs)
 
     def _set_xs(self, new_xs):
-
+        """This method first verifies if a macro sequence of cross section dictionnaries has been already created for the nuclide.
+        If not, it creates a sequence and append the new cross section dictionnary.
+        If a sequence already exists, it just appends the new dictionnary to the already existing sequence"""
         # If this is the fist step
         if self.current_xs == None:
             self.xs_seq = [new_xs]
@@ -212,7 +187,9 @@ class Passport(object):
        # self._append_time_subseq_mat()
 
     def _overwrite_xs(self, new_xs):
-
+        """This method first verifies if a macro sequence of cross section dictionnaries has been already created for the nuclide.
+        If not, it creates a sequence and append the new cross section dictionnary.
+        If a sequence already exists, it overwrites the last dictionnary with the new dictionnary in the already existing sequence"""
        # If this is the fist step
         if self.current_xs == None:
             self.xs_seq = [new_xs]
@@ -225,10 +202,10 @@ class Passport(object):
 
     # Passport instantiation will read and extract by itself mass for the corresponding nuclide
     def load_xs(self):
-        """Load the cross sections data of the nuclide
+        """Load the cross sections data of the nuclide.
 
-        This method directly fetches the cross sections data from the source data and automatically set
-        of the passport object"""
+        This method directly fetches the cross sections data from the cross section library and automatically sets
+        it to the passport object"""
 
         zamid = self._zamid
         xs_lib = d.default_xs_lib
@@ -240,24 +217,27 @@ class Passport(object):
 
     @property
     def fy(self):
-        """Returns the fission yields data in percent"""
+        """Returns the fission yields dictionnary.
+
+        Fission yield dictionnary are defined per fission product. Each key of the dictionnary is the zamid of one of the 
+        fission parent and the corresponding entry is the fission yield normalized to 1 (value between 0 and 1)"""
         if self._fy is None:
             pass  # define exception for undefined variable)
         return self._fy
 
     @fy.setter
     def fy(self, new_fy):
-
+        """Sets the fission yields dictionnary to a nuclide"""
         if self.get_FAM == 'ACT':
             raise Not_a_Fission_Product("{} is not a FP and can't be given fission yields".format(self._zamid))
         self._fy = new_fy
 
     # Passport instantiation will read and extract by itself mass for the corresponding nuclide
     def load_fy(self):
-        """Load the fission yields data of the nuclide
+        """Load the fission yields dictionnary of the nuclide
 
-        This method directly fetches the fission yields data from the source data and automatically set
-        of the passport object
+        This method directly fetches the fission yields data from the fission yield library and automatically sets
+        it to the passport object
 
         If the nuclide for which the fission yields data are being loaded is not a fission product,
         the error *Not_a_Fission_Product* will be raised"""
@@ -275,74 +255,71 @@ class Passport(object):
 
     @property
     def current_dens(self):
-        """Returns the density of the nuclide in atom per cm^3"""
+        """Returns the current density of the nuclide in atom per cm^3"""
         if self._current_dens is None:
             pass  # define exception for undefined variable
         return self._current_dens
 
     @current_dens.setter
     def current_dens(self, new_dens):
-        """set the density of the nuclide in atom per cm^3"""
+        """Sets the current density of the nuclide in atom per cm^3"""
         self._current_dens = new_dens
 
     @property
     def dens_seq(self):
+        """Returns the macro sequence of densities of the nuclide in atom per cm^3"""
         return self._dens_seq
 
     @dens_seq.setter
     def dens_seq(self, new_dens_seq):
+        """Sets the macro sequence of densities of the nuclide in atom per cm^3"""
 
         self._dens_seq = new_dens_seq
 
     def _append_dens_seq(self, new_dens):
-
+        """Appends a new density value to the macro sequence of densities of the nuclide in atom per cm^3"""
         self._dens_seq.append(new_dens)
 
-    # @property
-    # def current_dens_subseq(self):
-
-    #     return self._current_dens_subseq
-
-    # def _append_current_dens_subseq(self, new_dens, ss):
-
-    #     # Start of a new step
-    #     if ss == 0:
-    #         self._current_dens_subseq = []
-    #     self.current_dens_subseq.append(new_dens)
-
     def get_current_dens_subseq(self):
-
+        """Returns the current micro sequence of densities (i.e. micro sequence corresponding to the current macro step)"""
         return self._dens_subseq_mat[-1]
 
     @property
     def dens_subseq_mat(self):
-
+        """Returns the list of micro sequences of densities (one per macro step)"""
         return self._dens_subseq_mat
 
     def get_dens_subseq(self, s):
-
+        """Returns the micro sequence of densities number s (i.e. micro sequence corresponding to the macro step number s)"""
         return self._dens_subseq_mat[s]
 
     def _append_dens_subseq_mat(self, new_dens, ss):
+        """Sets new density value to the list of micro sequences of densities
 
+        If this is the first micro step, creates a new micro sequence"""
         if ss == 0:
             self._dens_subseq_mat.append([])
         self._dens_subseq_mat[-1].append(new_dens)
 
     def _set_initial_dens(self, new_dens):
-
-        """set new dens to current dens and append to dens_seqor"""
+        """Sets initial density"""
         self.current_dens = new_dens
         self.dens_seq = [new_dens]
         self._dens_subseq_mat = [[new_dens]]
 
     def _set_step_dens(self):
+        """Sets a new density in the macro sequence of densities
 
+        The current density is set to the new density
+        The new density is appended to the macro sequence of densities"""
         dens = self.current_dens
         self._append_dens_seq(dens)
 
     def _set_substep_dens(self, dens, ss):
+        """Sets a new density in the micro sequence of densities
 
+        The current density is set to the new density
+        The new density is appended to the micro sequence of densities"""
         self.current_dens = dens
         self._append_dens_subseq_mat(dens, ss)
        
@@ -352,17 +329,18 @@ class Passport(object):
 
     @property
     def zamid(self):
-
+        """Returns the zamid of the nuclide"""
         return self._zamid
 
     @property
     def name(self):
-
+        """Returns the name of the nuclide"""
         return self._name
 
 
     def _get_xs_prod_from_dic(self):
-
+        """Produces a dictionnary that contains the operations required to be done on the zamid number of the nuclide
+        to obtain the zamid of nuclides produced by the different types of neutron-induced reaction"""
         state = self._state
         if state == 0:
             xs_prod_from = d.xs_prod_fromS_toS.copy()
@@ -375,7 +353,8 @@ class Passport(object):
         return xs_prod_from
 
     def _get_decay_prod_from_dic(self):
-
+        """Produces a dictionnary that contains the operations required to be done on the zamid number of the nuclide
+        to obtain the zamid of nuclides produced by the different types of decay reaction"""
         state = self._state
         if state == 0:
             decay_prod_from = d.decay_prod_fromS_toS.copy()
@@ -388,7 +367,8 @@ class Passport(object):
         return decay_prod_from
 
     def _get_xs_prod_to_dic(self):
-
+        """Produces a dictionnary that contains the operations required to be done on the zamid number of other nuclides
+        that produces the nuclide via different types of neutron-induced reaction"""
         state = self._state
         if state == 0:
             xs_prod_to = d.xs_prod_fromS_toS.copy()
@@ -401,7 +381,8 @@ class Passport(object):
         return xs_prod_to
 
     def _get_decay_prod_to_dic(self):
-
+        """Produces a dictionnary that contains the operations required to be done on the zamid number of other nuclides
+        that produces the nuclide via different types of decay reaction"""
         state = self._state
         if state == 0:
             decay_prod_to = d.decay_prod_fromS_toS.copy()
