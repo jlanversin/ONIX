@@ -372,21 +372,21 @@ class Cell(object):
 
 
 
-	def _set_sequence_from_input(self, sequence_dict):
+	# def _set_sequence_from_input(self, sequence_dict):
 
 
-		cell_id = self._cell_id
-		sequence = seq(cell_id)
+	# 	cell_id = self._cell_id
+	# 	sequence = seq(cell_id)
 
-		self._set_ihm()
-		self._set_bu_sec_conv_factor()
+	# 	self._set_ihm()
+	# 	self._set_bu_sec_conv_factor()
 
-		passlist = self.passlist
-		bu_sec_conv_factor = self._bu_sec_conv_factor
+	# 	passlist = self.passlist
+	# 	bu_sec_conv_factor = self._bu_sec_conv_factor
 
-		sequence._set_from_input(sequence_dict, passlist, bu_sec_conv_factor)
+	# 	sequence._set_from_input(sequence_dict, passlist, bu_sec_conv_factor)
 
-		self._sequence = sequence
+	# 	self._sequence = sequence
 
 	def set_sequence(self, sequence, mode = 'stand_alone'):
 
@@ -400,8 +400,9 @@ class Cell(object):
 		passlist = self.passlist
 		bu_sec_conv_factor = self._bu_sec_conv_factor
 
-		sequence_copy._cell_conversion(passlist, bu_sec_conv_factor, mode)
-
+		#The _cell_conversion method was actually just calling _set_initial_bucell_bu()
+		#sequence_copy._cell_conversion(passlist, bu_sec_conv_factor, mode)
+		sequence_copy._set_initial_bucell_bu()
 		self._sequence = sequence_copy
 
 	@property

@@ -18,6 +18,11 @@ from onix import utils
 from onix import data
 
 class Stand_alone(object):
+	"""This class is used to execute standalone simulations
+
+	Through this class the user can set the nuclear data libraries used for the simulation,
+	manually set the volumes of each BUCell, set the burnup/time sequence and finally
+	launch a simulation with the method "burn" """
 
 	def __init__(self):
 
@@ -29,36 +34,39 @@ class Stand_alone(object):
 
 	@property
 	def system(self):
-
+		"""Returns an instantiation of the class system"""
 		return self._system
 
 	@system.setter
 	def system(self, system):
-
+		"""Sets an instantiation of the class system"""
 		self._system = system
 
 	def add_bucell(self, bucell):
-
+		"""Adds a BUCell to the system"""
 		system = self.system
 		system.add_bucell(bucell)
 
 	@property
 	def total_vol(self):
+		"""Returns the total volume of the system"""
 		return self._total_vol
 
 	@total_vol.setter
 	def total_vol(self, total_vol):
-
+		"""Sets the total volume of the system"""
 		self._total_vol = total_vol
 
 	def set_sequence(self, sequence):
-
+		"""Sets the burnup/time sequence to the system"""
 		self.sequence = sequence
 		system = self.system
 		system.set_sequence(sequence, mode = 'stand alone')
 
 	def set_decay_lib(self, decay_lib_path):
+		"""Sets a decay library chosen by the user that will be used in the simulation
 
+		The user needs to specify the path of the chosen library"""
 		system = self.system
 		self._decay_lib_set = 'yes'
 		self._decay_lib_path = decay_lib_path
@@ -66,7 +74,7 @@ class Stand_alone(object):
 
 
 	def set_default_decay_lib(self):
-
+		"""Sets the decay library to the default decay library (ENDF/B-VIII)"""
 		system = self.system
 		self._decay_lib_set = 'yes'
 		#system.set_default_decay_for_all_no_add()
@@ -74,7 +82,7 @@ class Stand_alone(object):
 		system.set_default_decay_for_all()
 
 	def set_decay_from_object(self, bucell, object):
-
+		"""Sets the decay library from a decay object created by the user"""
 		system = self.system
 		# This should not set yes since it is only for one bucell
 		# Need to be fixed later
@@ -84,21 +92,23 @@ class Stand_alone(object):
 		bucell.set_decay(object)
 
 	def set_xs_lib(self, xs_lib_path):
+		"""Sets a cross section library chosen by the user that will be used in the simulation
 
+		The user needs to specify the path of the chosen library"""
 		system = self.system
 		self._xs_lib_set = 'yes'
 		self._xs_lib_path = xs_lib_path
 		system.set_xs_for_all(xs_lib_path)
 
 	def set_default_xs_lib(self):
-
+		"""Sets the cross section library to the default cross section library (ENDF/B-VIII)"""
 		system = self.system
 		self._xs_lib_set = 'yes'
 		#system.set_default_decay_for_all_no_add()
 		system.set_default_xs_for_all()
 
 	def set_xs_from_object(self, bucell, object):
-
+		"""Sets the cross section library from a cross section object created by the user"""
 		system = self.system
 		# This should not set yes since it is only for one bucell
 		# Need to be fixed later
@@ -108,14 +118,16 @@ class Stand_alone(object):
 		bucell.set_xs(object)
 
 	def set_fy_lib(self, fy_lib_path):
+		"""Sets a fission yield library chosen by the user that will be used in the simulation
 
+		The user needs to specify the path of the chosen library"""
 		system = self.system
 		self._fy_lib_set = 'yes'
 		self._fy_lib_path = fy_lib_path
 		system.set_fy_for_all(fy_lib_path)
 
 	def set_default_fy_lib(self):
-
+		"""Sets the fission yields library to the default fission yield library (ENDF/B-VIII)"""
 		system = self.system
 		self._fy_lib_set = 'yes'
 		self._fy_lib_path = 'default'
@@ -123,7 +135,7 @@ class Stand_alone(object):
 		system.set_default_fy_for_all()
 
 	def set_fy_from_object(self, bucell, object):
-
+		"""Sets the fission yield library from a fission yeild object created by the user"""
 		system = self.system
 		# This should not set yes since it is only for one bucell
 		# Need to be fixed later
@@ -133,7 +145,8 @@ class Stand_alone(object):
 		bucell.set_fy(object)
 
 	def set_vol(self, vol_dict):
-
+		"""Sets the volume of each BUCell by providing a dictionnary of BUCell volumes
+		where each key is the name of the BUCell and the entries are the volume in cm^3"""
 		system = self.system
 		bucell_dict = system.bucell_dict
 
@@ -148,7 +161,7 @@ class Stand_alone(object):
 
 		self._volume_set = 'yes'
 
-	def step_normalization(self, s):
+	def _step_normalization(self, s):
 
 		system = self.system
 		bucell_list = system.get_bucell_list()
@@ -162,7 +175,18 @@ class Stand_alone(object):
 
 
 	def burn(self):
+		"""Burns the system
 
+		The method burn will set default nuclear data to the system if the user has not
+		set nuclear data already
+
+		A macrostep folder named "step_s" (with s the index of the macrostep) will be created per macrostep and
+		contains various information on the system for the corresponding macrostep
+
+		For each macrostep, burn calls salameche.burnstep to deplete the system until the next macrostep
+
+		At the end of the simulation, burn will print various information on the system in the output_summary folder
+		 """
 		start_time = time.time()
 
 		# If no decay libs and fy libs have been set, set default libs
@@ -199,8 +223,8 @@ class Stand_alone(object):
 		for s in range(1, macrosteps_number+1):
 
 			print ('\n\n\n\n====== STEP {}======\n\n\n\n'.format(s))
-			sequence.gen_step_folder(s)
-			self.step_normalization(s)
+			sequence._gen_step_folder(s)
+			self._step_normalization(s)
 			print (('\n\n\n=== Salameche Burn {}===\n\n\n'.format(s)))
 			salameche.burn_step(system, s, 'stand alone')
 

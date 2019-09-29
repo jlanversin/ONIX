@@ -398,7 +398,7 @@ class Passport(object):
 
     @property
     def xs_child(self):
-        """Returns the neutron reactions' daughter products"""
+        """Returns the daughter products of the nuclide via neutron-induced rections"""
         return self._xs_child    
 
     def _set_xschild(self):
@@ -417,7 +417,7 @@ class Passport(object):
 
     @property
     def decay_child(self):
-        """Returns the decay reactions' daughter products"""
+        """Returns the daughter products of the nuclide via decay reactions"""
         return self._decay_child
 
     def _set_decaychild(self):
@@ -436,7 +436,7 @@ class Passport(object):
 
     @property
     def xs_parent(self):
-        """Returns the neutron reactions' daughter products"""
+        """Returns the parents of the nuclide via neutron-induced reactions"""
         return self._xs_parent
 
     def _set_xsparent(self):
@@ -455,7 +455,7 @@ class Passport(object):
 
     @property
     def decay_parent(self):
-        """Returns the decay reactions' daughter products"""
+        """Returns the parents of the nuclide via decay reactions"""
         return self._decay_parent
 
     def _set_decayparent(self):
@@ -474,7 +474,7 @@ class Passport(object):
 
     @property
     def all_parent(self):
-
+        """Returns all parents of the nuclide"""
         return self._all_parent
 
     def _set_all_parent(self):
@@ -492,7 +492,7 @@ class Passport(object):
 
     @property
     def all_child(self):
-
+        """Returns all daughter products of the nuclide"""
         return self._all_child
 
     def _set_all_child(self):
@@ -510,7 +510,7 @@ class Passport(object):
 
     @property
     def fission_child(self):
-
+        """Returns daughter products of the nuclide via fission reactions"""
         return self._fission_child
 
     @fission_child.setter
@@ -550,7 +550,7 @@ class Passport(object):
 
     # On the fly calculation
     def get_all_non0_child(self):
-
+        """Gets all daughter products of the nuclide produced via reaction that are non-zero in the library used in the simulation"""
         xs_child = self._xs_child
         decay_child = self._decay_child
         non0_child_list = []
@@ -586,6 +586,7 @@ class Passport(object):
 
     # On the fly calculation since an AVT can become a FP if fy is set
     def get_FAM(self):
+        """Returns the family of a nuclide (ACT= Activation, FP= Fission Product, Act= Actinide)"""
 
         nz = self.get_z
 
@@ -623,6 +624,7 @@ class Passport(object):
 
     @property
     def state(self):
+        """Return the exitation state of the nuclide"""
 
         return self._state
 
@@ -644,12 +646,12 @@ class Passport(object):
 
     @property
     def fission_E(self):
-
+        """Returns the fission energy of the nuclide"""
         return self._fission_E
 
     @fission_E.setter
     def fission_E(self, fission_E):
-
+        """Sets the fission energy of the nuclide"""
         self._fission_E = fission_E
 
     def _set_energy_per_fission(self):
@@ -661,7 +663,7 @@ class Passport(object):
         self._fission_E = fission_E
 
     def get_natural_abundance(self):
-
+        """Gets the natural abundance of the nuclide normalized to 1 (value between 0 and 1)"""
         name_new_format = fct.onix_name_to_openmc_name(self.name)
         nat_abun_dict = d.NATURAL_ABUNDANCE
         if name_new_format in nat_abun_dict:
@@ -674,17 +676,23 @@ class Passport(object):
 
     @property
     def destruction_dic(self):
+        """Returns a dictionnary of all the destruction terms of the nuclide.
 
+        The keys are the reactions' names
+        The entries are the reaction rates of the reaction"""
         return self._destruction_dic
 
     @destruction_dic.setter
     def destruction_dic(self, destruction_dic):
-
+        """Sets a dictionnary of all the destruction terms of the nuclide"""
         self._destruction_dic = destruction_dic
 
     @property
     def creation_dic(self):
+        """Returns a dictionnary of all the production terms of the nuclide.
 
+        The keys are the parent nuclides' names with the reaction in parenthesis
+        The entries are the reaction rates of the reaction"""
         return self._creation_dic
 
     @creation_dic.setter
@@ -694,7 +702,7 @@ class Passport(object):
 
     @property
     def allreacs_dic(self):
-
+        """Returns an aggregated dictionnary with production and destruction terms of the nuclide"""
         return self._allreacs_dic
 
     @allreacs_dic.setter
@@ -726,7 +734,13 @@ class Passport(object):
 
     @property
     def sorted_allreacs_tuple_mat(self):
+        """Returns a list of tuples that contains destruction and production terms
 
+        For destruction terms, the first element is the reaction name and the second element
+        is the reaction rate
+        For production terms, the first element is the parent nuclide witht the reaction name in parenthesis
+        and the second element is the reactio rate
+        These tuples are ranked from lower reaction rate to higher reaction rate"""
         return self._sorted_allreacs_tuple_mat
 
     def append_sorted_allreacs_tuple_mat(self):

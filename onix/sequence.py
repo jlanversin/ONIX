@@ -78,22 +78,22 @@ class Sequence(object):
         self._current_isomeric_branching_ratio = None
         self._isomeric_branching_ratio_seq = None
 
-    def _set_from_input(self, sequence_dict, passlist,  bu_sec_conv_factor):
+    # def _set_from_input(self, sequence_dict, passlist,  bu_sec_conv_factor):
 
-        sequence = sequence_dict
-        self._bu_sec_conv_factor = bu_sec_conv_factor
+    #     sequence = sequence_dict
+    #     self._bu_sec_conv_factor = bu_sec_conv_factor
 
-        self.set_sequence(sequence['unit_vector'], sequence['unit'])
+    #     self.set_sequence(sequence['unit_vector'], sequence['unit'])
 
-        self.set_norma(sequence['norma_vector'], sequence['normalization'] )
+    #     self.set_norma(sequence['norma_vector'], sequence['normalization'] )
 
-        self.microstep_vector = sequence['microstep_vector']
+    #     self.microstep_vector = sequence['microstep_vector']
 
-        self.flux_approximation = sequence['flux_approximation']
+    #     self.flux_approximation = sequence['flux_approximation']
 
-        #self.set_flux_approximation(sequence['flux_approximation'])
+    #     #self.set_flux_approximation(sequence['flux_approximation'])
 
-        self._cell_conversion(passlist, bu_sec_conv_factor, mode)
+    #     self._cell_conversion(passlist, bu_sec_conv_factor, mode)
 
 
     # I AM NOT SO SURE THIS FUNCTION IS STILL NEDDED
@@ -101,14 +101,14 @@ class Sequence(object):
     # THE REMAINING (FLUX, POW_DENS, MC_FLUX, TIME/BU), WILL BE DYNAMICALLY
     # SET DURING THE BURN LOOP
     # THE ONLY THING NEEDED IS TO SET THE BU_SEC_CONV_FACTOR
-    def _cell_conversion(self, passlist, bu_sec_conv_factor, mode):
+    # def _cell_conversion(self, passlist, bu_sec_conv_factor, mode):
 
-        #This method will convert the user input sequence into time, burnup, flux and power sequence if possible
+    #     #This method will convert the user input sequence into time, burnup, flux and power sequence if possible
 
-        # First, we set the bu_sec_conv_factor to the sequence
-        self._set_initial_bucell_bu()
+    #     # First, we set the bu_sec_conv_factor to the sequence
+    #     self._set_initial_bucell_bu()
 
-        # if self._macrostep_unit in ['s', 'm', 'y', 'd']:
+    #     # if self._macrostep_unit in ['s', 'm', 'y', 'd']:
 
         #     # Create the time sequence
         #     # += because self._time_seq is already initialised
@@ -230,7 +230,7 @@ class Sequence(object):
                 self._av_pow_dens_seq = [norma_vector[0]]+norma_vector
                 cm3_to_liter = 1E-3 # av_pow is in kW/l
                 self._tot_pow_seq = [x*total_vol*cm3_to_liter for x in self._av_pow_dens_seq]
-                self.initial_system_time_bu_conversion(system)
+                self._initial_system_time_bu_conversion(system)
 
             if norma_mode == 'flux':
 
@@ -265,7 +265,7 @@ class Sequence(object):
                 cm3_to_liter = 1E-3 # av_pow is in kW/l
                 self._tot_pow_seq = [x*total_vol*cm3_to_liter for x in self._av_pow_dens_seq]
 
-                self.initial_system_bu_time_conversion(system)
+                self._initial_system_bu_time_conversion(system)
 
             if norma_mode == 'flux':
 
@@ -327,7 +327,7 @@ class Sequence(object):
     #             self._time_seq += [self._time_seq[-1] + time_step]
 
     # This convert time_seq and subseq to system bu seq and subseq using av_pow_dens
-    def initial_system_time_bu_conversion(self, system):
+    def _initial_system_time_bu_conversion(self, system):
 
         av_pow_dens_seq = self._av_pow_dens_seq
         bu_sec_conv_factor = system.bu_sec_conv_factor
@@ -351,7 +351,7 @@ class Sequence(object):
         #     self._set_substep_time(time_substep_val, ss)
 
     # This convert time_seq and subseq to system bu seq and subseq using av_pow_dens
-    def initial_system_bu_time_conversion(self, system):
+    def _initial_system_bu_time_conversion(self, system):
 
         av_pow_dens_seq = self._av_pow_dens_seq
         bu_sec_conv_factor = system.bu_sec_conv_factor
@@ -366,24 +366,25 @@ class Sequence(object):
             time_subintvl_val = time_intvl/microsteps_number
             self._time_subseq_mat.append([time_subintvl_val*(j+1) + self._time_seq[s] for j in range(microsteps_number)])
 
-    def dynamic_system_time_bu_conversion(self, system, s):
+    # Looks obsolete
+    # def dynamic_system_time_bu_conversion(self, system, s):
 
-        # calculate total power
-        tot_pow = 0
-        for bucell_name in system.bucell_dict:
-            bucell = bucell_dict[bucell_name]
-            bucell_vol = bucell.vol
-            bucell_pow_dens = bucell.current_pow_dens
-            bucell_pow = bucell_vol*bucell_pow_dens
-            tot_pow += bucell_pow
+    #     # calculate total power
+    #     tot_pow = 0
+    #     for bucell_name in system.bucell_dict:
+    #         bucell = bucell_dict[bucell_name]
+    #         bucell_vol = bucell.vol
+    #         bucell_pow_dens = bucell.current_pow_dens
+    #         bucell_pow = bucell_vol*bucell_pow_dens
+    #         tot_pow += bucell_pow
 
-        system._append_tot_pow_seq(tot_pow)
+    #     system._append_tot_pow_seq(tot_pow)
 
-        # total ihm
-        tot_ihm = system.get_tot_ihm()
+    #     # total ihm
+    #     tot_ihm = system.get_tot_ihm()
 
-        #current time
-        current_time = self.time
+    #     #current time
+    #     current_time = self.time
 
 
 
@@ -394,7 +395,7 @@ class Sequence(object):
 
 
     # This convert time to bucell bu for each substep
-    def bucell_time_bu_substep_conversion(self, bucell, s, ss):
+    def _bucell_time_bu_substep_conversion(self, bucell, s, ss):
 
         pow_dens = self.current_pow_dens
         bu_sec_conv_factor = bucell.bu_sec_conv_factor
@@ -501,7 +502,7 @@ class Sequence(object):
 
 
     # Method provided by MCODE
-    def get_FMF1(self, system, s):
+    def _get_FMF1(self, system, s):
 
         tot_pow = self.tot_pow_seq[s] # in kW
         bucell_dict = system.bucell_dict
@@ -537,79 +538,122 @@ class Sequence(object):
 
     @property
     def macrostep_vector(self):
-
+        """Returns the macrostep vector"""
         return self._macrostep_vector
 
     @macrostep_vector.setter
     def macrostep_vector(self, macrostep_vector):
-
+        """Sets the macrostep vector"""
         self._macrostep_vector = macrostep_vector
 
     @property
     def macrostep_unit(self):
+        """Returns the units of the macrosteps
 
+        Units can be time in second or burnup in MWd/kg
+        """
         return self._macrostep_unit
 
     @macrostep_unit.setter
     def macrostep_unit(self, macrostep_unit):
+        """Sets the units of the macrosteps
 
+        Units can be time in second or burnup in MWd/kg"""
         self._macrostep_unit = macrostep_unit
 
     @property
     def macrosteps_number(self):
-
+        """Returns the number of macrosteps"""
         return self._macrosteps_number
 
     @macrosteps_number.setter
     def macrosteps_number(self, macrosteps_number):
-
+        """Sets the number of macrosteps"""
         self._macrosteps_number = macrosteps_number
 
 
     def set_norma(self, norma_vector, norma_unit):
+        """Sets information on normalization
 
+        In version 0.10, the couple mode can only accept normalizations of the flux
+        where the total power of the system is held constant
+        The standalone mode can only accept normalization of the total power
+        where the flux of the system if held constant
+
+        In version 0.10, in standalone mode, the flux set by the user is going to be
+        used for all BUCells of the system. In other words, all BUCells will have the
+        same neutron flux"""
         self._norma_vector = norma_vector
         self._norma_unit = norma_unit
 
     @property
     def norma_vector(self):
-
+        """Returns the normalization vector"""
         return self._norma_vector
 
     @norma_vector.setter
     def norma_vector(self, norma_vector):
+        """Sets the normalization vector
 
+        One value for normalization should be set per macrostep
+        Hence, the size of the vector norma_vector should be the same
+        as the size of macrostep_vector
+        """
         self._norma_vector = norma_vector
 
     @property
     def norma_unit(self):
-
+        """Returns the normalization unit"""
         return self._norma_unit
 
     @norma_unit.setter
     def norma_unit(self, norma_unit):
+        """Sets the normalization unit
+
+        Power density: kW/l
+        In version 0.10, the user should specify the power density as the total power
+        divided by the total volume of the system. The total volume of the system should includes
+        all regions of the system, even regions that are not BUCells (for example, it should include
+        the water region around the fuel BUCell)
+
+        Neutron flux: cm^-2 s^-1
+        """
 
         self._norma_unit = norma_unit
 
 
     @property
     def flux_approximation(self):
+        """Returns the method used for approximating the flux between two microsteps
 
+        Warning: This method should not be used by the user in version 0.10"""
         return self._flux_approximation
 
     @flux_approximation.setter
     def flux_approximation(self, flux_approximation):
+        """Sets the method used for approximating the flux between two microsteps
 
+        Warning: This method should not be used by the user in version 0.10"""
         self._flux_approximation = flux_approximation
 
     @property
     def microstep_vector(self):
+        """Returns the microstep vector
+        
+        Time: seconds
 
+        Burnup: MWd/kg
+        """
         return self._microstep_vector
 
     @microstep_vector.setter
     def microstep_vector(self, microstep_vector):
+        """Sets the microstep vector
+        
+        Time: seconds
 
+        Burnup: MWd/kg
+        """
         self._microstep_vector = microstep_vector
 
     # bu_sec_conv_factor should be set to each cell or system, not sequence
@@ -617,23 +661,25 @@ class Sequence(object):
 
     #     self._bu_sec_conv_factor = bu_sec_conv_factor
 
-    def gen_initial_step_folder(self):
 
-        name = 'step_0'
-        utils.gen_folder(name)
+    # Looks obsolete
+    # def gen_initial_step_folder(self):
 
-    def gen_step_folder(self, s):
+    #     name = 'step_0'
+    #     utils.gen_folder(name)
+
+    def _gen_step_folder(self, s):
 
         # Folder numbering starts with 1 not 0
         name = 'step_{}'.format(s)
         utils.gen_folder(name)
 
     def microsteps_number(self, s):
-
+        """Returns the number of microsteps for macrostep s"""
         return self._microstep_vector[s]
 
     def set_macrostep(self, macrostep_vector, macrostep_unit):
-
+        """Sets the macrostep vector and the macrostep units"""
         self.macrostep_vector = macrostep_vector
         self.macrostep_unit = macrostep_unit
         self.macrosteps_number = len(macrostep_vector)
@@ -849,10 +895,11 @@ class Sequence(object):
 ##### average power density info ######
 
 
-    @property
-    def av_pow_dens_seq(self):
+    # Looks obsolete
+    # @property
+    # def av_pow_dens_seq(self):
 
-        return self._av_pow_dens_seq
+    #     return self._av_pow_dens_seq
 
 
 ##### total power info ######
@@ -862,23 +909,28 @@ class Sequence(object):
     # Power density that is currently set
     @property
     def current_tot_pow(self):
-
+        """Returns the current total power of the system
+        """
         if self._current_tot_pow is None:
             pass  # define exception for undefined variable
         return self._current_tot_pow
 
     @current_tot_pow.setter
     def current_tot_pow(self, new_tot_pow):
+        """Sets the current total power of the system
+        """
         self._current_tot_pow = new_tot_pow
 
     @property
     def tot_pow_seq(self):
-
+        """Returns the sequence of total power of the system
+        """
         return self._tot_pow_seq
 
     @tot_pow_seq.setter
     def tot_pow_seq(self, new_tot_pow_seq):
-
+        """Sets the sequence of total power of the system
+        """
         self._tot_pow_seq = new_tot_pow_seq
 
     def _append_tot_pow_seq(self, new_tot_pow):
@@ -887,33 +939,38 @@ class Sequence(object):
         self._tot_pow_seq.append(new_tot_pow)
     
     def tot_pow_point(self, s):
-
+        """Returns the total power value for macrostep s
+        """
         return self._tot_pow_seq[s]
 
 
 
 ##### time info ######
 
-    # Power density that is currently set
     @property
     def current_time(self):
-
+        """Returns the time in second corresponding to the current macrostep or microstep
+        """    
         if self._current_time is None:
             pass  # define exception for undefined variable
         return self._current_time
 
     @current_time.setter
     def current_time(self, new_time):
+        """Sets the time in second corresponding to the current microstep (or macrostep)
+        """ 
         self._current_time = new_time
 
     @property
     def time_seq(self):
-
+        """Returns the time macrosequence
+        """       
         return self._time_seq
 
     @time_seq.setter
     def time_seq(self, new_time_seq):
-
+        """Sets the time macrosequence
+        """ 
         self._time_seq = new_time_seq
 
     def _append_time_seq(self, new_time):
@@ -922,7 +979,8 @@ class Sequence(object):
     
     @property
     def current_time_subseq(self):
-
+        """Returns the time microsequence in second corresponding to the current macrostep
+        """ 
         return self._current_time_subseq
 
     def _append_current_time_subseq(self, new_time, ss):
@@ -933,13 +991,16 @@ class Sequence(object):
         self.current_time_subseq.append(new_time)
 
     @property
-    def time_subseq_mat(self):
-
+        """Returns a list of time microsequences in second where each microsequence correspond 
+        to one macrostep
+        """ 
         return self._time_subseq_mat
 
     @time_subseq_mat.setter
     def time_subseq_mat(self, time_subseq_mat):
-
+        """Sets a list of time microsequences in second where each microsequence correspond 
+        to one macrostep
+        """
         self._time_subseq_mat = time_subseq_mat
 
     def _append_time_subseq_mat(self, time, ss):
@@ -950,15 +1011,18 @@ class Sequence(object):
         self._time_subseq_mat[-1].append(time)
 
     def time_point(self, s):
-
+        """Returns the time in second for macrostep s
+        """
         return self._time_seq[s]
 
     def time_subpoint(self, s, ss):
-
+        """Returns the time in second for macrostep s and microstep ss
+        """
         return self._time_subseq_mat[s][ss]
 
     def get_time_intvl(self, s):
-
+        """Gets the time interval in second between macrostep s nd macrostep s-1
+        """
         if s == 0:
             raise Step_0 ('Step 0 has no interval')
 
@@ -967,7 +1031,8 @@ class Sequence(object):
         return time_intvl
 
     def get_time_subintvl(self, s, ss):
-
+        """Gets the time interval in second between macrostep s nd macrostep s-1
+        """
         if s == 0:
             raise Step_0 ('Step 0 has no subinterval')
 
