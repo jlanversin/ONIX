@@ -1,14 +1,13 @@
 var searchData=
 [
-  ['empty_5fargument',['Empty_argument',['../classopenbu_1_1utils_1_1functions_1_1_empty__argument.html',1,'openbu::utils::functions']]],
-  ['empty_5fdata',['Empty_data',['../classopenbu_1_1utils_1_1reactions__class_1_1_empty__data.html',1,'openbu::utils::reactions_class']]],
-  ['endf',['endf',['../namespaceconv__nndc__decaylib.html#ab19ff59bed475faa8e49881138856297',1,'conv_nndc_decaylib']]],
-  ['endf8_5ffile',['ENDF8_file',['../namespaceconv__nndc__decaylib.html#a8c032f85126be707a5b51eb8354cf634',1,'conv_nndc_decaylib']]],
-  ['energy_5fbin',['energy_bin',['../classopenbu_1_1couple_1_1couple__openmc_1_1_couple__openmc.html#a1094f01c6059b91cdf623bce1862a540',1,'openbu::couple::couple_openmc::Couple_openmc']]],
-  ['energy_5fgrid',['energy_grid',['../namespaceread__energ__grid.html#a7d2e4df813022c7dd2fd294ab28693b3',1,'read_energ_grid']]],
-  ['energy_5fgrid_5fmat',['energy_grid_mat',['../namespaceread__energ__grid.html#a94a3bb867ec79a84675f563f698debbf',1,'read_energ_grid']]],
-  ['export_5fgeometry_5fto_5fxml',['export_geometry_to_xml',['../classopenbu_1_1couple_1_1couple__openmc_1_1_couple__openmc.html#a828e2a249e1882bf8cddb58796cfe16d',1,'openbu::couple::couple_openmc::Couple_openmc']]],
-  ['export_5fmaterial_5fto_5fxml',['export_material_to_xml',['../classopenbu_1_1couple_1_1couple__openmc_1_1_couple__openmc.html#ab0f5e73d13112cb5e1d16c32add9c698',1,'openbu::couple::couple_openmc::Couple_openmc']]],
-  ['export_5fsettings_5fto_5fxml',['export_settings_to_xml',['../classopenbu_1_1couple_1_1couple__openmc_1_1_couple__openmc.html#a947e7cc8a90a2a4efa9944c84e5f0323',1,'openbu::couple::couple_openmc::Couple_openmc']]],
-  ['export_5ftallies_5fto_5fxml',['export_tallies_to_xml',['../classopenbu_1_1couple_1_1couple__openmc_1_1_couple__openmc.html#ab93dec4678af3338259e4abe79b31c6d',1,'openbu::couple::couple_openmc::Couple_openmc']]]
+  ['fission_5fchild',['fission_child',['../classonix_1_1passport_1_1Passport.html#aa073caafcac43de54811fd7d18bb0089',1,'onix::passport::Passport']]],
+  ['fission_5fe',['fission_E',['../classonix_1_1passport_1_1Passport.html#ac52e38d981da6f201f37e4a747dd37d2',1,'onix.passport.Passport.fission_E(self)'],['../classonix_1_1passport_1_1Passport.html#aae7f9097507c87f2f098940416d738e7',1,'onix.passport.Passport.fission_E(self, fission_E)']]],
+  ['flux_5fapproximation',['flux_approximation',['../classonix_1_1sequence_1_1Sequence.html#a540435e404fb702638ef020d1f5d79eb',1,'onix.sequence.Sequence.flux_approximation(self)'],['../classonix_1_1sequence_1_1Sequence.html#a0705ea21972d5d28041c449f678b93ae',1,'onix.sequence.Sequence.flux_approximation(self, flux_approximation)']]],
+  ['flux_5fpoint',['flux_point',['../classonix_1_1sequence_1_1Sequence.html#a4e049d7c4dc532a042da7c4d6297566e',1,'onix::sequence::Sequence']]],
+  ['flux_5fseq',['flux_seq',['../classonix_1_1sequence_1_1Sequence.html#a6b1fa0e16ef859ac035ac6b1a77944ad',1,'onix.sequence.Sequence.flux_seq(self)'],['../classonix_1_1sequence_1_1Sequence.html#aad160c741c397ef1dfe8ed927e8f199f',1,'onix.sequence.Sequence.flux_seq(self, new_flux_seq)']]],
+  ['flux_5fspectrum_5fseq',['flux_spectrum_seq',['../classonix_1_1sequence_1_1Sequence.html#a36aa488bccd1ef500741808076fff801',1,'onix.sequence.Sequence.flux_spectrum_seq(self)'],['../classonix_1_1sequence_1_1Sequence.html#a92e2986096244c35a1bb5ab86aa24db4',1,'onix.sequence.Sequence.flux_spectrum_seq(self, new_flux_spectrum_seq)']]],
+  ['flux_5fsubpoint',['flux_subpoint',['../classonix_1_1sequence_1_1Sequence.html#a8f803930e0bddcd26e986f48fa95c7b8',1,'onix::sequence::Sequence']]],
+  ['flux_5fsubseq_5fmat',['flux_subseq_mat',['../classonix_1_1sequence_1_1Sequence.html#a7bdc99d34fa79fec10d979a972138ffa',1,'onix::sequence::Sequence']]],
+  ['fy',['fy',['../classonix_1_1passport_1_1Passport.html#a8c1aec4f4e3c394b41bc9a2dc683b38e',1,'onix.passport.Passport.fy(self)'],['../classonix_1_1passport_1_1Passport.html#a3b5293faf78c91bf22954edd3e459499',1,'onix.passport.Passport.fy(self, new_fy)']]],
+  ['fy_5flib',['fy_lib',['../classonix_1_1utils_1_1reactions__class_1_1fy__lib.html',1,'onix::utils::reactions_class']]]
 ];

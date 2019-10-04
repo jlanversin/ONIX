@@ -1,0 +1,47 @@
+digraph "Graphical Class Hierarchy"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node15 [label="Exception",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node15 -> Node0 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node0 [label="onix.cell.Initial_nucl\l_not_in_Nucl_set",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1cell_1_1Initial__nucl__not__in__Nucl__set.html"];
+  Node15 -> Node17 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node17 [label="onix.cell.Initial_nucl\l_not_set",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1cell_1_1Initial__nucl__not__set.html"];
+  Node15 -> Node18 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node18 [label="onix.cell.Nucl_set\l_not_in_Lib_nucl",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1cell_1_1Nucl__set__not__in__Lib__nucl.html"];
+  Node15 -> Node19 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node19 [label="onix.cell.Nuclide_list\l_redundant",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1cell_1_1Nuclide__list__redundant.html"];
+  Node15 -> Node20 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node20 [label="onix.cell.Passlist\l_not_defined",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1cell_1_1Passlist__not__defined.html"];
+  Node15 -> Node21 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node21 [label="onix.couple.couple\l_openmc.Initial_nuclides\l_not_in_nuclide_list",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1couple_1_1couple__openmc_1_1Initial__nuclides__not__in__nuclide__list.html"];
+  Node15 -> Node22 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node22 [label="onix.couple.couple\l_openmc.STOP",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1couple_1_1couple__openmc_1_1STOP.html"];
+  Node15 -> Node23 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node23 [label="onix.passlist.Neg_decay",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1passlist_1_1Neg__decay.html"];
+  Node15 -> Node24 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node24 [label="onix.passlist.Neg_xs",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1passlist_1_1Neg__xs.html"];
+  Node15 -> Node25 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node25 [label="onix.passlist.Nuc_xs\l_not_found",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1passlist_1_1Nuc__xs__not__found.html"];
+  Node15 -> Node26 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node26 [label="onix.passport.Incorrect\l_nuc_id",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1passport_1_1Incorrect__nuc__id.html"];
+  Node15 -> Node27 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node27 [label="onix.passport.No_fission_XS",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1passport_1_1No__fission__XS.html"];
+  Node15 -> Node28 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node28 [label="onix.passport.Not_a\l_Fission_Product",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1passport_1_1Not__a__Fission__Product.html"];
+  Node15 -> Node29 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node29 [label="onix.passport.Nuc_xs\l_not_found",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1passport_1_1Nuc__xs__not__found.html"];
+  Node15 -> Node30 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node30 [label="onix.passport.XS_not\l_yet_set",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1passport_1_1XS__not__yet__set.html"];
+  Node15 -> Node31 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node31 [label="onix.sequence.Step_0",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1sequence_1_1Step__0.html"];
+  Node15 -> Node32 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node32 [label="onix.system.Cell_name\l_not_found",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1system_1_1Cell__name__not__found.html"];
+  Node15 -> Node33 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node33 [label="onix.utils.data_processor.xs\l_name_not_found",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1utils_1_1data__processor_1_1xs__name__not__found.html"];
+  Node15 -> Node34 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node34 [label="onix.utils.functions.Empty\l_argument",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1utils_1_1functions_1_1Empty__argument.html"];
+  Node15 -> Node35 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node35 [label="onix.utils.reactions\l_class.Empty_data",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classonix_1_1utils_1_1reactions__class_1_1Empty__data.html"];
+}

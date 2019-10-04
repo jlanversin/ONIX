@@ -29,7 +29,7 @@ def burn(system):
 
         print ('\n\n\n\n STEP {}\n\n\n\n'.format(s))
 
-        sequence.gen_step_folder(s)
+        sequence._gen_step_folder(s)
         burn_step(system, s, mode='stand alone')
 
     system._gen_output_summary_folder()
@@ -104,7 +104,7 @@ def burn_substep(bucell, B, C, N, s, ss, ssn, mode):
     # and not created at the beginning, then the conversion bu-time/time-bu
     # will also be done dynamically
     # In case of norma = bu, time need to be calculated now, before CRAM
-    sequence.bucell_time_bu_substep_conversion(bucell, s, ss)
+    sequence._bucell_time_bu_substep_conversion(bucell, s, ss)
 
     # print ('s', s, 'ss', ss)
     # print ('time subseq mat', sequence._time_subseq_mat)

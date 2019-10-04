@@ -20,6 +20,33 @@ from onix import data
 
 
 class Couple_openmc(object):
+	"""This class is used to execute coupled-mode simulations
+
+	Through this class, the user can:
+	- chose to parallelize the Monte Carlo simulations
+	via the "set_MPI" method,
+	- set the nuclear data libraries to be used in the simulation,
+	- set the burnup/time sequence for the simulation,
+	- manually set the volume of each BUCells (note that by default, ONIX uses the OpenMC stochastic volume calculation
+	to find the volume of each cells. However, this method might produce important errors on the volume and it is
+	advised to set the volume manually)
+	- select which of the Cells defined in the OpenMC input should be depleted (known as BUCells)
+	- select a list of nuclides in each BUCell which cross sections will be tallied. If the user 
+	does not specify any such list of nuclides, ONIX will by default tally the cross sections of all
+	nuclides which data are found in the cross section library.
+
+	The Couple_openmc class also takes care of the coupling between ONIX and OpenMC. At the beginning of a simulation,
+	it imports certain initial parameters from the OpenMC input to ONIX such as the name of the BUCells and the initial
+	nuclide densities of each BUCell. During the simulation, it makes sure that information such as the flux tallies,
+	neutron spectrum tallies, the reaction rates and the updated nuclide densities are correctly transfered between the burnup
+	module and the neutron transport module.
+
+	The Couple_openmc class will also sample the isomeric branching ratios and (n,gamma) cross sections on the
+	the same energy points to prepare for the calculations of one-group isomeric branching ratios.
+
+	IMPORTANT: the root cell in the OpenMC input should be named "root cell" """
+
+
 
 	# One-group energy bin
 	energy_bin = openmc.EnergyFilter([0., 20.0e6])
@@ -151,27 +178,6 @@ class Couple_openmc(object):
 
 		return nucl_list
 
-
-	# @property
-	# def nucl_list(self):
-
-	# 	return self._nucl_list
-	
-
-	# # for no_const_lib mode, defines a unique nuclide list for all materials
-	# @nucl_list.setter
-	# def nucl_list(self, nucl_list):
-
-	# 	self._nucl_list = nucl_list
-
-	# 	mat_dict = self.root_cell.get_all_materials()
-	# 	for mat_id in mat_dict:
-	# 		mat = mat_dict[mad_id]
-	# 		mat_name = mat.name
-	# 		self._nucl_list_dict[mat_id] = nucl_list
-
-
-
 	@property
 	def system(self):
 
@@ -284,46 +290,6 @@ class Couple_openmc(object):
 		shutil.copyfile(MC_input_path + '/materials.xml', user_input_folder_path + '/materials.xml')
 		shutil.copyfile(MC_input_path + '/settings.xml', user_input_folder_path + '/settings.xml')
 
-	# Probably obsolete
-
-	# def get_summary(self):
-
-	# 	MC_input_path = self.MC_input_path
-
-	# 	get_summary_dir_path = MC_input_path +'/get_summary_dir'
-	# 	os.mkdir(get_summary_dir_path)
-
-	# 	# Instantiate a Settings object
-	# 	settings_file = openmc.Settings()
-	# 	settings_file.batches = 2
-	# 	settings_file.inactive = 1
-	# 	settings_file.particles = 8
-
-	# 	# Copy the geometry and material file to the new dummy dir
-
-	# 	shutil.copyfile(MC_input_path + '/geometry.xml', get_summary_dir_path + '/geometry.xml')
-	# 	shutil.copyfile(MC_input_path + '/materials.xml', get_summary_dir_path + '/materials.xml')
-
-	# 	# Export to "settings.xml"
-	# 	settings_file.export_to_xml(path = get_summary_dir_path + '/settings.xml')
-
-	# 	openmc.run(cwd = get_summary_dir_path)
-
-	# 	summary = openmc.Summary(get_summary_dir_path + '/summary.h5')
-	# 	# geo = summary.geometry
-	# 	# cells = geo.get_all_cells()
-	# 	shutil.rmtree(get_summary_dir_path)
-
-	# 	return summary
-
-	#def pre_read_xml(self):
-
-		# To be able to launch the prerun, onix needs at least to extract the list of 
-		# openmc cells and the boundingbox of the system
-		# For that, the user needs to provide the 
-
-
-
 	def _pre_run(self, root_cell):
 
 		MC_input_path = self.MC_input_path
@@ -356,9 +322,6 @@ class Couple_openmc(object):
 		# By default, the openm_exec is set to 'openmc'
 		# For some reasons, this does not work on the cluster (della)
 		# On della, we need to explicitly define the absolute path to the bin we want to use
-		# Right now a temporary path that depends on my installation is used
-
-		#openmc.calculate_volumes(cwd = pre_run_path, openmc_exec='/tigress/jdtdl/openmc/py3-mpi-190324/bin/openmc')
 		openmc.calculate_volumes(cwd = pre_run_path, openmc_exec=self.openmc_bin_path)
 		#openmc.run()
 
@@ -1199,7 +1162,7 @@ class Couple_openmc(object):
 
 		system = self.system
 		sequence = self.sequence
-		FMF = sequence.get_FMF1(system, s)
+		FMF = sequence._get_FMF1(system, s)
 
 		bucell_list = system.get_bucell_list()
 		for bucell in bucell_list:
@@ -1220,7 +1183,7 @@ class Couple_openmc(object):
 
 		system = self.system
 		sequence = self.sequence
-		FMF = sequence.get_FMF1(system, 0)
+		FMF = sequence._get_FMF1(system, 0)
 
 		bucell_list = system.get_bucell_list()
 		for bucell in bucell_list:
@@ -1326,11 +1289,6 @@ class Couple_openmc(object):
 		sequence = system.sequence
 		norma_mode = sequence.norma_unit
 
-		# Check consistency of nuclides list &
-		# Generate leaves for each cell
-		# I attempted to update set_all_leaves in order to be able to 
-		# sort out nuclides and reduce nuclide set
-		# But it is too complicated and risk to break the code
 		bucell_list = system.get_bucell_list()
 		for bucell in bucell_list:
 			# Check if different nuclide list (initial list, lib list and nucl set (user defined set of nuclides to be considered))
@@ -1349,7 +1307,7 @@ class Couple_openmc(object):
 		for s in range(1, steps_number+1):
 
 			print ('\n\n\n\n====== STEP {}======\n\n\n\n'.format(s))
-			sequence.gen_step_folder(s)
+			sequence._gen_step_folder(s)
 			print (('\n\n\n=== OpenMC Transport {}===\n\n\n'.format(s)))
 			self.run_openmc()
 			self.set_tallies_to_bucells(s)

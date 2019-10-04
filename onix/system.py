@@ -359,7 +359,7 @@ class System(object):
 
 			print ('\n\n\n\n STEP {}\n\n\n\n'.format(s))
 
-			sequence.gen_step_folder(s)
+			sequence._gen_step_folder(s)
 			salameche.burn_step(self, s)
 
 		system._gen_output_summary_folder()

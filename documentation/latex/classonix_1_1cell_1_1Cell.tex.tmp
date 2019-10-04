@@ -1,0 +1,306 @@
+\hypertarget{classonix_1_1cell_1_1Cell}{}\section{onix.\+cell.\+Cell Class Reference}
+\label{classonix_1_1cell_1_1Cell}\index{onix.\+cell.\+Cell@{onix.\+cell.\+Cell}}
+
+
+Inheritance diagram for onix.\+cell.\+Cell\+:
+% FIG 0
+
+
+Collaboration diagram for onix.\+cell.\+Cell\+:
+% FIG 1
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_aeedc78a557a7ba9679c5642d3be1ccd5}\label{classonix_1_1cell_1_1Cell_aeedc78a557a7ba9679c5642d3be1ccd5}} 
+def {\bfseries \+\_\+\+\_\+init\+\_\+\+\_\+} (self, cell\+\_\+id, name)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a8cb702fdcd6b02bc33dff6bf37942c05}\label{classonix_1_1cell_1_1Cell_a8cb702fdcd6b02bc33dff6bf37942c05}} 
+def {\bfseries id} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a0f32f10002d9da3145384fbea54e299d}\label{classonix_1_1cell_1_1Cell_a0f32f10002d9da3145384fbea54e299d}} 
+def {\bfseries name} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_ac21a55e1cb14dc26ee6eec8a1e61e766}\label{classonix_1_1cell_1_1Cell_ac21a55e1cb14dc26ee6eec8a1e61e766}} 
+def {\bfseries set\+\_\+initial\+\_\+dens} (self, dens\+\_\+dict)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a24e147807b52c209022eebbb01fbe9a1}\label{classonix_1_1cell_1_1Cell_a24e147807b52c209022eebbb01fbe9a1}} 
+def {\bfseries initial\+\_\+nucl} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_acca1b6ae7c2a0b909a4004e0da7203c8}\label{classonix_1_1cell_1_1Cell_acca1b6ae7c2a0b909a4004e0da7203c8}} 
+def {\bfseries M\+C\+\_\+\+X\+S\+\_\+nucl\+\_\+list} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a54c518079bccf10da97cbeff9f01898a}\label{classonix_1_1cell_1_1Cell_a54c518079bccf10da97cbeff9f01898a}} 
+def {\bfseries M\+C\+\_\+\+X\+S\+\_\+nucl\+\_\+list} (self, M\+C\+\_\+\+X\+S\+\_\+nucl\+\_\+list)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_aa3cba40a16f3ecc2c5b8abe1cfb7b0af}\label{classonix_1_1cell_1_1Cell_aa3cba40a16f3ecc2c5b8abe1cfb7b0af}} 
+def {\bfseries nucl\+\_\+set} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a76f5864ef21e4e3113fb7fede853756e}\label{classonix_1_1cell_1_1Cell_a76f5864ef21e4e3113fb7fede853756e}} 
+def {\bfseries nucl\+\_\+set} (self, nucl\+\_\+set)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a345a3cfba415bec733b4f2023b27123b}\label{classonix_1_1cell_1_1Cell_a345a3cfba415bec733b4f2023b27123b}} 
+def {\bfseries init\+\_\+nucl} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_ac0d0992a56866216cde689997d910e26}\label{classonix_1_1cell_1_1Cell_ac0d0992a56866216cde689997d910e26}} 
+def {\bfseries init\+\_\+nucl} (self, init\+\_\+nucl)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_aa98a271f68d29f7a01a886fe77994e16}\label{classonix_1_1cell_1_1Cell_aa98a271f68d29f7a01a886fe77994e16}} 
+def {\bfseries get\+\_\+total\+\_\+dens} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a40043653a309a3826f81922e17ca0070}\label{classonix_1_1cell_1_1Cell_a40043653a309a3826f81922e17ca0070}} 
+def {\bfseries get\+\_\+subtotal\+\_\+dens} (self, nucl\+\_\+list)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a8914d81eff1df3bf8dbe09a6a1bc0617}\label{classonix_1_1cell_1_1Cell_a8914d81eff1df3bf8dbe09a6a1bc0617}} 
+def {\bfseries get\+\_\+subtotal\+\_\+dens\+\_\+counting\+\_\+zero\+\_\+dens} (self, nucl\+\_\+list)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a8641f9a912bb3682441541bb33ae5191}\label{classonix_1_1cell_1_1Cell_a8641f9a912bb3682441541bb33ae5191}} 
+def {\bfseries get\+\_\+nucl\+\_\+dens\+\_\+for\+\_\+openmc} (self, nucl\+\_\+id)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a01185aeaa16cb764455f52d8ad580849}\label{classonix_1_1cell_1_1Cell_a01185aeaa16cb764455f52d8ad580849}} 
+def {\bfseries get\+\_\+nucl\+\_\+ao} (self, nucl\+\_\+id)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_ae103d0776be6e32ce59a590cf53ecc9f}\label{classonix_1_1cell_1_1Cell_ae103d0776be6e32ce59a590cf53ecc9f}} 
+def {\bfseries get\+\_\+nucl\+\_\+subao} (self, nucl\+\_\+id, nucl\+\_\+list)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a2711244b880398e673c28a51d7a7ece6}\label{classonix_1_1cell_1_1Cell_a2711244b880398e673c28a51d7a7ece6}} 
+def {\bfseries vol} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a68ced00113b6a61925687c748ad27c61}\label{classonix_1_1cell_1_1Cell_a68ced00113b6a61925687c748ad27c61}} 
+def {\bfseries vol} (self, vol)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a5e253d9a1057ede641143b9b8dd9709a}\label{classonix_1_1cell_1_1Cell_a5e253d9a1057ede641143b9b8dd9709a}} 
+def {\bfseries hm\+\_\+vol} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_af7853b4278926d468e3b3e138c4bbb9c}\label{classonix_1_1cell_1_1Cell_af7853b4278926d468e3b3e138c4bbb9c}} 
+def {\bfseries hm\+\_\+vol} (self, hm\+\_\+vol)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_af33c37233e73945411373fc249973551}\label{classonix_1_1cell_1_1Cell_af33c37233e73945411373fc249973551}} 
+def {\bfseries set\+\_\+passlist} (self, nucl\+\_\+list)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a1362ca6ce483325e66b35da7b760d02a}\label{classonix_1_1cell_1_1Cell_a1362ca6ce483325e66b35da7b760d02a}} 
+def {\bfseries get\+\_\+passlist} (self, nucl\+\_\+list)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a39f14379278299fb2c8554a4adce2512}\label{classonix_1_1cell_1_1Cell_a39f14379278299fb2c8554a4adce2512}} 
+def {\bfseries get\+\_\+nucl\+\_\+list} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a9c4f8140788c5c6c07df8c83a70981a9}\label{classonix_1_1cell_1_1Cell_a9c4f8140788c5c6c07df8c83a70981a9}} 
+def {\bfseries get\+\_\+nuclide} (self, nuclide\+\_\+id)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a9f4bc1b1ec826ffd10c414dccf47e9d4}\label{classonix_1_1cell_1_1Cell_a9f4bc1b1ec826ffd10c414dccf47e9d4}} 
+def {\bfseries passlist} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_adbbb1d90f4df464e383af36b780c57b7}\label{classonix_1_1cell_1_1Cell_adbbb1d90f4df464e383af36b780c57b7}} 
+def {\bfseries passlist} (self, passlist)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a476ac1a0ab6ebda9ffcb8fbf43d68df2}\label{classonix_1_1cell_1_1Cell_a476ac1a0ab6ebda9ffcb8fbf43d68df2}} 
+def {\bfseries index\+\_\+dict} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_aecc41f9adb09c1d1ffeb8f128056b5f0}\label{classonix_1_1cell_1_1Cell_aecc41f9adb09c1d1ffeb8f128056b5f0}} 
+def {\bfseries index\+\_\+dict} (self, index\+\_\+dict)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a2af48394a4e5a257af4f7f2c17837e30}\label{classonix_1_1cell_1_1Cell_a2af48394a4e5a257af4f7f2c17837e30}} 
+def {\bfseries passdic} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_afae5ee9732bcae593d19042c7a95ab80}\label{classonix_1_1cell_1_1Cell_afae5ee9732bcae593d19042c7a95ab80}} 
+def {\bfseries passdic} (self, passdic)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_ada4e4c264957774fa85a1a71df483c12}\label{classonix_1_1cell_1_1Cell_ada4e4c264957774fa85a1a71df483c12}} 
+def {\bfseries set\+\_\+sequence} (self, sequence, mode=\textquotesingle{}stand\+\_\+alone\textquotesingle{})
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a8b86920459a253c4906963a358e82533}\label{classonix_1_1cell_1_1Cell_a8b86920459a253c4906963a358e82533}} 
+def {\bfseries sequence} (self)
+\item 
+def \hyperlink{classonix_1_1cell_1_1Cell_a8bdfaf39e9cb4a9dce3f0e3b0d77ab36}{ihm} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a1b84082d65cbfa8dc2e43e1bd01a1c2a}\label{classonix_1_1cell_1_1Cell_a1b84082d65cbfa8dc2e43e1bd01a1c2a}} 
+def {\bfseries set\+\_\+ihm} (self, passlist, hm\+\_\+vol)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_abef6ecef4a6b14f294856d11b9e65752}\label{classonix_1_1cell_1_1Cell_abef6ecef4a6b14f294856d11b9e65752}} 
+def {\bfseries get\+\_\+hm} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a677993133e337dd86ee4b89a0c9946e8}\label{classonix_1_1cell_1_1Cell_a677993133e337dd86ee4b89a0c9946e8}} 
+def {\bfseries check\+\_\+act\+\_\+presence} (self)
+\item 
+def \hyperlink{classonix_1_1cell_1_1Cell_aeae34b97a9c96ef282af3855efee3c81}{bu\+\_\+sec\+\_\+conv\+\_\+factor} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a5286b0d2510f30b1bc55d16084c3e4b6}\label{classonix_1_1cell_1_1Cell_a5286b0d2510f30b1bc55d16084c3e4b6}} 
+def {\bfseries set\+\_\+bu\+\_\+sec\+\_\+conv\+\_\+factor} (self, vol, ihm)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a14056cca1d8cb75f441cf29b4d63feb8}\label{classonix_1_1cell_1_1Cell_a14056cca1d8cb75f441cf29b4d63feb8}} 
+def {\bfseries get\+\_\+act\+\_\+passport\+\_\+list} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a7624263a11dbdc6c80da860526cfc2ec}\label{classonix_1_1cell_1_1Cell_a7624263a11dbdc6c80da860526cfc2ec}} 
+def {\bfseries get\+\_\+fp\+\_\+passport\+\_\+list} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_aa6f2afe3dba8567c755de5e8fbd3c8e1}\label{classonix_1_1cell_1_1Cell_aa6f2afe3dba8567c755de5e8fbd3c8e1}} 
+def {\bfseries get\+\_\+avt\+\_\+passport\+\_\+list} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_ac0ea38263c90b42d31ed8c14c79d7d8f}\label{classonix_1_1cell_1_1Cell_ac0ea38263c90b42d31ed8c14c79d7d8f}} 
+def {\bfseries set\+\_\+decay\+\_\+lib} (self, decay\+\_\+lib\+\_\+path)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a66ce3db76d77d9737587dfa1736758ab}\label{classonix_1_1cell_1_1Cell_a66ce3db76d77d9737587dfa1736758ab}} 
+def {\bfseries set\+\_\+default\+\_\+decay\+\_\+lib} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a0339c001f62ec566f45bf0f350cb9742}\label{classonix_1_1cell_1_1Cell_a0339c001f62ec566f45bf0f350cb9742}} 
+def {\bfseries set\+\_\+default\+\_\+decay\+\_\+lib\+\_\+no\+\_\+add} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a751b427407bfe68ed8549a7c47d0decb}\label{classonix_1_1cell_1_1Cell_a751b427407bfe68ed8549a7c47d0decb}} 
+def {\bfseries set\+\_\+decay} (self, decay\+\_\+object)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_afd8af9f0d2f305aabdbeefec58156d78}\label{classonix_1_1cell_1_1Cell_afd8af9f0d2f305aabdbeefec58156d78}} 
+def {\bfseries decay\+\_\+b\+\_\+lib} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a2475d506b31d86d4463bcb35933f86a8}\label{classonix_1_1cell_1_1Cell_a2475d506b31d86d4463bcb35933f86a8}} 
+def {\bfseries decay\+\_\+a\+\_\+lib} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a32590994cb75656c8c0ebb2895dbcccc}\label{classonix_1_1cell_1_1Cell_a32590994cb75656c8c0ebb2895dbcccc}} 
+def {\bfseries set\+\_\+xs\+\_\+lib} (self, xs\+\_\+lib\+\_\+path)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a738815749e734686449c907c44c31602}\label{classonix_1_1cell_1_1Cell_a738815749e734686449c907c44c31602}} 
+def {\bfseries set\+\_\+default\+\_\+xs\+\_\+lib} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_ad0b27456f7495bab02af01e3b3e4ac76}\label{classonix_1_1cell_1_1Cell_ad0b27456f7495bab02af01e3b3e4ac76}} 
+def {\bfseries set\+\_\+default\+\_\+xs\+\_\+lib\+\_\+no\+\_\+add} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a68aa4970ab4e66dff6f6ac0cc8400db6}\label{classonix_1_1cell_1_1Cell_a68aa4970ab4e66dff6f6ac0cc8400db6}} 
+def {\bfseries set\+\_\+xs} (self, xs\+\_\+object)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_ade8ed54d55f121555ba088ec12aaf4cd}\label{classonix_1_1cell_1_1Cell_ade8ed54d55f121555ba088ec12aaf4cd}} 
+def {\bfseries overwrite\+\_\+xs} (self, xs\+\_\+object)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_ab480e302c0db60960fa1e89fd19c3e9b}\label{classonix_1_1cell_1_1Cell_ab480e302c0db60960fa1e89fd19c3e9b}} 
+def {\bfseries xs\+\_\+lib} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a13c55a897e4e91b37a8e0ff578b93cee}\label{classonix_1_1cell_1_1Cell_a13c55a897e4e91b37a8e0ff578b93cee}} 
+def {\bfseries set\+\_\+fy\+\_\+lib} (self, fy\+\_\+lib\+\_\+path)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a87f35660037bd99dac22fc3cd15a681c}\label{classonix_1_1cell_1_1Cell_a87f35660037bd99dac22fc3cd15a681c}} 
+def {\bfseries set\+\_\+default\+\_\+fy\+\_\+lib} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a88efa6e6388ed25dbc73b283d59a7e5d}\label{classonix_1_1cell_1_1Cell_a88efa6e6388ed25dbc73b283d59a7e5d}} 
+def {\bfseries set\+\_\+default\+\_\+fy\+\_\+lib\+\_\+no\+\_\+add} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_aeed0cf2875e5a49d0c0dfb2114f9dbcf}\label{classonix_1_1cell_1_1Cell_aeed0cf2875e5a49d0c0dfb2114f9dbcf}} 
+def {\bfseries set\+\_\+fy} (self, fy\+\_\+object)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_acf3a39b61c29fdf814eb33911a1a7a2f}\label{classonix_1_1cell_1_1Cell_acf3a39b61c29fdf814eb33911a1a7a2f}} 
+def {\bfseries fy\+\_\+lib} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a03e25e47bcce4e9b05a7a246f2cef7e6}\label{classonix_1_1cell_1_1Cell_a03e25e47bcce4e9b05a7a246f2cef7e6}} 
+def {\bfseries get\+\_\+decay\+\_\+nucl} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a7be038874391aca1bcfd1dfe8bd952c0}\label{classonix_1_1cell_1_1Cell_a7be038874391aca1bcfd1dfe8bd952c0}} 
+def {\bfseries get\+\_\+xs\+\_\+nucl} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a5c257ecb7fb70c8755a29897ee680c6b}\label{classonix_1_1cell_1_1Cell_a5c257ecb7fb70c8755a29897ee680c6b}} 
+def {\bfseries get\+\_\+fy\+\_\+nucl} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_ae79b7224385ff991e731421a4b429c46}\label{classonix_1_1cell_1_1Cell_ae79b7224385ff991e731421a4b429c46}} 
+def {\bfseries get\+\_\+lib\+\_\+nucl} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a989a418e1b5631c4e78f2e6838329d95}\label{classonix_1_1cell_1_1Cell_a989a418e1b5631c4e78f2e6838329d95}} 
+def {\bfseries get\+\_\+fy\+\_\+parent\+\_\+nucl} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a7bb9f0a43d8ee5665c52e338a42a0441}\label{classonix_1_1cell_1_1Cell_a7bb9f0a43d8ee5665c52e338a42a0441}} 
+def {\bfseries get\+\_\+tree} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_ad856f2e0ed8735d45d03b0903f9583e7}\label{classonix_1_1cell_1_1Cell_ad856f2e0ed8735d45d03b0903f9583e7}} 
+def {\bfseries leaves} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a2561e5fe732b812df6dbe1f44189ca63}\label{classonix_1_1cell_1_1Cell_a2561e5fe732b812df6dbe1f44189ca63}} 
+def {\bfseries fission\+\_\+tree} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_ab254f34f3ead4f3bce9e30917ee3e96a}\label{classonix_1_1cell_1_1Cell_ab254f34f3ead4f3bce9e30917ee3e96a}} 
+def {\bfseries fission\+\_\+leaves} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_ae9350814448c4c3e6aac3e9da2e862ba}\label{classonix_1_1cell_1_1Cell_ae9350814448c4c3e6aac3e9da2e862ba}} 
+def {\bfseries folder\+\_\+path} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a8fa01e492c2298c4f8e89afd55cf63b0}\label{classonix_1_1cell_1_1Cell_a8fa01e492c2298c4f8e89afd55cf63b0}} 
+def {\bfseries gen\+\_\+folder} (self)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a5ed10066a340206993438e08838297c0}\label{classonix_1_1cell_1_1Cell_a5ed10066a340206993438e08838297c0}} 
+def {\bfseries copy\+\_\+cell\+\_\+folders\+\_\+to\+\_\+step\+\_\+folder} (self, s)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_ac346d1d940f5d90b5317cedbf9919cf9}\label{classonix_1_1cell_1_1Cell_ac346d1d940f5d90b5317cedbf9919cf9}} 
+{\bfseries nucl\+\_\+set}
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a3c4816d55ecb9ac27e161cf1558ba95d}\label{classonix_1_1cell_1_1Cell_a3c4816d55ecb9ac27e161cf1558ba95d}} 
+{\bfseries passlist}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a2e6cc50fb8e231451772629879ddfb38}\label{classonix_1_1cell_1_1Cell_a2e6cc50fb8e231451772629879ddfb38}} 
+int {\bfseries zero\+\_\+dens\+\_\+1\+\_\+atm} = 1\+E-\/24
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a4f42dd898e0d77028e3ff2e1bdb4c813}\label{classonix_1_1cell_1_1Cell_a4f42dd898e0d77028e3ff2e1bdb4c813}} 
+def {\bfseries vol} = self.\+vol
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a6a9e8e1ce33a7f3da758dcfeaca218fe}\label{classonix_1_1cell_1_1Cell_a6a9e8e1ce33a7f3da758dcfeaca218fe}} 
+def {\bfseries ihm} = utils.\+get\+\_\+hm(passlist, vol)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a38baabb3f4d732dd82f8cd5172a3dba7}\label{classonix_1_1cell_1_1Cell_a38baabb3f4d732dd82f8cd5172a3dba7}} 
+{\bfseries read\+\_\+file} = open(file\+\_\+name, \textquotesingle{}r\textquotesingle{})
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a1a68c52b1983eae572ea9931ea2140ca}\label{classonix_1_1cell_1_1Cell_a1a68c52b1983eae572ea9931ea2140ca}} 
+{\bfseries lines} = read\+\_\+file.\+readlines()
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a587d7d34486c39f786751e19d9dd0fc4}\label{classonix_1_1cell_1_1Cell_a587d7d34486c39f786751e19d9dd0fc4}} 
+{\bfseries append\+\_\+file} = open(file\+\_\+name, \textquotesingle{}w\textquotesingle{})
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a73c8f485e159ceecd19ddf58e1b4a61e}\label{classonix_1_1cell_1_1Cell_a73c8f485e159ceecd19ddf58e1b4a61e}} 
+{\bfseries line} = lines\mbox{[}i\mbox{]}
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_ac924720d764add1dfea1ee608850e6d4}\label{classonix_1_1cell_1_1Cell_ac924720d764add1dfea1ee608850e6d4}} 
+string {\bfseries append\+\_\+txt} = \textquotesingle{} \{\}\textbackslash{}n\textquotesingle{}.format(time\+\_\+point)
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_ae0a56425d1a372ff14d5759569189245}\label{classonix_1_1cell_1_1Cell_ae0a56425d1a372ff14d5759569189245}} 
+int {\bfseries j} = i-\/2
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_af0b98a8b49a2c9783330c0e58f4427e8}\label{classonix_1_1cell_1_1Cell_af0b98a8b49a2c9783330c0e58f4427e8}} 
+{\bfseries nuc\+\_\+pass} = passport\+\_\+list\mbox{[}j\mbox{]}
+\item 
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a5c46eaadc12424792a707d8c96e56c0e}\label{classonix_1_1cell_1_1Cell_a5c46eaadc12424792a707d8c96e56c0e}} 
+{\bfseries dens} = nuc\+\_\+pass.\+current\+\_\+dens
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 14 of file cell.\+py.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_aeae34b97a9c96ef282af3855efee3c81}\label{classonix_1_1cell_1_1Cell_aeae34b97a9c96ef282af3855efee3c81}} 
+\index{onix\+::cell\+::\+Cell@{onix\+::cell\+::\+Cell}!bu\+\_\+sec\+\_\+conv\+\_\+factor@{bu\+\_\+sec\+\_\+conv\+\_\+factor}}
+\index{bu\+\_\+sec\+\_\+conv\+\_\+factor@{bu\+\_\+sec\+\_\+conv\+\_\+factor}!onix\+::cell\+::\+Cell@{onix\+::cell\+::\+Cell}}
+\subsubsection{\texorpdfstring{bu\+\_\+sec\+\_\+conv\+\_\+factor()}{bu\_sec\_conv\_factor()}}
+{\footnotesize\ttfamily def onix.\+cell.\+Cell.\+bu\+\_\+sec\+\_\+conv\+\_\+factor (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the absolute values of the decay constant of the nuclide\end{DoxyVerb}
+ 
+
+Definition at line 464 of file cell.\+py.
+
+\mbox{\Hypertarget{classonix_1_1cell_1_1Cell_a8bdfaf39e9cb4a9dce3f0e3b0d77ab36}\label{classonix_1_1cell_1_1Cell_a8bdfaf39e9cb4a9dce3f0e3b0d77ab36}} 
+\index{onix\+::cell\+::\+Cell@{onix\+::cell\+::\+Cell}!ihm@{ihm}}
+\index{ihm@{ihm}!onix\+::cell\+::\+Cell@{onix\+::cell\+::\+Cell}}
+\subsubsection{\texorpdfstring{ihm()}{ihm()}}
+{\footnotesize\ttfamily def onix.\+cell.\+Cell.\+ihm (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns the absolute values of the decay constant of the nuclide\end{DoxyVerb}
+ 
+
+Definition at line 422 of file cell.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/julien/\+O\+N\+I\+X/\+O\+N\+I\+X/onix/cell.\+py\end{DoxyCompactItemize}
