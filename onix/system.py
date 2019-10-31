@@ -342,7 +342,8 @@ class System(object):
 
 		bucell_dict = self.bucell_dict
 		for bucell_id in bucell_dict:
-			bucell = bucell = bucell_dict[bucell_id]
+			bucell = bucell_dict[bucell_id]
+			print(bucell.name, bucell.id)
 			bucell.copy_cell_folders_to_step_folder(s)
 
 	def _gen_output_summary_folder(self):

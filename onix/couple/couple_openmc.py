@@ -28,9 +28,9 @@ class Couple_openmc(object):
 	- set the nuclear data libraries to be used in the simulation,
 	- set the burnup/time sequence for the simulation,
 	- manually set the volume of each BUCells (note that by default, ONIX uses the OpenMC stochastic volume calculation
-	to find the volume of each cells. However, this method might produce important errors on the volume and it is
+	to find the volume of each cell. However, this method might produce important errors on the volume and it is
 	advised to set the volume manually)
-	- select which of the Cells defined in the OpenMC input should be depleted (known as BUCells)
+	- select which of the Cells defined in the OpenMC input should be depleted (these cells will be known as BUCells)
 	- select a list of nuclides in each BUCell which cross sections will be tallied. If the user 
 	does not specify any such list of nuclides, ONIX will by default tally the cross sections of all
 	nuclides which data are found in the cross section library.
@@ -109,6 +109,7 @@ class Couple_openmc(object):
 
 	@property
 	def MC_input_path(self):
+		"""Returns the path to the bin of OpenMC"""
 
 		return self._MC_input_path
 
@@ -116,22 +117,26 @@ class Couple_openmc(object):
 	def xs_mode(self):
 		return self._xs_mode
 	
-	@property
-	def nucl_list_dict(self):
+	# @property
+	# def nucl_list_dict(self):
 
-		return self._nucl_list_dict
+	# 	return self._nucl_list_dict
 
 	@property
 	def root_cell(self):
-
+		"""Returns the root cell as define in the OpenMC geometry"""
 		return self._root_cell
 
 	@property
 	def MPI(self):
+		"""Returns wether MPI is activated or not ('on' if the user chose to parallelize OpenMC with MPI)"""
 		return self._MPI
 
 	def set_MPI(self, execu, tasks):
+		"""Sets the settings for the MPI parallelization
 
+		execu: the MPI execute command
+		tasks: the number of tasks to parallelize"""
 		self._MPI = 'on'
 		self._tasks = tasks
 		self._exec = execu
@@ -143,7 +148,17 @@ class Couple_openmc(object):
 	# 	self._nucl_list_dict[mat_name] = nucl_list
 
 	def select_bucells(self, bucell_list):
+		"""Selects the cells from the OpenMC input that should be depleted
 
+		The user can choose to specify the nuclides for which cross sections should be updated by
+		the OpenMC Monte Carlo simulations. To do so, the user must enter a tuple where the first 
+		element is the OpenMC cell object and the second element is a list of the name of nuclides 
+		which cross sections should be updated.
+
+		If the user does not want to specify for which nuclides cross sections should be updated,
+		only the OpenMC cell object should be entered. ONIX will by default calculate the cross sections
+		for all nuclides available in the cross section library
+		"""
 		self.selected_bucells_name_list = []
 		self.selected_bucells_nucl_list_dict = {}
 
@@ -156,7 +171,7 @@ class Couple_openmc(object):
 			else:
 				self.selected_bucells_name_list.append(arg.name)
 
-	def get_nucl_to_be_tallied(self, bucell):
+	def _get_nucl_to_be_tallied(self, bucell):
 
 		# If the user has provided a list of nuclide to be tallied
 		if bucell.name in self.selected_bucells_nucl_list_dict:
@@ -180,16 +195,41 @@ class Couple_openmc(object):
 
 	@property
 	def system(self):
-
+		"""Returns the system object of the simulation
+		"""
 		return self._system
 
 	@system.setter
 	def system(self, system):
-
+		"""Sets the system object of the simulation
+		"""
 		self._system = system
 	
 
 	def import_openmc(self, root_cell):
+		"""This method import certain parameters from OpenMC to ONIX
+
+		Depending on the selection that the user made, BUCells are created
+		from existing OpenMC Cells
+
+		This method also runs the _pre_run script which runs a first Monte Carlo
+		simulation in order for ONIX to get a handle on the various OpenMC objects
+		(this feature is essential when the user decides to defines input parameters
+		via a text input file rather than using the Python API. However, as of now,
+		ONIX only supports Python API input)
+
+		The _pre_run script also request OpenMC to calculate the volume of each OpenMC
+		Cell with the calculate_volume() method of OpenMC. However, the volumes obtained
+		via this method can have significant errors, especially for complex or large geometry.
+		As of now, it is recommented that the user manually sets the volume of ech BUCell via
+		the set_volume() method
+
+		Finally, a very important functionality of import_openmc is to add minute quantity
+		of certain nuclides in BUCells materials so that OpenMC can calculate their cross sections.
+		This means that ONIX is going to modify the material.xml and add all nuclides requested by the user
+		for cross sections calculations. This feature is necessary because OpenMC cannot tally reaction
+		rates of nuclides that are not present in the material.
+		"""
 
 		#Instantiate a system
 		system = System(1)
@@ -212,8 +252,8 @@ class Couple_openmc(object):
 
 
 		# Move input files to input file folder
-		self.gen_user_input_folder()
-		self.copy_user_input()
+		self._gen_user_input_folder()
+		self._copy_user_input()
 
 		# MOVED TO OPENMC RUN
 		# # New material xml file needs to be written with zero dens nuclides
@@ -229,11 +269,13 @@ class Couple_openmc(object):
 
 	@property
 	def bounding_box(self):
-
+		"""Returns the bounding box of the geometry
+		"""
 		return self._bounding_box
 	 
 	def set_bounding_box(self, ll, ur):
-
+		"""Sets the bounding box of the geometry
+		"""
 		self._bounding_box = [ll, ur]
 
 	# def _set_material_nuclides(self, cell):
@@ -252,37 +294,37 @@ class Couple_openmc(object):
 	# 		nuc_ao = nuc.dens/total_dens
 	# 		material.add_nuclide(nuc_name,  nuc_ao)
 
+	# Osbolete
+	# def set_settings(self, settings, init_dist):
+	# # OpenMC simulation parameters
+	# 	batches = settings['batches']
+	# 	inactive = settings['inactive']	
+	# 	particles = settings['particles']
 
-	def set_settings(self, settings, init_dist):
-	# OpenMC simulation parameters
-		batches = settings['batches']
-		inactive = settings['inactive']	
-		particles = settings['particles']
+	# 	# Instantiate a Settings object
+	# 	settings_file = openmc.Settings()
+	# 	settings_file.batches = batches
+	# 	settings_file.inactive = inactive
+	# 	settings_file.particles = particles
+	# 	settings_file.output = {'tallies': True}
 
-		# Instantiate a Settings object
-		settings_file = openmc.Settings()
-		settings_file.batches = batches
-		settings_file.inactive = inactive
-		settings_file.particles = particles
-		settings_file.output = {'tallies': True}
+	# 	# Create an initial uniform spatial source distribution over fissionable zones
+	# 	init_dist = setting.init_dist
+	# 	shape = init_dist['shape']
+	# 	low_left_bound = init_dist['low_left']
+	# 	up_right_bound = init_dist['up_right']
+	# 	if shape == 'Box':
+	# 		uniform_dist = openmc.stats.Box(low_left_bound, up_right_bound, only_fissionable=True)
+	# 	settings_file.source = openmc.source.Source(space=uniform_dist)
 
-		# Create an initial uniform spatial source distribution over fissionable zones
-		init_dist = setting.init_dist
-		shape = init_dist['shape']
-		low_left_bound = init_dist['low_left']
-		up_right_bound = init_dist['up_right']
-		if shape == 'Box':
-			uniform_dist = openmc.stats.Box(low_left_bound, up_right_bound, only_fissionable=True)
-		settings_file.source = openmc.source.Source(space=uniform_dist)
+	# 	# Export to "settings.xml"
+	# 	settings_file.export_to_xml()
 
-		# Export to "settings.xml"
-		settings_file.export_to_xml()
-
-	def gen_user_input_folder(self):
+	def _gen_user_input_folder(self):
 
 		utils.gen_folder('user_input')
 
-	def copy_user_input(self):
+	def _copy_user_input(self):
 
 		MC_input_path = self.MC_input_path
 		user_input_folder_path = os.getcwd() + '/user_input'
@@ -344,13 +386,13 @@ class Couple_openmc(object):
 		self._change_cell_materials()
 
 		# Read and distribute volumes to cells
-		self.set_vol_to_cell(vol1, pre_run_path)
+		self._set_vol_to_cell(vol1, pre_run_path)
 
 		# pdb.set_trace()
 
 		shutil.rmtree(pre_run_path)
 
-	def set_vol_to_cell(self, vol1, pre_run_path):
+	def _set_vol_to_cell(self, vol1, pre_run_path):
 
 		root_cell = self.root_cell
 		cell_dict = root_cell.get_all_cells()
@@ -490,7 +532,7 @@ class Couple_openmc(object):
 					if self.selected_bucells_nucl_list_dict[bucell_name] == 'initial nuclides':
 						continue
 			cell = summary.geometry.get_cells_by_name(bucell_name)[0]
-			self.add_zero_dens_nuclides(cell)
+			self._add_zero_dens_nuclides(cell)
 
 
 	# def _change_cells_materials(self):
@@ -513,7 +555,7 @@ class Couple_openmc(object):
 
 
 	# Add zero dens nuclide for each material
-	def add_zero_dens_nuclides(self, cell):
+	def _add_zero_dens_nuclides(self, cell):
 
 		material_dict = cell.get_all_materials()
 		material = material_dict[list(material_dict.keys())[0]]	
@@ -560,14 +602,14 @@ class Couple_openmc(object):
 
 		return self._sequence
 	
-	@sequence.setter
-	def sequence(self, sequence):
+	# @sequence.setter
+	# def sequence(self, sequence):
 
-		self._sequence = sequence
+	# 	self._sequence = sequence
 
 	def set_sequence(self, sequence):
 
-		self.sequence = sequence
+		self._sequence = sequence
 		system = self.system
 		system.set_sequence(sequence, mode = 'couple')
 
@@ -780,7 +822,7 @@ class Couple_openmc(object):
 	# Every nuclide presents in cell material will have its tally taken
 	def get_all_nucl_rxn_tally(self, bucell):
 
-		nucl_list = self.get_nucl_to_be_tallied(bucell)
+		nucl_list = self._get_nucl_to_be_tallied(bucell)
 		print ('bucell name',bucell.name)
 		print ('nucl list when set to tally',nucl_list)
 		nucl_list = utils.bu_namelist_to_mc_namelist(nucl_list)
@@ -1218,7 +1260,7 @@ class Couple_openmc(object):
 		bucell_dict = system.bucell_dict
 		for bucell_id in bucell_dict:
 			bucell = bucell_dict[bucell_id]
-			tally_nucl_list = utils.mc_namelist_to_bu_namelist(self.get_nucl_to_be_tallied(bucell))
+			tally_nucl_list = utils.mc_namelist_to_bu_namelist(self._get_nucl_to_be_tallied(bucell))
 			cell = summary.geometry.get_cells_by_name(bucell.name)[0]
 			material_dict = cell.get_all_materials()
 			material = material_dict[list(material_dict.keys())[0]]
@@ -1273,7 +1315,7 @@ class Couple_openmc(object):
 			self.set_default_xs_lib()
 			print ('\n\n\n----Default cross section library set for system----\n\n\n')
 		else:
-			# This method simply pass the MC_XS_nucl_list to each cell so that each cell
+			# This method simply passes the MC_XS_nucl_list to each cell so that each cell
 			# can then build it own lib_nucl_list
 			self.set_MC_XS_nuc_list_to_bucells()
 
