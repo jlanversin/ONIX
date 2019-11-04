@@ -527,10 +527,12 @@ class Couple_openmc(object):
 		materials = summary.materials
 		for bucell_name in self.selected_bucells_name_list:
 			# If bucell should only tally initial nuclide, no need to add 1 atm nuclides
-			if self.selected_bucells_nucl_list_dict != {}:
-				if bucell_name in self.selected_bucells_nucl_list_dict:
-					if self.selected_bucells_nucl_list_dict[bucell_name] == 'initial nuclides':
-						continue
+			# This caused the cell material branching issue discovered on Nov 2 2019
+			# This is now commented out
+			# if self.selected_bucells_nucl_list_dict != {}:
+			# 	if bucell_name in self.selected_bucells_nucl_list_dict:
+			# 		if self.selected_bucells_nucl_list_dict[bucell_name] == 'initial nuclides':
+			# 			continue
 			cell = summary.geometry.get_cells_by_name(bucell_name)[0]
 			self._add_zero_dens_nuclides(cell)
 
@@ -566,6 +568,8 @@ class Couple_openmc(object):
 		# Not sure if this is necessary
 		if self.selected_bucells_nucl_list_dict != {}:
 			if cell_name in self.selected_bucells_nucl_list_dict:
+				print ('AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH')
+				print (cell_name, material.id, cell.id)
 				nucl_list_input = self.selected_bucells_nucl_list_dict[cell_name]
 				if nucl_list_input == 'initial nuclides':
 					nucl_list = init_nucl
@@ -595,7 +599,9 @@ class Couple_openmc(object):
 		# Material is rename 'cell name' + 'mat'
 		# New material id is 'mat id' + 'cell id'
 		material.name = '{} mat'.format(cell_name)
-		material.id = int('{}{}'.format(material.id, cell.id))		
+		material.id = int('{}{}'.format(material.id, cell.id))
+		print (material.name)
+		print (material.id)	
 
 	@property
 	def sequence(self):

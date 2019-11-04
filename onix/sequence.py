@@ -82,6 +82,9 @@ class Sequence(object):
         self._current_isomeric_branching_ratio = None
         self._isomeric_branching_ratio_seq = None
 
+        # Isotopic change
+        self._isotopic_change_dict = None
+
     # def _set_from_input(self, sequence_dict, passlist,  bu_sec_conv_factor):
 
     #     sequence = sequence_dict
@@ -625,6 +628,20 @@ class Sequence(object):
 
         self._norma_unit = norma_unit
 
+
+    @property
+    def isotopic_change_dict(self):
+        return self._isotopic_change_dict
+
+    def set_isotopic_change(self, cell, cell_isotopic_change):
+
+        # If this is the first cell which is set isotopic change, create the dict
+        if self.isotopic_change_dict == None:
+            self._isotopic_change_dict = {}
+
+        self._isotopic_change_dict[cell.name] = cell_isotopic_change
+
+    
 
     @property
     def flux_approximation(self):
