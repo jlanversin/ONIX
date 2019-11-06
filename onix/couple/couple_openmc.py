@@ -7,6 +7,7 @@ import xml.etree.ElementTree as ET
 import glob
 import pdb
 import time
+from copy import deepcopy
 
 import openmc
 import openmc.mgxs as mgxs
@@ -560,7 +561,18 @@ class Couple_openmc(object):
 	def _add_zero_dens_nuclides(self, cell):
 
 		material_dict = cell.get_all_materials()
-		material = material_dict[list(material_dict.keys())[0]]	
+
+		# A deepcopy of the object material is created and this copy will eventually overwrite the
+		# original material that was filling the cell
+		# If a deepcopy was not used:
+		# -  when a material id is modified (branched out) vis-a-vis the hosting cell
+		# the changes would also be applied on the original material object
+		# However, this original material object might fill other cells which would mean that
+		# when the loop goes to another cell with same material, the change are going to
+		# cumulate
+		# -  in addition, different cells with same initial material would still only have one common material object
+		# (i.e. the branching out fails)
+		material = deepcopy(material_dict[list(material_dict.keys())[0]])	
 
 		init_nucl = material.get_nuclides()
 		cell_name = cell.name
@@ -600,6 +612,11 @@ class Couple_openmc(object):
 		# New material id is 'mat id' + 'cell id'
 		material.name = '{} mat'.format(cell_name)
 		material.id = int('{}{}'.format(material.id, cell.id))
+
+		# Here, we overwrite the original material object with a copy which id and name have been modified
+		# to reflect the fact that this material object is specific to this cell
+		cell.fill = material
+
 		print (material.name)
 		print (material.id)	
 
