@@ -1,6 +1,7 @@
 import onix.utils as utils
 from . import data
 import numpy
+import uncertainties
 
 class Sequence(object):
     """The sequence object contains information about the burnup sequence for the system,
@@ -809,7 +810,7 @@ class Sequence(object):
     def _set_macrostep_kinf(self, kinf):
 
         # If kinf from previous cycles have already been stored
-        if isinstance(self.current_kinf, numpy.ndarray):
+        if isinstance(self.current_kinf, uncertainties.UFloat):
             self._append_kinf_seq(kinf)
         # If this is the fist step
         elif self.current_kinf == None:

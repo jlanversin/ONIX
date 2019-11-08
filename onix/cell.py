@@ -539,20 +539,21 @@ class Cell(object):
 
 		sequence = self.sequence
 		isotopic_change_dict = sequence.isotopic_change_dict
-		if self.name in isotopic_change_dict:
-			bucell_isotopic_change_dict = isotopic_change_dict[self.name]
-			for nucl_name in bucell_isotopic_change_dict:
-				nuclide_isotopic_change_dict = bucell_isotopic_change_dict[nucl_name]
-				if s in nuclide_isotopic_change_dict:
-					nucl_passport = self.get_nuclide(nucl_name)
-					# Only the current_dens is set to the user-defined density
-					# the dens_seq and dens_subseq_mat last value are left unchanged
-					# However both set_dens_cells (which updates material for new openmc simulation)
-					# and mat_builder (which prepares the matrix for new depletion calculation) uses
-					# current_dens. Therefore, only changing current_dens will update calculation without
-					# changing stored value that will be printed
-					new_dens = nuclide_isotopic_change_dict[s]
-					nucl_passport.current_dens = new_dens
+		if isotopic_change_dict != None:
+			if self.name in isotopic_change_dict:
+				bucell_isotopic_change_dict = isotopic_change_dict[self.name]
+				for nucl_name in bucell_isotopic_change_dict:
+					nuclide_isotopic_change_dict = bucell_isotopic_change_dict[nucl_name]
+					if s in nuclide_isotopic_change_dict:
+						nucl_passport = self.get_nuclide(nucl_name)
+						# Only the current_dens is set to the user-defined density
+						# the dens_seq and dens_subseq_mat last value are left unchanged
+						# However both set_dens_cells (which updates material for new openmc simulation)
+						# and mat_builder (which prepares the matrix for new depletion calculation) uses
+						# current_dens. Therefore, only changing current_dens will update calculation without
+						# changing stored value that will be printed
+						new_dens = nuclide_isotopic_change_dict[s]
+						nucl_passport.current_dens = new_dens
 
 
 	# Get the a sub passport list of all actinides

@@ -308,16 +308,17 @@ class System(object):
 		txt += '\n\n'
 
 		txt += '{:<12}'.format('K-INF')
-		txt += '{:<13.5E}'.format(kinf_seq[0][0])
+		txt += '{:<13.5E}'.format(kinf_seq[0].n)
+		print (kinf_seq)
 		for s in range(steps_number):
-			txt += '{:<13.5E}'.format(kinf_seq[s+1][0])
+			txt += '{:<13.5E}'.format(kinf_seq[s+1].n)
 
 		txt += '\n'
 
 		txt += '{:<12}'.format('UNCERTAINTY')
-		txt += '{:<13.5E}'.format(kinf_seq[0][1])
+		txt += '{:<13.5E}'.format(kinf_seq[0].s)
 		for s in range(steps_number):
-			txt += '{:<13.5E}'.format(kinf_seq[s+1][1])
+			txt += '{:<13.5E}'.format(kinf_seq[s+1].s)
 
 		write_file.write(txt)
 		write_file.close()
