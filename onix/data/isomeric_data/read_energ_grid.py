@@ -22,7 +22,7 @@ intersection = set(energy_grid_mat[0]).intersection(*energy_grid_mat)
 
 union = list(set().union(*energy_grid_mat)) 
 
-print (intersection)
-print (len(union))
+# print (intersection)
+# print (len(union))
 
 

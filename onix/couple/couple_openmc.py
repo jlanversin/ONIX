@@ -99,6 +99,8 @@ class Couple_openmc(object):
 
 		self._openmc_bin_path = None
 
+		self._few_isomeric = 'off'
+
 		# Old way of defaulting MC_input_path to cwd
 		# if args:
 		# 	self._MC_input_path = arg[0]
@@ -141,6 +143,13 @@ class Couple_openmc(object):
 		self._MPI = 'on'
 		self._tasks = tasks
 		self._exec = execu
+
+	def few_isomeric_on(self):
+		"""Calling this function will force ONIX to only calculate isomeric branching ratios of Pm147 and Am241
+		By default ONIX calculates all isomeric branching ratios for which data
+		can be found in the EAF-2010 multiplicities library
+		"""
+		self._few_isomeric = 'on'
 	
 	# for no_const_lib mode, defines the list of nucl that will be simulated
 	# for mat id #
@@ -1178,14 +1187,23 @@ class Couple_openmc(object):
 		count = 1
 		for file_name in file_name_list:
 			nucl_name = file_name.replace('.h5', '')
-			if nucl_name in ['Pm147', 'Am241']: # make it a shorter
+			if self._few_isomeric == 'on':
+				if nucl_name in ['Pm147', 'Am241']: # make it a shorter
+					nucl_path = cross_section_path+'/{}'.format(file_name)
+					xs_data = openmc.data.IncidentNeutron.from_hdf5(nucl_path)
+					ng_xs_data = xs_data[102].xs['294K']
+					print ('--- Sampling {} (n,gamma) point-wise cross section --- [{}/{}]'.format(nucl_name, count, total_count))
+					sampled_ng_xs_data = ng_xs_data(self.mg_energy_mid_points)
+					sampled_ng_cross_section_data[nucl_name] = sampled_ng_xs_data
+					count += 1
+			elif self._few_isomeric == 'off':
 				nucl_path = cross_section_path+'/{}'.format(file_name)
 				xs_data = openmc.data.IncidentNeutron.from_hdf5(nucl_path)
 				ng_xs_data = xs_data[102].xs['294K']
 				print ('--- Sampling {} (n,gamma) point-wise cross section --- [{}/{}]'.format(nucl_name, count, total_count))
 				sampled_ng_xs_data = ng_xs_data(self.mg_energy_mid_points)
 				sampled_ng_cross_section_data[nucl_name] = sampled_ng_xs_data
-				count += 1
+				count += 1	
 		end = time.time()
 		print('\n Time to sample cross sections: {}'.format(end - start))
 
