@@ -535,6 +535,24 @@ class Cell(object):
 
 		return new_flux
 
+	def _change_total_density(self, s):
+
+		sequence = self.sequence
+		density_change_dict = sequence.density_change_dict
+		if density_change_dict != None:
+
+			if self.name in density_change_dict:
+				bucell_density_change_dict = density_change_dict[self.name]
+				if s in bucell_density_change_dict:
+
+					new_tot_dens = bucell_density_change_dict[s]
+					current_total_dens = self.get_total_dens()
+					factor = new_tot_dens/current_total_dens
+					passport_list = self.passlist.passport_list
+					for nuc_pass in passport_list:
+						current_dens = nuc_pass.current_dens
+						nuc_pass.current_dens = current_dens*factor
+
 	def _change_isotope_density(self,s):
 
 		sequence = self.sequence

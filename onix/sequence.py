@@ -86,6 +86,12 @@ class Sequence(object):
         # Isotopic change
         self._isotopic_change_dict = None
 
+        # Density change
+        self._density_change_dict = None
+
+        # Temperature change
+        self._temperature_change_dict = None
+
     # def _set_from_input(self, sequence_dict, passlist,  bu_sec_conv_factor):
 
     #     sequence = sequence_dict
@@ -635,14 +641,47 @@ class Sequence(object):
         return self._isotopic_change_dict
 
     def set_isotopic_change(self, cell, cell_isotopic_change):
-
+        """Manually changes the isotopic densities (in atm per cm3) of user-specified nuclides in the BUCell for user-specified
+        macrosteps
+        
+        IMPORTANT: The other method "set_density_change" trumps this method, i.e., the new isotopic densities set in
+        set_isotopic_change will be renormalized by the new value from set_density_change"""
         # If this is the first cell which is set isotopic change, create the dict
         if self.isotopic_change_dict == None:
             self._isotopic_change_dict = {}
 
         self._isotopic_change_dict[cell.name] = cell_isotopic_change
 
-    
+
+    @property
+    def density_change_dict(self):
+        return self._density_change_dict
+
+    def set_density_change(self, cell, cell_density_change):
+        """Manually changes the total density (in atm per cm3) of the material of the BUCell for user-specified
+        macrosteps
+        
+        IMPORTANT: This method trumps the other method "set_isotopic_change", i.e., the new isotopic densities set in
+        set_isotopic_change will be renormalized by the new value from set_density_change"""
+
+        # If this is the first cell which is set density change, create the dict
+        if self.density_change_dict == None:
+            self._density_change_dict = {}
+
+        self._density_change_dict[cell.name] = cell_density_change
+
+    @property
+    def temperature_change_dict(self):
+        return self._temperature_change_dict
+
+    def set_temperature_change(self, cell, cell_temperature_change):
+        """Manually changes the temperature (Kelvin) of the material of the BUCell for user-specified
+        macrosteps"""
+        # If this is the first cell which is set density change, create the dict
+        if self.temperature_change_dict == None:
+            self._temperature_change_dict = {}
+
+        self._temperature_change_dict[cell.name] = cell_temperature_change    
 
     @property
     def flux_approximation(self):

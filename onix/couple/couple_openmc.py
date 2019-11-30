@@ -589,8 +589,6 @@ class Couple_openmc(object):
 		# Not sure if this is necessary
 		if self.selected_bucells_nucl_list_dict != {}:
 			if cell_name in self.selected_bucells_nucl_list_dict:
-				print ('AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH')
-				print (cell_name, material.id, cell.id)
 				nucl_list_input = self.selected_bucells_nucl_list_dict[cell_name]
 				if nucl_list_input == 'initial nuclides':
 					nucl_list = init_nucl
@@ -624,10 +622,7 @@ class Couple_openmc(object):
 
 		# Here, we overwrite the original material object with a copy which id and name have been modified
 		# to reflect the fact that this material object is specific to this cell
-		cell.fill = material
-
-		print (material.name)
-		print (material.id)	
+		cell.fill = material	
 
 	@property
 	def sequence(self):
@@ -1294,6 +1289,24 @@ class Couple_openmc(object):
 		for file_name in all_MC_files:
 			os.remove(os.getcwd() + '/{}'.format(file_name))
 
+	def _change_temperature(self, s):
+
+		# It seems that temperature set in cells trumps the temperature set in material
+		# Therefore, this method change temperature in cell
+
+		root_cell = self.root_cell
+		cell_dict = root_cell.get_all_cells()
+		sequence = self.sequence
+		temperature_change_dict = sequence.temperature_change_dict
+		for cell_id in cell_dict:
+			cell = cell_dict[cell_id]
+			if cell.name in temperature_change_dict:
+				cell_temperature_change = temperature_change_dict[cell.name]
+				if s in cell_temperature_change:
+					new_temperature = cell_temperature_change[s]
+					cell.temperature = new_temperature
+
+
 	def set_dens_to_cells(self):
 
 		summary = self.initial_summary
@@ -1392,6 +1405,7 @@ class Couple_openmc(object):
 			print ('\n\n\n\n====== STEP {}======\n\n\n\n'.format(s))
 			sequence._gen_step_folder(s)
 			print (('\n\n\n=== OpenMC Transport {}===\n\n\n'.format(s)))
+			self._change_temperature(s)
 			self.run_openmc()
 			self.set_tallies_to_bucells(s)
 			self.step_normalization(s)

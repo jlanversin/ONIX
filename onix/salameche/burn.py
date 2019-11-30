@@ -47,6 +47,7 @@ def burn_step(system, s, mode):
         bucell._print_xs_lib()
         burn_cell(bucell, s, mode)
         bucell._change_isotope_density(s)
+        bucell._change_total_density(s)
         bucell._print_substep_dens(s)
 
 

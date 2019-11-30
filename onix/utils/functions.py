@@ -177,6 +177,36 @@ def get_hm(passlist, hm_vol):
 
 	return hm
 
+def convert_mass_to_atom(mass, nuclide):
+
+	if is_name(nuclide):
+		zamid = name_to_zamid(nuclide)
+		zaid =zamid[:-1]
+	else:
+		zamid = nuclide
+		zaid =zamid[:-1]
+
+	molar_mass = d.default_atm_mass_lib[zaid]
+
+	atom = mass*NA/molar_mass
+
+	return atom
+
+def convert_atom_to_mass(atom, nuclide):
+
+	if is_name(nuclide):
+		zamid = name_to_zamid(nuclide)
+		zaid =zamid[:-1]
+	else:
+		zamid = nuclide
+		zaid =zamid[:-1]
+
+	molar_mass = d.default_atm_mass_lib[zaid]
+
+	mass = atom*molar_mass/NA
+
+	return mass
+
 def get_bu_sec_conv_factor(vol, ihm):
 
 	bu_sec_conv_factor = vol*1e-3/(ihm*24*3600) # Unit in L/g
