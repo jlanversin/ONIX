@@ -12,6 +12,8 @@ class System(object):
 		self._sequence = None
 		self._output_summary_path = None
 
+		self._reac_rank = 'off'
+
 	@property
 	def id(self):
 		return self._id
@@ -78,6 +80,17 @@ class System(object):
 	def bounding_box(self, bounding_box):
 
 		self._bounding_box = bounding_box
+
+	@property
+	def reac_rank(self):
+
+		return self._reac_rank
+	
+	def reac_rank_on(self):
+		"""Calling this function will tell ONIX to produce reaction rates ranking and print them for each BUCells
+		By default ONIX does not produce reaction rates ranking as it takes a lot of memory
+		"""
+		self._reac_rank = 'on'
 
 	@property
 	def total_vol(self):

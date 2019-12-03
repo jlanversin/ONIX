@@ -40,21 +40,22 @@ def burn(system):
 def burn_step(system, s, mode):
 
     bucell_list = system.get_bucell_list()
+    reac_rank = system.reac_rank
     for bucell in bucell_list:
         print ('\n\n\n\n CELL {}\n\n\n\n'.format(bucell.name))
         # Create and set the folder corresponding to that cell
         bucell._set_folder()
         bucell._print_xs_lib()
-        burn_cell(bucell, s, mode)
+        burn_cell(bucell, s, mode, reac_rank)
         bucell._change_isotope_density(s)
         bucell._change_total_density(s)
         bucell._print_substep_dens(s)
 
-
-    system._print_current_allreacs_rank()
+    if reac_rank == 'on':
+        system._print_current_allreacs_rank()
     system.copy_cell_folders_to_step_folder(s)
 
-def burn_cell(bucell, s, mode):
+def burn_cell(bucell, s, mode, reac_rank):
 
     # Check if different nuclide lists are coherent with each other
     # This should not be called in burn_cell because bun_cell is in the sequence loop
@@ -80,7 +81,7 @@ def burn_cell(bucell, s, mode):
 
     if flux_approximation == 'iv':
         for i in range(microsteps_number):
-            N = burn_substep(bucell, B, C, N, s, i, microsteps_number, mode)
+            N = burn_substep(bucell, B, C, N, s, i, microsteps_number, mode, reac_rank)
     elif flux_approximation == 'pc':
         for i in range(microsteps_number):
             burn_substep_pc(bucell, B, C, N, s, i, microsteps_number, mode)
@@ -93,7 +94,7 @@ def burn_cell(bucell, s, mode):
 
     # At the end of this burn sequence, the flux and power
 
-def burn_substep(bucell, B, C, N, s, ss, ssn, mode):
+def burn_substep(bucell, B, C, N, s, ss, ssn, mode, reac_rank):
 
     print ('\n\n++++ Substep {} ++++\n\n'.format(ss))
 
@@ -152,7 +153,8 @@ def burn_substep(bucell, B, C, N, s, ss, ssn, mode):
     bucell._update_dens(N, ss, ssn)
 
     # Generate the allreacsdic for each nuclide
-    bucell._set_allreacs_dic(s, ss, ssn)
+    if reac_rank == 'on':
+        bucell._set_allreacs_dic(s, ss, ssn)
 
     return N
 

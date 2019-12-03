@@ -99,7 +99,11 @@ class Couple_openmc(object):
 
 		self._openmc_bin_path = None
 
+		# By default all available isomeric branching ratio are calculated
 		self._few_isomeric = 'off'
+
+		# By default, ONIX does not compute reactions rates ranking (it takes a lot of memory)
+		self._reac_rank = 'off'
 
 		# Old way of defaulting MC_input_path to cwd
 		# if args:
@@ -150,12 +154,17 @@ class Couple_openmc(object):
 		can be found in the EAF-2010 multiplicities library
 		"""
 		self._few_isomeric = 'on'
-	
-	# for no_const_lib mode, defines the list of nucl that will be simulated
-	# for mat id #
-	# def set_nucl_list(self, mat_name, nucl_list):
 
-	# 	self._nucl_list_dict[mat_name] = nucl_list
+	@property
+	def reac_rank(self):
+
+		return self._reac_rank
+	
+	def reac_rank_on(self):
+		"""Calling this function will tell ONIX to produce reaction rates ranking and print them for each BUCells
+		By default ONIX does not produce reaction rates ranking as it takes a lot of memory
+		"""
+		self._reac_rank = 'on'
 
 	def select_bucells(self, bucell_list):
 		"""Selects the cells from the OpenMC input that should be depleted
@@ -243,6 +252,8 @@ class Couple_openmc(object):
 
 		#Instantiate a system
 		system = System(1)
+		if self.reac_rank == 'on':
+			system.reac_rank_on()
 		self.system = system
 
 		# read periodic surfaces  (openmc summary forgets the periodic surfaces coupling)
@@ -1298,13 +1309,14 @@ class Couple_openmc(object):
 		cell_dict = root_cell.get_all_cells()
 		sequence = self.sequence
 		temperature_change_dict = sequence.temperature_change_dict
-		for cell_id in cell_dict:
-			cell = cell_dict[cell_id]
-			if cell.name in temperature_change_dict:
-				cell_temperature_change = temperature_change_dict[cell.name]
-				if s in cell_temperature_change:
-					new_temperature = cell_temperature_change[s]
-					cell.temperature = new_temperature
+		if temperature_change_dict != None:
+			for cell_id in cell_dict:
+				cell = cell_dict[cell_id]
+				if cell.name in temperature_change_dict:
+					cell_temperature_change = temperature_change_dict[cell.name]
+					if s in cell_temperature_change:
+						new_temperature = cell_temperature_change[s]
+						cell.temperature = new_temperature
 
 
 	def set_dens_to_cells(self):
@@ -1419,7 +1431,8 @@ class Couple_openmc(object):
 		self.run_openmc()
 
 		system._gen_output_summary_folder()
-		system._print_summary_allreacs_rank()
+		if self.reac_rank == 'on':
+			system._print_summary_allreacs_rank()
 		system._print_summary_subdens()
 		system._print_summary_dens()
 		system._print_summary_xs()
