@@ -218,8 +218,6 @@ class System(object):
 		# Since this get_tot_hm is called before burn, hm is ihm
 		total_ihm = self.get_tot_hm()
 
-		print('total_ihm', total_ihm)
-
 		if total_ihm == 0:
 			self._bu_sec_conv_factor = 0
 		else:

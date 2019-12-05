@@ -345,11 +345,23 @@ class Sequence(object):
 
         av_pow_dens_seq = self._av_pow_dens_seq
         bu_sec_conv_factor = system.bu_sec_conv_factor
+        macrosteps_number = self.macrosteps_number
         time_seq = self.time_seq
         time_subseq_mat = self.time_subseq_mat
         microstep_vector = self._microstep_vector
 
-        self._system_bu_seq += [x*y*bu_sec_conv_factor for x, y in zip(time_seq[1:],av_pow_dens_seq)]
+        system_bu = 0
+        system_bu_seq = []
+        for s in range(1, macrosteps_number+1):
+            time_intvl = self.get_time_intvl(s)
+            system_bu_intvl = time_intvl*av_pow_dens_seq[s]*bu_sec_conv_factor # the initial power density is is set to both av_pow_dens_seq[0] and av_pow_dens_seq[1]
+            system_bu += system_bu_intvl
+            system_bu_seq.append(system_bu)
+        self._system_bu_seq += system_bu_seq
+
+        # Incorrect way to calculate system bu from time
+        #self._system_bu_seq += [x*y*bu_sec_conv_factor for x, y in zip(time_seq[1:],av_pow_dens_seq)]
+
         for s in range(len(self._system_bu_seq)-1):
             microsteps_number = self._microstep_vector[s]
             system_bu_intvl = self.get_system_bu_intvl(s+1)
@@ -364,15 +376,28 @@ class Sequence(object):
         #     time_substep_val = time_subintvl_val + self.current_time
         #     self._set_substep_time(time_substep_val, ss)
 
-    # This convert time_seq and subseq to system bu seq and subseq using av_pow_dens
+    # This convert bu_seq and subseq to time seq and subseq using av_pow_dens
     def _initial_system_bu_time_conversion(self, system):
 
         av_pow_dens_seq = self._av_pow_dens_seq
         bu_sec_conv_factor = system.bu_sec_conv_factor
+        macrosteps_number = self.macrosteps_number
         system_bu_seq = self.system_bu_seq
         system_bu_subseq_mat = self.system_bu_subseq_mat
         microstep_vector = self._microstep_vector
-        self._time_seq += [x/(y*bu_sec_conv_factor) for x, y in zip(system_bu_seq[1:],av_pow_dens_seq)]
+
+        time = 0
+        time_seq = []
+        for s in range(1, macrosteps_number+1):
+            system_bu_intvl = self.get_system_bu_intvl(s)
+            time_intvl = system_bu_intvl/(av_pow_dens_seq[s]*bu_sec_conv_factor) # the initial power density is is set to both av_pow_dens_seq[0] and av_pow_dens_seq[1]
+            time += time_intvl
+            time_seq.append(time)
+        self._time_seq += time_seq
+
+        # Incorrect way to calculate time from system bu
+        #self._time_seq += [x/(y*bu_sec_conv_factor) for x, y in zip(system_bu_seq[1:],av_pow_dens_seq)]
+       
         for s in range(len(self._time_seq)-1):
             microsteps_number = self._microstep_vector[s]
             #time_intvl += [self._time_seq[i+1]- self._time_seq[i]]
@@ -902,7 +927,7 @@ class Sequence(object):
         self._append_time_subseq_mat(time, ss)
       #  self._append_current_time_subseq(time, ss)
 
-    # Add bu to bu_seq and add the current bu_subseq to subseq_mat
+    # Add bu to bu_subseq and add the current bu_subseq to subseq_mat
     def _set_substep_system_bu(self, bu, ss):
 
         self.current_system_bu = bu
@@ -1118,7 +1143,7 @@ class Sequence(object):
 
     @current_system_bu.setter
     def current_system_bu(self, new_system_bu):
-        """Gets burnup level of current macro or microstep
+        """Sets burnup level of current macro or microstep
         """
         self._current_system_bu = new_system_bu
 
