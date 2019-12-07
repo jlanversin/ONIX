@@ -543,9 +543,14 @@ class Cell(object):
 
 			if self.name in density_change_dict:
 				bucell_density_change_dict = density_change_dict[self.name]
-				if s in bucell_density_change_dict:
+				# When user sets a new density for step s+1, the Monte Carlo simulation of step s+1
+				# needs to run with this new density
+				# For conveniency, ONIX thus changes the density at the end of step s
+				# This means that if we are now at step s, we need to look if the user has specified a new 
+				# density for step s+1
+				if s+1 in bucell_density_change_dict:
 
-					new_tot_dens = bucell_density_change_dict[s]
+					new_tot_dens = bucell_density_change_dict[s+1]
 					current_total_dens = self.get_total_dens()
 					factor = new_tot_dens/current_total_dens
 					passport_list = self.passlist.passport_list
@@ -560,9 +565,19 @@ class Cell(object):
 		if isotopic_change_dict != None:
 			if self.name in isotopic_change_dict:
 				bucell_isotopic_change_dict = isotopic_change_dict[self.name]
+				unit = bucell_isotopic_change_dict['unit']
+				current_total_dens = self.get_total_dens()
 				for nucl_name in bucell_isotopic_change_dict:
+					if nucl_name == 'unit':
+						continue
 					nuclide_isotopic_change_dict = bucell_isotopic_change_dict[nucl_name]
-					if s in nuclide_isotopic_change_dict:
+
+					# When user sets a new density for step s+1, the Monte Carlo simulation of step s+1
+					# needs to run with this new density
+					# For conveniency, ONIX thus changes the density at the end of step s
+					# This means that if we are now at step s, we need to look if the user has specified a new 
+					# density for step s+1
+					if s+1 in nuclide_isotopic_change_dict:
 						nucl_passport = self.get_nuclide(nucl_name)
 						# Only the current_dens is set to the user-defined density
 						# the dens_seq and dens_subseq_mat last value are left unchanged
@@ -570,7 +585,14 @@ class Cell(object):
 						# and mat_builder (which prepares the matrix for new depletion calculation) uses
 						# current_dens. Therefore, only changing current_dens will update calculation without
 						# changing stored value that will be printed
-						new_dens = nuclide_isotopic_change_dict[s]
+
+						# If unit is number density
+						if unit == 'number density':
+							new_dens = nuclide_isotopic_change_dict[s+1]
+						# else if unit is atom fraction
+						if unit == 'atom fraction':
+							new_dens = nuclide_isotopic_change_dict[s+1]*current_total_dens
+
 						nucl_passport.current_dens = new_dens
 
 

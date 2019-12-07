@@ -665,17 +665,26 @@ class Sequence(object):
     def isotopic_change_dict(self):
         return self._isotopic_change_dict
 
-    def set_isotopic_change(self, cell, cell_isotopic_change):
-        """Manually changes the isotopic densities (in atm per cm3) of user-specified nuclides in the BUCell for user-specified
+    def set_isotopic_change(self, cell, cell_isotopic_change, unit='number density'):
+        """Manually changes the isotopic densities of user-specified nuclides in the BUCell for user-specified
         macrosteps
+
+        Parameter:
+
+        unit: specifies the unit of the new isotopic density
+        'number density' (default) for density in atm per cm3
+        'atom fraction' for density as atomic fraction
         
-        IMPORTANT: The other method "set_density_change" trumps this method, i.e., the new isotopic densities set in
-        set_isotopic_change will be renormalized by the new value from set_density_change"""
+        IMPORTANT: If the method "set_density_change" is also used for the same BUCell, the isotopic change set by the user
+        must be in atom fraction"""
         # If this is the first cell which is set isotopic change, create the dict
         if self.isotopic_change_dict == None:
             self._isotopic_change_dict = {}
 
         self._isotopic_change_dict[cell.name] = cell_isotopic_change
+        self._isotopic_change_dict[cell.name]['unit'] = unit
+
+
 
 
     @property
