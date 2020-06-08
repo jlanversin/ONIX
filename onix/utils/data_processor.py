@@ -74,6 +74,7 @@ def plot_bucell_nuclide_network(nuclide, step, path, cell, threshold):
 
 	zamid = name_to_zamid(nuclide)
 
+	print (nuclide, zamid)
 	search = 'nuclide'
 	for i in range(0,len(lines)):
 		l = lines[i]
@@ -1239,7 +1240,7 @@ def plot_matrix_from_compressed_matrix(path, step, cell):
 
 def plot_matrix_bysign_from_compressed_matrix(path, step, cell):
 
-	plt.style.use('dark_background')
+	#plt.style.use('dark_background')
 	path_to_xs = path +'/step_{}'.format(step) +'/{}_cell'.format(cell) +'/matrix/xs_mat'
 	path_to_decay = path +'/step_{}'.format(step) +'/{}_cell'.format(cell) +'/matrix/decay_mat'
 	file_xs = open(path_to_xs, 'r')
@@ -1249,7 +1250,7 @@ def plot_matrix_bysign_from_compressed_matrix(path, step, cell):
 
 	size = 0.8
 
-	plt.figure(1)
+	plt.figure(1, figsize=(7.3,5.5))
 
 	count = 0
 	# x_vect = [i for i in range(len(lines))]
@@ -1268,9 +1269,9 @@ def plot_matrix_bysign_from_compressed_matrix(path, step, cell):
 			current_x_vect_xs .append(elt_index)
 			current_line_xs.append(elt_val_xs)
 		if i == len(lines_xs)-1:
-			plt.scatter(current_x_vect_xs , current_line_xs , marker='s', color = 'orange', s = size, label = 'Production Terms')
+			plt.scatter(current_x_vect_xs , current_line_xs , marker='s', color = 'red', s = size, label = 'Production terms')
 		else:
-			plt.scatter(current_x_vect_xs , current_line_xs , marker='s', color = 'orange', s = size)
+			plt.scatter(current_x_vect_xs , current_line_xs , marker='s', color = 'red', s = size)
 		line_elt_decay = line_decay.split(':')[1]
 		elts_decay = line_elt_decay.split(',')[:-1] # Last element empty because of last coma in each line
 		current_line_decay = []
@@ -1282,25 +1283,26 @@ def plot_matrix_bysign_from_compressed_matrix(path, step, cell):
 			current_x_vect_decay.append(elt_index)
 			current_line_decay.append(elt_val_decay)
 		if i == len(lines_xs)-1:	
-			plt.scatter(current_x_vect_decay , current_line_decay , marker='s', color = 'orange', s = size)
+			plt.scatter(current_x_vect_decay , current_line_decay , marker='s', color = 'red', s = size)
 		else:
-			plt.scatter(current_x_vect_decay , current_line_decay , marker='s', color = 'orange', s = size)
+			plt.scatter(current_x_vect_decay , current_line_decay , marker='s', color = 'red', s = size)
 		#mat.append(current_line)
 		count += 1
 
 	# cover diag elt
 	for i in range(len(lines_xs)):
 		if i == 0:
-			plt.scatter([i], [i],  marker='s', color = 'orange', s = size, label = 'Destruction Terms')
+			plt.scatter([i], [i],  marker='s', color = 'black', s = size, label = 'Destruction terms')
 		else:
-			plt.scatter([i], [i],  marker='s', color = 'orange', s = size)
+			plt.scatter([i], [i],  marker='s', color = 'black', s = size)
 	file_xs.close()
 	file_decay.close()
+	plt.tick_params(labelsize=14)
 	plt.gca().invert_yaxis()
-	plt.ylabel('Row index')
-	plt.xlabel('Column index')
-	#plt.legend()
-	plt.grid(color = 'dimgray')
+	plt.ylabel('Row index', fontsize=16)
+	plt.xlabel('Column index', fontsize=16)
+	plt.legend(prop={'size': 15}, markerscale = 6)
+	plt.grid(color = 'darkgray')
 	plt.show()
 
 

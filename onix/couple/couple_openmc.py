@@ -1251,7 +1251,11 @@ class Couple_openmc(object):
 
 		system = self.system
 		sequence = self.sequence
-		FMF = sequence._get_FMF1(system, s)
+		master_bucell = sequence.master_bucell
+		if master_bucell == None:
+			FMF = sequence._get_system_FMF(system, s)
+		else:
+			FMF = sequence._get_bucell_FMF(master_bucell, s)
 
 		bucell_list = system.get_bucell_list()
 		for bucell in bucell_list:
@@ -1262,7 +1266,6 @@ class Couple_openmc(object):
 			# to have flux in cm.s you need to divide by volule of the cell
 			flux = FMF*MC_flux/bucell.vol
 			pow_dens = bucell._update_pow_dens(flux)
-			print ('initial', pow_dens)
 			bucell_sequence._set_macrostep_flux(flux)
 			bucell_sequence._set_macrostep_pow_dens(pow_dens)
 

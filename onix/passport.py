@@ -146,6 +146,14 @@ class Passport(object):
         self.decay_a = decay_a
         self.decay_b = decay_b
 
+    # def get_halflife(self):
+
+    #     print (self._decay_a)
+    #     if self._decay_a == 'stable':
+    #         return 'stable'
+    #     else:
+    #         return m.log(2)/self._decay_a
+
 
     @property
     def current_xs(self):

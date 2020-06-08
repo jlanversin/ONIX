@@ -237,6 +237,7 @@ class Stand_alone(object):
 		system._print_summary_subdens()
 		system._print_summary_dens()
 		system._print_summary_param()
+		system._print_summary_activity()
 
 		run_time = time.time() - start_time
 		print ('\n\n\n >>>>>> ONIX burn took {} seconds <<<<<<< \n\n\n'.format(run_time))

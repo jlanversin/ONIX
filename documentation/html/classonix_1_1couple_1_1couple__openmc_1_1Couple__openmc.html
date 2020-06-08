@@ -397,7 +397,31 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>zero_dens_1_atm</b> = 
 <tr class="separator:a8ca4a5156df1fecfca8d79e0d0aa372c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
+<div class="textblock"><pre class="fragment">This class is used to execute coupled-mode simulations
+
+Through this class, the user can:
+- chose to parallelize the Monte Carlo simulations
+via the "set_MPI" method,
+- set the nuclear data libraries to be used in the simulation,
+- set the burnup/time sequence for the simulation,
+- manually set the volume of each BUCells (note that by default, ONIX uses the OpenMC stochastic volume calculation
+to find the volume of each cells. However, this method might produce important errors on the volume and it is
+advised to set the volume manually)
+- select which of the Cells defined in the OpenMC input should be depleted (known as BUCells)
+- select a list of nuclides in each BUCell which cross sections will be tallied. If the user 
+does not specify any such list of nuclides, ONIX will by default tally the cross sections of all
+nuclides which data are found in the cross section library.
+
+The Couple_openmc class also takes care of the coupling between ONIX and OpenMC. At the beginning of a simulation,
+it imports certain initial parameters from the OpenMC input to ONIX such as the name of the BUCells and the initial
+nuclide densities of each BUCell. During the simulation, it makes sure that information such as the flux tallies,
+neutron spectrum tallies, the reaction rates and the updated nuclide densities are correctly transfered between the burnup
+module and the neutron transport module.
+
+The Couple_openmc class will also sample the isomeric branching ratios and (n,gamma) cross sections on the
+the same energy points to prepare for the calculations of one-group isomeric branching ratios.
+
+IMPORTANT: the root cell in the OpenMC input should be named "root cell" </pre> 
 <p class="definition">Definition at line <a class="el" href="couple__openmc_8py_source.html#l00022">22</a> of file <a class="el" href="couple__openmc_8py_source.html">couple_openmc.py</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/julien/ONIX/ONIX/onix/couple/<a class="el" href="couple__openmc_8py_source.html">couple_openmc.py</a></li>

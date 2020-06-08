@@ -1236,7 +1236,7 @@ def plot_compare_two_nuclear_data_on_nuclide_chart(decay_path1, fy_path1,decay_p
 	size = 13
 
 	# setup the plot
-	plt.figure(1)
+	plt.figure(1,figsize=(7.3,5.5))
 
 	# Plot nuclear data 1
 	plt.scatter(decay_n1, decay_z1, marker = 's', color='k', label = 'Full', s = size)
@@ -1256,11 +1256,12 @@ def plot_compare_two_nuclear_data_on_nuclide_chart(decay_path1, fy_path1,decay_p
 	plt.grid(b=True, which='major', color='k', linestyle='-')
 	plt.grid(b=True, which='minor', color='r', linestyle='-', alpha=0.2, markevery=50)
 	plt.minorticks_on()
-	plt.tick_params(labelsize=15)
+	plt.tick_params(labelsize=14)
 	# plt.grid('on')
 	plt.gca().set_aspect('equal', adjustable='box')
 	plt.legend(prop={'size': 15})
 	#plt.set_minor_frequency(2)
+	plt.subplots_adjust(left=0.21, bottom=0.110, right=0.98, top=0.98)
 
 	# for i, txt in enumerate(label_list):
 	# 	plt.annotate(txt, (a_list1[i], z_list1[i]))

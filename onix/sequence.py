@@ -18,6 +18,8 @@ class Sequence(object):
         self._norma_vector = None
         self._norma_unit = None
 
+        self._master_bucell = None
+
         self._macrosteps_number = None
         self._microsteps_number = None
 
@@ -541,12 +543,11 @@ class Sequence(object):
 
 
     # Method provided by MCODE
-    def _get_FMF1(self, system, s):
+    def _get_system_FMF(self, system, s):
 
         tot_pow = self.tot_pow_seq[s] # in kW
         bucell_dict = system.bucell_dict
         deno = 0
-        fission_rate_list = []
         for bucell_id in bucell_dict:
             bucell = bucell_dict[bucell_id]
             bucell_sequence = bucell.sequence
@@ -570,6 +571,30 @@ class Sequence(object):
             deno += fission_energy
 
         return tot_pow/deno
+
+    def _get_bucell_FMF(self, bucell, s):
+
+        master_pow_dens = self.master_pow_dens_seq[s] # in kW/l (for the master bucell)
+        master_pow = master_pow_dens*vol*1E-3 #vol is in cm3, pow_dens in kW/l
+        bucell_sequence = bucell.sequence
+        MC_flux = bucell_sequence.current_MC_flux # MC_flux unit of neutron.cm per source particle
+        vol = bucell.vol # probably useless, MC_flux is already volume integrated
+        passlist = bucell.passlist
+        passport_list = passlist.passport_list
+        conv_Mev_J = 1.60218e-13
+        conv_J_kJ = 1E-3
+        fission_energy = 0
+        for nucl in passport_list:
+            if nucl.get_FAM() == 'ACT' and nucl.current_xs != None:
+                fission_E = nucl.fission_E
+                # xs is obtained by dividing reaction rates (rate per source neutron) by flux (neutron.cm per source neutron)
+                # and density (cm-3), therefore, xs are just in cm2
+                fission_xs = nucl.current_xs['fission'][0]
+                dens = nucl.current_dens
+                fission_energy += dens*fission_xs*MC_flux*fission_E*conv_Mev_J*conv_J_kJ #kW
+
+
+        return master_pow/fission_energy
 
 
 ##### steps and norma info ######
@@ -659,6 +684,22 @@ class Sequence(object):
         """
 
         self._norma_unit = norma_unit
+
+    @property
+    def master_bucell(self):
+        return self._master_bucell
+    
+
+    def set_master_bucell(BUCell):
+        """Sets the BUCell against which macrostep normalization is implemented
+
+        This feature allows the user to define the sequence steps with the burnup points of the chosen
+        master BUCell
+
+        By default, the macrostep normalization is implemented against the whole system and thus the burunup
+        points defined for the sequence are those of the whole system"""
+
+        self._master_bucell = BUCell
 
 
     @property

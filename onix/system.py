@@ -260,6 +260,14 @@ class System(object):
 			bucell = bucell_dict[bucell_id]
 			bucell._print_summary_dens(summary_path)
 
+	def _print_summary_activity(self):
+
+		summary_path = self._output_summary_path
+		bucell_dict = self.bucell_dict
+		for bucell_id in bucell_dict:
+			bucell = bucell_dict[bucell_id]
+			bucell._print_summary_activity(summary_path)
+
 	def _print_summary_subdens(self):
 
 		summary_path = self._output_summary_path

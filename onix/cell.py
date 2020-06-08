@@ -1298,42 +1298,49 @@ class Cell(object):
 		write_file = open(file_name, 'w')
 		txt = ''
 
-		txt += '{:<10}'.format('TIME')
+		txt += '{:<10}'.format('NUCL')
+		txt += '{:<10}'.format('ZAMID')
+		txt += '{:<13}'.format('TIME [days]')
 		txt += '{:<13.5E}'.format(time_seq[0]/(24*3600))# in days
 		for s in range(steps_number):
 			txt += '{:<13.5E}'.format(time_seq[s+1]/(24*3600))# in days
 
 		txt += '\n'
 
-		txt += '{:<10}'.format('SYSTEM-BU')
+		txt += '{:<20}'.format('')
+		txt += '{:<13}'.format('SYSTEM-BU')
 		txt += '{:<13.5E}'.format(system_bu_seq[0])
 		for s in range(steps_number):
 			txt += '{:<13.5E}'.format(system_bu_seq[s+1])
 
 		txt += '\n'
 
-		txt += '{:<10}'.format('CELL-BU')
+		txt += '{:<20}'.format('')
+		txt += '{:<13}'.format('CELL-BU')
 		txt += '{:<13.5E}'.format(bucell_bu_seq[0])
 		for s in range(steps_number):
 			txt += '{:<13.5E}'.format(bucell_bu_seq[s+1])
 
 		txt += '\n'
 
-		txt += '{:<10}'.format('FLUX')
+		txt += '{:<20}'.format('')
+		txt += '{:<13}'.format('FLUX')
 		txt += '{:^13}'.format('')
 		for s in range(steps_number):
 				txt += '{:<13.5E}'.format(flux_seq[s])
 
 		txt += '\n'
 
-		txt += '{:<10}'.format('POW-DENS')
+		txt += '{:<20}'.format('')
+		txt += '{:<13}'.format('POW-DENS')
 		txt += '{:^13}'.format('')
 		for s in range(steps_number):
 			txt += '{:<13.5E}'.format(pow_dens_seq[s])
 
 		txt += '\n'
 
-		txt += '{:<10}'.format('POW')
+		txt += '{:<20}'.format('')
+		txt += '{:<13}'.format('POW')
 		txt += '{:^13}'.format('')
 		for s in range(steps_number):
 				txt += '{:<13.5E}'.format(pow_dens_seq[s]*self.vol*1E-3)
@@ -1342,13 +1349,135 @@ class Cell(object):
 
 		for nucl in passport_list:
 			zamid = nucl.zamid
+			name = nucl.name
 
+			txt += '{:<10}'.format(name)
 			txt += '{:<10}'.format(zamid)
+			txt += '{:^13}'.format('')
 			init_dens = nucl.dens_seq[0]
 			txt += '{:<13.5E}'.format(init_dens)
 			for s in range(steps_number):
 				dens = nucl.dens_seq[s+1]
 				txt += '{:<13.5E}'.format(dens)
+
+			txt += '\n'
+
+		write_file.write(txt)
+		write_file.close()
+
+	def _print_summary_activity(self, summary_path):
+
+		cell_name = self.name
+		passlist = self.passlist
+		passport_list = passlist.passport_list
+		cell_folder_path = self.folder_path
+		sequence = self.sequence
+		time_seq = sequence.time_seq
+		system_bu_seq = sequence.system_bu_seq
+		bucell_bu_seq = sequence.bucell_bu_seq
+		flux_seq = sequence.flux_seq
+		pow_dens_seq = sequence.pow_dens_seq
+		steps_number = sequence.macrosteps_number
+		file_name = summary_path + '/{}_activity'.format(cell_name)
+
+		write_file = open(file_name, 'w')
+		txt = ''
+
+		txt += '{:<10}'.format('NUCL')
+		txt += '{:<10}'.format('ZAMID')
+		txt += '{:<13}'.format('HL [s]')
+		txt += '{:<13}'.format('TIME [days]')
+		txt += '{:<13.5E}'.format(time_seq[0]/(24*3600))# in days
+		for s in range(steps_number):
+			txt += '{:<13.5E}'.format(time_seq[s+1]/(24*3600))# in days
+
+		txt += '\n'
+
+		txt += '{:<33}'.format('')
+		txt += '{:<13}'.format('SYSTEM-BU')
+		txt += '{:<13.5E}'.format(system_bu_seq[0])
+		for s in range(steps_number):
+			txt += '{:<13.5E}'.format(system_bu_seq[s+1])
+
+		txt += '\n'
+
+		txt += '{:<33}'.format('')
+		txt += '{:<13}'.format('CELL-BU')
+		txt += '{:<13.5E}'.format(bucell_bu_seq[0])
+		for s in range(steps_number):
+			txt += '{:<13.5E}'.format(bucell_bu_seq[s+1])
+
+		txt += '\n'
+
+		txt += '{:<33}'.format('')
+		txt += '{:<13}'.format('FLUX')
+		txt += '{:^13}'.format('')
+		for s in range(steps_number):
+				txt += '{:<13.5E}'.format(flux_seq[s])
+
+		txt += '\n'
+
+		txt += '{:<33}'.format('')
+		txt += '{:<13}'.format('POW-DENS')
+		txt += '{:^13}'.format('')
+		for s in range(steps_number):
+			txt += '{:<13.5E}'.format(pow_dens_seq[s])
+
+		txt += '\n'
+
+		txt += '{:<33}'.format('')
+		txt += '{:<13}'.format('POW')
+		txt += '{:^13}'.format('')
+		for s in range(steps_number):
+				txt += '{:<13.5E}'.format(pow_dens_seq[s]*self.vol*1E-3)
+
+		txt += '\n\n'
+
+		for nucl in passport_list:
+			zamid = nucl.zamid
+			name = nucl.name
+			decay = nucl.decay_a
+
+			if decay == None:
+
+				txt += '{:<10}'.format(name)
+				txt += '{:<10}'.format(zamid)
+				txt += '{:<13}'.format('N/A')
+				init_act = 0.0
+				txt += '{:<13}'.format('')
+				txt += '{:<13.5E}'.format(init_act)
+				for s in range(steps_number):
+					act = 0.0
+					txt += '{:<13.5E}'.format(act)
+
+
+			elif decay == 'stable':
+
+				txt += '{:<10}'.format(name)
+				txt += '{:<10}'.format(zamid)
+				txt += '{:<13}'.format('stable')
+				init_act = 0.0
+				txt += '{:<13}'.format('')
+				txt += '{:<13.5E}'.format(init_act)
+				for s in range(steps_number):
+					act = 0.0
+					txt += '{:<13.5E}'.format(act)
+
+
+			else:
+
+				decay_val = decay['total decay']
+				hl = decay['half-life']
+				txt += '{:<10}'.format(name)
+				txt += '{:<10}'.format(zamid)
+				txt += '{:<13.5E}'.format(hl)
+				init_act = nucl.dens_seq[0]*decay_val
+				txt += '{:<13}'.format('')
+				txt += '{:<13.5E}'.format(init_act)
+				for s in range(steps_number):
+					dens = nucl.dens_seq[s+1]
+					act = dens*decay_val
+					txt += '{:<13.5E}'.format(act)
 
 			txt += '\n'
 
