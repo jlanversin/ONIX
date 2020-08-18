@@ -427,6 +427,7 @@ class Cell(object):
 
 		return ihm
 
+	# Not used?
 	def set_ihm(self, passlist, hm_vol):
 
 		ihm = utils.get_hm(passlist, hm_vol)
@@ -447,6 +448,8 @@ class Cell(object):
 		passlist = self._passlist
 	#	hm_vol = self._hm # when user had to define the hm_vol
 		vol = self.vol
+		print ('PIKACHU')
+		print (vol)
 	#	ihm = utils.get_ihm(passlist, hm_vol) # when user had to define the hm_vol
 		ihm = utils.get_hm(passlist, vol)
 

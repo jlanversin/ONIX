@@ -225,6 +225,28 @@ def plot_nuclide_dens_from_path(bucell, nuclide, path_to_simulation):
 
 	plt.show()
 
+def plot_nuclide_group_dens_from_path(bucell, nuclide_list, path_to_simulation):
+
+	path = path_to_simulation + '/output_summary/{}_dens'.format(bucell)
+
+	time_seq = read_time_seq(path)
+
+	group_dens_seq = [0.0]*len(time_seq)
+	for nuclide in nuclide_list:
+		dens_seq = read_dens(nuclide, path)
+		for i in range(len(group_dens_seq)):
+			group_dens_seq[i] = group_dens_seq[i] + dens_seq[i]
+
+
+	plt.figure(1)
+	plt.plot(time_seq, group_dens_seq, color = 'orange', marker = 'o')
+	plt.xlabel('Time [day]')
+	plt.ylabel('Density [atm/cm3]')
+	plt.grid()
+	plt.title('{} {} density evolution'.format(bucell, nuclide_list))
+
+	plt.show()
+
 
 def plot_xs_time_evolution(bucell, nuclide, xs_name):
 
@@ -498,7 +520,9 @@ def plot_xs_dens_flux(bucell, xs_nuclide, xs_name, dens_nuclide, xs_path, dens_p
 	plt.show()
 
 
-def read_time_seq(path):
+# This function reads the old format for densities
+# Should be removed
+def read_time_seq_old_version(path):
 
 	time_file = open(path, 'r')
 
@@ -509,6 +533,21 @@ def read_time_seq(path):
 		if line != '\n':
 			if line.split()[0] == 'TIME':
 				time_seq = [float(x) for x in line.split()[1:]]
+				break
+
+	return time_seq
+
+def read_time_seq(path):
+
+	time_file = open(path, 'r')
+
+	lines = time_file.readlines()
+
+	# Find and store time
+	for line in lines:
+		if line != '\n':
+			if line.split()[2] == 'TIME':
+				time_seq = [float(x) for x in line.split()[4:]]
 				break
 
 	return time_seq
@@ -762,8 +801,8 @@ def read_dens(nuclide, path):
 
 	for line in lines:
 		if line != '\n':
-			if line.split()[0] == zamid:
-				dens_seq = [float(x) for x in line.split()[1:]]
+			if line.split()[1] == zamid:
+				dens_seq = [float(x) for x in line.split()[2:]]
 				break
 
 	return dens_seq
@@ -799,6 +838,21 @@ def get_nucl_atomic_mass(nucl):
 		M = int(get_zamid_a(zamid))
 
 	return M
+
+# calculate total density at certain step
+def get_total_density(path, cell, step):
+
+	nucl_name_list = read_dens_nucl(path, cell)
+	dens_path = path+'/{}_dens'.format(cell)
+	dens_file = open(dens_path )
+
+	total_density = 0
+
+	for nucl in nucl_name_list:
+		dens = read_dens(nucl, dens_path)[step]
+		total_density += dens
+
+	return total_density	
 
 # calculate total mass density at certain step
 def get_total_mass_density(path, cell, step):
