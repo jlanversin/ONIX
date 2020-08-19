@@ -171,12 +171,12 @@ class System(object):
 			bucell = bucell_dict[bucell_id]
 			bucell.set_default_fy_lib_no_add()
 
-	def set_fy_for_all(self, fy_lib_path):
+	def set_fy_for_all(self, fy_lib_path, complete):
 
 		bucell_dict = self.bucell_dict
 		for bucell_id in bucell_dict:
 			bucell = bucell_dict[bucell_id]
-			bucell.set_fy_lib(fy_lib_path)
+			bucell.set_fy_lib(fy_lib_path, complete)
 
 	@property
 	def sequence(self):

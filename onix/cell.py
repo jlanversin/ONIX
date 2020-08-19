@@ -850,17 +850,67 @@ class Cell(object):
 		return self._xs_lib
 
 
-	def set_fy_lib(self, fy_lib_path):
+	def set_fy_lib(self, fy_lib_path, complete):
 
-		fy_dic = data.read_lib_functions.read_fy_lib(fy_lib_path)
+		if complete == False:
 
-		nucl_list = list(fy_dic.keys())
+			fy_dic = data.read_lib_functions.read_fy_lib(fy_lib_path)
 
-		passlist = self.passlist
-		if passlist == None:
-			self.set_passlist(nucl_list)
-		else:
-			passlist._add_nucl_list(nucl_list)
+			nucl_list = list(fy_dic.keys())
+
+			passlist = self.passlist
+			if passlist == None:
+				self.set_passlist(nucl_list)
+			else:
+				passlist._add_nucl_list(nucl_list)
+
+		elif complete == True:
+
+			fy_dic = {}
+
+			user_fy_dic = data.read_lib_functions.read_fy_lib(fy_lib_path)
+
+			default_fy_lib_path = data.default_fy_lib_path
+			default_fy_dic = data.read_lib_functions.read_fy_lib(default_fy_lib_path)
+
+			# Create nucl_list from merging of two fy_dic key list
+			user_fy_nucl_list = list(user_fy_dic.keys())
+			default_fy_nucl_list = list(default_fy_dic.keys())
+			user_fy_nucl_set = set(user_fy_nucl_list)
+			default_fy_nucl_set = set(default_fy_nucl_list)
+			in_default_not_in_user = default_fy_nucl_set - user_fy_nucl_set
+			nucl_list = user_fy_nucl_list + list(in_default_not_in_user)
+
+			# Creation of a merged dictionnary
+			for fp in nucl_list:
+				# if fp is not in user_fy but in default, add it to fy_dic with all the parents' data
+				if fp not in user_fy_nucl_list:
+					fy_dic[fp] = default_fy_dic[fp]
+
+				# if fp is not in default but in user, add it to fy_dic with all the parents' data
+				elif fp not in default_fy_nucl_list:
+					fy_dic[fp] = user_fy_dic[fp]
+
+				# if fp is in both libraries
+				elif fp in user_fy_nucl_list and fp in default_fy_nucl_list:
+
+					# Start by copying the entry from the user library
+					fy_dic[fp] = user_fy_dic[fp]
+
+					# Then see what additional parents' data the default has for this specific fp and add it
+					user_fy_parents = list(user_fy_dic[fp].keys())
+					default_fy_parents = list(default_fy_dic[fp].keys())
+					for parent in default_fy_parents:
+						if parent not in user_fy_parents:
+							fy_dic[fp][parent] = default_fy_dic[fp][parent] 
+
+
+			passlist = self.passlist
+			if passlist == None:
+				self.set_passlist(nucl_list)
+			else:
+				passlist._add_nucl_list(nucl_list)       
+
 
 		self._fy_lib = fy_dic
 
@@ -870,6 +920,7 @@ class Cell(object):
 
 		# This command will find the absolute path of cell.py
 		# Since cell.py is located in onix, the default library is just in __file__path + ./data/default_libs/decay_lib
+		# Probably obsolete
 		__file__path = os.path.abspath(os.path.dirname(__file__))
 
 		#default_fy_lib_path = __file__path+ '/data/default_libs/fy_lib'

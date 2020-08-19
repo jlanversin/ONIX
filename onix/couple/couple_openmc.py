@@ -87,7 +87,10 @@ class Couple_openmc(object):
 		# Dict of selected cells to deplete with their user defined nucl list
 		self.selected_bucells_nucl_list_dict = None
 
-		self._fy_lib_set = 'no'
+		self._default_fy_lib_set = 'no'
+		self._user_fy_lib_set = 'no'
+		self._complete_user_fy_lib = 'no'
+		self._complete_fy_lib = 'no'
 		self._decay_lib_set = 'no'
 		self._xs_lib_set = 'no'
 
@@ -1114,18 +1117,20 @@ class Couple_openmc(object):
 		#system.set_default_decay_for_all_no_add()
 		system.set_default_xs_for_all()
 
-	def set_fy_lib(self, fy_lib_path):
+	def set_user_fy_lib(self, user_fy_lib_path, complete=False):
 
 		system = self.system
-		self._fy_lib_set = 'yes'
-		self._fy_lib_path = fy_lib_path
-		system.set_fy_for_all(fy_lib_path)
+		self._user_fy_lib_set = 'yes'
+		if complete == True:
+			self._complete_user_fy_lib = 'yes'
+		self._user_fy_lib_path = user_fy_lib_path
+		system.set_fy_for_all(user_fy_lib_path, complete)
 
 	def set_default_fy_lib(self):
 
 		system = self.system
-		self._fy_lib_set = 'yes'
-		self._fy_lib_path = 'default'
+		self._default_fy_lib_set = 'yes'
+		self._default_fy_lib_path = 'default'
 		#system.set_default_fy_for_all_no_add()
 		system.set_default_fy_for_all()
 
@@ -1137,6 +1142,7 @@ class Couple_openmc(object):
 		self._fy_lib_set = 'yes'
 		bucell = system.get_bucell(bucell)
 		bucell.set_fy(object)
+
 
 	# This method reads, samples the isomeric branching data and xs data
 	# using the mg energy bin mid points data and fold them together
@@ -1364,7 +1370,7 @@ class Couple_openmc(object):
 
 		start_time = time.time()
 
-		# If no decay libs and fy libs have been set, set default libs
+		# If no decay libs have been set, set default libs
 		if self._decay_lib_set == 'no':
 			self.set_default_decay_lib()
 			print ('\n\n\n----  Default decay constants library set for system  ----\n---- {} ----'.format(data.default_decay_b_lib_path))
@@ -1372,12 +1378,30 @@ class Couple_openmc(object):
 			print ('\n\n\n----  User defined path for decay library  ----\n\n')
 			print ('----  {}  ----\n\n\n'.format(self._decay_lib_path))
 		
-		if self._fy_lib_set == 'no':
+
+		# If user has not set a fission yield library, default library (ENDF/B-VII.O) is set
+		if self._user_fy_lib_set == 'no':
 			self.set_default_fy_lib()
 			print ('\n\n\n----  Default fission yields library set for system  ----\n---- {} ----'.format(data.default_fy_lib_path))
-		else:
+		
+		# If user has set a fission library, two options:
+		elif self._user_fy_lib_set == 'yes':
 			print ('\n\n\n----  User defined path for fission yields library ----\n\n')
-			print ('----  {}  ----\n\n\n'.format(self._fy_lib_path))
+			print ('----  {}  ----\n\n\n'.format(self._user_fy_lib_path))
+
+			# 1) Default library used to complete user library
+			if self._complete_user_fy_lib == 'yes':
+				print ('\n\n\n----  User defined fission yields library completed with default fission yields library ----\n\n')
+				print ('----  {}  ----\n\n\n'.format(data.default_fy_lib_path))
+
+			# 2) Default library is not used, ONIX only uses user defined fission yields library
+
+		# self.set_default_fy_lib()
+		# print ('\n\n\n----  Default fission yields library set for system  ----\n---- {} ----'.format(data.default_fy_lib_path))
+		# # If user has provided own fission yield library, data from this library extand and overwrite default library
+		# if self._user_fy_lib_set == 'yes':
+		# 	print ('\n\n\n----  User defined path for fission yields library ----\n\n')
+		# 	print ('----  {}  ----\n\n\n'.format(self._fy_lib_path))
 		
 		#print (self.xs_mode, self._xs_lib_set)
 		if self.xs_mode == 'constant lib' and self._xs_lib_set == 'no':
