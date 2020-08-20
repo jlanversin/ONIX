@@ -864,52 +864,92 @@ class Cell(object):
 			else:
 				passlist._add_nucl_list(nucl_list)
 
+		# elif complete == True:
+
+		# 	fy_dic = {}
+
+		# 	user_fy_dic = data.read_lib_functions.read_fy_lib(fy_lib_path)
+
+		# 	default_fy_lib_path = data.default_fy_lib_path
+		# 	default_fy_dic = data.read_lib_functions.read_fy_lib(default_fy_lib_path)
+
+		# 	# Create nucl_list from merging of two fy_dic key list
+		# 	user_fy_nucl_list = list(user_fy_dic.keys())
+		# 	default_fy_nucl_list = list(default_fy_dic.keys())
+		# 	user_fy_nucl_set = set(user_fy_nucl_list)
+		# 	default_fy_nucl_set = set(default_fy_nucl_list)
+		# 	in_default_not_in_user = default_fy_nucl_set - user_fy_nucl_set
+		# 	nucl_list = user_fy_nucl_list + list(in_default_not_in_user)
+
+		# 	# Creation of a merged dictionnary
+		# 	for fp in nucl_list:
+		# 		# if fp is not in user_fy but in default, add it to fy_dic with all the parents' data
+		# 		if fp not in user_fy_nucl_list:
+		# 			fy_dic[fp] = default_fy_dic[fp]
+
+		# 		# if fp is not in default but in user, add it to fy_dic with all the parents' data
+		# 		elif fp not in default_fy_nucl_list:
+		# 			fy_dic[fp] = user_fy_dic[fp]
+
+		# 		# if fp is in both libraries
+		# 		elif fp in user_fy_nucl_list and fp in default_fy_nucl_list:
+
+		# 			# Start by copying the entry from the user library
+		# 			fy_dic[fp] = user_fy_dic[fp]
+
+		# 			# Then see what additional parents' data the default has for this specific fp and add it
+		# 			user_fy_parents = list(user_fy_dic[fp].keys())
+		# 			default_fy_parents = list(default_fy_dic[fp].keys())
+		# 			for parent in default_fy_parents:
+		# 				if parent not in user_fy_parents:
+		# 					fy_dic[fp][parent] = default_fy_dic[fp][parent] 
+
 		elif complete == True:
-
-			fy_dic = {}
-
-			user_fy_dic = data.read_lib_functions.read_fy_lib(fy_lib_path)
-
-			default_fy_lib_path = data.default_fy_lib_path
-			default_fy_dic = data.read_lib_functions.read_fy_lib(default_fy_lib_path)
-
-			# Create nucl_list from merging of two fy_dic key list
-			user_fy_nucl_list = list(user_fy_dic.keys())
-			default_fy_nucl_list = list(default_fy_dic.keys())
-			user_fy_nucl_set = set(user_fy_nucl_list)
-			default_fy_nucl_set = set(default_fy_nucl_list)
-			in_default_not_in_user = default_fy_nucl_set - user_fy_nucl_set
-			nucl_list = user_fy_nucl_list + list(in_default_not_in_user)
-
-			# Creation of a merged dictionnary
-			for fp in nucl_list:
-				# if fp is not in user_fy but in default, add it to fy_dic with all the parents' data
-				if fp not in user_fy_nucl_list:
-					fy_dic[fp] = default_fy_dic[fp]
-
-				# if fp is not in default but in user, add it to fy_dic with all the parents' data
-				elif fp not in default_fy_nucl_list:
-					fy_dic[fp] = user_fy_dic[fp]
-
-				# if fp is in both libraries
-				elif fp in user_fy_nucl_list and fp in default_fy_nucl_list:
-
-					# Start by copying the entry from the user library
-					fy_dic[fp] = user_fy_dic[fp]
-
-					# Then see what additional parents' data the default has for this specific fp and add it
-					user_fy_parents = list(user_fy_dic[fp].keys())
-					default_fy_parents = list(default_fy_dic[fp].keys())
-					for parent in default_fy_parents:
-						if parent not in user_fy_parents:
-							fy_dic[fp][parent] = default_fy_dic[fp][parent] 
-
-
-			passlist = self.passlist
-			if passlist == None:
-				self.set_passlist(nucl_list)
-			else:
-				passlist._add_nucl_list(nucl_list)       
+					fy_dic = {}
+					user_fy_dic = data.read_lib_functions.read_fy_lib(fy_lib_path)
+					default_fy_lib_path = data.default_fy_lib_path
+					default_fy_dic = data.read_lib_functions.read_fy_lib(default_fy_lib_path)
+					# Create list of actinides in user fy
+					user_fy_nucl_list = list(user_fy_dic.keys())
+					user_act = []
+					for fp in user_fy_nucl_list:
+						for act in user_fy_dic[fp]:
+							if act not in user_act:
+								user_act.append(act)
+					# Create list of additional actinides from default fy
+					default_fy_nucl_list = list(default_fy_dic.keys())
+					default_add_act = []
+					for fp in default_fy_nucl_list:
+						for act in default_fy_dic[fp]:
+							if (act not in user_act) and (act not in default_add_act):
+								default_add_act.append(act)   
+					# Create nucl_list from merging of two fy_dic key list
+					full_fy_nucl_list = user_fy_nucl_list + default_fy_nucl_list
+					# remove duplicates
+					nucl_list = list(dict.fromkeys(full_fy_nucl_list))
+					# Creation of a merged dictionary
+					for fp in nucl_list:
+						# empty dictionary
+						fy_dic[fp] = {}
+						# first add fy from user provided actinides
+						for act in user_act:
+							# need to check if fp exist in user lib, otherwise yield zero (second condition is a safety check)
+							if (fp in user_fy_dic) and (act in user_fy_dic[fp]):
+								fy_dic[fp][act] = user_fy_dic[fp][act]
+							else: 
+								fy_dic[fp][act] = 0
+						# now add fy from additional actinides from default
+						for act in default_add_act:   
+							# need to check if fp exist in default lib, otherwise yield zero (second condition is a safety check)
+							if (fp in default_fy_dic) and (act in default_fy_dic[fp]):
+								fy_dic[fp][act] = default_fy_dic[fp][act]
+							else: 
+								fy_dic[fp][act] = 0
+					passlist = self.passlist
+					if passlist == None:
+						self.set_passlist(nucl_list)
+					else:
+						passlist._add_nucl_list(nucl_list)  
 
 
 		self._fy_lib = fy_dic
