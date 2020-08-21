@@ -937,14 +937,16 @@ class Cell(object):
 							if (fp in user_fy_dic) and (act in user_fy_dic[fp]):
 								fy_dic[fp][act] = user_fy_dic[fp][act]
 							else: 
-								fy_dic[fp][act] = 0
+								# First zero for FY value, second zero for uncertainty
+								fy_dic[fp][act] = [0,0]
 						# now add fy from additional actinides from default
 						for act in default_add_act:   
 							# need to check if fp exist in default lib, otherwise yield zero (second condition is a safety check)
 							if (fp in default_fy_dic) and (act in default_fy_dic[fp]):
 								fy_dic[fp][act] = default_fy_dic[fp][act]
 							else: 
-								fy_dic[fp][act] = 0
+								# First zero for FY value, second zero for uncertainty
+								fy_dic[fp][act] = [0,0]
 					passlist = self.passlist
 					if passlist == None:
 						self.set_passlist(nucl_list)
@@ -953,7 +955,7 @@ class Cell(object):
 
 
 		self._fy_lib = fy_dic
-
+		print ('PIKKKAAAA',fy_dic)
 		self.passlist._set_fy(fy_dic)
 
 	def set_default_fy_lib(self):
