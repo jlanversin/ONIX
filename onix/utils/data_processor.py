@@ -545,6 +545,7 @@ def read_time_seq(path):
 
 	# Find and store time
 	for line in lines:
+		print (line.split())
 		if line != '\n':
 			if line.split()[2] == 'TIME':
 				time_seq = [float(x) for x in line.split()[4:]]
@@ -803,6 +804,25 @@ def read_dens(nuclide, path):
 		if line != '\n':
 			if line.split()[1] == zamid:
 				dens_seq = [float(x) for x in line.split()[2:]]
+				break
+
+	return dens_seq
+
+# For simulations using old output format
+def read_dens_old_version(nuclide, path):
+
+	zamid = name_to_zamid(nuclide)
+
+	dens_seq = []
+
+	dens_file = open(path, 'r')
+
+	lines = dens_file.readlines()
+
+	for line in lines:
+		if line != '\n':
+			if line.split()[0] == zamid:
+				dens_seq = [float(x) for x in line.split()[1:]]
 				break
 
 	return dens_seq
