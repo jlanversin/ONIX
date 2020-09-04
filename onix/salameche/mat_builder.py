@@ -42,6 +42,24 @@ def _get_xs_mat(passlist):
             if parent_pass.state == 1:
                 j = j[1:]
 
+            if zaidi == '10030':
+                print ('tritium')
+                print ('xs', nucli_xs)
+                print ('parent dict', xs_parent)
+                print ('xs name before', j)
+                print ('parent', xs_parent[j])
+                print ('parent xs', parent_xs)
+
+            # Certain nuclides are produced by several parents through the same reaction
+            # Ex: tritium with (n,t) from Li6 and B10
+            # In the xs_parent dict, these reactions are differentiated with prefixes ('<parent_name>(n,t)')
+            # But in the xs dict of each nuclide, this is not the case. Each reaction is only represented once
+            # To find the corresponding reactions in parent's xs dic, we need to strip the reaction name
+            # found in the xs_parent dic from its prefix
+            j = '(' + j.split('(')[1]
+            if zaidi == '10030':
+                print ('xs name after', j)
+
             # If the specific xs that produce nucli does not exist for the parent, skip
             if j not in parent_xs:
                 continue

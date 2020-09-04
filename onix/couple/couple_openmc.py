@@ -861,6 +861,7 @@ class Couple_openmc(object):
 		return flux_spectrum
 
 	# Every nuclide presents in cell material will have its tally taken
+	# (n,t) is tallied for all nuclides for the moment. It is surely more efficient to only tally it for Lithium
 	def get_all_nucl_rxn_tally(self, bucell):
 
 		nucl_list = self._get_nucl_to_be_tallied(bucell)
@@ -870,12 +871,27 @@ class Couple_openmc(object):
 		rxn = openmc.Tally(name='{} rxn rate'.format(bucell.name))
 		rxn.filters = [openmc.CellFilter(bucell.id)]
 		rxn.filters.append(self.energy_bin)
-		rxn.scores = ['fission', '(n,gamma)', '(n,2n)', '(n,3n)', '(n,p)', '(n,a)']
+		rxn.scores = ['fission', '(n,gamma)', '(n,2n)', '(n,3n)', '(n,p)', '(n,a)', '(n,t)']
 		#rxn.scores = ['fission', '(n,gamma)']
 		#rxn.scores = ['fission', '(n,gamma)', '(n,2n)']
 		rxn.nuclides = nucl_list
 		
 		return rxn
+
+	# Tally dedicated to production reaction rate for tritium
+	# Only Lithium6 and Berylium10 are non-negligible tritium producer nuclides through (n,t)
+	# def get_H3_rxn_tally(self, bucell):
+
+	# 	print ('Creating H3 rxn rate tally')
+	# 	H3_rxn = openmc.Tally(name='{} H3 rxn rate'.format(bucell.name))
+	# 	H3_rxn.filters = [openmc.CellFilter(bucell.id)]
+	# 	H3_rxn.filters.append(self.energy_bin)
+	# 	H3_rxn.scores = ['(n,t)']
+	# 	#rxn.scores = ['fission', '(n,gamma)']
+	# 	#rxn.scores = ['fission', '(n,gamma)', '(n,2n)']
+	# 	H3_rxn.nuclides = ['Li6', 'Be10']
+		
+	# 	return H3_rxn
 
 	def export_material_to_xml(self):
 
@@ -940,9 +956,11 @@ class Couple_openmc(object):
 			flux = self.get_flux_tally(bucell)
 			flux_spectrum = self.get_flux_spectrum_tally(bucell)
 			rxn = self.get_all_nucl_rxn_tally(bucell)
+			# H3_rxn = self.get_H3_rxn_tally(bucell)
 			tallies.append(flux)
 			tallies.append(flux_spectrum)
 			tallies.append(rxn)
+			# tallies.append(H3_rxn)
 
 		# If the input tallies.xml file is in cwd, remove it
 		try:
@@ -1247,6 +1265,7 @@ class Couple_openmc(object):
 			flux_tally = sp.get_tally(name = '{} flux'.format(bucell.name))
 			flux_spectrum_tally = sp.get_tally(name = '{} flux spectrum'.format(bucell.name))
 			rxn_rate_tally = sp.get_tally(name = '{} rxn rate'.format(bucell.name))
+			# H3_rxn_rate_tally = sp.get_tally(name = '{} H3 rxn rate'.format(bucell.name))
 			bucell._set_MC_tallies(mc_nuclides_densities, flux_tally, flux_spectrum_tally, rxn_rate_tally, sampled_isomeric_branching_data, sampled_ng_cross_section_data, xs_mode, s)
 
 		# YOU NEED TO CREATE LIST TO STORE EACH NEW XS

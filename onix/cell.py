@@ -811,7 +811,7 @@ class Cell(object):
 
 		self.passlist._set_xs(xs_dic)
 
-	# Set the xs dictionary from a xs object defined by the user
+	# Set the xs dictionary from a xs object
 	def set_xs(self, xs_object):
 
 		xs_dic = xs_object.xs
@@ -1943,11 +1943,10 @@ class Cell(object):
 			# Its density set for onix is 0
 			# But the macro xs need to be divided by 1E-24 and not 0
 
-			# For
 			if nucl_passport.current_dens == 0.0:
 
 				# mc_nuclide_densities gives a tuples where the first element is the nuclide name
-				# and the sedonc element is the density
+				# and the second element is the density
 				#nucl_dens = mc_nuclide_densities[nucl][1]
 
 				nucl_dens = self.zero_dens_1_atm

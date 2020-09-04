@@ -416,8 +416,24 @@ class Passport(object):
         xs_prod_from_dic = self._get_xs_prod_from_dic()
         
         child_dic = {}
-        
+      
         for i in xs_prod_from_dic:
+
+            # If nuclide is Li6 or Be10, add children from (n,t)
+            # (n,t) rxn rate only tallied for Li6 and Be10
+            if i == '(n,t)':
+                if zamid in [30060, 50100]:
+                    # In the case of (n,t) (and (n,alpha) as well), the reaction creates two new nuclides
+                    # The reaction is thus branched out in two new reactions:
+                    # 1) (n,x) which creates nuclides according to xs_prod_from_dic
+                    # 2) (n,x)x which creates x, which is the particle emitted (tritium or alpha)
+                    child_dic['(n,t)t'] = '10030'
+            
+                elif zamid not in [30060, 50100]:
+                    continue
+
+                # Note that after that, Li6 and Be10 are still being added the other child from (n,t), as below
+
             child_zamid = zamid + 10000*xs_prod_from_dic[i][0]+ 10*xs_prod_from_dic[i][1] + xs_prod_from_dic[i][2]
             child_dic[i] = str(child_zamid)
 
@@ -456,6 +472,27 @@ class Passport(object):
         xs_prod_to_dic = self._get_xs_prod_to_dic()
         
         for i in xs_prod_to_dic:
+
+            if i == '(n,t)':
+
+                # If nuclide is not a possible children of (n,t) reaction of Li6 or Be10
+                # Skip
+                if zamid not in [10030,20040, 30070]:
+                    continue
+
+                # In the case of tritium itself, the nuclide has two parents from the same type
+                # of reaction (Li6 and Be10 from (n,t))
+                # Therefore, we branched out this channel into two new channels
+                # Note that ONIX should not try to find a parent for tritium through xs_prod_to_dic in this case
+                # It would track back to Helium5 (He5 +n = H3 + H3)), which itself has no (n,t) reaction allocated
+                if zamid == 10030:
+                    parent_dic['Li6(n,t)'] = '30060'
+                    parent_dic['Be10(n,t)'] = '50100'
+                    continue
+
+                # This leaves us with only He4 and Li7 who are the products of Li6 (n,t) and Be10 (n,t) respectively
+                # For these two nuclides, ONIX finds the parents through xs_prod_to_dict as below
+
             parent_zamid = zamid - 10000*xs_prod_to_dic[i][0]- 10*xs_prod_to_dic[i][1] - xs_prod_to_dic[i][2]
             parent_dic[i] = str(parent_zamid)
 

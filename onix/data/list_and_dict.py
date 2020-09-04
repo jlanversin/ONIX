@@ -224,9 +224,9 @@ NATURAL_ABUNDANCE = {
 
 nuc_zz_dic = {v: k for k, v in list(nuc_name_dic.items())}
 
-MT_dic = {102: '(n,gamma)', 18: 'fission', 16: '(n,2n)', 17:'(n,3n)', 22:'(n,a)'}
+MT_dic = {102: '(n,gamma)', 18: 'fission', 16: '(n,2n)', 17:'(n,3n)', 22:'(n,a)', 105:'(n,t)'}
 
-xs_key = ['(n,gamma)', '(n,gamma)X', '(n,2n)', '(n,2n)X', '(n,a)', '(n,p)', 'fisson', '(n,3n)', 'removal']
+xs_key = ['(n,gamma)', '(n,gamma)X', '(n,2n)', '(n,2n)X', '(n,a)', '(n,p)', 'fisson', '(n,3n)', '(n,t)', 'removal']
 
 
 fiss_nuc = ['902320', '922330', '922350', '922380', '942390', '942410', '962450', '982490']
@@ -241,10 +241,11 @@ fiss_nuc = ['902320', '922330', '922350', '922380', '942390', '942410', '962450'
 # There are four type of dic for reaction production. First, depending on whether the father nuclide is excited or not. Then it depends 
 # if the son is excited or not. Overall there should be four dic: stable to stable, stable to excited, excited to stable, and excited to excited
 
-xs_prod_fromS_toS = {'(n,gamma)':[0,1,0],'(n,2n)':[0,-1,0],'(n,3n)':[0,-2,0],'(n,p)':[-1,0,0],'(n,a)':[-2,-3,0]}
+xs_prod_fromS_toS = {'(n,gamma)':[0,1,0],'(n,2n)':[0,-1,0],'(n,3n)':[0,-2,0],'(n,p)':[-1,0,0],'(n,a)':[-2,-3,0], '(n,t)': [-1,-2,0]}
 xs_prod_fromS_toX = {'(n,2n)X':[0,-1,1],'(n,gamma)X':[0,1,1]}
-xs_prod_fromX_toS = {'X(n,gamma)':[0,1,-1],'X(n,2n)':[0,-1,-1],'X(n,3n)':[0,-2,-1],'X(n,p)':[-1,0,-1],'X(n,a)':[-2,-3,-1]}
+xs_prod_fromX_toS = {'X(n,gamma)':[0,1,-1],'X(n,2n)':[0,-1,-1],'X(n,3n)':[0,-2,-1],'X(n,p)':[-1,0,-1],'X(n,a)':[-2,-3,-1], 'X(n,t)':[-1,-2,-1]}
 xs_prod_fromX_toX = {'X(n,2n)X':[0,-1,0],'X(n,gamma)X':[0,1,0]}
+
 
 decay_prod_fromS_toS = {'betaneg':[1,0,0], 'betapos':[-1,0,0], 'alpha':[-2,-4,0], 'neutron':[0,-1,0], 'proton':[-1,-1,0]}
 decay_prod_fromS_toX = {'betanegX':[1,0,1], 'betaposX':[-1,0,1], 'alphaX':[-2,-4,1],'neutronX':[0,-1,1],'protonX':[-1,-1,1]}
