@@ -8,7 +8,7 @@ import openmc
 import itertools
 
 
- # This class stores the path of the simulationf or the batch
+ # This class stores the path of the simulation or the batch
  # and also extract corresponding cross sections
 class Batch(object):
 
@@ -199,6 +199,7 @@ def review_selected_ratio_candidates(NAX_cell, operation_history, path, selected
 	#quit()
 
 	plot_selected_ratio_history(selected_list, selected_ratio_dict, history_fluence, batch_break_indexes = batch_break_indexes2)
+	plot_selected_ratio_history_sup1(selected_list, selected_ratio_dict, history_fluence, batch_break_indexes = batch_break_indexes2)
 
 	plot_selected_fluence_relative_error_history(selected_list, selected_ratio_dict, selected_fluence_derivative_dict, history_mid_fluence, combine_indexes, ratio_uncertainty, cut_off = cut_off, batch_break_indexes = batch_break_indexes2)
 		#plot_fluence_relative_error_with_ratio_history(ratio_evolution, fluence_derivative_dict, history_mid_fluence, combine_indexes, chain, history_matrix, history_fluence)
@@ -307,6 +308,7 @@ def list_NAX_ng_chain_from_output(path, cell, step):
 					# I could compare cross section instead of reaction rate. But when undertaking theoritical evaluation of ratio usefulness, I dont think looking at xs relative magnitude is relevant
 					# Beause in the practical case, the magnitude of the rate might not be the same as xs
 					# I thus propose not to discard nuclide on the basis on the relative cross section of their precursor
+
 					# It is at least necessary to verify that ng precursor has non-zero cross section for ng
 			
 					# prod_rank = utils.read_nuclide_reac_rank(name, step+1, path_to_output+'/cell_2_reacs_rank')[1]
@@ -1309,6 +1311,62 @@ def plot_selected_ratio_history(selected_list, selected_ratio_dict, history_flue
 
 	plt.show()
 
+
+def plot_selected_ratio_history_sup1(selected_list, selected_ratio_dict, history_fluence, batch_break_indexes=None):
+
+	ratio_name_list = selected_list
+	#plt.style.use('dark_background')
+
+	f, ax = plt.subplots()
+	for i in range(len(ratio_name_list)):
+		ratio_name = ratio_name_list[i]
+		ratio = selected_ratio_dict[ratio_name]
+		ratio_sup1 = convert_ratio_to_sup1(ratio)
+		ax.plot(history_fluence, ratio_sup1, label = ratio_name)
+
+	#Fluence at each batch break point
+	batch_break_fluence = [history_fluence[i] for i in batch_break_indexes]
+	#plt.axvline(x=0, linestyle = '--', color ='grey')
+	for fluence in batch_break_fluence:
+		print (fluence)
+		plt.axvline(x=fluence, linestyle = '--', color ='grey')
+
+	#quit()
+
+	# plt.axvspan(batch_break_fluence[0], batch_break_fluence[2], alpha=0.2, color='grey')
+	# plt.axvspan(batch_break_fluence[9], batch_break_fluence[12], alpha=0.2, color='grey')
+
+
+	ax.set_ylabel('Ratio', fontsize=16)
+	ax.set_xlabel('Fluence [cm/cm$^{3}$]', fontsize=16)
+	ax.yaxis.get_offset_text().set_fontsize(16)
+	ax.xaxis.get_offset_text().set_fontsize(16)
+	plt.ticklabel_format(style='sci', axis='y',scilimits=(0,0))
+	ax.grid(color = 'dimgray')
+	plt.tick_params(labelsize=15)
+	ax.set_ylim(bottom = 0, top=100)
+	plt.legend(prop={'size': 12})
+
+	# Put these freaking Shutdown dates on the top
+	ax3 = ax.twiny()
+	ax3.set_xlim(ax.get_xlim())
+	ax3.set_xticks(batch_break_fluence)
+	ax3.tick_params(labelsize=11)
+	ax3.set_xticklabels(['Shutdown\nApril 1994', 'Shutdown\nApril 2005', 'Shutdown\nJuly 2007', 'Shutdown\nOctober 2015', 'Shutdown\nMarch 2018'])
+
+	#ax3.set_ylim(bottom = 0, top=3.1)
+
+	plt.show()
+
+def convert_ratio_to_sup1(ratio):
+
+	for i in range(len(ratio)):
+		ratio_value = ratio[i]
+		if ratio_value < 1:
+			ratio[i] = 1/ratio_value
+
+	return ratio
+
 def plot_ng_chain_densities_history(chain, history_matrix, history_fluence, different_axes):
 
 	nuclide_list = get_nuclide_list_from_chain(chain)
@@ -1494,6 +1552,7 @@ def plot_mass_pu_prod_against_fluence(mass_pu_prod_history_matrix, concatenate_h
 
 	# tot Pu mass at each batch break point
 	batch_break_pu = [round(tot_pu_seq[i], 1) for i in batch_break_indexes]
+	print (batch_break_pu)
 
 	#ax2 = ax1.twinx()
 
@@ -1527,7 +1586,7 @@ def plot_mass_pu_prod_against_fluence(mass_pu_prod_history_matrix, concatenate_h
 
 	ax1.set_ylabel('Mass [kg]', fontsize=16)
 	#ax2.set_ylabel('Mass [kg]', fontsize=16)
-	ax1.set_yticks([0, batch_break_pu[0], batch_break_pu[1]])
+	#ax1.set_yticks([0, batch_break_pu[0], batch_break_pu[1]])
 	ax1.set_xlabel('Fluence [neutrons cm$^{-2}$]', fontsize=16)
 	ax1.set_xlim(left = 0, right = max_fluence)
 	# ax1.set_ylim(bottom = 0,top = 31)

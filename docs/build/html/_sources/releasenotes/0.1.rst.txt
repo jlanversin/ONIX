@@ -1,0 +1,21 @@
+======================
+ONIX first release 0.1
+======================
+
+.. currentmodule:: onix
+
+-------
+Summary
+-------
+
+This is the very first release of ONIX. Much more is coming!
+
+------------
+Contributors
+------------
+
+This release contains new contributions from the following people:
+
+- `Julien de Troullioud de Lanversin <https://github.com/jlanversin>`_
+- `Moritz Kutt <https://github.com/ohnemax>`_
+- `Alexander Glaser <https://sgs.princeton.edu/team/alex-glaser>`_

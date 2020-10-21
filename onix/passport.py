@@ -1,18 +1,20 @@
-""" This module defines the Python class passport used in Open-Burnup"""
+""" This module defines the Python class passport used in ONIX"""
 
 import math as m
 from . import data as d
 from .utils import functions as fct
 
 class Passport(object):
-    """passport stores all the relevant data of indivudual nuclides and offers methods to extract information on them.
+    """Passport stores all the relevant data of indivudual nuclides and offers methods to extract information on them.
 
        The passport class is individually instantiated for each nuclide. It contains two types of information: constant and variable data.
        Constant data, such as the atomic mass, decay constant or the element's familyn (actinide or fission products) do not change over the course of a simulation.
        Variable data such as cross sections or fission yields do vary during a simulation and need to be updated regularly during a simulation.
        Some of the data are created at the time of the instantiation of the class for a nuclide such as the element's family or the nuclide's
        neutron reaction daughters. Other type of data, typically large in size such as cross sections and decay constants, are to be explicitly set or loaded.
+    
     """
+
     _mass = None
     _fission_E = None
 

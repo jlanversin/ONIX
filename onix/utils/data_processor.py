@@ -650,7 +650,8 @@ def get_fluence_subseq(path, cell):
 	subdens_file = path +'/{}_subdens'.format(cell)
 
 	flux_subseq = read_flux(subdens_file)
-	time_subseq = read_time_seq(subdens_file)
+	# Subdens output not yet under new format
+	time_subseq = read_time_seq_old_version(subdens_file)
 
 	#Reminder: flux starts with 0
 
@@ -713,7 +714,8 @@ def get_extra_subfluence_from_time(path, cell, time):
 
 	flux_subseq = read_flux_subseq(subdens_file)
 	flux= flux_subseq[substep]
-	previous_time_point = read_time_seq(subdens_file)[substep]
+	# Subdens output not yet under new format
+	previous_time_point = read_time_seq_old_version(subdens_file)[substep]
 
 	time_int = time-previous_time_point
 
@@ -735,7 +737,8 @@ def find_step_from_time(path, cell, time):
 def find_substep_from_time(path, cell, time):
 
 	subdens_file = path +'/{}_subdens'.format(cell)
-	time_seq = read_time_seq(subdens_file)
+	# Subdens output not yet under new format
+	time_seq = read_time_seq_old_version(subdens_file)
 
 	substep = 0
 	for t in time_seq[1:]:
@@ -902,14 +905,15 @@ def get_pu_subseq_mat(path, cell, EFPD):
 
 	name_list = d.Pu_isotopes_name
 	
-	time_subseq = read_time_seq(path)
+	# Subdens output not yet under new format
+	time_subseq = read_time_seq_old_version(path)
 
 	t_before = time_subseq[final_substep]
 	t_after = time_subseq[final_substep+1]
 
 	pu_subseq_mat = []
 	for name in name_list:
-		dens_subseq = read_dens(name, path)
+		dens_subseq = read_dens_old_version(name, path)
 		dens_subseq_until_time = dens_subseq[:final_substep+1]
 		dens_before = dens_subseq[final_substep]
 		dens_after = dens_subseq[final_substep+1]
