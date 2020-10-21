@@ -1,0 +1,5 @@
+name: openmc
+channels:
+  - conda-forge
+dependencies:
+  - openmc
