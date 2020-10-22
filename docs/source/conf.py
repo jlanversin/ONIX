@@ -60,7 +60,7 @@ html_theme = 'sphinx_rtd_theme'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+#tml_static_path = ['_static']
 
 
 html_theme_options = {
@@ -85,7 +85,7 @@ master_doc = 'index'
 #pygments_style = 'bw'
 #pygments_style = 'fruity'
 #pygments_style = 'manni'
-pygments_style = 'tango'
+#pygments_style = 'tango'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
