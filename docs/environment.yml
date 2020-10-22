@@ -5,5 +5,5 @@ dependencies:
   - openmc
   - numpy=1.9.2
   - matplotlib
-  -pip:
+  - pip:
     - networkx==2.5
