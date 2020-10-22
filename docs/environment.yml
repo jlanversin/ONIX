@@ -1,10 +1,96 @@
-name: openmc
+name: sphinx_test3
 channels:
   - conda-forge
+  - defaults
 dependencies:
-  - python 3.6.11
-  - openmc
-  - numpy=1.9.2
-  - matplotlib
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=1_gnu
+  - c-ares=1.16.1=h516909a_3
+  - ca-certificates=2020.6.20=hecda079_0
+  - certifi=2020.6.20=py36h9880bd3_2
+  - cycler=0.10.0=py_2
+  - freetype=2.10.4=he06d7ca_0
+  - future=0.18.2=py36h9f0ad1d_2
+  - h5py=2.10.0=nompi_py36ha233d17_105
+  - hdf5=1.10.6=nompi_h1022a3e_1110
+  - icu=67.1=he1b5a44_0
+  - jpeg=9d=h516909a_0
+  - kiwisolver=1.2.0=py36hdb11119_1
+  - krb5=1.17.1=hfafb76e_3
+  - lcms2=2.11=hbd6801e_0
+  - ld_impl_linux-64=2.35=h769bd43_9
+  - libblas=3.8.0=17_openblas
+  - libcblas=3.8.0=17_openblas
+  - libcurl=7.71.1=hcdd3856_8
+  - libedit=3.1.20191231=he28a2e2_2
+  - libev=4.33=h516909a_1
+  - libffi=3.2.1=he1b5a44_1007
+  - libgcc-ng=9.3.0=h5dbcf3e_17
+  - libgfortran-ng=9.3.0=he4bcb1c_17
+  - libgfortran5=9.3.0=he4bcb1c_17
+  - libgomp=9.3.0=h5dbcf3e_17
+  - libiconv=1.16=h516909a_0
+  - liblapack=3.8.0=17_openblas
+  - libnghttp2=1.41.0=h8cfc5f6_2
+  - libopenblas=0.3.10=pthreads_h4812303_5
+  - libpng=1.6.37=hed695b0_2
+  - libssh2=1.9.0=hab1572f_5
+  - libstdcxx-ng=9.3.0=h2ae2ef3_17
+  - libtiff=4.1.0=hc7e4089_6
+  - libwebp-base=1.1.0=h516909a_3
+  - libxml2=2.9.10=h68273f3_2
+  - libxslt=1.1.33=h572872d_1
+  - lxml=4.6.1=py36h17c4326_0
+  - lz4-c=1.9.2=he1b5a44_3
+  - matplotlib-base=3.3.2=py36h1eb8776_1
+  - ncurses=6.2=he1b5a44_2
+  - numpy=1.19.2=py36h68c22af_1
+  - olefile=0.46=pyh9f0ad1d_1
+  - openmc=0.12.0=py36hac062a8_1
+  - openssl=1.1.1h=h516909a_0
+  - pandas=1.1.3=py36h66e3816_2
+  - pillow=8.0.0=py36h8328e55_0
+  - pip=20.2.4=py_0
+  - pyparsing=2.4.7=pyh9f0ad1d_0
+  - python=3.6.11=h4d41432_2_cpython
+  - python-dateutil=2.8.1=py_0
+  - python_abi=3.6=1_cp36m
+  - pytz=2020.1=pyh9f0ad1d_0
+  - readline=8.0=he28a2e2_2
+  - scipy=1.5.2=py36h82117a9_2
+  - setuptools=49.6.0=py36h9880bd3_2
+  - six=1.15.0=pyh9f0ad1d_0
+  - sqlite=3.33.0=h4cf870e_1
+  - tk=8.6.10=hed695b0_1
+  - tornado=6.0.4=py36h8c4c3a4_2
+  - uncertainties=3.1.4=py_0
+  - wheel=0.35.1=pyh9f0ad1d_0
+  - xz=5.2.5=h516909a_1
+  - zlib=1.2.11=h516909a_1010
+  - zstd=1.4.5=h6597ccf_2
   - pip:
+    - alabaster==0.7.12
+    - babel==2.8.0
+    - chardet==3.0.4
+    - decorator==4.4.2
+    - docutils==0.16
+    - idna==2.10
+    - imagesize==1.2.0
+    - jinja2==2.11.2
+    - markupsafe==1.1.1
     - networkx==2.5
+    - onix==0.1.0
+    - packaging==20.4
+    - pygments==2.7.1
+    - requests==2.24.0
+    - snowballstemmer==2.0.0
+    - sphinx==3.2.1
+    - sphinxcontrib-applehelp==1.0.2
+    - sphinxcontrib-devhelp==1.0.2
+    - sphinxcontrib-htmlhelp==1.0.3
+    - sphinxcontrib-jsmath==1.0.1
+    - sphinxcontrib-qthelp==1.0.3
+    - sphinxcontrib-serializinghtml==1.1.4
+    - urllib3==1.25.11
+prefix: /home/julien/anaconda3/envs/sphinx_test3
+
