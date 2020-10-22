@@ -6,6 +6,8 @@
 
 # -- Path setup --------------------------------------------------------------
 
+import sphinx_rtd_theme
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -36,8 +38,8 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.napoleon',
               'sphinx.ext.autosummary',
               'sphinx.ext.intersphinx',
-              'sphinx.ext.viewcode'
-]
+              'sphinx.ext.viewcode',
+              'sphinx_rtd_theme']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -53,7 +55,7 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'sphinx_rtd_theme'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -69,3 +71,17 @@ autosummary_generate = True
 
 # The master toctree document.
 master_doc = 'index'
+
+# The name of the Pygments (syntax highlighting) style to use.
+#pygments_style = 'sphinx'
+#pygments_style = 'friendly'
+#pygments_style = 'bw'
+#pygments_style = 'fruity'
+#pygments_style = 'manni'
+pygments_style = 'tango'
+
+html_logo = '_images/logo.png'
+
+# The name for this set of Sphinx documents.  If None, it defaults to
+# "<project> v<release> documentation".
+html_title = "ONIX Documentation"
