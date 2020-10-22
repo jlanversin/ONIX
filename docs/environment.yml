@@ -3,3 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - openmc
+  - numpy=1.9.2
+  - matplotlib
+  -pip:
+    - networkx==2.5
