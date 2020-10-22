@@ -62,6 +62,16 @@ html_theme = 'sphinx_rtd_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+
+html_theme_options = {
+    'logo_only': True,
+    'style_nav_header_background': '#0d0d0d',
+    ''
+
+}
+
+html_logo = '_image/logo.png'
+
 ### Added from openmc conf.py
 
 #Autodocumentation Flags
@@ -80,8 +90,7 @@ master_doc = 'index'
 #pygments_style = 'manni'
 pygments_style = 'tango'
 
-html_logo = '_images/logo.png'
-
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
 html_title = "ONIX Documentation"
+
