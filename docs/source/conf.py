@@ -65,10 +65,7 @@ html_static_path = ['_static']
 
 html_theme_options = {
     'logo_only': True,
-    'style_nav_header_background': '#0d0d0d',
-    ''
-
-}
+    'style_nav_header_background': '#0d0d0d'}
 
 html_logo = '_image/logo.png'
 
