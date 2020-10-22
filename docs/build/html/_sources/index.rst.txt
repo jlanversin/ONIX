@@ -20,6 +20,7 @@ ONIX's documentation
 .. toctree::
     :maxdepth: 1
 
+    overview
     installation
     examples/index
     releasenotes/index
