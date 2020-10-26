@@ -24,7 +24,6 @@ ONIX's documentation
     installation
     examples/index
     releasenotes/index
-    methods/index
     pythonapi/index
     license
 

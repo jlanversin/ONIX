@@ -15,6 +15,7 @@ import sphinx_rtd_theme
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath('../sphinxext'))
 #sys.path.insert(0, os.path.abspath('/home/julien/ONIX/ONIX'))
 
 
@@ -39,7 +40,8 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.autosummary',
               'sphinx.ext.intersphinx',
               'sphinx.ext.viewcode',
-              'sphinx_rtd_theme']
+              'sphinx_rtd_theme',
+              'notebook_sphinxext']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
