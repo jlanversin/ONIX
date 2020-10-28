@@ -5,16 +5,39 @@ channels:
 dependencies:
   - _libgcc_mutex=0.1=conda_forge
   - _openmp_mutex=4.5=1_gnu
+  - alabaster=0.7.12=py_0
+  - async_generator=1.10=py_0
+  - attrs=20.2.0=pyh9f0ad1d_0
+  - babel=2.8.0=py_0
+  - bleach=3.2.1=pyh9f0ad1d_0
+  - brotlipy=0.7.0=py36he6145b8_1001
   - c-ares=1.16.1=h516909a_3
   - ca-certificates=2020.6.20=hecda079_0
   - certifi=2020.6.20=py36h9880bd3_2
+  - cffi=1.14.3=py36h829019c_1
+  - chardet=3.0.4=py36h9880bd3_1008
+  - cryptography=3.1.1=py36h5d711a5_1
   - cycler=0.10.0=py_2
+  - decorator=4.4.2=py_0
+  - defusedxml=0.6.0=py_0
+  - docutils=0.16=py36h9880bd3_2
+  - entrypoints=0.3=py36h9f0ad1d_1002
   - freetype=2.10.4=he06d7ca_0
   - future=0.18.2=py36h9f0ad1d_2
   - h5py=2.10.0=nompi_py36ha233d17_105
   - hdf5=1.10.6=nompi_h1022a3e_1110
   - icu=67.1=he1b5a44_0
+  - idna=2.10=pyh9f0ad1d_0
+  - imagesize=1.2.0=py_0
+  - importlib-metadata=2.0.0=py_1
+  - importlib_metadata=2.0.0=1
+  - ipython_genutils=0.2.0=py_1
+  - jinja2=2.11.2=pyh9f0ad1d_0
   - jpeg=9d=h516909a_0
+  - jsonschema=3.2.0=py_2
+  - jupyter_client=6.1.7=py_0
+  - jupyter_core=4.6.3=py36h9f0ad1d_2
+  - jupyterlab_pygments=0.1.2=pyh9f0ad1d_0
   - kiwisolver=1.2.0=py36hdb11119_1
   - krb5=1.17.1=hfafb76e_3
   - lcms2=2.11=hbd6801e_0
@@ -34,6 +57,7 @@ dependencies:
   - libnghttp2=1.41.0=h8cfc5f6_2
   - libopenblas=0.3.10=pthreads_h4812303_5
   - libpng=1.6.37=hed695b0_2
+  - libsodium=1.0.18=h516909a_1
   - libssh2=1.9.0=hab1572f_5
   - libstdcxx-ng=9.3.0=h2ae2ef3_17
   - libtiff=4.1.0=hc7e4089_6
@@ -42,77 +66,67 @@ dependencies:
   - libxslt=1.1.33=h572872d_1
   - lxml=4.6.1=py36h17c4326_0
   - lz4-c=1.9.2=he1b5a44_3
+  - markupsafe=1.1.1=py36he6145b8_2
   - matplotlib-base=3.3.2=py36h1eb8776_1
+  - mistune=0.8.4=py36h8c4c3a4_1002
+  - nbclient=0.5.1=py_0
+  - nbconvert=6.0.7=py36h9f0ad1d_1
+  - nbformat=5.0.8=py_0
+  - nbsphinx=0.7.1=pyh9f0ad1d_0
   - ncurses=6.2=he1b5a44_2
+  - nest-asyncio=1.4.1=py_0
   - numpy=1.19.2=py36h68c22af_1
   - olefile=0.46=pyh9f0ad1d_1
   - openmc=0.12.0=py36hac062a8_1
   - openssl=1.1.1h=h516909a_0
+  - packaging=20.4=pyh9f0ad1d_0
   - pandas=1.1.3=py36h66e3816_2
+  - pandoc=2.11.0.4=hd18ef5c_0
   - pillow=8.0.0=py36h8328e55_0
   - pip=20.2.4=py_0
+  - pycparser=2.20=pyh9f0ad1d_2
+  - pyopenssl=19.1.0=py_1
   - pyparsing=2.4.7=pyh9f0ad1d_0
+  - pyrsistent=0.17.3=py36h8c4c3a4_1
+  - pysocks=1.7.1=py36h9880bd3_2
   - python=3.6.11=h4d41432_2_cpython
   - python-dateutil=2.8.1=py_0
   - python_abi=3.6=1_cp36m
   - pytz=2020.1=pyh9f0ad1d_0
   - readline=8.0=he28a2e2_2
+  - requests=2.24.0=pyh9f0ad1d_0
   - scipy=1.5.2=py36h82117a9_2
   - setuptools=49.6.0=py36h9880bd3_2
   - six=1.15.0=pyh9f0ad1d_0
+  - snowballstemmer=2.0.0=py_0
+  - sphinx=3.2.1=py_0
+  - sphinxcontrib-applehelp=1.0.2=py_0
+  - sphinxcontrib-devhelp=1.0.2=py_0
+  - sphinxcontrib-htmlhelp=1.0.3=py_0
+  - sphinxcontrib-jsmath=1.0.1=py_0
+  - sphinxcontrib-qthelp=1.0.3=py_0
+  - sphinxcontrib-serializinghtml=1.1.4=py_0
   - sqlite=3.33.0=h4cf870e_1
+  - testpath=0.4.4=py_0
   - tk=8.6.10=hed695b0_1
   - tornado=6.0.4=py36h8c4c3a4_2
+  - traitlets=4.3.3=py36h9f0ad1d_1
   - uncertainties=3.1.4=py_0
+  - urllib3=1.25.11=py_0
   - wheel=0.35.1=pyh9f0ad1d_0
   - xz=5.2.5=h516909a_1
+  - zeromq=4.3.3=he1b5a44_2
+  - zipp=3.4.0=py_0
   - zlib=1.2.11=h516909a_1010
   - zstd=1.4.5=h6597ccf_2
   - pip:
-    - alabaster==0.7.12
-    - async-generator==1.10
-    - attrs==20.2.0
-    - babel==2.8.0
-    - bleach==3.2.1
-    - chardet==3.0.4
-    - decorator==4.4.2
-    - defusedxml==0.6.0
-    - docutils==0.16
-    - entrypoints==0.3
-    - idna==2.10
-    - imagesize==1.2.0
     - ipython-genutils==0.2.0
-    - jinja2==2.11.2
-    - jsonschema==3.2.0
-    - jupyter-client==6.1.7
-    - jupyter-core==4.6.3
-    - jupyterlab-pygments==0.1.2
-    - markupsafe==1.1.1
-    - mistune==0.8.4
-    - nbclient==0.5.1
-    - nbconvert==6.0.7
-    - nbformat==5.0.8
-    - nest-asyncio==1.4.1
     - networkx==2.5
     - onix==0.1.0
-    - packaging==20.4
     - pandocfilters==1.4.3
     - pygments==2.7.1
-    - pyrsistent==0.17.3
     - pyzmq==19.0.2
-    - requests==2.24.0
-    - snowballstemmer==2.0.0
-    - sphinx==3.2.1
     - sphinx-rtd-theme==0.5.0
-    - sphinxcontrib-applehelp==1.0.2
-    - sphinxcontrib-devhelp==1.0.2
-    - sphinxcontrib-htmlhelp==1.0.3
-    - sphinxcontrib-jsmath==1.0.1
-    - sphinxcontrib-qthelp==1.0.3
-    - sphinxcontrib-serializinghtml==1.1.4
-    - testpath==0.4.4
-    - traitlets==4.3.3
-    - urllib3==1.25.11
     - webencodings==0.5.1
 prefix: /home/julien/anaconda3/envs/sphinx_test3
 
