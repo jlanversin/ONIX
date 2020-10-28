@@ -8,10 +8,15 @@ class Passport(object):
     """Passport stores all the relevant data of indivudual nuclides and offers methods to extract information on them.
 
        The passport class is individually instantiated for each nuclide. It contains two types of information: constant and variable data.
-       Constant data, such as the atomic mass, decay constant or the element's familyn (actinide or fission products) do not change over the course of a simulation.
+       Constant data, such as the atomic mass, decay constant or the element's family (actinide or fission products) do not change over the course of a simulation.
        Variable data such as cross sections or fission yields do vary during a simulation and need to be updated regularly during a simulation.
-       Some of the data are created at the time of the instantiation of the class for a nuclide such as the element's family or the nuclide's
-       neutron reaction daughters. Other type of data, typically large in size such as cross sections and decay constants, are to be explicitly set or loaded.
+       Some of the data are created at the time of the instantiation of the class such as the element's family or the nuclide's
+       neutron reaction daughters. Other type of data, typically large in size such as cross sections and decay constants, are to be explicitly set or loaded by the code or by the user.
+
+       Parameters
+       ----------
+       nuc_id : str
+            Name or z-a-m id of the nuclide.
     
     """
 
@@ -70,22 +75,22 @@ class Passport(object):
 
     @property
     def mass(self):
-        """Return the atomic mass of the nuclide in gram"""
+        """Returns the atomic mass of the nuclide in grams"""
         if self._mass is None:
             pass  # define exception for undefined variable
         return self._mass
 
     @mass.setter
     def mass(self, new_mass):
-        """ Sets the atomic mass of the nuclide in gram"""
+        """Sets the atomic mass of the nuclide in grams"""
 
         self._mass = new_mass    
 
     # Passport instantiation will read and extract by itself mass for the corresponding nuclide
     def load_mass(self):
-        """Load the atomic mass of the nuclide in gram.
+        """Loads the atomic mass of the nuclide in gram.
 
-        This method directly fetches the atomic mass from the mass library and automatically set it
+        This method directly fetches the atomic mass from the mass library and automatically sets it
         to the passport object"""
 
         zamid = self._zamid
@@ -135,10 +140,9 @@ class Passport(object):
         self.decay_b =  decay_b
 
     def load_decay(self):
-        """Load the decay constant value of the nuclide.
+        """Loads the decay constant value of the nuclide.
 
-        This method directly fetches the decay constant values (absolute and fractional) from the decay library and automatically set
-        of the passport object"""
+        This method directly fetches the decay constant values (absolute and fractional) from the decay library and automatically sets it to the passport object"""
 
         zamid = self._zamid
 
@@ -147,15 +151,6 @@ class Passport(object):
 
         self.decay_a = decay_a
         self.decay_b = decay_b
-
-    # def get_halflife(self):
-
-    #     print (self._decay_a)
-    #     if self._decay_a == 'stable':
-    #         return 'stable'
-    #     else:
-    #         return m.log(2)/self._decay_a
-
 
     @property
     def current_xs(self):
@@ -212,7 +207,7 @@ class Passport(object):
 
     # Passport instantiation will read and extract by itself mass for the corresponding nuclide
     def load_xs(self):
-        """Load the cross sections data of the nuclide.
+        """Loads the cross sections data of the nuclide.
 
         This method directly fetches the cross sections data from the cross section library and automatically sets
         it to the passport object"""
@@ -230,14 +225,23 @@ class Passport(object):
         """Returns the fission yields dictionnary.
 
         Fission yield dictionnary are defined per fission product. Each key of the dictionnary is the zamid of one of the 
-        fission parent and the corresponding entry is the fission yield normalized to 1 (value between 0 and 1)"""
+        fission parents and the corresponding entry is the fission yield normalized to 1 (value between 0 and 1)"""
+
         if self._fy is None:
             pass  # define exception for undefined variable)
         return self._fy
 
     @fy.setter
     def fy(self, new_fy):
-        """Sets the fission yields dictionnary to a nuclide"""
+        """Sets the fission yields dictionnary to a nuclide
+
+        Parameters
+        ----------
+        new_fy : dict
+            Dictionnary of fission yields for a daughter nuclide
+
+        """
+
         if self.get_FAM == 'ACT':
             raise Not_a_Fission_Product("{} is not a FP and can't be given fission yields".format(self._zamid))
         self._fy = new_fy
@@ -250,7 +254,7 @@ class Passport(object):
         it to the passport object
 
         If the nuclide for which the fission yields data are being loaded is not a fission product,
-        the error *Not_a_Fission_Product* will be raised"""
+        the error onix.Not_a_Fission_Product will be raised"""
 
         if self.get_FAM() == 'ACT':
             raise Not_a_Fission_Product("{} is not a FP and can't be given fission yields".format(self._zamid))
@@ -265,29 +269,29 @@ class Passport(object):
 
     @property
     def current_dens(self):
-        """Returns the current density of the nuclide in atom per cm^3"""
+        """Returns the current density of the nuclide in atom per :math:`cm^{3}`"""
         if self._current_dens is None:
             pass  # define exception for undefined variable
         return self._current_dens
 
     @current_dens.setter
     def current_dens(self, new_dens):
-        """Sets the current density of the nuclide in atom per cm^3"""
+        """Sets the current density of the nuclide in atom per :math:`cm^{3}`"""
         self._current_dens = new_dens
 
     @property
     def dens_seq(self):
-        """Returns the macro sequence of densities of the nuclide in atom per cm^3"""
+        """Returns the macro sequence of densities of the nuclide in atom per :math:`cm^{3}`"""
         return self._dens_seq
 
     @dens_seq.setter
     def dens_seq(self, new_dens_seq):
-        """Sets the macro sequence of densities of the nuclide in atom per cm^3"""
+        """Sets the macro sequence of densities of the nuclide in atom per :math:`cm^{3}`"""
 
         self._dens_seq = new_dens_seq
 
     def _append_dens_seq(self, new_dens):
-        """Appends a new density value to the macro sequence of densities of the nuclide in atom per cm^3"""
+        """Appends a new density value to the macro sequence of densities of the nuclide in atom per :math:`cm^{3}`"""
         self._dens_seq.append(new_dens)
 
     def get_current_dens_subseq(self):
@@ -339,7 +343,7 @@ class Passport(object):
 
     @property
     def zamid(self):
-        """Returns the zamid of the nuclide"""
+        """Returns the z-a-m-id of the nuclide"""
         return self._zamid
 
     @property
@@ -561,7 +565,8 @@ class Passport(object):
         return self._fission_child
 
     @fission_child.setter
-    def fission_child(self, fission_child):
+    def _fission_child(self, fission_child):
+
 
         # I am not sure why I set this error
         # If the parent has no cross section, it is ok to still list its fission child
@@ -597,7 +602,7 @@ class Passport(object):
 
     # On the fly calculation
     def get_all_non0_child(self):
-        """Gets all daughter products of the nuclide produced via reaction that are non-zero in the library used in the simulation"""
+        """Gets all daughter products of the nuclide produced via reactions that are non-zero in the library used in the simulation"""
         xs_child = self._xs_child
         decay_child = self._decay_child
         non0_child_list = []
@@ -633,7 +638,7 @@ class Passport(object):
 
     # On the fly calculation since an AVT can become a FP if fy is set
     def get_FAM(self):
-        """Returns the family of a nuclide (ACT= Activation, FP= Fission Product, Act= Actinide)"""
+        """Returns the family of a nuclide (AVT= Activation, FP= Fission Product, ACT= Actinide)"""
 
         nz = self.get_z
 
@@ -671,12 +676,12 @@ class Passport(object):
 
     @property
     def state(self):
-        """Return the exitation state of the nuclide"""
+        """Return the excitation state of the nuclide (excited or ground state)"""
 
         return self._state
 
     def _set_state(self):
-        """Returns the state of the nuclide (excited or ground state)"""
+        """Sets the excitation state of the nuclide (excited or ground state)"""
         zamid = self._zamid
         state = int(zamid[-1])
 
@@ -726,11 +731,11 @@ class Passport(object):
         """Returns a dictionnary of all the destruction terms of the nuclide.
 
         The keys are the reactions' names
-        The entries are the reaction rates of the reaction"""
+        The entries are the reaction rates of the reactions in :math:`barn^{-1}cm^{-1}s^{-1}`"""
         return self._destruction_dic
 
     @destruction_dic.setter
-    def destruction_dic(self, destruction_dic):
+    def _destruction_dic(self, destruction_dic):
         """Sets a dictionnary of all the destruction terms of the nuclide"""
         self._destruction_dic = destruction_dic
 
@@ -739,11 +744,11 @@ class Passport(object):
         """Returns a dictionnary of all the production terms of the nuclide.
 
         The keys are the parent nuclides' names with the reaction in parenthesis
-        The entries are the reaction rates of the reaction"""
+        The entries are the reaction rates of the reactions in :math:`barn^{-1}cm^{-1}s^{-1}`"""
         return self._creation_dic
 
     @creation_dic.setter
-    def creation_dic(self, creation_dic):
+    def _creation_dic(self, creation_dic):
 
         self._creation_dic = creation_dic
 
@@ -753,16 +758,17 @@ class Passport(object):
         return self._allreacs_dic
 
     @allreacs_dic.setter
-    def allreacs_dic(self, allreacs_dic):
+    def _allreacs_dic(self, allreacs_dic):
 
         self._allreacs_dic = allreacs_dic
 
     @property
     def allreacs_dic_list(self):
+        """Returns a list of aggregated dictionnaries with production and destruction terms of the nuclide. One dictionnary per microstep"""
 
         return self._allreacs_dic_list
 
-    def allreacs_dic_list_append(self, allreacs_dic):
+    def _allreacs_dic_list_append(self, allreacs_dic):
 
         self._allreacs_dic_list.append(allreacs_dic)
 
@@ -771,7 +777,7 @@ class Passport(object):
 
         return self._current_sorted_allreacs_tuple_list
 
-    def append_current_sorted_allreacs_tuple_list(self, sorted_allreacs, ss):
+    def _append_current_sorted_allreacs_tuple_list(self, sorted_allreacs, ss):
 
         # If this is the beginning of a new step
         if ss == 0:
@@ -784,20 +790,20 @@ class Passport(object):
         """Returns a list of tuples that contains destruction and production terms
 
         For destruction terms, the first element is the reaction name and the second element
-        is the reaction rate
+        is the reaction rate in :math:`barn^{-1}cm^{-1}s^{-1}`
         For production terms, the first element is the parent nuclide witht the reaction name in parenthesis
-        and the second element is the reactio rate
+        and the second element is the reactio rate in :math:`barn^{-1}cm^{-1}s^{-1}`
         These tuples are ranked from lower reaction rate to higher reaction rate"""
         return self._sorted_allreacs_tuple_mat
 
-    def append_sorted_allreacs_tuple_mat(self):
+    def _append_sorted_allreacs_tuple_mat(self):
 
         self._sorted_allreacs_tuple_mat.append(self.current_sorted_allreacs_tuple_list)
 
     @property
     def pikachu(self):
 
-        return 'PIKA PIKA !'
+        return 'PIKA PIKA!'
 
 
 class Incorrect_nuc_id(Exception):

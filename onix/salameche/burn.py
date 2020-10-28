@@ -96,7 +96,7 @@ def burn_cell(bucell, s, mode, reac_rank):
 
 def burn_substep(bucell, B, C, N, s, ss, ssn, mode, reac_rank):
 
-    print ('\n\n++++ Substep {} ++++\n\n'.format(ss))
+    print ('\n\n++++ Microstep {} ++++\n\n'.format(ss))
 
     bucell_id = bucell.id
     sequence = bucell.sequence

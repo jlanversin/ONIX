@@ -443,9 +443,9 @@ class Sequence(object):
         # microsteps_number length is s-1
         microsteps_number = self.microsteps_number(s-1)
         time_subintvl = self.get_time_subintvl(s, 0) # Since d is the user default unit, each time substep has the same length
-        print (time_subintvl)
-        print (bu_sec_conv_factor)
-        print (pow_dens)
+        # print (time_subintvl)
+        # print (bu_sec_conv_factor)
+        # print (pow_dens)
         bucell_bu_subintvl_val = time_subintvl*bu_sec_conv_factor*pow_dens
         bucell_bu_substep_val = bucell_bu_subintvl_val + self.current_bucell_bu
         self._set_substep_bucell_bu(bucell_bu_substep_val, ss)

@@ -45,7 +45,23 @@ class Couple_openmc(object):
 	The Couple_openmc class will also sample the isomeric branching ratios and (n,gamma) cross sections on the
 	the same energy points to prepare for the calculations of one-group isomeric branching ratios.
 
-	IMPORTANT: the root cell in the OpenMC input should be named "root cell" """
+	**IMPORTANT: the root cell in the OpenMC input should be named "root cell"**
+
+	Parameters
+    ----------
+    MC_input_path : str
+        Specifies where the OpenMC input files in .xml format are located. This parameter should not be specified as ONIX cannot yet work without Python API.
+
+    xs_mode : str
+        Choice between 'constant lib' and 'no constant lib'. Default to 'no constant lib'.
+        'constant lib' indicates to ONIX that the user has provided a constant one-group cross section libraries to be used.
+        'no constant lib' indicates to ONIX that it should use one-group cross section computed by OpenMC.
+
+    MPI : str
+    	Choice between 'on' and 'off'.
+    	Indicates whether OpenMC will be parrallelized or not.
+
+    """
 
 
 
@@ -253,6 +269,10 @@ class Couple_openmc(object):
 		rates of nuclides that are not present in the material.
 		"""
 
+
+		# Printing of ONIX header here since this prerun will start OpenMC simulations
+		print (utils.printer.onix_header)
+
 		#Instantiate a system
 		system = System(1)
 		if self.reac_rank == 'on':
@@ -358,6 +378,8 @@ class Couple_openmc(object):
 
 	def _pre_run(self, root_cell):
 
+		print ('=== OpenMC pre-run ===\n\n\n')
+
 		MC_input_path = self.MC_input_path
 		pre_run_path = os.getcwd() +'/pre_run'
 		try:
@@ -388,8 +410,12 @@ class Couple_openmc(object):
 		# By default, the openm_exec is set to 'openmc'
 		# For some reasons, this does not work on the cluster (della)
 		# On della, we need to explicitly define the absolute path to the bin we want to use
-		openmc.calculate_volumes(cwd = pre_run_path, openmc_exec=self.openmc_bin_path)
-		#openmc.run()
+
+		# If the user has not define the bin path, we assume the simulation is not on a cluster
+		if self.openmc_bin_path == None:
+			openmc.calculate_volumes(cwd = pre_run_path)
+		else:
+			openmc.calculate_volumes(cwd = pre_run_path, openmc_exec=self.openmc_bin_path)
 
 		# Read and set initial nuclides dict
 		self.set_init_nucl_dict(root_cell)
@@ -1083,9 +1109,15 @@ class Couple_openmc(object):
 		#openpc_bin_path = '/tigress/mkutt/openmc/py3-mpi/bin/openmc'
 
 		if self.MPI == 'on':
-			openmc.run(mpi_args=[self._exec, '-n', self._tasks], openmc_exec = self.openmc_bin_path)
+			if self.openmc_bin_path == None:
+				openmc.run(mpi_args=[self._exec, '-n', self._tasks])
+			else:
+				openmc.run(mpi_args=[self._exec, '-n', self._tasks], openmc_exec = self.openmc_bin_path)
 		else:
-			openmc.run(openmc_exec = self.openmc_bin_path)
+			if self.openmc_bin_path == None:
+				openmc.run()
+			else:
+				openmc.run(openmc_exec = self.openmc_bin_path)
 
 		self._set_statepoint()
 		self._set_updated_summary()
@@ -1428,7 +1460,7 @@ class Couple_openmc(object):
 			print ('\n\n\n----Default cross section library set for system----\n\n\n')
 		else:
 			# This method simply passes the MC_XS_nucl_list to each cell so that each cell
-			# can then build it own lib_nucl_list
+			# can then build its own lib_nucl_list
 			self.set_MC_XS_nuc_list_to_bucells()
 
 			print ('\n\n\n----  Path for cross sections library ----\n\n')
@@ -1468,12 +1500,13 @@ class Couple_openmc(object):
 			self.set_tallies_to_bucells(s)
 			self.step_normalization(s)
 			self.copy_MC_files(s)
-			print (('\n\n\n=== Salameche Burn {}===\n\n\n'.format(s)))
+			print (('\n\n\n=== Salameche Burn {} ===\n\n\n'.format(s)))
+			print (utils.printer.salameche_header)
 			salameche.burn_step(system, s, 'couple')
 			self.set_dens_to_cells()
 		
 		# This last openmc_run is used to compute the last burnup/time point kinf
-		print ('\n\n\n=== OpenMC Transport for Final Point===\n\n\n')
+		print ('\n\n\n=== OpenMC Transport for Final Point ===\n\n\n')
 		self.run_openmc()
 
 		system._gen_output_summary_folder()

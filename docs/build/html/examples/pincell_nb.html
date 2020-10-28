@@ -1,0 +1,822 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Fuel pin-cell simulation &mdash; ONIX Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Python API" href="../pythonapi/index.html" />
+    <link rel="prev" title="Examples" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #0d0d0d" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#reactor-simulation">Reactor Simulation</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Fuel pin-cell simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#OpenMC-input-part">OpenMC input part</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ONIX-input-part">ONIX input part</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#nuclear-archaeology">Nuclear Archaeology</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../pythonapi/index.html">Python API</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ONIX</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Examples</a> &raquo;</li>
+        
+      <li>Fuel pin-cell simulation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/examples/pincell_nb.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Fuel-pin-cell-simulation">
+<h1>Fuel pin-cell simulation<a class="headerlink" href="#Fuel-pin-cell-simulation" title="Permalink to this headline">¶</a></h1>
+<p>This notebook shows how ONIX can be used to run a coupled simulation of a simple fuel pin-cell. Since this model uses coupling with OpenMC, it is necessary to have OpenMC installed.</p>
+<div class="section" id="OpenMC-input-part">
+<h2>OpenMC input part<a class="headerlink" href="#OpenMC-input-part" title="Permalink to this headline">¶</a></h2>
+<p>ONIX python input commands should be located just after OpenMC python commands in the same python input file. The OpenMC part of the input file is the same as the one you would use to launch an OpenMC simulation. Users should refer to OpenMC documentation for the corresponding Python API. In this example, however, the OpenMC part of the input file is included to better explain the articulation of ONIX with OpenMC.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>import openmc
+import onix
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ModuleNotFoundError</span>                       Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-1-51377a570dec&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">import</span> openmc
+<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-green-fg">import</span> onix
+
+<span class="ansi-red-fg">ModuleNotFoundError</span>: No module named &#39;openmc&#39;
+</pre></div></div>
+</div>
+<p>This part of the OpenMC input commands create the materials that will fill the OpenMC cells.</p>
+<p><strong>Important to note</strong>: since ONIX cannot handle elements but only isotopes, users should only use the command “add_nuclide” for materials that are going to be depleted by ONIX. Other materials not depleted by ONIX can use “add_element”.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>MOX_mat = openmc.Material()
+MOX_mat.set_density(&#39;atom/b-cm&#39;, density = 0.06987922652 )
+MOX_mat.add_nuclide(&#39;U234&#39;, 2.5952E-7)
+MOX_mat.add_nuclide(&#39;U235&#39;, 5.4287E-5)
+MOX_mat.add_nuclide(&#39;U238&#39;, 2.1387E-2)
+MOX_mat.add_nuclide(&#39;Pu238&#39;, 4.6610E-5)
+MOX_mat.add_nuclide(&#39;Pu239&#39;, 1.0156E-3)
+MOX_mat.add_nuclide(&#39;Pu240&#39;, 4.8255E-4)
+MOX_mat.add_nuclide(&#39;Pu241&#39;, 1.7491E-4)
+MOX_mat.add_nuclide(&#39;Pu242&#39;, 1.3201E-4)
+MOX_mat.add_nuclide(&#39;O16&#39;, 4.6586E-2)
+
+clad_mat = openmc.Material()
+clad_mat.set_density(&#39;atom/b-cm&#39;, density = 0.038858703999999994 )
+clad_mat.add_element(&#39;Zr&#39;,3.8657E-2)
+clad_mat.add_element(&#39;Fe&#39;,1.3345E-4)
+clad_mat.add_element(&#39;Cr&#39;,6.8254E-5)
+
+mod_mat = openmc.Material()
+mod_mat.set_density(&#39;atom/b-cm&#39;, density = 0.0726512136)
+mod_mat.add_element(&#39;H&#39;,4.8414E-2)
+mod_mat.add_nuclide(&#39;O16&#39;,2.4213E-2)
+mod_mat.add_nuclide(&#39;B10&#39;, 4.7896E-6)
+mod_mat.add_nuclide(&#39;B11&#39;, 1.9424E-5)
+mod_mat.add_s_alpha_beta(&#39;c_H_in_H2O&#39;)
+
+# Instantiate a Materials collection
+materials_file = openmc.Materials([MOX_mat, clad_mat, mod_mat])
+materials_file.cross_sections = &#39;/home/julien/cross-sections/mcnp_endfb70/cross_sections.xml&#39;
+
+# Export to &quot;materials.xml&quot;
+materials_file.export_to_xml()
+</pre></div>
+</div>
+</div>
+<p>The following commands define the geometry and the cells.</p>
+<p><strong>Important to note</strong>: ONIX requires the user to define a root cell that is named “root cell”. This root cell will be used to fill the root universe.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span># Create cylinders for the fuel and clad
+fuel_outer_radius = openmc.ZCylinder(x0=0.0, y0=0.0, R=0.410)
+clad_outer_radius = openmc.ZCylinder(x0=0.0, y0=0.0, R=0.475)
+
+# Create boundary planes to surround the geometry
+min_x = openmc.XPlane(x0=-0.65635, boundary_type=&#39;reflective&#39;)
+max_x = openmc.XPlane(x0=+0.65635, boundary_type=&#39;reflective&#39;)
+min_y = openmc.YPlane(y0=-0.65635, boundary_type=&#39;reflective&#39;)
+max_y = openmc.YPlane(y0=+0.65635, boundary_type=&#39;reflective&#39;)
+min_z = openmc.ZPlane(z0=-0.65635, boundary_type=&#39;reflective&#39;)
+max_z = openmc.ZPlane(z0=+0.65635, boundary_type=&#39;reflective&#39;)
+
+# Create a Universe to encapsulate the fuel pin
+pin_cell_universe = openmc.Universe(name=&#39;MOX Fuel Pin&#39;)
+
+# Create fuel Cell
+MOX_cell = openmc.Cell(name=&#39;MOX fuel&#39;)
+MOX_cell.fill = MOX_mat
+MOX_cell.region = -fuel_outer_radius
+MOX_cell.temperature = 900
+pin_cell_universe.add_cell(MOX_cell)
+
+# Create a clad Cell
+clad_cell = openmc.Cell(name=&#39;Clad&#39;)
+clad_cell.fill = clad_mat
+clad_cell.region = +fuel_outer_radius &amp; -clad_outer_radius
+clad_cell.temperature = 600
+pin_cell_universe.add_cell(clad_cell)
+
+# Create a moderator Cell
+mod_cell = openmc.Cell(name=&#39;Mod&#39;)
+mod_cell.fill = mod_mat
+mod_cell.region = +clad_outer_radius
+mod_cell.temperature = 600
+pin_cell_universe.add_cell(mod_cell)
+
+# Create root Cell
+root_cell = openmc.Cell(name=&#39;root cell&#39;)
+root_cell.fill = pin_cell_universe
+root_cell.region = +min_x &amp; -max_x &amp; +min_y &amp; -max_y &amp; +min_z &amp; -max_z
+
+# Create root Universe
+root_universe = openmc.Universe(universe_id=0, name=&#39;root universe&#39;)
+root_universe.add_cell(root_cell)
+
+# Create Geometry and set root Universe
+openmc_geometry = openmc.Geometry(root_universe)
+
+# Export to &quot;geometry.xml&quot;
+openmc_geometry.export_to_xml()
+</pre></div>
+</div>
+</div>
+<p>The following commands are for the simulations settings of OpenMC.</p>
+<p>There are no particular requirements from ONIX here so users can input these commands as they would for a normal OpenMC simulation.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span># OpenMC simulation parameters
+batches = 100
+inactive = 10
+particles = 10000
+
+# Instantiate a Settings object
+settings_file = openmc.Settings()
+settings_file.batches = batches
+settings_file.inactive = inactive
+settings_file.particles = particles
+
+# Create an initial uniform spatial source distribution over fissionable zones
+bounds = [-0.65635, -0.65635, -0.65635, 0.65635, 0.65635, 0.65635]
+uniform_dist = openmc.stats.Box(bounds[:3], bounds[3:], only_fissionable=True)
+settings_file.source = openmc.source.Source(space=uniform_dist)
+
+#settings_file.temperature = {&#39;method&#39;:&#39;interpolation&#39;}
+
+# Export to &quot;settings.xml&quot;
+settings_file.export_to_xml()
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="ONIX-input-part">
+<h2>ONIX input part<a class="headerlink" href="#ONIX-input-part" title="Permalink to this headline">¶</a></h2>
+<p>This section describes the input commands for ONIX.</p>
+<div class="section" id="Defning-a-sequence">
+<h3>Defning a sequence<a class="headerlink" href="#Defning-a-sequence" title="Permalink to this headline">¶</a></h3>
+<p>The first thing to define is the sequence of burnup points or time points that ONIX should follow when iterating between OpenMC simulations and depletion calculations.</p>
+<p>We first define the macrostep vector in burnup units (MWd/kg) or time units (“s” for seconds, “m” for minutes, “d” for days, “y” for years). These points defines when OpenMC simulations update the neutron flux and reaction rates.</p>
+<p>There is no need to define the initial point (which would be 0 in burnup or time units).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>macrostep_vector = [0.1, 0.5, 2.5, 7.5, 15, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360, 390, 420]
+macrostep_unit = &#39;d&#39;
+</pre></div>
+</div>
+</div>
+<p>We then define a vector for power of flux normalization. This vector indicates what is the value or the flux or power density to use for each macrostep. The user choose between flux and power density by defining the unit of the vector, “flux” or “power”.</p>
+<p>The flux should be in units of <span class="math notranslate nohighlight">\(cm^{-2}\cdot s^{-1}\)</span>, the power should be in units of <span class="math notranslate nohighlight">\(kW/l\)</span>.</p>
+<p><strong>Important to note</strong>: the power density is the total power of the system divided by the <strong>total</strong> volume of the system, including non-nuclear elements such as moderator, cladding etc.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>norma_vector = [108.93]*len(macrostep_vector)
+norma_unit = &#39;power&#39;
+</pre></div>
+</div>
+</div>
+<p>The last element of the sequence object that we need to define is the number of microsteps within each macrostep. Below, we indicate to ONIX that there should be 3 microsteps that divide each and every macrosteps.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>microstep_vector = [3]*len(macrostep_vector)
+</pre></div>
+</div>
+</div>
+<p>We then instantiate a sequence object and fill it with the vectors we defined above.</p>
+<p><strong>Important to note</strong>: since ONIX enables the user to define multiple sequence objects within one input file, the user needs to associate each sequence object with a number id as below.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>sequence1 = Sequence(1)
+sequence1.set_macrostep(macrostep_vector, macrostep_unit)
+sequence1.set_norma(norma_vector, norma_unit)
+sequence1.microstep_vector = microstep_vector
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Coupling-with-OpenMC">
+<h3>Coupling with OpenMC<a class="headerlink" href="#Coupling-with-OpenMC" title="Permalink to this headline">¶</a></h3>
+<p>Once the sequence objects are defined, we can import parameters from OpenMC to construct ONIX depletion systems</p>
+<p>We first need to instantiate a couple object. This object will operate all communication between OpenMC and ONIX.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>couple = Couple_openmc()
+</pre></div>
+</div>
+</div>
+<p>ONIX will run a dummy OpenMC volume simulation. Because this “pre run” simulation calculates volumes, it is necessary to provide a bounding box to ONIX.</p>
+<p><strong>Important to note</strong>: ONIX can use the volume provided by this simulation for the burnup regions that the user wants to deplete. However, due to non-negligible errors in the stochastic volume calculation of OpenMC, it is recommended</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>couple.set_bounding_box([-0.65635, -0.65635, -0.65635], [0.65635, 0.65635, 0.65635])
+</pre></div>
+</div>
+</div>
+<p><strong>[Optional]</strong>: simulations on HPC clusters require to explicitly define the path to the OpenMC executable in the openmc.run() command. The user should indicate the path to OpenMC executable to ONIX with the following command:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>couple.openmc_bin_path = &#39;/home/julien/virtualenvs/py3/bin/openmc&#39;
+</pre></div>
+</div>
+</div>
+<p>The user can select which OpenMC cells will be depleted by adding the names of the cell objects defined above in the command below. Cells that are selected for depletion are called BUCells in ONIX.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>couple.select_bucells([MOX_cell])
+</pre></div>
+</div>
+</div>
+<p>The following command indicate to ONIX which OpenMC cell is the root cell. ONIX will use this cell to extract information on OpenMC materials and cells.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>couple.import_openmc(root_cell)
+</pre></div>
+</div>
+</div>
+<p><strong>[Optional]</strong> By default, ONIX will use ENDF/B-VIII.0 libraries for decay and fission yields data. If users want to use other libraries, they can use the following commands:</p>
+<p><strong>Important to note</strong>: if users want to complement the fission yield data library they are defining with the data from ENDF/B-VIII.0, they should set the <em>complete</em> parameter to True in the set_user_fy_lib command.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>couple.set_decay_lib(&#39;/home/julien/ONIX/ONIX/onix/data/other_libs/origen2.2/decay_lib&#39;)
+couple.set_user_fy_lib(&#39;/home/julien/ONIX/ONIX/onix/data/other_libs/origen2.2/fy_lib&#39;, complete=True)
+</pre></div>
+</div>
+</div>
+<p>As explained above, OpenMC volume calculations are not always reliable, especially for complex geometry. The user can dedice to manually set volumes for each BUCell.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>vol_dict = {&#39;MOX fuel&#39;: 0.69323, &#39;total volume&#39;:2.26197}
+couple.set_vol(vol_dict)
+</pre></div>
+</div>
+</div>
+<p>Now we can indicate to the couple object which sequence it should use for the simulation.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>couple.set_sequence(sequence1)
+</pre></div>
+</div>
+</div>
+<p>We can finally ask ONIX to burn the system and launch the coupled simulation</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>couple.burn()
+</pre></div>
+</div>
+</div>
+<p>Output results are going to be located in two types of folder. Per step folders include densities, power, neutron flux, burnup, one-group cross sections and burnup matrices for each macrostep, separately. The output summary folder contains aggregated output results for the whole simulation and for every macrostep.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../pythonapi/index.html" class="btn btn-neutral float-right" title="Python API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Julien de Troullioud de Lanversin
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+ 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30411614-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>

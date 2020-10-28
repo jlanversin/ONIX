@@ -448,8 +448,6 @@ class Cell(object):
 		passlist = self._passlist
 	#	hm_vol = self._hm # when user had to define the hm_vol
 		vol = self.vol
-		print ('PIKACHU')
-		print (vol)
 	#	ihm = utils.get_ihm(passlist, hm_vol) # when user had to define the hm_vol
 		ihm = utils.get_hm(passlist, vol)
 
@@ -955,7 +953,6 @@ class Cell(object):
 
 
 		self._fy_lib = fy_dic
-		print ('PIKKKAAAA',fy_dic)
 		self.passlist._set_fy(fy_dic)
 
 	def set_default_fy_lib(self):
@@ -2107,14 +2104,14 @@ class Cell(object):
 			nuc_pass.destruction_dic = destruction_dic
 			nuc_pass.creation_dic = creation_dic
 			nuc_pass.allreacs_dic = allreacs_dic
-			nuc_pass.allreacs_dic_list_append(allreacs_dic)
+			nuc_pass._allreacs_dic_list_append(allreacs_dic)
 
 			sorted_allreacs = sorted(list(allreacs_dic.items()), key=operator.itemgetter(1))
 
-			nuc_pass.append_current_sorted_allreacs_tuple_list(sorted_allreacs, ss)
+			nuc_pass._append_current_sorted_allreacs_tuple_list(sorted_allreacs, ss)
 
 			if EOS == 1:
-				nuc_pass.append_sorted_allreacs_tuple_mat()
+				nuc_pass._append_sorted_allreacs_tuple_mat()
 
 	def _print_current_allreacs_rank(self):
 

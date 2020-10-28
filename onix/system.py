@@ -328,7 +328,6 @@ class System(object):
 
 		txt += '{:<12}'.format('K-INF')
 		txt += '{:<13.5E}'.format(kinf_seq[0].n)
-		print (kinf_seq)
 		for s in range(steps_number):
 			txt += '{:<13.5E}'.format(kinf_seq[s+1].n)
 
@@ -363,7 +362,6 @@ class System(object):
 		bucell_dict = self.bucell_dict
 		for bucell_id in bucell_dict:
 			bucell = bucell_dict[bucell_id]
-			print(bucell.name, bucell.id)
 			bucell.copy_cell_folders_to_step_folder(s)
 
 	def _gen_output_summary_folder(self):
