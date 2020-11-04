@@ -583,7 +583,7 @@ class Couple_openmc(object):
 			# 	if bucell_name in self.selected_bucells_nucl_list_dict:
 			# 		if self.selected_bucells_nucl_list_dict[bucell_name] == 'initial nuclides':
 			# 			continue
-			cell = summary.geometry.get_cells_by_name(bucell_name)[0]
+			cell = summary.geometry.get_cells_by_name(bucell_name,matching=True)[0]
 			self._add_zero_dens_nuclides(cell)
 
 
