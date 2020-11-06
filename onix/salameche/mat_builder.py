@@ -2,8 +2,14 @@
 import numpy as np
 import os
 
-def _get_xs_mat(passlist):
-    """ Build the cross section matrix"""
+def get_xs_mat(passlist):
+    """Builds the cross section matrix.
+    
+    Parameters
+    ----------
+    passlist: onix.Passlist
+        Passlist object associated with the BUCell being depleted
+    """
 
     # order the list by mass number
     #azm_sort(passport_list)
@@ -125,8 +131,14 @@ def _get_xs_mat(passlist):
 
 
 
-def _get_decay_mat(passlist):
-    """ Build the cross section matrix"""
+def get_decay_mat(passlist):
+    """Builds the decay matrix.
+    
+    Parameters
+    ----------
+    passlist: onix.Passlist
+        Passlist object associated with the BUCell being depleted
+    """
 
     # order the list by mass number
     #azm_sort(passport_list)
@@ -179,6 +191,35 @@ def _get_decay_mat(passlist):
             decay_mat[row][index] = decay_val
 
     return decay_mat
+
+
+def get_initial_vect(passlist):
+
+    """Gets the initial density vector.
+    
+    Parameters
+    ----------
+    passlist: onix.Passlist
+        Passlist object associated with the BUCell being depleted
+    """
+    passport_list = passlist.passport_list
+
+    N = len(passport_list)
+    
+    vect = np.zeros((N))
+    for i in range(N):
+        nuc_pass = passport_list[i]
+        vect[i] = nuc_pass.current_dens
+
+    return vect
+
+
+
+
+
+
+
+    
 
 
 def _print_all_mat_to_text(xs_mat, decay_mat, cell, s):
@@ -402,17 +443,3 @@ def nucl_list_from_txt(mattxt_name):
 
     return nucl_list
 
-
-
-def _get_initial_vect(passlist):
-
-    passport_list = passlist.passport_list
-
-    N = len(passport_list)
-    
-    vect = np.zeros((N))
-    for i in range(N):
-        nuc_pass = passport_list[i]
-        vect[i] = nuc_pass.current_dens
-
-    return vect

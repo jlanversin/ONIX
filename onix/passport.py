@@ -543,7 +543,7 @@ class Passport(object):
 
     @property
     def all_child(self):
-        """Returns all daughter products of the nuclide"""
+        """Returns all daughter products of the nuclide."""
         return self._all_child
 
     def _set_all_child(self):
@@ -561,7 +561,7 @@ class Passport(object):
 
     @property
     def fission_child(self):
-        """Returns daughter products of the nuclide via fission reactions"""
+        """Returns daughter products of the nuclide via fission reactions."""
         return self._fission_child
 
     @fission_child.setter
@@ -602,7 +602,7 @@ class Passport(object):
 
     # On the fly calculation
     def get_all_non0_child(self):
-        """Gets all daughter products of the nuclide produced via reactions that are non-zero in the library used in the simulation"""
+        """Gets all daughter products of the nuclide produced via reactions that are non-zero (i.e., the reaction cross section or decay constant is not null) in the library used in the simulation"""
         xs_child = self._xs_child
         decay_child = self._decay_child
         non0_child_list = []

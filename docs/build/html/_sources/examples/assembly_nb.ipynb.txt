@@ -1,0 +1,915 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Assembly simulation\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This notebook shows how ONIX can be used to run a coupled simulation of an LWR assembly. Since this model uses coupling with OpenMC, it is necessary to have OpenMC installed."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## OpenMC input part\n",
+    "\n",
+    "ONIX python input commands should be located just after OpenMC python commands in the same python input file. The OpenMC part of the input file is the same as the one you would use to launch an OpenMC simulation. Users should refer to OpenMC documentation for the corresponding Python API. In this example, however, the OpenMC part of the input file is included to better explain the articulation of ONIX with OpenMC."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "ename": "ModuleNotFoundError",
+     "evalue": "No module named 'openmc'",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mModuleNotFoundError\u001b[0m                       Traceback (most recent call last)",
+      "\u001b[0;32m<ipython-input-1-51377a570dec>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0;32mimport\u001b[0m \u001b[0mopenmc\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      2\u001b[0m \u001b[0;32mimport\u001b[0m \u001b[0monix\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;31mModuleNotFoundError\u001b[0m: No module named 'openmc'"
+     ]
+    }
+   ],
+   "source": [
+    "import openmc\n",
+    "import onix"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This part of the OpenMC input commands create the materials that will fill the OpenMC cells.\n",
+    "\n",
+    "**Important to note**: since ONIX cannot handle elements but only isotopes, users should only use the command \"add_nuclide\" for materials that are going to be depleted by ONIX. Other materials not depleted by ONIX can use \"add_element\"."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# All densities are in atm/(barn*cm)\n",
+    "\n",
+    "#LEU fuel (U)\n",
+    "# Enrichment 3.8 wt% in 235\n",
+    "# Fuel density 10.4 g cm3\n",
+    "U234_dens = 8.492176928241094e-6\n",
+    "U235_dens = 8.921015824220379e-4\n",
+    "U238_dens = 2.2302847635443696e-2\n",
+    "O16_dens = 4.640688278958795e-2\n",
+    "tot_dens =U234_dens+ U235_dens + U238_dens + O16_dens\n",
+    "U = openmc.Material(name='U')\n",
+    "U.set_density('atom/b-cm', tot_dens)\n",
+    "U.add_nuclide('U234', U234_dens, percent_type = 'ao')\n",
+    "U.add_nuclide('U235', U235_dens, percent_type = 'ao')\n",
+    "U.add_nuclide('U238', U238_dens, percent_type = 'ao')\n",
+    "U.add_nuclide('O16', O16_dens, percent_type = 'ao')\n",
+    "\n",
+    "# Gd Fuel\n",
+    "# Enrichment 2.6 wt% in 235\n",
+    "# Fuel density 10.4 g cm3\n",
+    "# Enrichment in Gd2O3 is 7%\n",
+    "U235_dens = 5.6796569966758324e-4\n",
+    "U238_dens = 2.100811730537396e-2\n",
+    "O16_dens_fromUO2 = 4.315216601008309e-2\n",
+    "Gd152_dens = 5.007610609954495e-6\n",
+    "Gd154_dens = 5.3873340627459146e-5\n",
+    "Gd155_dens = 3.6338064112348325e-4\n",
+    "Gd156_dens = 4.993729503352673e-4\n",
+    "Gd157_dens = 3.7934991657329525e-4\n",
+    "Gd158_dens = 5.982987297594215e-4\n",
+    "Gd160_dens = 5.199279101704396e-4\n",
+    "O16_dens_fromGd2O3 = 3.628816648798981e-3\n",
+    "tot_dens = U235_dens+U238_dens+Gd152_dens+Gd154_dens+Gd155_dens+Gd156_dens+Gd157_dens+Gd158_dens+Gd160_dens+O16_dens_fromUO2+O16_dens_fromGd2O3\n",
+    "GD = openmc.Material(name='GD')\n",
+    "GD.set_density('atom/b-cm', tot_dens)\n",
+    "GD.add_nuclide('U235', U235_dens, percent_type = 'ao')\n",
+    "GD.add_nuclide('U238', U238_dens, percent_type = 'ao')\n",
+    "GD.add_nuclide('O16', O16_dens_fromUO2+O16_dens_fromGd2O3, percent_type = 'ao')\n",
+    "GD.add_nuclide('Gd152', Gd152_dens, percent_type = 'ao')\n",
+    "GD.add_nuclide('Gd154', Gd154_dens, percent_type = 'ao')\n",
+    "GD.add_nuclide('Gd155', Gd155_dens, percent_type = 'ao')\n",
+    "GD.add_nuclide('Gd156', Gd156_dens, percent_type = 'ao')\n",
+    "GD.add_nuclide('Gd157', Gd157_dens, percent_type = 'ao')\n",
+    "GD.add_nuclide('Gd158', Gd158_dens, percent_type = 'ao')\n",
+    "GD.add_nuclide('Gd160', Gd160_dens, percent_type = 'ao')\n",
+    "\n",
+    "#clad\n",
+    "# Zircaloy-4 (ref zircaloy-4.pdf)\n",
+    "Tin_dens = 1.50\n",
+    "Fe_dens = 0.20\n",
+    "Cr_dens = 0.10\n",
+    "Zr_dens = 100 - Tin_dens - Fe_dens - Cr_dens\n",
+    "clad = openmc.Material(name='clad')\n",
+    "clad.set_density('g/cm3', 6.55)\n",
+    "clad.add_element('Zr', Zr_dens, percent_type = 'wo')\n",
+    "clad.add_element('Sn', Tin_dens, percent_type = 'wo')\n",
+    "clad.add_element('Cr', Cr_dens, percent_type = 'wo')\n",
+    "clad.add_element('Fe', Fe_dens, percent_type = 'wo')\n",
+    "\n",
+    "# mod\n",
+    "# Boron concentration: \n",
+    "H_dens = 4.32002334608591e-2\n",
+    "O16_dens = 2.160011673042955e-2\n",
+    "B10_dens = 6.949982545596444e-06\n",
+    "B11_dens = 2.7799930182385777e-05\n",
+    "tot_dens = H_dens+O16_dens+B10_dens+B11_dens\n",
+    "mod = openmc.Material(name='mod')\n",
+    "mod.set_density('atom/b-cm', tot_dens)\n",
+    "mod.add_nuclide('H1', H_dens, percent_type = 'ao')\n",
+    "mod.add_nuclide('B10', B10_dens, percent_type = 'ao')\n",
+    "mod.add_nuclide('B11', B11_dens, percent_type = 'ao')\n",
+    "mod.add_nuclide('O16', O16_dens, percent_type = 'ao')\n",
+    "mod.add_s_alpha_beta('c_H_in_H2O')\n",
+    "\n",
+    "# Instantiate a Materials collection\n",
+    "materials_file = openmc.Materials([U, GD, clad , mod])\n",
+    "#materials_file.cross_sections = '/tigress/jdtdl/openmc/cross-sections/lib80x_hdf5/cross_sections.xml'\n",
+    "\n",
+    "# Export to \"materials.xml\"\n",
+    "materials_file.export_to_xml()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The following commands define the geometry and the cells.\n",
+    "\n",
+    "**Important to note**: ONIX requires the user to define a root cell that is named \"root cell\". This root cell will be used to fill the root universe."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Create cylinders for the fuel and clad\n",
+    "fuel_outer_radius = openmc.ZCylinder(x0=0.0, y0=0.0, R=0.4025)\n",
+    "# The cladding inner radius was set equal to fuel outer radius for simplication\n",
+    "fuel_clad_outer_radius = openmc.ZCylinder(x0=0.0, y0=0.0, R=0.475)\n",
+    "\n",
+    "\n",
+    "# Create cylinders for the guide tube\n",
+    "guide_tube_inner_radius = openmc.ZCylinder(x0=0.0, y0=0.0, R=0.555)\n",
+    "guide_tube_outer_radius = openmc.ZCylinder(x0=0.0, y0=0.0, R=0.616)\n",
+    "\n",
+    "\n",
+    "min_z = openmc.ZPlane(z0=-0.5, boundary_type='periodic')\n",
+    "max_z = openmc.ZPlane(z0=+0.5, boundary_type='periodic')\n",
+    "\n",
+    "\n",
+    "# Create a Universe to encapsulate U cells\n",
+    "U_cell_universe = openmc.Universe(name='U_universe')\n",
+    "# Create a Universe to encapsulate GD cells\n",
+    "GD_cell_universe = openmc.Universe(name='GD_universe')\n",
+    "# Create a Universe to encapsulate a guide tubes\n",
+    "Guide_cell_universe = openmc.Universe(name='Guide_universe')\n",
+    "# Create a Universe to encapsulate measured cell\n",
+    "Measured_cell_universe = openmc.Universe(name='Measured_universe')\n",
+    "\n",
+    "\n",
+    "# Create U Cell\n",
+    "U_cell = openmc.Cell(name='U')\n",
+    "U_cell.fill = U\n",
+    "U_cell.region = -fuel_outer_radius\n",
+    "U_cell.temperature = 1027\n",
+    "U_cell_universe.add_cell(U_cell)\n",
+    "\n",
+    "# Create a clad Cell for U\n",
+    "U_clad_cell = openmc.Cell(name='U_clad')\n",
+    "U_clad_cell.fill = clad\n",
+    "U_clad_cell.region = +fuel_outer_radius & -fuel_clad_outer_radius\n",
+    "U_clad_cell.temperature = 1027\n",
+    "U_cell_universe.add_cell(U_clad_cell)\n",
+    "\n",
+    "# Create a moderator Cell for U\n",
+    "U_moderator_cell = openmc.Cell(name='U_moderator')\n",
+    "U_moderator_cell.fill = mod\n",
+    "U_moderator_cell.region = +fuel_clad_outer_radius\n",
+    "U_moderator_cell.temperature = 575 ################\" No thermac XS at 1027 so we need to set water to 575\n",
+    "U_cell_universe.add_cell(U_moderator_cell)\n",
+    "\n",
+    "\n",
+    "# Create GD Cell\n",
+    "GD_cell = openmc.Cell(name='GD')\n",
+    "GD_cell.fill = GD\n",
+    "GD_cell.region = -fuel_outer_radius\n",
+    "GD_cell.temperature = 1027\n",
+    "GD_cell_universe.add_cell(GD_cell)\n",
+    "\n",
+    "# Create a clad Cell for GD\n",
+    "GD_clad_cell = openmc.Cell(name='GD_clad')\n",
+    "GD_clad_cell.fill = clad\n",
+    "GD_clad_cell.region = +fuel_outer_radius & -fuel_clad_outer_radius\n",
+    "GD_clad_cell.temperature = 1027\n",
+    "GD_cell_universe.add_cell(GD_clad_cell)\n",
+    "\n",
+    "# Create a moderator Cell for GD\n",
+    "GD_moderator_cell = openmc.Cell(name='GD_moderator')\n",
+    "GD_moderator_cell.fill = mod\n",
+    "GD_moderator_cell.region = +fuel_clad_outer_radius\n",
+    "GD_moderator_cell.temperature = 575 ################\" No thermac XS at 1027 so we need to set water to 575\n",
+    "GD_cell_universe.add_cell(GD_moderator_cell)\n",
+    "\n",
+    "\n",
+    "\n",
+    "# Create a clad Cell for Guide\n",
+    "Guide_clad_cell = openmc.Cell(name='Guide_clad')\n",
+    "Guide_clad_cell.fill = clad\n",
+    "Guide_clad_cell.region = +guide_tube_inner_radius & -guide_tube_outer_radius\n",
+    "Guide_clad_cell.temperature = 1027\n",
+    "Guide_cell_universe.add_cell(Guide_clad_cell)\n",
+    "\n",
+    "# Create a moderator Cell for inside Guide\n",
+    "Guide_moderator_in_cell = openmc.Cell(name='Guide_moderator_in')\n",
+    "Guide_moderator_in_cell.fill = mod\n",
+    "Guide_moderator_in_cell.region = -guide_tube_inner_radius\n",
+    "Guide_moderator_in_cell.temperature = 575 ################\" No thermal XS at 1027 so we need to set water to 575\n",
+    "Guide_cell_universe.add_cell(Guide_moderator_in_cell)\n",
+    "\n",
+    "# Create a moderator Cell for outside Guide\n",
+    "Guide_moderator_out_cell = openmc.Cell(name='Guide_moderator_out')\n",
+    "Guide_moderator_out_cell.fill = mod\n",
+    "Guide_moderator_out_cell.region = +guide_tube_outer_radius\n",
+    "Guide_moderator_out_cell.temperature = 575 ################\" No thermal XS at 1027 so we need to set water to 575\n",
+    "Guide_cell_universe.add_cell(Guide_moderator_out_cell)\n",
+    "\n",
+    "\n",
+    "# Create measured Cell\n",
+    "Measured_cell = openmc.Cell(name='Measured')\n",
+    "Measured_cell.fill = U\n",
+    "Measured_cell.region = -fuel_outer_radius\n",
+    "Measured_cell.temperature = 1027\n",
+    "Measured_cell_universe.add_cell(Measured_cell)\n",
+    "\n",
+    "# Create a clad Cell for Measured Cell\n",
+    "Measured_clad_cell = openmc.Cell(name='Measured_clad')\n",
+    "Measured_clad_cell.fill = clad\n",
+    "Measured_clad_cell.region = +fuel_outer_radius & -fuel_clad_outer_radius\n",
+    "Measured_clad_cell.temperature = 1027\n",
+    "Measured_cell_universe.add_cell(Measured_clad_cell)\n",
+    "\n",
+    "# Create a moderator Cell for Measured Cell\n",
+    "Measured_moderator_cell = openmc.Cell(name='Measured_moderator')\n",
+    "Measured_moderator_cell.fill = mod\n",
+    "Measured_moderator_cell.region = +fuel_clad_outer_radius\n",
+    "Measured_moderator_cell.temperature = 575 ################\" No thermal XS at 1027 so we need to set water to 575\n",
+    "Measured_cell_universe.add_cell(Measured_moderator_cell)\n",
+    "\n",
+    "# Ceate an outer-lattice cell\n",
+    "outer_cell = openmc.Cell(name = 'outer cell')\n",
+    "outer_cell.fill = mod\n",
+    "\n",
+    "# Create an outer-lattice universe\n",
+    "outer_universe = openmc.Universe(name = 'outer universe')\n",
+    "outer_universe.add_cell(outer_cell)\n",
+    "\n",
+    "row1 = [U_cell_universe]*18\n",
+    "\n",
+    "row3 = [U_cell_universe]*18\n",
+    "row3[2] = GD_cell_universe\n",
+    "row3[6] = Guide_cell_universe\n",
+    "row3[11] = Guide_cell_universe\n",
+    "row3[15] = GD_cell_universe\n",
+    "\n",
+    "row4 = [U_cell_universe]*18\n",
+    "row4[3] = Guide_cell_universe\n",
+    "row4[9] = GD_cell_universe\n",
+    "row4[14] = Guide_cell_universe\n",
+    "\n",
+    "row5 = [U_cell_universe]*18\n",
+    "row5[4] = GD_cell_universe\n",
+    "row5[7] = Guide_cell_universe\n",
+    "row5[10] = Guide_cell_universe\n",
+    "row5[13] = GD_cell_universe\n",
+    "\n",
+    "row6 = [U_cell_universe]*18\n",
+    "row6[5] = Guide_cell_universe\n",
+    "row6[12] = Guide_cell_universe\n",
+    "\n",
+    "row7 = [U_cell_universe]*18\n",
+    "row7[2] = Guide_cell_universe\n",
+    "row7[15] = Guide_cell_universe\n",
+    "\n",
+    "row8 =  [U_cell_universe]*18\n",
+    "row8[4] = Guide_cell_universe\n",
+    "row8[13] = Guide_cell_universe\n",
+    "\n",
+    "row9 = [U_cell_universe]*18\n",
+    "row9[3] = GD_cell_universe\n",
+    "\n",
+    "row10 = [U_cell_universe]*18\n",
+    "row10[14] = GD_cell_universe\n",
+    "\n",
+    "row11 = [U_cell_universe]*18\n",
+    "row11[4] = Guide_cell_universe\n",
+    "row11[10] = Measured_cell_universe\n",
+    "row11[13] = Guide_cell_universe\n",
+    "\n",
+    "row15 = [U_cell_universe]*18\n",
+    "row15[3] = Guide_cell_universe\n",
+    "row15[8] = GD_cell_universe\n",
+    "row15[14] = Guide_cell_universe\n",
+    "\n",
+    "\n",
+    "lattice = openmc.RectLattice(name='Lattice')\n",
+    "lattice.pitch = [1.27, 1.27]\n",
+    "lattice.lower_left = [-11.43, -11.43]\n",
+    "lattice.universes = [row1, row1, row3, row4, row5, row6, row7, row8, row9, row10, row11, row7, row6, row5, row15, row3, row1, row1]\n",
+    "\n",
+    "# Create root Cell\n",
+    "assembly_rect = openmc.model.rectangular_prism(width=22.86, height=22.86, boundary_type='periodic')\n",
+    "root_cell = openmc.Cell(name='root cell')\n",
+    "root_cell.region = assembly_rect\n",
+    "root_cell.fill = lattice\n",
+    "\n",
+    "\n",
+    "# Create root Universe\n",
+    "root_universe = openmc.Universe(universe_id=0, name='root universe')\n",
+    "root_universe.add_cell(root_cell)\n",
+    "region = root_cell.region\n",
+    "\n",
+    "\n",
+    "# Create Geometry and set root Universe\n",
+    "openmc_geometry = openmc.Geometry(root_universe)\n",
+    "\n",
+    "# Export to \"geometry.xml\"\n",
+    "openmc_geometry.export_to_xml()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The following command plots a cross section of the assembly"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "NameError",
+     "evalue": "name 'openmc' is not defined",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+      "\u001b[0;32m<ipython-input-1-960ea75871ab>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[0;31m# Instantiate a Plot\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 2\u001b[0;31m \u001b[0mplot\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mopenmc\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mPlot\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mplot_id\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      3\u001b[0m \u001b[0mplot\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mfilename\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m'materials-xy'\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      4\u001b[0m \u001b[0mplot\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0morigin\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m[\u001b[0m\u001b[0;36m0\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;36m0\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;36m0\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      5\u001b[0m \u001b[0mplot\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mwidth\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m[\u001b[0m\u001b[0;36m24\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;36m24\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;31mNameError\u001b[0m: name 'openmc' is not defined"
+     ]
+    }
+   ],
+   "source": [
+    "# Instantiate a Plot\n",
+    "plot = openmc.Plot(plot_id=1)\n",
+    "plot.filename = 'materials-xy'\n",
+    "plot.origin = [0, 0, 0]\n",
+    "plot.width = [24, 24]\n",
+    "plot.pixels = [1000, 1000]\n",
+    "plot.color_by = 'material'\n",
+    "\n",
+    "# Show plot\n",
+    "openmc.plot_inline(plot)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The following commands are for the simulations settings of OpenMC.\n",
+    "\n",
+    "There are no particular requirements from ONIX here so users can input these commands as they would for a normal OpenMC simulation."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# OpenMC simulation parameters\n",
+    "batches = 100\n",
+    "inactive = 10\n",
+    "particles = 10000\n",
+    "\n",
+    "\n",
+    "#Instantiate a Settings object\n",
+    "settings_file = openmc.Settings()\n",
+    "settings_file.batches = batches\n",
+    "settings_file.inactive = inactive\n",
+    "settings_file.particles = particles\n",
+    "\n",
+    "# Create an initial uniform spatial source distribution over fissionable zones\n",
+    "bounds = [-11.43, -11.43, -0.5, 11.43, 11.43, 0.5]\n",
+    "uniform_dist = openmc.stats.Box(bounds[:3], bounds[3:], only_fissionable=True)\n",
+    "settings_file.source = openmc.source.Source(space=uniform_dist)\n",
+    "\n",
+    "# Export to \"settings.xml\"\n",
+    "settings_file.export_to_xml()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## ONIX input part\n",
+    "\n",
+    "This section describes the input commands for ONIX."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Defning a sequence\n",
+    "\n",
+    "The first thing to define is the sequence of burnup points or time points that ONIX should follow when iterating between OpenMC simulations and depletion calculations."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We first define the macrostep vector in burnup units (MWd/kg) or time units (\"s\" for seconds, \"m\" for minutes, \"d\" for days, \"y\" for years). These points defines when OpenMC simulations update the neutron flux and reaction rates. There is no need to define the initial point (which would be 0 in burnup or time units).\n",
+    "\n",
+    "For this simulation, the operation history is made of successive periods of irradtiation cycles and down times. We make use of Python flexibility to create the corresponding Sequence object. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "cycle5 = [0.1, 1, 2, 3, 6.0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 295.4,310]\n",
+    "down5 = [332]\n",
+    "cycle6 = [338.0, 362.0, 392.0, 422.0, 452.0, 482.0, 512.0, 542.0, 572.0, 602.0, 632.0, 662.0, 687.0, 718.7]\n",
+    "down6 = [735.7]\n",
+    "cycle7 = [741.7, 765.7, 795.7, 825.7, 855.7, 885.7, 915.7, 945.7, 975.7, 1005.7, 1044.6, 1083.6]\n",
+    "down7 = [1098.6]\n",
+    "cycle8 = [1104.6, 1128.6, 1158.6, 1188.6, 1218.6,1248.6, 1278.6, 1308.6, 1338.6, 1368.6, 1411.0, 1445.4]\n",
+    "down8 =  [2600+1445.4, 2601+1445.4, 2635+1445.4, 2648+1445.4, 2672+1445.4, 2735+1445.4, 2753+1445.4, 2760+1445.4, 2813+1445.4, 2846+1445.4]\n",
+    "\n",
+    "macrostep_vector = cycle5 + down5 + cycle6 + down6 + cycle7 + down7 + cycle8 + down8\n",
+    "\n",
+    "macrostep_unit = 'd'"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We then define a vector for power of flux normalization. This vector indicates what is the value of the flux or power density to use for each macrostep. The user choose between flux and power density by defining the unit of the vector, \"flux\" or \"power\". The flux should be in units of $cm^{-2}\\cdot s^{-1}$, the power should be in units of $kW/l$.\n",
+    "\n",
+    "In this simulation the power density of the assembly decreases cycles after cycles.\n",
+    "\n",
+    "**Important to note**: the power density is the total power of the system divided by the **total** volume of the system, including non-nuclear elements such as moderator, cladding etc."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "norma_vector_cycle5 = [162]*len(cycle5)\n",
+    "norma_vector_cycle6 = [139]*len(cycle6)\n",
+    "norma_vector_cycle7 = [118.8]*len(cycle7)\n",
+    "norma_vector_cycle8 = [33.5]*len(cycle8)\n",
+    "norma_vector_down8 = [0.0]*len(down8)\n",
+    "\n",
+    "norma_vector = norma_vector_cycle5 + [0.0] + norma_vector_cycle6 + [0.0] + norma_vector_cycle7 + [0.0] + norma_vector_cycle8 + norma_vector_down8\n",
+    "norma_unit = 'power'"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The last element of the sequence object that we need to define is the number of microsteps within each macrostep. Below, we indicate to ONIX that there should be 3 microsteps that divide each and every macrosteps."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "microstep_vector = [3]*len(macrostep_vector)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We then instantiate a sequence object and fill it with the vectors we defined above.\n",
+    "\n",
+    "**Important to note**: since ONIX enables the user to define multiple sequence objects within one input file, the user needs to associate each sequence object with a number id as below."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sequence1 = Sequence(1)\n",
+    "sequence1.set_macrostep(macrostep_vector, macrostep_unit)\n",
+    "sequence1.set_norma(norma_vector, norma_unit)\n",
+    "sequence1.microstep_vector = microstep_vector"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Setting up scheduled parameters change\n",
+    "\n",
+    "ONIX allows the user to schedule change in certain parameters of the operation of the reactor during the simulation such as temperature, density and isotopics of materials.\n",
+    "\n",
+    "In this simulation the moderator (water) has its boron concentration manually changed by the operator. In addition, the temperature of both the moderator and the fuel decrease. Because of this decrease in temperature, the density of the water rises."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "First we define the isotopic change of the boron isotopes in the water. The change of concentration is expressed in atom fraction because the overall density of the water will also be changed and all individual isotopic concentration will be re-normalized against the new density."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "moderator_B10_online_change = {\n",
+    "6: \t\t9.736672674935091e-05,\n",
+    "7 :\t\t8.69924941707639e-05,\n",
+    "8 :\t\t7.572967636060627e-05,\n",
+    "9 :\t\t6.477786338149834e-05,\n",
+    "10 :\t5.4359201541332796e-05,\n",
+    "11 :\t4.45292274170828e-05,\n",
+    "12 :\t3.4243853361652844e-05,\n",
+    "13 :\t2.298103555149521e-05,\n",
+    "14 :\t1.104067150226498e-05,\n",
+    "15 :\t1.1107315394632776e-06,\n",
+    "16 :\t1.1107315394632776e-06,\n",
+    "18 :\t0.0001306109217254868,\n",
+    "19 :\t0.0001209475573321563,\n",
+    "20 :\t0.00011093986616159216,\n",
+    "21 :\t9.983255076695937e-05,\n",
+    "22 :\t8.88807377878515e-05,\n",
+    "23 :\t7.842875400150202e-05,\n",
+    "24 :\t6.856545793106812e-05,\n",
+    "25 :\t5.879102038379128e-05,\n",
+    "26 :\t4.798360250481359e-05,\n",
+    "27 :\t3.59543799324263e-05,\n",
+    "28 :\t2.359193789820002e-05,\n",
+    "29 :\t1.1307247071736167e-05,\n",
+    "30 :\t1.1107315394632774e-06,\n",
+    "31 :\t1.1107315394632774e-06,\n",
+    "33 :\t0.00011285032440946899,\n",
+    "34 :\t0.00010290927713127266,\n",
+    "35 :\t9.261279576044808e-05,\n",
+    "36 :\t8.13388706348958e-05,\n",
+    "37 :\t7.027598450184157e-05,\n",
+    "38 :\t5.969071293075653e-05,\n",
+    "39 :\t4.970523639098166e-05,\n",
+    "40 :\t3.950872085870877e-05,\n",
+    "41 :\t2.8323654256313578e-05,\n",
+    "42 :\t1.6505470676424304e-05,\n",
+    "43 :\t8.663706007813565e-07,\n",
+    "44 :\t8.663706007813565e-07,\n",
+    "46 :\t0.0001364977988846422,\n",
+    "47 :\t0.00012439082510449245,\n",
+    "48 :\t0.00011121754904645799,\n",
+    "49 :\t9.711125849527437e-05,\n",
+    "50 :\t8.321600693658877e-05,\n",
+    "51 :\t6.967618947053139e-05,\n",
+    "52 :\t5.654734267407547e-05,\n",
+    "53 :\t4.3918325070378e-05,\n",
+    "54 :\t3.138927330523223e-05,\n",
+    "55 :\t1.881579227850792e-05,\n",
+    "56 :\t1.3217705319613002e-06,\n",
+    "57 :\t1.3217705319613002e-06\n",
+    "}\n",
+    "\n",
+    "moderator_B11_online_change = {\n",
+    "6: \t\t0.00038946690699740366,\n",
+    "7 :\t\t0.0003479699766830556,\n",
+    "8 :\t\t0.00030291870544242507,\n",
+    "9 :\t\t0.00025911145352599336,\n",
+    "10 :\t0.00021743680616533118,\n",
+    "11 :\t0.0001781169096683312,\n",
+    "12 :\t0.00013697541344661137,\n",
+    "13 :\t9.192414220598085e-05,\n",
+    "14 :\t4.416268600905992e-05,\n",
+    "15 :\t4.442926157853111e-06,\n",
+    "16 :\t4.442926157853111e-06,\n",
+    "18 :\t0.0005224436869019473,\n",
+    "19 :\t0.0004837902293286252,\n",
+    "20 :\t0.00044375946464636864,\n",
+    "21 :\t0.0003993302030678375,\n",
+    "22 :\t0.000355522951151406,\n",
+    "23 :\t0.0003137150160060081,\n",
+    "24 :\t0.0002742618317242725,\n",
+    "25 :\t0.00023516408153516512,\n",
+    "26 :\t0.00019193441001925436,\n",
+    "27 :\t0.0001438175197297052,\n",
+    "28 :\t9.436775159280008e-05,\n",
+    "29 :\t4.5228988286944666e-05,\n",
+    "30 :\t4.44292615785311e-06,\n",
+    "31 :\t4.44292615785311e-06,\n",
+    "33 :\t0.00045140129763787597,\n",
+    "34 :\t0.0004116371085250906,\n",
+    "35 :\t0.00037045118304179233,\n",
+    "36 :\t0.0003253554825395832,\n",
+    "37 :\t0.0002811039380073663,\n",
+    "38 :\t0.00023876285172302612,\n",
+    "39 :\t0.00019882094556392663,\n",
+    "40 :\t0.0001580348834348351,\n",
+    "41 :\t0.00011329461702525431,\n",
+    "42 :\t6.602188270569722e-05,\n",
+    "43 :\t3.465482403125426e-06,\n",
+    "44 :\t3.465482403125426e-06,\n",
+    "46 :\t0.0005459911955385687,\n",
+    "47 :\t0.0004975633004179698,\n",
+    "48 :\t0.00044487019618583194,\n",
+    "49 :\t0.00038844503398109746,\n",
+    "50 :\t0.00033286402774635506,\n",
+    "51 :\t0.00027870475788212555,\n",
+    "52 :\t0.00022618937069630187,\n",
+    "53 :\t0.000175673300281512,\n",
+    "54 :\t0.00012555709322092893,\n",
+    "55 :\t7.526316911403169e-05,\n",
+    "56 :\t5.287082127845201e-06,\n",
+    "57 :\t5.287082127845201e-06\n",
+    "}\n",
+    "\n",
+    "moderator_isotopic_change = {'B-11': moderator_B11_online_change, 'B-10': moderator_B10_online_change}"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Next we define the change in temperature of both the moderator and the fuel and finally the density change in water."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "fuel_temperature_change = {17: 904.25, 32:819.69, 46:646.13}\n",
+    "moderator_temperature_change = {17: 598.98, 32:593.34, 46:574.23}\n",
+    "\n",
+    "moderator_density_change = {17:0.06670624284397361, 32:0.06831120507781357, 46:0.07272485122087348}"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Finally, we set these instructions to the Sequence object sequence1. Since the water and the fuel are in multiple geometric regions (as defined in the OpenMC geometry), we need to set the scheduled changes for each of these cells."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sequence1.set_isotopic_change(U_moderator_cell, moderator_isotopic_change, unit = 'atom fraction')\n",
+    "sequence1.set_isotopic_change(GD_moderator_cell, moderator_isotopic_change, unit = 'atom fraction')\n",
+    "sequence1.set_isotopic_change(Measured_moderator_cell, moderator_isotopic_change, unit = 'atom fraction')\n",
+    "sequence1.set_isotopic_change(Guide_moderator_in_cell, moderator_isotopic_change, unit = 'atom fraction')\n",
+    "sequence1.set_isotopic_change(Guide_moderator_out_cell, moderator_isotopic_change, unit = 'atom fraction')\n",
+    "\n",
+    "sequence1.set_density_change(U_moderator_cell, moderator_density_change)\n",
+    "sequence1.set_density_change(GD_moderator_cell, moderator_density_change)\n",
+    "sequence1.set_density_change(Measured_moderator_cell, moderator_density_change)\n",
+    "sequence1.set_density_change(Guide_moderator_in_cell, moderator_density_change)\n",
+    "sequence1.set_density_change(Guide_moderator_out_cell, moderator_density_change)\n",
+    "\n",
+    "sequence1.set_temperature_change(U_cell, fuel_temperature_change)\n",
+    "sequence1.set_temperature_change(GD_cell, fuel_temperature_change)\n",
+    "sequence1.set_temperature_change(Measured_cell, fuel_temperature_change)\n",
+    "sequence1.set_temperature_change(U_moderator_cell, moderator_temperature_change)\n",
+    "sequence1.set_temperature_change(GD_moderator_cell, moderator_temperature_change)\n",
+    "sequence1.set_temperature_change(Measured_moderator_cell, moderator_temperature_change)\n",
+    "sequence1.set_temperature_change(Guide_moderator_in_cell, moderator_temperature_change)\n",
+    "sequence1.set_temperature_change(Guide_moderator_out_cell, moderator_temperature_change)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Coupling with OpenMC\n",
+    "\n",
+    "Once the sequence objects are defined, we can import parameters from OpenMC to construct ONIX depletion systems"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We first need to instantiate a couple object. This object will operate all communication between OpenMC and ONIX."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "couple = Couple_openmc()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "ONIX will run a dummy OpenMC volume simulation. Because this \"pre run\" simulation calculates volumes, it is necessary to provide a bounding box to ONIX.\n",
+    "\n",
+    "**Important to note**: ONIX can use the volume provided by this simulation for the burnup regions that the user wants to deplete. However, due to non-negligible errors in the stochastic volume calculation of OpenMC, it is recommended to manually set volumes with the set_vol() command."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "couple.set_bounding_box([-11.43, -11.43, -0.5], [11.43, 11.43, 0.5])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**[Optional]**: simulations on HPC clusters require to explicitly define the path to the OpenMC executable in the openmc.run() command. The user should indicate the path to OpenMC executable to ONIX with the following command:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "couple.openmc_bin_path = '/home/julien/virtualenvs/py3/bin/openmc'"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The user can select which OpenMC cells will be depleted by adding the names of the cell objects defined above in the command below. Cells that are selected for depletion are called BUCells in ONIX."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "couple.select_bucells([U_cell, GD_cell, Measured_cell, U_moderator_cell,GD_moderator_cell, Measured_moderator_cell, Guide_moderator_in_cell, Guide_moderator_out_cell ])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The following command indicate to ONIX which OpenMC cell is the root cell. ONIX will use this cell to extract information on OpenMC materials and cells."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "couple.import_openmc(root_cell)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**[Optional]** By default, ONIX will use ENDF/B-VIII.0 libraries for decay and fission yields data. If users want to use other libraries, they can use the following commands:\n",
+    "\n",
+    "**Important to note**: if users want to complement the fission yield data library they are defining with the data from ENDF/B-VIII.0, they should set the *complete* parameter to True in the set_user_fy_lib command."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "couple.set_decay_lib('/home/julien/ONIX/ONIX/onix/data/other_libs/origen2.2/decay_lib')\n",
+    "couple.set_user_fy_lib('/home/julien/ONIX/ONIX/onix/data/other_libs/origen2.2/fy_lib', complete=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "As explained above, OpenMC volume calculations are not always reliable, especially for complex geometry. The user can dedice to manually set volumes for each BUCell."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "vol_dict = {'U1': 139.9573369652652, 'GD1': 5.148932129156914, 'cell1': 0.4680847390142649, 'cell24': 0.4680847390142649, 'total volume':482.342}\n",
+    "couple.set_vol(vol_dict)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now we can indicate to the couple object which sequence it should use for the simulation."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "couple.set_sequence(sequence1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can finally ask ONIX to burn the system and launch the coupled simulation"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "couple.burn()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Output results are going to be located in two types of folder. Per step folders include densities, power, neutron flux, burnup, one-group cross sections and burnup matrices for each macrostep, separately. The output summary folder contains aggregated output results for the whole simulation and for every macrostep."
+   ]
+  }
+ ],
+ "metadata": {
+  "anaconda-cloud": {},
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 1
+}

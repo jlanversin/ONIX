@@ -1,0 +1,799 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>onix.Sequence &mdash; ONIX Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="onix – Couple module" href="../couple.html" />
+    <link rel="prev" title="onix.System" href="onix.System.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #0d0d0d" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../main_class.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Main Classes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="onix.Passport.html">onix.Passport</a></li>
+<li class="toctree-l3"><a class="reference internal" href="onix.Passlist.html">onix.Passlist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="onix.Cell.html">onix.Cell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="onix.System.html">onix.System</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">onix.Sequence</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../couple.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Couple module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nax.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Nuclear Archaeology (NAX) module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../salameche.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Salamèche: the burnup solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Data and library readers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Utilities and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License Agreement</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ONIX</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Python API</a> &raquo;</li>
+        
+          <li><a href="../main_class.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Main Classes</a> &raquo;</li>
+        
+      <li>onix.Sequence</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/pythonapi/generated/onix.Sequence.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="onix-sequence">
+<h1>onix.Sequence<a class="headerlink" href="#onix-sequence" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="onix.Sequence">
+<em class="property">class </em><code class="sig-prename descclassname">onix.</code><code class="sig-name descname">Sequence</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id_number</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sequence object contains information about the burnup and time sequence that ONIX will follow during simulations.</p>
+<p>With the sequence object, the user can:</p>
+<ul class="simple">
+<li><p>Set the macrosteps for the simultion (points in time or burnup at which ONIX will call OpenMC to update the neutron flux and one-group reaction rates)</p></li>
+<li><p>Set the microsteps that divide each macrostep (ONIX depletes the system over each microstep)</p></li>
+<li><p>Set the normalization for each macrostep (flux or power density)</p></li>
+<li><p>Set operational change during the simulation such as temperature changes, density changes or isotopic changes</p></li>
+</ul>
+<p>Each BUCell is automatically associated with a unique copy of the ‘master’ sequence defined by the user. Each sequence object contains data on the evolution of all relevant quantities (<span class="math notranslate nohighlight">\(k_{inf}\)</span>, isomeric branchings, neutron flux spectrum, power, flux, burnup and time).</p>
+<dl class="py method">
+<dt id="onix.Sequence.MC_flux_point">
+<code class="sig-name descname">MC_flux_point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.MC_flux_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.MC_flux_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Monte Carlo neutron flux of the BUCell at macrostep s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.MC_flux_seq">
+<em class="property">property </em><code class="sig-name descname">MC_flux_seq</code><a class="headerlink" href="#onix.Sequence.MC_flux_seq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Monte Carlo neutron flux macrostep vector (<span class="math notranslate nohighlight">\(cm^{-2}s^{-1}\)</span> per source particle) for the BUCell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.bucell_bu_point">
+<code class="sig-name descname">bucell_bu_point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.bucell_bu_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.bucell_bu_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the burnup level of the BUCell at macrostep s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.bucell_bu_seq">
+<em class="property">property </em><code class="sig-name descname">bucell_bu_seq</code><a class="headerlink" href="#onix.Sequence.bucell_bu_seq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the burnup macrostep vector (MWd/kg) for the BUCell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.bucell_bu_subpoint">
+<code class="sig-name descname">bucell_bu_subpoint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">ss</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.bucell_bu_subpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.bucell_bu_subpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the burnup level of the BUCell at macrostep s and microstep ss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p></li>
+<li><p><strong>ss</strong> (<em>int</em>) – Microstep number ss.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.bucell_bu_subseq_mat">
+<em class="property">property </em><code class="sig-name descname">bucell_bu_subseq_mat</code><a class="headerlink" href="#onix.Sequence.bucell_bu_subseq_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of burnup microstep vectors (MWd/kg) for the BUCell where each microstep vector corresponds
+to one macrostep.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.current_pow_dens_subseq">
+<em class="property">property </em><code class="sig-name descname">current_pow_dens_subseq</code><a class="headerlink" href="#onix.Sequence.current_pow_dens_subseq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the power density microsequence of current macrostep
+for BUCell</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.current_tot_pow">
+<em class="property">property </em><code class="sig-name descname">current_tot_pow</code><a class="headerlink" href="#onix.Sequence.current_tot_pow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current total power of the system.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.density_change_dict">
+<em class="property">property </em><code class="sig-name descname">density_change_dict</code><a class="headerlink" href="#onix.Sequence.density_change_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the density change dictionnary set by the user.””</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.flux_approximation">
+<em class="property">property </em><code class="sig-name descname">flux_approximation</code><a class="headerlink" href="#onix.Sequence.flux_approximation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the method used for approximating the flux between two microsteps</p>
+<p><strong>Note</strong>: This method should not be used by the user in version 0.1</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.flux_point">
+<code class="sig-name descname">flux_point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.flux_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.flux_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the neutron flux of the BUCell at macrostep s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.flux_seq">
+<em class="property">property </em><code class="sig-name descname">flux_seq</code><a class="headerlink" href="#onix.Sequence.flux_seq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the neutron flux macrostep vector (<span class="math notranslate nohighlight">\(cm^{-2}s^{-1}\)</span>) for the BUCell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.flux_spectrum_seq">
+<em class="property">property </em><code class="sig-name descname">flux_spectrum_seq</code><a class="headerlink" href="#onix.Sequence.flux_spectrum_seq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of 300-group neutron flux arrays, one array per macrostep for the BUCell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.flux_subpoint">
+<code class="sig-name descname">flux_subpoint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">ss</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.flux_subpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.flux_subpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the neutron flux of the BUCell at macrostep s and microstep ss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p></li>
+<li><p><strong>ss</strong> (<em>int</em>) – Microstep number ss.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.flux_subseq_mat">
+<em class="property">property </em><code class="sig-name descname">flux_subseq_mat</code><a class="headerlink" href="#onix.Sequence.flux_subseq_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of neutron flux microstep vectors (<span class="math notranslate nohighlight">\(cm^{-2}s^{-1}\)</span>) for the BUCell where each microstep vector corresponds
+to one macrostep.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.get_bucell_bu_intvl">
+<code class="sig-name descname">get_bucell_bu_intvl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.get_bucell_bu_intvl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.get_bucell_bu_intvl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the burnup interval for the BUCell between macrostep s-1 and macrostep s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.get_bucell_bu_subintvl">
+<code class="sig-name descname">get_bucell_bu_subintvl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">ss</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.get_bucell_bu_subintvl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.get_bucell_bu_subintvl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the burnup interval for the BUCell between microstep ss-1 and microstep ss for macrostep s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p></li>
+<li><p><strong>ss</strong> (<em>int</em>) – Microstep number ss.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.get_system_bu_intvl">
+<code class="sig-name descname">get_system_bu_intvl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.get_system_bu_intvl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.get_system_bu_intvl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the average burnup interval for the whole system between macrostep s-1 and macrostep s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.get_system_bu_subintvl">
+<code class="sig-name descname">get_system_bu_subintvl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">ss</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.get_system_bu_subintvl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.get_system_bu_subintvl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the average burnup interval for the whole system between microstep ss-1 and microstep ss for macrostep s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p></li>
+<li><p><strong>ss</strong> (<em>int</em>) – Microstep number ss.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.get_time_intvl">
+<code class="sig-name descname">get_time_intvl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.get_time_intvl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.get_time_intvl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the time interval (seconds) between macrostep s nd macrostep s-1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.get_time_subintvl">
+<code class="sig-name descname">get_time_subintvl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">ss</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.get_time_subintvl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.get_time_subintvl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the time interval (seconds) between macrostep s and macrostep s-1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p></li>
+<li><p><strong>ss</strong> (<em>int</em>) – Microstep number ss.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.isomeric_branching_ratio_seq">
+<em class="property">property </em><code class="sig-name descname">isomeric_branching_ratio_seq</code><a class="headerlink" href="#onix.Sequence.isomeric_branching_ratio_seq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the isomeric branching ratios macrostep vector for the BUCell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.kinf_point">
+<code class="sig-name descname">kinf_point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.kinf_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.kinf_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the multiplication factor of the BUCell at macrostep s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.kinf_seq">
+<em class="property">property </em><code class="sig-name descname">kinf_seq</code><a class="headerlink" href="#onix.Sequence.kinf_seq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the multiplication factor macrostep vector for the BUCell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.macrostep_unit">
+<em class="property">property </em><code class="sig-name descname">macrostep_unit</code><a class="headerlink" href="#onix.Sequence.macrostep_unit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the units of the macrosteps.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.macrostep_vector">
+<em class="property">property </em><code class="sig-name descname">macrostep_vector</code><a class="headerlink" href="#onix.Sequence.macrostep_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the macrostep vector.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.macrosteps_number">
+<em class="property">property </em><code class="sig-name descname">macrosteps_number</code><a class="headerlink" href="#onix.Sequence.macrosteps_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of macrosteps.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.microstep_vector">
+<em class="property">property </em><code class="sig-name descname">microstep_vector</code><a class="headerlink" href="#onix.Sequence.microstep_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the microstep vector</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.microsteps_number">
+<code class="sig-name descname">microsteps_number</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.microsteps_number"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.microsteps_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of microsteps for macrostep s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.norma_unit">
+<em class="property">property </em><code class="sig-name descname">norma_unit</code><a class="headerlink" href="#onix.Sequence.norma_unit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the normalization unit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.norma_vector">
+<em class="property">property </em><code class="sig-name descname">norma_vector</code><a class="headerlink" href="#onix.Sequence.norma_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the normalization vector.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.pow_dens_point">
+<code class="sig-name descname">pow_dens_point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.pow_dens_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.pow_dens_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the power density of the BUCell at macrostep s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.pow_dens_seq">
+<em class="property">property </em><code class="sig-name descname">pow_dens_seq</code><a class="headerlink" href="#onix.Sequence.pow_dens_seq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the power density macrostep vector (<span class="math notranslate nohighlight">\(kW/l\)</span>) for the BUCell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.pow_dens_subpoint">
+<code class="sig-name descname">pow_dens_subpoint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">ss</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.pow_dens_subpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.pow_dens_subpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the neutron flux of the BUCell at macrostep s and microstep ss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p></li>
+<li><p><strong>ss</strong> (<em>int</em>) – Microstep number ss.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.pow_dens_subseq_mat">
+<em class="property">property </em><code class="sig-name descname">pow_dens_subseq_mat</code><a class="headerlink" href="#onix.Sequence.pow_dens_subseq_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of power density microstep vectors (<span class="math notranslate nohighlight">\(kW/l\)</span>) for the BUCell where each microstep vector corresponds
+to one macrostep.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.set_density_change">
+<code class="sig-name descname">set_density_change</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">cell_density_change</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.set_density_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.set_density_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually changes the total density (in atm per <span class="math notranslate nohighlight">\(cm^{3}\)</span>) of the material of the BUCell for user-specified macrosteps.</p>
+<p><strong>Note</strong>: This method trumps the other method “onix.Sequence.set_isotopic_change”, i.e., the new isotopic densities set in
+set_isotopic_change will be renormalized by the new value from set_density_change</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<a class="reference internal" href="onix.Cell.html#onix.Cell" title="onix.Cell"><em>onix.Cell</em></a>) – BUCell in which the density change is to be operated</p></li>
+<li><p><strong>cell_density_change</strong> (<em>dict</em>) – A dictionnary where keys are macrostep numbers (int) and entries are densities in atm per <span class="math notranslate nohighlight">\(cm^{3}\)</span>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.set_isotopic_change">
+<code class="sig-name descname">set_isotopic_change</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">cell_isotopic_change</span></em>, <em class="sig-param"><span class="n">unit</span><span class="o">=</span><span class="default_value">'number density'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.set_isotopic_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.set_isotopic_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually changes the isotopic densities of user-specified nuclides in a BUCell for user-specified
+macrosteps.</p>
+<p><strong>Note</strong>: If the method onix.Sequence.set_density_change is also used for the same BUCell, the isotopic change set by the user
+must be in atom fraction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<a class="reference internal" href="onix.Cell.html#onix.Cell" title="onix.Cell"><em>onix.Cell</em></a>) – BUCell in which the isotopic change is to be operated</p></li>
+<li><p><strong>cell_isotopic_change</strong> (<em>dict</em>) – A dictionnary where keys are nuclides’ name and entries are evolution sub-dictionnaries. The sub-dictionnaries contain desired density evolution per macrostep where keys are macrostep numbers (int) and entries are densities (unit specified by the user).</p></li>
+<li><p><strong>unit</strong> (<em>str</em>) – Specifies the unit for isotopic density evolution.
+‘number density’ (default) for density in atm per <span class="math notranslate nohighlight">\(cm^{3}\)</span>
+‘atom fraction’ for density as atomic fraction</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.set_macrostep">
+<code class="sig-name descname">set_macrostep</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">macrostep_vector</span></em>, <em class="sig-param"><span class="n">macrostep_unit</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.set_macrostep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.set_macrostep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the macrosteps and its units.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>macrostep_vector</strong> (<em>list</em>) – List of integers defining the points in time or burnup for which OpenMC will be run to update neutron flux and one-group reaction rates.</p></li>
+<li><p><strong>macrostep_unit</strong> (<em>str</em>) – ‘MWd/kg’ for burnup units or ‘s’ for seconds, ‘m’ for minutes, ‘d’ for days, and ‘y’ for years.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.set_master_bucell">
+<code class="sig-name descname">set_master_bucell</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.set_master_bucell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.set_master_bucell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the BUCell against which macrostep normalization is implemented</p>
+<p>This feature allows the user to define the sequence steps with the burnup points of the chosen
+master BUCell</p>
+<p>By default, the macrostep normalization is implemented against the whole system and thus the burunup
+points defined for the sequence are those of the whole system</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.set_norma">
+<code class="sig-name descname">set_norma</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">norma_vector</span></em>, <em class="sig-param"><span class="n">norma_unit</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.set_norma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.set_norma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the normalization for each macrostep.</p>
+<p><strong>Note 1</strong>: In version 0.10, in standalone mode, the flux set by the user is going to be
+used for all BUCells of the system. In other words, all BUCells will have the
+same neutron flux.</p>
+<p><strong>Note 2</strong>: The user should specify the power density as the total power
+divided by the total volume of the system. The total volume of the system should include
+all regions of the system, even regions that are not BUCells (for example, it should include the water region around the fuel BUCell).</p>
+<p><strong>Note 3</strong>: In version 0.10, the couple mode can only accept constant power depletion (i.e. the normalization should be against power).
+The standalone mode can only accept constant flux depletion (i.e. the normalization should be against flux)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>norma_vector</strong> (<em>list</em>) – List of float defining the value of the normalization (kW/l for power density, <span class="math notranslate nohighlight">\(cm^{-2}s^{-1}\)</span> for neutron flux).</p></li>
+<li><p><strong>macrostep_unit</strong> (<em>str</em>) – ‘power’ for power density, ‘flux’ for neutron flux</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.set_temperature_change">
+<code class="sig-name descname">set_temperature_change</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">cell_temperature_change</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.set_temperature_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.set_temperature_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually changes the temperature (Kelvin) of the material of the BUCell for user-specified
+macrosteps</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<a class="reference internal" href="onix.Cell.html#onix.Cell" title="onix.Cell"><em>onix.Cell</em></a>) – BUCell in which the temperature change is to be operated</p></li>
+<li><p><strong>cell_temperature_change</strong> (<em>dict</em>) – A dictionnary where keys are macrostep numbers (int) and entries are temperature in Kelvin.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.system_bu_point">
+<code class="sig-name descname">system_bu_point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.system_bu_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.system_bu_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the average burnup level of the whole system at macrostep s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.system_bu_seq">
+<em class="property">property </em><code class="sig-name descname">system_bu_seq</code><a class="headerlink" href="#onix.Sequence.system_bu_seq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the average burnup macrostep vector (MWd/kg) for the whole system.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.system_bu_subpoint">
+<code class="sig-name descname">system_bu_subpoint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">ss</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.system_bu_subpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.system_bu_subpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the average burnup level of the whole system at macrostep s and microstep ss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p></li>
+<li><p><strong>ss</strong> (<em>int</em>) – Microstep number ss.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.system_bu_subseq_mat">
+<em class="property">property </em><code class="sig-name descname">system_bu_subseq_mat</code><a class="headerlink" href="#onix.Sequence.system_bu_subseq_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of average burnup microstep vectors (MWd/kg) for the whole system where each microstep vector corresponds
+to one macrostep.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.temperature_change_dict">
+<em class="property">property </em><code class="sig-name descname">temperature_change_dict</code><a class="headerlink" href="#onix.Sequence.temperature_change_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the density change dictionnary set by the user.””</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.time_point">
+<code class="sig-name descname">time_point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.time_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.time_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the time (seconds) for macrostep s</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.time_seq">
+<em class="property">property </em><code class="sig-name descname">time_seq</code><a class="headerlink" href="#onix.Sequence.time_seq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the macrostep vector in time (seconds).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.time_subpoint">
+<code class="sig-name descname">time_subpoint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">ss</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.time_subpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.time_subpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the time (seconds) for macrostep s and microstep ss</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p></li>
+<li><p><strong>ss</strong> (<em>int</em>) – Microstep number ss.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.time_subseq_mat">
+<em class="property">property </em><code class="sig-name descname">time_subseq_mat</code><a class="headerlink" href="#onix.Sequence.time_subseq_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of time microstep vectors (seconds) where each microstep vector corresponds
+to one macrostep.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.tot_pow_point">
+<code class="sig-name descname">tot_pow_point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/sequence.html#Sequence.tot_pow_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Sequence.tot_pow_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the total power value for macrostep s</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>int</em>) – Macrostep number s.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Sequence.tot_pow_seq">
+<em class="property">property </em><code class="sig-name descname">tot_pow_seq</code><a class="headerlink" href="#onix.Sequence.tot_pow_seq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the sequence of total power of the system.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../couple.html" class="btn btn-neutral float-right" title="onix – Couple module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="onix.System.html" class="btn btn-neutral float-left" title="onix.System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Julien de Troullioud de Lanversin
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+ 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30411614-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>

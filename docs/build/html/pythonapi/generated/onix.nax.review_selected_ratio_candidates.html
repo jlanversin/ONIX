@@ -1,0 +1,304 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>onix.nax.review_selected_ratio_candidates &mdash; ONIX Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="onix.nax.list_NAX_ng_chain_from_output" href="onix.nax.list_NAX_ng_chain_from_output.html" />
+    <link rel="prev" title="onix.nax.review_all_ratio_candidates" href="onix.nax.review_all_ratio_candidates.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #0d0d0d" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../main_class.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Main Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../couple.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Couple module</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../nax.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Nuclear Archaeology (NAX) module</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../nax.html#fluence-indicator-identifier">Fluence indicator identifier</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="onix.nax.review_all_ratio_candidates.html">onix.nax.review_all_ratio_candidates</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">onix.nax.review_selected_ratio_candidates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.nax.list_NAX_ng_chain_from_output.html">onix.nax.list_NAX_ng_chain_from_output</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.nax.bateman_step_solution_matrix.html">onix.nax.bateman_step_solution_matrix</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../nax.html#plutonium-production-estimator">Plutonium production estimator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nax.html#classes">Classes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../salameche.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Salamèche: the burnup solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Data and library readers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Utilities and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License Agreement</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ONIX</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Python API</a> &raquo;</li>
+        
+          <li><a href="../nax.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Nuclear Archaeology (NAX) module</a> &raquo;</li>
+        
+      <li>onix.nax.review_selected_ratio_candidates</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/pythonapi/generated/onix.nax.review_selected_ratio_candidates.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="onix-nax-review-selected-ratio-candidates">
+<h1>onix.nax.review_selected_ratio_candidates<a class="headerlink" href="#onix-nax-review-selected-ratio-candidates" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="onix.nax.review_selected_ratio_candidates">
+<code class="sig-prename descclassname">onix.nax.</code><code class="sig-name descname">review_selected_ratio_candidates</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NAX_cell</span></em>, <em class="sig-param"><span class="n">operation_history</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">selected_list</span></em>, <em class="sig-param"><span class="n">ratio_uncertainty</span></em>, <em class="sig-param"><span class="n">cut_off</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/nax/functions.html#review_selected_ratio_candidates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.nax.review_selected_ratio_candidates" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function plots a series of graphs containing isotopic ratios evolution and their associated relative errors on fluence for a selected list of provided ratios  and for a given operation history. It can be used to identify potential good fluence indicators.</p>
+<p><strong>Detail description</strong>: the function builds (n,gamma) chains from all isotopes which are available in the one-group cross section library with onix.nax.list_NAX_ng_chain_from_output. Then, it depletes chains which contain the selected ratios provided by the user with a simple and fast analytical integrator (based on Bateman solution) according to the operation history provided. The obtained isotopic evolutions are used to construct ratios evolution as well as relative error on fluence associated with these ratios. Both ratios evolution and relative errors on fluence are displayed on graphs for the user to assess good fluence indicators.</p>
+<p><strong>Note</strong>: Since the relative error on fluence depends on the relative error on the measured ratios, the user must provide an assumed relative error that affect ratios measurements. These uncertainties affecting measurements depend on the isotopes densities, the ratio values and the technology used to measure the ratios. ONIX makes the approximation that the uncertainties affecting all ratios are the same.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>NAX_cell</strong> (<em>str</em>) – Name of the BUCell for which fluence indicators are to be identified</p></li>
+<li><p><strong>operation_history</strong> (<em>List of Tuples</em>) – Irradiation history of the reactor. This history can include successive fuel batches of different types. Each tuples represent the operation of a batch. The first element of the Tuple is the Batch object (onix.nax.Batch) corresponding to the batch type and the second element is the number of days for which this fuel batch has been run.</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – Path to the simulation’s directory</p></li>
+<li><p><strong>selected_list</strong> (<em>List of str</em>) – List of nuclide’s names selected by the user</p></li>
+<li><p><strong>ratio_uncertainty</strong> (<em>float</em>) – Assumed uncertainty on the measured ratios provided by the user</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="onix.nax.list_NAX_ng_chain_from_output.html" class="btn btn-neutral float-right" title="onix.nax.list_NAX_ng_chain_from_output" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="onix.nax.review_all_ratio_candidates.html" class="btn btn-neutral float-left" title="onix.nax.review_all_ratio_candidates" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Julien de Troullioud de Lanversin
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+ 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30411614-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>

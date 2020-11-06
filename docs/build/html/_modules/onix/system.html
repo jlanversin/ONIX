@@ -1,0 +1,735 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>onix.system &mdash; ONIX Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #0d0d0d" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pythonapi/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License Agreement</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ONIX</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>onix.system</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for onix.system</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">onix.utils</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">salameche</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<div class="viewcode-block" id="System"><a class="viewcode-back" href="../../pythonapi/generated/onix.System.html#onix.System">[docs]</a><span class="k">class</span> <span class="nc">System</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The system oject contains and organizes the ensemble of BUCells.</span>
+
+<span class="sd">    When running a standalone simulation, the system object is the the object with which the user can set certain attributes and parameters for the simulation (nuclear data libraries, burnup sequence, new BUCells).</span>
+<span class="sd">    In a coupled simulation, the class onix.couple.Couple_openmc fullfills that role and passes-on directives to the system object.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    system_id: int</span>
+<span class="sd">        Number id for the system object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_id</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">system_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bucell_dict</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bounding_box</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_summary_path</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reac_rank</span> <span class="o">=</span> <span class="s1">&#39;off&#39;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the number id of the system object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">bucell_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a dictionnary where keys are BUCell number ids and entries are corresponding BUCells objects&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bucell_dict</span>
+
+    <span class="nd">@bucell_dict</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">bucell_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bucell_dict</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bucell_dict</span> <span class="o">=</span> <span class="n">bucell_dict</span>
+
+    <span class="c1"># Probably obsolete</span>
+    <span class="k">def</span> <span class="nf">add_bucell_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_bucell_dict</span><span class="p">):</span>
+
+        <span class="c1"># You need to make sure that there are no cells with same ids</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span> <span class="o">=</span> <span class="n">new_bucell_dict</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">old_bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">updated_bucell_dict</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">old_bucell_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">new_bucell_dict</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span> <span class="o">=</span> <span class="n">updated_bucell_dict</span>
+
+<div class="viewcode-block" id="System.add_bucell"><a class="viewcode-back" href="../../pythonapi/generated/onix.System.html#onix.System.add_bucell">[docs]</a>    <span class="k">def</span> <span class="nf">add_bucell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_bucell</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds a new BUCell to System.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_BUCell: onix.Cell</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">new_bucell</span><span class="o">.</span><span class="n">id</span> <span class="p">:</span> <span class="n">new_bucell</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># You need to make sure this id is not already taken by other cell</span>
+            <span class="n">updated_bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">updated_bucell_dict</span><span class="p">[</span><span class="n">new_bucell</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_bucell</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span> <span class="o">=</span> <span class="n">updated_bucell_dict</span></div>
+
+<div class="viewcode-block" id="System.get_bucell"><a class="viewcode-back" href="../../pythonapi/generated/onix.System.html#onix.System.get_bucell">[docs]</a>    <span class="k">def</span> <span class="nf">get_bucell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the BUCell object with corresponding name.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name: str</span>
+<span class="sd">            Name of the BUCell</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">bucell</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">bucell</span>
+        
+        <span class="k">if</span> <span class="n">result</span> <span class="o">==</span>  <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Cell_name_not_found</span><span class="p">(</span><span class="s1">&#39;BUCell named </span><span class="si">{}</span><span class="s1"> has not been found in system no. </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="System.get_bucell_list"><a class="viewcode-back" href="../../pythonapi/generated/onix.System.html#onix.System.get_bucell_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_bucell_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a list of the BUCell objects&quot;&quot;&quot;</span>
+
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="n">bucell_list</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">cell_dict_to_cell_list</span><span class="p">(</span><span class="n">bucell_dict</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">bucell_list</span></div>
+
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">bounding_box</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the bounding box defined by the user for the system&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bounding_box</span>
+
+    <span class="c1"># This function is only used within the code by Coupe_openmc. No need in standalone.</span>
+    <span class="nd">@bounding_box</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">bounding_box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounding_box</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bounding_box</span> <span class="o">=</span> <span class="n">bounding_box</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">reac_rank</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reac_rank</span>
+    
+<div class="viewcode-block" id="System.reac_rank_on"><a class="viewcode-back" href="../../pythonapi/generated/onix.System.html#onix.System.reac_rank_on">[docs]</a>    <span class="k">def</span> <span class="nf">reac_rank_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calling this method will tell ONIX to produce production and destrubtion reaction rates ranking for each nuclide and print the data for each BUCells.</span>
+<span class="sd">        By default ONIX does not produce reaction rates ranking as it takes a lot of memory.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reac_rank</span> <span class="o">=</span> <span class="s1">&#39;on&#39;</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">total_vol</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the total volume of the system. The total volume of the system is the volume of all BUCells plus the volume of regions that are not depleted (moderator for instance if no BUCell is created for the moderator).</span>
+
+<span class="sd">        In standalone mode, the total volume will simply be the addition of all BUCells&#39; volume as all regions should be depleted.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_total_vol</span>
+
+    <span class="nd">@total_vol</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">total_vol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">total_vol</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the total volume of the system.</span>
+
+<span class="sd">         The total volume of the system is the volume of all BUCells plus the volume of regions that are not depleted (moderator for instance if no BUCell is created for the moderator).</span>
+
+<span class="sd">        In standalone mode, the total volume will simply be the addition of all BUCells&#39; volume as all regions should be depleted.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        total_vol: float</span>
+<span class="sd">            Total volume of the system</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_total_vol</span> <span class="o">=</span> <span class="n">total_vol</span>
+
+<div class="viewcode-block" id="System.get_tot_hm"><a class="viewcode-back" href="../../pythonapi/generated/onix.System.html#onix.System.get_tot_hm">[docs]</a>    <span class="k">def</span> <span class="nf">get_tot_hm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the current total heavy metal mass contained in System (g).&quot;&quot;&quot;</span>
+
+        <span class="n">tot_hm</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">tot_hm</span> <span class="o">+=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">get_hm</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">tot_hm</span></div>
+
+<div class="viewcode-block" id="System.get_tot_ihm"><a class="viewcode-back" href="../../pythonapi/generated/onix.System.html#onix.System.get_tot_ihm">[docs]</a>    <span class="k">def</span> <span class="nf">get_tot_ihm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the total initial heavy metal (IHM) mass contained in System (g).&quot;&quot;&quot;</span>
+
+        <span class="n">tot_ihm</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">tot_ihm</span> <span class="o">+=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">ihm</span>
+
+        <span class="k">return</span> <span class="n">tot_ihm</span></div>
+    
+<div class="viewcode-block" id="System.set_default_decay_for_all"><a class="viewcode-back" href="../../pythonapi/generated/onix.System.html#onix.System.set_default_decay_for_all">[docs]</a>    <span class="k">def</span> <span class="nf">set_default_decay_for_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the decay library to the default one (ENDF/B-VIII.0) for all BUCells.</span>
+
+<span class="sd">        This function will add all nuclides for which there are decay data in the library but which are not yet in the onix.Passlist object of the BUCells. This means that the depletion system will be significantly enlarged.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">set_default_decay_lib</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="System.set_default_decay_for_all_no_add"><a class="viewcode-back" href="../../pythonapi/generated/onix.System.html#onix.System.set_default_decay_for_all_no_add">[docs]</a>    <span class="k">def</span> <span class="nf">set_default_decay_for_all_no_add</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the decay library to the default one (ENDF/B-VIII.0) for all BUCells.</span>
+
+<span class="sd">        This function will only take nuclear decay data for nuclides that are already in the onix.Passlist object of the BUCells. This enables to run simulation where the depletion system is not enlarged when adding decay data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">set_default_decay_lib_no_add</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="System.set_decay_for_all"><a class="viewcode-back" href="../../pythonapi/generated/onix.System.html#onix.System.set_decay_for_all">[docs]</a>    <span class="k">def</span> <span class="nf">set_decay_for_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">decay_lib_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the decay library for all BUCells.</span>
+
+<span class="sd">        This function will add all nuclides for which there are decay data in the library but which are not yet in the onix.Passlist object of the BUCells. This means that the depletion system will be significantly enlarged.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        decay_lib_path: str</span>
+<span class="sd">            Path to the decay library provided by the user</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">set_decay_lib</span><span class="p">(</span><span class="n">decay_lib_path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_default_xs_for_all"><a class="viewcode-back" href="../../pythonapi/generated/onix.System.html#onix.System.set_default_xs_for_all">[docs]</a>    <span class="k">def</span> <span class="nf">set_default_xs_for_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the cross section library to the default one for all BUCells.</span>
+
+<span class="sd">        The default cross section library in ONIX has been obtained by computing middle-burnup one-group cross section for a coupled simumation of a LWR fuel pin-cell. Therefore, this library is only adapted for LWR reactors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">set_default_xs_lib</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="System.set_xs_for_all"><a class="viewcode-back" href="../../pythonapi/generated/onix.System.html#onix.System.set_xs_for_all">[docs]</a>    <span class="k">def</span> <span class="nf">set_xs_for_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xs_lib_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the cross section library for all BUCells.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xs_lib_path: str</span>
+<span class="sd">            Path to the cross section library provided by the user</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">set_xs_lib</span><span class="p">(</span><span class="n">xs_lib_path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_default_fy_for_all"><a class="viewcode-back" href="../../pythonapi/generated/onix.System.html#onix.System.set_default_fy_for_all">[docs]</a>    <span class="k">def</span> <span class="nf">set_default_fy_for_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the fission yield library to the default one (ENDF/B-VIII.0) for all BUCells.</span>
+
+<span class="sd">        This function will add all fission products for which there are fission yield data in the library but which are not yet in the onix.Passlist object of the BUCells. This means that the depletion system will be significantly enlarged.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">set_default_fy_lib</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="System.set_default_fy_for_all_no_add"><a class="viewcode-back" href="../../pythonapi/generated/onix.System.html#onix.System.set_default_fy_for_all_no_add">[docs]</a>    <span class="k">def</span> <span class="nf">set_default_fy_for_all_no_add</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the fission yield library to the default one (ENDF/B-VIII.0) for all BUCells.</span>
+
+<span class="sd">        This function will only take fission yield data for fission products that are already in the onix.Passlist object of the BUCells. This enables to run simulation where the depletion system is not enlarged when adding fission yield data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">set_default_fy_lib_no_add</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="System.set_fy_for_all"><a class="viewcode-back" href="../../pythonapi/generated/onix.System.html#onix.System.set_fy_for_all">[docs]</a>    <span class="k">def</span> <span class="nf">set_fy_for_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fy_lib_path</span><span class="p">,</span> <span class="n">complete</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the fission yield library for all BUCells. Setting the *complete* parameter to True allows ONIX to complement the data of the provided library with additional data found in ENDF/B-VIII.0.</span>
+
+<span class="sd">        This function will add all fission products for which there are fission yield data in the library but which are not yet in the onix.Passlist object of the BUCells. This means that the depletion system will be significantly enlarged.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        decay_lib_path: str</span>
+<span class="sd">            Path to the decay library provided by the user</span>
+<span class="sd">        complete: bool</span>
+<span class="sd">            Indicates to ONIX whether or not to complement the provided library with additional fission yields from ENDF:B-VIII.0 library.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">set_fy_lib</span><span class="p">(</span><span class="n">fy_lib_path</span><span class="p">,</span> <span class="n">complete</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the sequence object associated with System&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span>
+
+    <span class="nd">@sequence</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span> <span class="o">=</span> <span class="n">sequence</span>
+
+    <span class="c1"># In addition to set sequence for each cells</span>
+    <span class="c1"># This method also converts the average power_dens sequence to tot_power sequence if constant_power mode</span>
+    <span class="c1"># It seems the mode parameters is not used. Will have to investigate if its obsolete</span>
+<div class="viewcode-block" id="System.set_sequence"><a class="viewcode-back" href="../../pythonapi/generated/onix.System.html#onix.System.set_sequence">[docs]</a>    <span class="k">def</span> <span class="nf">set_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;stand alone&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets a sequence object to the System and distributes unique copies of the sequence object to each BUCells.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sequence: onix.Sequence</span>
+<span class="sd">            ONIX sequence object defined by the user</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create tot_pow, av_pow_dens sequence</span>
+        <span class="c1"># set time seq or bu seq depending on input</span>
+
+        <span class="n">sequence</span><span class="o">.</span><span class="n">_initial_system_conversion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sequence</span> <span class="o">=</span> <span class="n">sequence</span>
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;stand alone&#39;</span><span class="p">:</span>
+                <span class="n">bucell</span><span class="o">.</span><span class="n">_set_sequence</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;couple&#39;</span><span class="p">:</span>
+                <span class="n">bucell</span><span class="o">.</span><span class="n">_set_sequence</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;couple&#39;</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">bu_sec_conv_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bu_sec_conv_factor</span>
+    
+
+    <span class="k">def</span> <span class="nf">_set_bu_sec_conv_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">total_vol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_vol</span>
+        <span class="c1"># Since this get_tot_hm is called before burn, hm is ihm</span>
+        <span class="n">total_ihm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tot_hm</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">total_ihm</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bu_sec_conv_factor</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bu_sec_conv_factor</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_bu_sec_conv_factor</span><span class="p">(</span><span class="n">total_vol</span><span class="p">,</span> <span class="n">total_ihm</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">zam_order_passlist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">passlist</span><span class="o">.</span><span class="n">zam_order_passport_list_2</span><span class="p">()</span>
+
+    <span class="c1"># Burn the system according to the sequence set to system</span>
+    <span class="c1"># def burn_loop(self):</span>
+
+    <span class="c1">#   sequence = self.sequence</span>
+    <span class="c1">#   steps_number = sequence.steps_number</span>
+    <span class="c1">#   for s in range(steps_number):</span>
+
+    <span class="k">def</span> <span class="nf">_print_current_allreacs_rank</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">_print_current_allreacs_rank</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_print_summary_allreacs_rank</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">summary_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_summary_path</span>
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">_print_summary_allreacs_rank</span><span class="p">(</span><span class="n">summary_path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_print_summary_dens</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">summary_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_summary_path</span>
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">_print_summary_dens</span><span class="p">(</span><span class="n">summary_path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_print_summary_activity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">summary_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_summary_path</span>
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">_print_summary_activity</span><span class="p">(</span><span class="n">summary_path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_print_summary_subdens</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">summary_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_summary_path</span>
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">_print_summary_subdens</span><span class="p">(</span><span class="n">summary_path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_print_summary_xs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">summary_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_summary_path</span>
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">_print_summary_xs</span><span class="p">(</span><span class="n">summary_path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_print_summary_isomeric_branching_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">summary_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_summary_path</span>
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">_print_summary_isomeric_branching_ratio</span><span class="p">(</span><span class="n">summary_path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_print_summary_flux_spectrum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mg_energy_bin</span><span class="p">):</span>
+
+        <span class="n">summary_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_summary_path</span>
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">_print_summary_flux_spectrum</span><span class="p">(</span><span class="n">summary_path</span><span class="p">,</span> <span class="n">mg_energy_bin</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_print_summary_kinf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">summary_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_summary_path</span>
+        <span class="n">file_name</span> <span class="o">=</span> <span class="n">summary_path</span> <span class="o">+</span> <span class="s1">&#39;/kinf&#39;</span>
+        <span class="n">write_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">sequence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sequence</span>
+        <span class="n">time_seq</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">time_seq</span>
+        <span class="n">system_bu_seq</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">system_bu_seq</span>
+        <span class="n">kinf_seq</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">kinf_seq</span>
+        <span class="n">steps_number</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">macrosteps_number</span>
+
+        <span class="n">txt</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:&lt;12}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;TIME&#39;</span><span class="p">)</span>
+        <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:&lt;13.5E}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time_seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="mi">24</span><span class="o">*</span><span class="mi">3600</span><span class="p">))</span><span class="c1"># in days</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps_number</span><span class="p">):</span>
+            <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:&lt;13.5E}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time_seq</span><span class="p">[</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="mi">24</span><span class="o">*</span><span class="mi">3600</span><span class="p">))</span><span class="c1"># in days</span>
+
+        <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+        <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:&lt;12}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;SYSTEM-BU&#39;</span><span class="p">)</span>
+        <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:&lt;13.5E}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">system_bu_seq</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps_number</span><span class="p">):</span>
+            <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:&lt;13.5E}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">system_bu_seq</span><span class="p">[</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+
+        <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:&lt;12}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;K-INF&#39;</span><span class="p">)</span>
+        <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:&lt;13.5E}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kinf_seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps_number</span><span class="p">):</span>
+            <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:&lt;13.5E}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kinf_seq</span><span class="p">[</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+
+        <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+        <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:&lt;12}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;UNCERTAINTY&#39;</span><span class="p">)</span>
+        <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:&lt;13.5E}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kinf_seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps_number</span><span class="p">):</span>
+            <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:&lt;13.5E}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kinf_seq</span><span class="p">[</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+
+        <span class="n">write_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+        <span class="n">write_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+    <span class="k">def</span> <span class="nf">_print_summary_param</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">summary_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_summary_path</span>
+        <span class="n">file_name</span> <span class="o">=</span> <span class="n">summary_path</span> <span class="o">+</span> <span class="s1">&#39;/system_parameters&#39;</span>
+        <span class="n">write_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="s1">&#39;System Volume [cm³] = </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total_vol</span><span class="p">)</span>
+        <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;System IHM [g] = </span><span class="si">{}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_tot_ihm</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;BuCell </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bucell</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;Volume [cm³] = </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bucell</span><span class="o">.</span><span class="n">vol</span><span class="p">)</span>
+            <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;IHM [g] = </span><span class="si">{}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bucell</span><span class="o">.</span><span class="n">ihm</span><span class="p">)</span>
+        <span class="n">write_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+        <span class="n">write_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_copy_cell_folders_to_step_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell</span><span class="o">.</span><span class="n">_copy_cell_folders_to_step_folder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_gen_output_summary_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;output_summary&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_summary_path</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_folder_path</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">gen_folder</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="System.burn"><a class="viewcode-back" href="../../pythonapi/generated/onix.System.html#onix.System.burn">[docs]</a>    <span class="k">def</span> <span class="nf">burn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Launches a standalone simulation.&quot;&quot;&quot;</span>
+
+        <span class="n">sequence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sequence</span>
+        <span class="n">steps_number</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">steps_number</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps_number</span><span class="p">):</span>
+
+            <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n\n\n</span><span class="s1"> STEP </span><span class="si">{}</span><span class="se">\n\n\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+
+            <span class="n">sequence</span><span class="o">.</span><span class="n">_gen_step_folder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">salameche</span><span class="o">.</span><span class="n">burn_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+
+        <span class="n">system</span><span class="o">.</span><span class="n">_gen_output_summary_folder</span><span class="p">()</span>
+        <span class="n">system</span><span class="o">.</span><span class="n">_print_summary_allreacs_rank</span><span class="p">()</span>
+        <span class="n">system</span><span class="o">.</span><span class="n">_print_summary_dens</span><span class="p">()</span></div>
+
+
+
+
+    <span class="k">def</span> <span class="nf">print_bucell_nuclides</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bucell</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">nuclide_list</span><span class="p">):</span>
+
+        <span class="n">bucell</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bucell</span><span class="p">(</span><span class="n">bucell</span><span class="p">)</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;/</span><span class="si">{}</span><span class="s1">_step</span><span class="si">{}</span><span class="s1">_nucl_print&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bucell</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+
+        <span class="n">passport_list</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">passlist</span><span class="o">.</span><span class="n">passport_list</span>
+
+        <span class="n">nucl_name_density</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">nucl</span> <span class="ow">in</span> <span class="n">passport_list</span><span class="p">:</span>
+            <span class="n">nucl_name</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">onix_name_to_openmc_name</span><span class="p">(</span><span class="n">nucl</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">nucl_name</span> <span class="ow">in</span> <span class="n">nuclide_list</span><span class="p">:</span>
+                <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:&lt;10}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nucl_name</span><span class="p">)</span>
+                <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:&lt;13.5E}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nucl</span><span class="o">.</span><span class="n">dens_seq</span><span class="p">[</span><span class="n">step</span><span class="p">])</span>
+                <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<span class="k">class</span> <span class="nc">Cell_name_not_found</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+
+    <span class="k">pass</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Julien de Troullioud de Lanversin
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+ 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30411614-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>

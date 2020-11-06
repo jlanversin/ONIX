@@ -1,0 +1,631 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>onix.Cell &mdash; ONIX Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="onix.System" href="onix.System.html" />
+    <link rel="prev" title="onix.Passlist" href="onix.Passlist.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #0d0d0d" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../main_class.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Main Classes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="onix.Passport.html">onix.Passport</a></li>
+<li class="toctree-l3"><a class="reference internal" href="onix.Passlist.html">onix.Passlist</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">onix.Cell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="onix.System.html">onix.System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="onix.Sequence.html">onix.Sequence</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../couple.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Couple module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nax.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Nuclear Archaeology (NAX) module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../salameche.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Salamèche: the burnup solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Data and library readers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Utilities and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License Agreement</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ONIX</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Python API</a> &raquo;</li>
+        
+          <li><a href="../main_class.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Main Classes</a> &raquo;</li>
+        
+      <li>onix.Cell</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/pythonapi/generated/onix.Cell.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="onix-cell">
+<h1>onix.Cell<a class="headerlink" href="#onix-cell" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="onix.Cell">
+<em class="property">class </em><code class="sig-prename descclassname">onix.</code><code class="sig-name descname">Cell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell_id</span></em>, <em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cells (or BUCells), represent burnup regions and contain a unique onix.Passlist object with a specific list of nuclides.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell_id</strong> (<em>int</em>) – The id number of the BUCell</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The name of the BUCell</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="onix.Cell.bu_sec_conv_factor">
+<em class="property">property </em><code class="sig-name descname">bu_sec_conv_factor</code><a class="headerlink" href="#onix.Cell.bu_sec_conv_factor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the conversion factor to go from time (seconds) to burnup (MWd/kg) for the BUCell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.check_act_presence">
+<code class="sig-name descname">check_act_presence</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.check_act_presence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.check_act_presence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether actinides are present in the material of the BUCell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.decay_a_lib">
+<em class="property">property </em><code class="sig-name descname">decay_a_lib</code><a class="headerlink" href="#onix.Cell.decay_a_lib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an absolute decay dictionnary where keys are nuclides’ names and entries are decay sub-dictionnaries. The keys of these sub-dictionnaries are the names of the decay reactions and the entries are the absolute values of the corresponding decay constant in <span class="math notranslate nohighlight">\(s^{-1}\)</span>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.decay_b_lib">
+<em class="property">property </em><code class="sig-name descname">decay_b_lib</code><a class="headerlink" href="#onix.Cell.decay_b_lib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a fractionnal decay dictionnary where keys are nuclides’ names and entries are decay sub-dictionnaries. The keys of these sub-dictionnaries are the names of the decay reactions and the entries are the fractions of the corresponding decay constant over the total decay constant.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.fy_lib">
+<em class="property">property </em><code class="sig-name descname">fy_lib</code><a class="headerlink" href="#onix.Cell.fy_lib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionnary where keys are fission products’ names and entries are fission yield sub-dictionnaries. The keys of these sub-dictionnaries are fissionning parents’ z-a-m id and the entries are the value the corresponding fission yield in percent (values between 0 to 100).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.get_act_passport_list">
+<code class="sig-name descname">get_act_passport_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.get_act_passport_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.get_act_passport_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of Passport objects of all actinides present in the BUCell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.get_avt_passport_list">
+<code class="sig-name descname">get_avt_passport_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.get_avt_passport_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.get_avt_passport_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of Passport objects of all activation products present in the BUCell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.get_decay_nucl">
+<em class="property">property </em><code class="sig-name descname">get_decay_nucl</code><a class="headerlink" href="#onix.Cell.get_decay_nucl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of nuclides for which decay data exists in the provided decay library.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.get_fp_passport_list">
+<code class="sig-name descname">get_fp_passport_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.get_fp_passport_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.get_fp_passport_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of Passport objects of all fission products present in the BUCell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.get_fy_nucl">
+<code class="sig-name descname">get_fy_nucl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.get_fy_nucl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.get_fy_nucl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of fission products for which fission yields data exists in the provided fission yield data library.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.get_fy_parent_nucl">
+<code class="sig-name descname">get_fy_parent_nucl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.get_fy_parent_nucl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.get_fy_parent_nucl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of fissioning parents for which data exist in the fission yield library.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.get_hm">
+<code class="sig-name descname">get_hm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.get_hm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.get_hm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current heavy metal mass contained in the BUCell (g).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.get_lib_nucl">
+<code class="sig-name descname">get_lib_nucl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.get_lib_nucl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.get_lib_nucl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the full list of nuclides for which there are data in the nuclear libraries (deay, cross section or fission yield). This is the full list of nuclides modelled in the depletion network.</p>
+<p>This command does not work when the mode for cross sections is set to ‘constant lib’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.get_nucl_ao">
+<code class="sig-name descname">get_nucl_ao</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nucl_id</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.get_nucl_ao"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.get_nucl_ao" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the atom fraction of a nuclide over the total number of atoms in the BUCell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nucl_id</strong> (<em>str</em>) – The z-a-m id or the name of the nuclide</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.get_nucl_list">
+<code class="sig-name descname">get_nucl_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.get_nucl_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.get_nucl_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the list of nuclides contained in the Passlist object of the BUCell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.get_nucl_subao">
+<code class="sig-name descname">get_nucl_subao</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nucl_id</span></em>, <em class="sig-param"><span class="n">nucl_list</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.get_nucl_subao"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.get_nucl_subao" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the atom fraction of a nuclide over the number of atoms of a sub-set of nuclides in the BUCell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nucl_id</strong> (<em>str</em>) – The z-a-m id or the name of the nuclide</p></li>
+<li><p><strong>nucl_list</strong> (<em>list</em>) – The list of nuclides that constitute the sub-set of nuclides</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.get_nuclide">
+<code class="sig-name descname">get_nuclide</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nuclide_id</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.get_nuclide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.get_nuclide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Passport object of a nuclide.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nuclide_id</strong> (<em>str</em>) – Name or z-a-m id of a nuclide</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.get_subtotal_dens">
+<code class="sig-name descname">get_subtotal_dens</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nucl_list</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.get_subtotal_dens"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.get_subtotal_dens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the total density of sub-set of nuclides in the BUCell in <span class="math notranslate nohighlight">\(10^{24}cm^{-3}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nucl_list</strong> (<em>list</em>) – A list of nuclides’ names</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.get_total_dens">
+<code class="sig-name descname">get_total_dens</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.get_total_dens"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.get_total_dens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the total density of all nuclides in the BUCell in <span class="math notranslate nohighlight">\(10^{24}cm^{-3}\)</span>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.get_tree">
+<em class="property">property </em><code class="sig-name descname">get_tree</code><a class="headerlink" href="#onix.Cell.get_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the generation tree for the BUCell. This returns a dictionnary where keys are the z-a-m id of initial nuclides of the BUCell. The entry for each initial nuclide is a list of generations. Each element of this list represents a generation of daughter nuclides (they are themselves lists of all the daughters from one generation).</p>
+<p>Daughters of generation n will be located in the nth list. There are separated by n-1 intermediate nuclides from the initial nuclide.</p>
+<p>This method is very useful to see which nuclides will be produced from an initial nuclide. It requires, however, that nuclear data libraries are set to the BUCell (this can be a problem in coupled simulation as cross section data are only produced after OpenMC simulations).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.get_xs_nucl">
+<em class="property">property </em><code class="sig-name descname">get_xs_nucl</code><a class="headerlink" href="#onix.Cell.get_xs_nucl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of nuclides for which cross section data exists in the provided cross section library.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.hm_vol">
+<em class="property">property </em><code class="sig-name descname">hm_vol</code><a class="headerlink" href="#onix.Cell.hm_vol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the volume of the heavy metal regions of the BUCell in <span class="math notranslate nohighlight">\(cm^{-3}\)</span>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.id">
+<em class="property">property </em><code class="sig-name descname">id</code><a class="headerlink" href="#onix.Cell.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns number id of BUCell</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.ihm">
+<em class="property">property </em><code class="sig-name descname">ihm</code><a class="headerlink" href="#onix.Cell.ihm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the initial heavy metal (IHM) mass contained in the BUCell (g).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.initial_nucl">
+<em class="property">property </em><code class="sig-name descname">initial_nucl</code><a class="headerlink" href="#onix.Cell.initial_nucl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the initial list of nuclides.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#onix.Cell.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns name of BUCell</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.passlist">
+<em class="property">property </em><code class="sig-name descname">passlist</code><a class="headerlink" href="#onix.Cell.passlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Passlist object of the BUCell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.set_decay">
+<code class="sig-name descname">set_decay</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">decay_object</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.set_decay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.set_decay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the decay library from an ONIX decay object defined by the user for the BUCell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>object</strong> (<a class="reference internal" href="onix.utils.decay_lib.html#onix.utils.decay_lib" title="onix.utils.decay_lib"><em>onix.utils.decay_lib</em></a>) – A decay library object constructed by the user with onix.utils.decay_lib.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.set_decay_lib">
+<code class="sig-name descname">set_decay_lib</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">decay_lib_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.set_decay_lib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.set_decay_lib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the decay library for the BUCell.</p>
+<p>This function will add all nuclides for which there are decay data in the library but which are not yet in the onix.Passlist object of the BUCell. This means that the depletion system will be significantly enlarged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>decay_lib_path</strong> (<em>str</em>) – Path to the decay library provided by the user</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.set_default_decay_lib">
+<code class="sig-name descname">set_default_decay_lib</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.set_default_decay_lib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.set_default_decay_lib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the decay library to the default one (ENDF/B-VIII.0) for the BUCell.</p>
+<p>This function will add all nuclides for which there are decay data in the library but which are not yet in the onix.Passlist object of the BUCell. This means that the depletion system will be significantly enlarged.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.set_default_decay_lib_no_add">
+<code class="sig-name descname">set_default_decay_lib_no_add</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.set_default_decay_lib_no_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.set_default_decay_lib_no_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the decay library to the default one (ENDF/B-VIII.0) for the BUCell.</p>
+<p>This function will only take nuclear decay data for nuclides that are already in the onix.Passlist object of the BUCell. This enables to run simulation where the depletion system is not enlarged when adding decay data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.set_default_fy_lib">
+<code class="sig-name descname">set_default_fy_lib</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.set_default_fy_lib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.set_default_fy_lib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the fission yield library to the default one (ENDF/B-VIII.0) for the BUCell.</p>
+<p>This function will add all nuclides for which there are fission yield data in the library but which are not yet in the onix.Passlist object of the BUCell. This means that the depletion system will be significantly enlarged.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.set_default_fy_lib_no_add">
+<code class="sig-name descname">set_default_fy_lib_no_add</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.set_default_fy_lib_no_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.set_default_fy_lib_no_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the fission yield library to the default one (ENDF/B-VIII.0) for the BUCell.</p>
+<p>This function will only take fission yield data for nuclides that are already in the onix.Passlist object of the BUCell. This enables to run simulation where the depletion system is not enlarged when adding fission yield data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.set_default_xs_lib">
+<code class="sig-name descname">set_default_xs_lib</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.set_default_xs_lib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.set_default_xs_lib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the cross section library to the default one. The default cross section library in ONIX has been obtained by computing middle-burnup one-group cross section for a coupled simumation of a LWR fuel pin-cell. Therefore, this library is only adapted for LWR reactors.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.set_default_xs_lib_no_add">
+<code class="sig-name descname">set_default_xs_lib_no_add</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.set_default_xs_lib_no_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.set_default_xs_lib_no_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the cross section library to the default one. The default cross section library in ONIX has been obtained by computing middle-burnup one-group cross section for a coupled simumation of a LWR fuel pin-cell. Therefore, this library is only adapted for LWR reactors.</p>
+<p>This function will only take nuclear decay data for nuclides that are already in the onix.Passlist object of the BUCell. This enables to run simulation where the depletion system is not enlarged when adding cross section data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.set_fy">
+<code class="sig-name descname">set_fy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fy_object</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.set_fy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.set_fy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the fission yield library from an ONIX fission yield object defined by the user for the BUCell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>object</strong> (<a class="reference internal" href="onix.utils.fy_lib.html#onix.utils.fy_lib" title="onix.utils.fy_lib"><em>onix.utils.fy_lib</em></a>) – A fission yield library object constructed by the user with onix.utils.fy_lib.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.set_fy_lib">
+<code class="sig-name descname">set_fy_lib</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fy_lib_path</span></em>, <em class="sig-param"><span class="n">complete</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.set_fy_lib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.set_fy_lib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the fission yield library for the BUCell.</p>
+<p>This function will add all nuclides for which there are fission yield data in the library but which are not yet in the onix.Passlist object of the BUCell. This means that the depletion system will be significantly enlarged.</p>
+<p>Setting the <em>complete</em> parameter to True allows ONIX to complement the data of the provided library with additional data found in ENDF/B-VIII.0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fy_lib_path</strong> (<em>str</em>) – Path to the fission yield library provided by the user</p></li>
+<li><p><strong>complete</strong> (<em>bool</em>) – Indicates to ONIX whether or not to complement the provided library with additional fission yields from ENDF:B-VIII.0 library.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.set_initial_dens">
+<code class="sig-name descname">set_initial_dens</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dens_dict</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.set_initial_dens"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.set_initial_dens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the initial densities of nuclides in <span class="math notranslate nohighlight">\(10^{24}cm^{-3}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dens_dict</strong> (<em>dict</em>) – A dictionnary where keys are nuclides’ names and entries are densities in <span class="math notranslate nohighlight">\(10^{24}cm^{-3}\)</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.set_passlist">
+<code class="sig-name descname">set_passlist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nucl_list</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.set_passlist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.set_passlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates and sets a Passlist object to the BUCell using the provided nuclides list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nucl_list</strong> (<em>list</em>) – List of nuclides to create a Passlist object for the BUCell</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.set_xs">
+<code class="sig-name descname">set_xs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xs_object</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.set_xs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.set_xs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the cross section data from an ONIX cross section object defined by the user for a specific BUCell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>object</strong> (<a class="reference internal" href="onix.utils.xs_lib.html#onix.utils.xs_lib" title="onix.utils.xs_lib"><em>onix.utils.xs_lib</em></a>) – A cross section library object constructed by the user with onix.utils.xs_lib.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.set_xs_lib">
+<code class="sig-name descname">set_xs_lib</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xs_lib_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/cell.html#Cell.set_xs_lib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Cell.set_xs_lib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the cross section library for the BUCell.</p>
+<p>This function will add all nuclides for which there are cross section data in the library but which are not yet in the onix.Passlist object of the BUCell. This means that the depletion system will be significantly enlarged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xs_lib_path</strong> (<em>str</em>) – Path to the cross section library provided by the user</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.vol">
+<em class="property">property </em><code class="sig-name descname">vol</code><a class="headerlink" href="#onix.Cell.vol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the volume of the BUCell in <span class="math notranslate nohighlight">\(cm^{-3}\)</span>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.Cell.xs_lib">
+<em class="property">property </em><code class="sig-name descname">xs_lib</code><a class="headerlink" href="#onix.Cell.xs_lib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionnary where keys are nuclides’ names and entries are cross section sub-dictionnaries. The keys of these sub-dictionnaries are neutron-induced reactions names and the entries are the value the corresponding cross sections in barn.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="onix.System.html" class="btn btn-neutral float-right" title="onix.System" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="onix.Passlist.html" class="btn btn-neutral float-left" title="onix.Passlist" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Julien de Troullioud de Lanversin
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+ 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30411614-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>

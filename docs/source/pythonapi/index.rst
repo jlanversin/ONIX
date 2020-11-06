@@ -9,7 +9,7 @@ Python API
 .. toctree::
    :maxdepth: 1
 
-   base
+   main_class
    couple
    nax
    salameche

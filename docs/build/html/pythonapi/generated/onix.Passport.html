@@ -39,7 +39,8 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="prev" title="onix – Basic Functionality" href="../base.html" /> 
+    <link rel="next" title="onix.Passlist" href="onix.Passlist.html" />
+    <link rel="prev" title="onix – Main Classes" href="../main_class.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -93,15 +94,22 @@
 <li class="toctree-l1"><a class="reference internal" href="../../releasenotes/index.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Basic Functionality</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="../base.html#nuclides-passports">Nuclides’ Passports</a><ul class="current">
-<li class="toctree-l4 current"><a class="current reference internal" href="#">onix.Passport</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../main_class.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Main Classes</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">onix.Passport</a></li>
+<li class="toctree-l3"><a class="reference internal" href="onix.Passlist.html">onix.Passlist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="onix.Cell.html">onix.Cell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="onix.System.html">onix.System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="onix.Sequence.html">onix.Sequence</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../couple.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Couple module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nax.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Nuclear Archaeology (NAX) module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../salameche.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Salamèche: the burnup solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Data and library readers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Utilities and functions</a></li>
 </ul>
 </li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License Agreement</a></li>
 </ul>
 
             
@@ -150,7 +158,7 @@
         
           <li><a href="../index.html">Python API</a> &raquo;</li>
         
-          <li><a href="../base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Basic Functionality</a> &raquo;</li>
+          <li><a href="../main_class.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Main Classes</a> &raquo;</li>
         
       <li>onix.Passport</li>
     
@@ -214,7 +222,7 @@ neutron reaction daughters. Other type of data, typically large in size such as 
 <dl class="py method">
 <dt id="onix.Passport.all_child">
 <em class="property">property </em><code class="sig-name descname">all_child</code><a class="headerlink" href="#onix.Passport.all_child" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns all daughter products of the nuclide</p>
+<dd><p>Returns all daughter products of the nuclide.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -308,7 +316,7 @@ The entries are the reaction rates of the reactions in <span class="math notrans
 <dl class="py method">
 <dt id="onix.Passport.fission_child">
 <em class="property">property </em><code class="sig-name descname">fission_child</code><a class="headerlink" href="#onix.Passport.fission_child" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns daughter products of the nuclide via fission reactions</p>
+<dd><p>Returns daughter products of the nuclide via fission reactions.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -334,7 +342,7 @@ fission parents and the corresponding entry is the fission yield normalized to 1
 <dl class="py method">
 <dt id="onix.Passport.get_all_non0_child">
 <code class="sig-name descname">get_all_non0_child</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/passport.html#Passport.get_all_non0_child"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.Passport.get_all_non0_child" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets all daughter products of the nuclide produced via reactions that are non-zero in the library used in the simulation</p>
+<dd><p>Gets all daughter products of the nuclide produced via reactions that are non-zero (i.e., the reaction cross section or decay constant is not null) in the library used in the simulation</p>
 </dd></dl>
 
 <dl class="py method">
@@ -465,8 +473,10 @@ These tuples are ranked from lower reaction rate to higher reaction rate</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="onix.Passlist.html" class="btn btn-neutral float-right" title="onix.Passlist" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="../base.html" class="btn btn-neutral float-left" title="onix – Basic Functionality" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="../main_class.html" class="btn btn-neutral float-left" title="onix – Main Classes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

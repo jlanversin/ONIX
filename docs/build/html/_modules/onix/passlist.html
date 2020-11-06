@@ -1,0 +1,619 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>onix.passlist &mdash; ONIX Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #0d0d0d" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pythonapi/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License Agreement</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ONIX</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>onix.passlist</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for onix.passlist</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Create list of passport, set mass, decay and xs&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">.passport</span> <span class="kn">import</span> <span class="n">Passport</span>
+<span class="kn">from</span> <span class="nn">onix</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">d</span>
+<span class="kn">import</span> <span class="nn">onix.utils</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">math</span> <span class="k">as</span> <span class="nn">m</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">operator</span>
+
+<div class="viewcode-block" id="Passlist"><a class="viewcode-back" href="../../pythonapi/generated/onix.Passlist.html#onix.Passlist">[docs]</a><span class="k">class</span> <span class="nc">Passlist</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Passlist manages the list of nuclides&#39; passports.</span>
+
+<span class="sd">    It can for example order the list of nuclides in a certain order and is tasked with distributing nuclear data to individual nuclides.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nucl_list: list</span>
+<span class="sd">        (Optiontal) List of nuclides for which Passlist should build the Passports list. A passlist object can be instantiated without providing a nuclides list</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">nucl_list</span><span class="p">):</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nucl_list</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_passport_list</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">nucl_list</span><span class="p">:</span>
+
+            <span class="n">nucl_list</span> <span class="o">=</span> <span class="n">nucl_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">sample_elt</span> <span class="o">=</span> <span class="n">nucl_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">utils</span><span class="o">.</span><span class="n">is_name</span><span class="p">(</span><span class="n">sample_elt</span><span class="p">):</span>
+                <span class="n">nucl_list</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">name_list_to_zamid_list</span><span class="p">(</span><span class="n">nucl_list</span><span class="p">)</span>
+
+            <span class="n">passport_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_passport_list</span><span class="p">(</span><span class="n">nucl_list</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nucl_list</span> <span class="o">=</span> <span class="n">nucl_list</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_passport_list</span> <span class="o">=</span> <span class="n">passport_list</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_mass</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">zam_order_passport_list</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_zero_dens</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nucl_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the list of nuclides&#39; names.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nucl_list</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">passport_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the list of Passport objects.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_passport_list</span>
+
+        
+    <span class="k">def</span> <span class="nf">_get_zamid_passport_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert the list of Passport objects into a dictionnary of Passport objects where keys are the zamid of the nuclides and entries are Passport objects.&quot;&quot;&quot;</span>
+
+        <span class="n">passport_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">passport_list</span>
+
+        <span class="n">passport_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">passport_list</span><span class="p">:</span>
+            <span class="n">zamid</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">zamid</span>
+            <span class="n">passport_dict</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+
+        <span class="k">return</span> <span class="n">passport_dict</span>
+
+    <span class="k">def</span> <span class="nf">_get_name_passport_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert the list of passport into a dictionnary of passports where entries are the zamid of the nuclides.&quot;&quot;&quot;</span>
+
+        <span class="n">passport_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">passport_list</span>
+
+        <span class="n">passport_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">passport_list</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">passport_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+
+        <span class="k">return</span> <span class="n">passport_dict</span>
+
+<div class="viewcode-block" id="Passlist.azm_order_passport_list"><a class="viewcode-back" href="../../pythonapi/generated/onix.Passlist.html#onix.Passlist.azm_order_passport_list">[docs]</a>    <span class="k">def</span> <span class="nf">azm_order_passport_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Orders the list of Passport objects after mass number first and then atomic number.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">passport_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">passport_list</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;AZM ORDER CALLED&#39;</span><span class="p">)</span>
+        <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">while</span> <span class="n">changed</span><span class="p">:</span>
+            <span class="n">changed</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">a0</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_a</span>
+                <span class="n">a1</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_a</span>
+                <span class="n">z0</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_z</span>
+                <span class="n">z1</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_z</span>
+                <span class="n">state0</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
+                <span class="n">state1</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
+                <span class="n">azm0</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">*</span><span class="n">a0</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">z0</span> <span class="o">+</span> <span class="n">state0</span>
+                <span class="n">azm1</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">*</span><span class="n">a1</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">z1</span> <span class="o">+</span> <span class="n">state1</span>
+                <span class="k">if</span> <span class="n">azm0</span> <span class="o">&gt;</span> <span class="n">azm1</span><span class="p">:</span>
+                    <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Passlist.zam_order_passport_list"><a class="viewcode-back" href="../../pythonapi/generated/onix.Passlist.html#onix.Passlist.zam_order_passport_list">[docs]</a>    <span class="k">def</span> <span class="nf">zam_order_passport_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Orders the list of Passport objects after atomic number first and then mass number.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">passport_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">passport_list</span>
+        <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">while</span> <span class="n">changed</span><span class="p">:</span>
+            <span class="n">changed</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">passp0</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">passp1</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">zamid0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">passp0</span><span class="o">.</span><span class="n">zamid</span><span class="p">)</span>
+                <span class="n">zamid1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">passp1</span><span class="o">.</span><span class="n">zamid</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">zamid0</span> <span class="o">&gt;</span> <span class="n">zamid1</span><span class="p">:</span>
+                    <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+    <span class="c1"># def qsort(inlist):</span>
+    <span class="c1">#     passport_list = self.passport_list</span>
+    <span class="c1">#     if inlist == []: </span>
+    <span class="c1">#         return []</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         pivot = inlist[0]</span>
+    <span class="c1">#         lesser = qsort([x for x in inlist[1:] if x &lt; pivot])</span>
+    <span class="c1">#         greater = qsort([x for x in inlist[1:] if x &gt;= pivot])</span>
+    <span class="c1">#         return lesser + [pivot] + greater</span>
+
+
+<div class="viewcode-block" id="Passlist.zam_order_passport_list_2"><a class="viewcode-back" href="../../pythonapi/generated/onix.Passlist.html#onix.Passlist.zam_order_passport_list_2">[docs]</a>    <span class="k">def</span> <span class="nf">zam_order_passport_list_2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Orders the list of Passport objects after atomic number first and then mass number with Python list.sort() method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">passport_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">passport_list</span>
+        <span class="c1">#passport_list = sorted(passport_list, key = lambda pp: int(pp.zamid))</span>
+        <span class="n">passport_list</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">pp</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">zamid</span><span class="p">))</span></div>
+
+        <span class="c1">#return ordered_passport_list</span>
+
+
+<div class="viewcode-block" id="Passlist.get_index_dict"><a class="viewcode-back" href="../../pythonapi/generated/onix.Passlist.html#onix.Passlist.get_index_dict">[docs]</a>    <span class="k">def</span> <span class="nf">get_index_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a dictionnary where keys are z-a-m id of nuclides and entries are the index of their Passport in the Passport list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">passport_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">passport_list</span>
+
+        <span class="n">index_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">passport_list</span><span class="p">:</span>
+            <span class="n">index_dict</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">zamid</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">index_dict</span></div>
+
+    <span class="k">def</span> <span class="nf">_add_nucl_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nucl_list</span><span class="p">):</span>
+
+        <span class="n">sample_elt</span> <span class="o">=</span> <span class="n">nucl_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">utils</span><span class="o">.</span><span class="n">is_name</span><span class="p">(</span><span class="n">sample_elt</span><span class="p">):</span>
+            <span class="n">nucl_list</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">name_list_to_zamid_list</span><span class="p">(</span><span class="n">nucl_list</span><span class="p">)</span>
+
+        <span class="n">current_nucl_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nucl_list</span>
+        <span class="n">new_extra_nuclides</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">nucl_list</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">current_nucl_list</span><span class="p">))</span>
+
+        <span class="n">new_extra_passport_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_passport_list</span><span class="p">(</span><span class="n">new_extra_nuclides</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_mass</span><span class="p">(</span><span class="n">new_extra_passport_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_zero_dens</span><span class="p">(</span><span class="n">new_extra_passport_list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">nucl_pass</span> <span class="ow">in</span> <span class="n">new_extra_passport_list</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">passport_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nucl_pass</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nucl_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nucl_pass</span><span class="o">.</span><span class="n">zamid</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Passlist.create_passport_list"><a class="viewcode-back" href="../../pythonapi/generated/onix.Passlist.html#onix.Passlist.create_passport_list">[docs]</a>    <span class="k">def</span> <span class="nf">create_passport_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nucl_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a Passport objects list after a provided list of nuclides.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nucl_list: list</span>
+<span class="sd">            List of nuclides&#39; names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">passport_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">nucl</span> <span class="ow">in</span> <span class="n">nucl_list</span><span class="p">:</span>
+            <span class="n">passport_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Passport</span><span class="p">(</span><span class="n">nucl</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">passport_list</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_set_mass</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">passport_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read and set the atomic mass for each nuclide in the passports list.&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)):</span>
+
+            <span class="n">nuc_pass</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">zaid</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">zamid</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="c1"># Some (rare) nuclides (for example Ag133 from ENDFVIII) are not in the mass library</span>
+            <span class="c1"># For these nuclides, the mass number is used for the mass</span>
+            <span class="k">if</span> <span class="n">zaid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">default_atm_mass_lib</span><span class="p">:</span>
+                <span class="n">mass</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">zaid</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:])</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mass</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">default_atm_mass_lib</span><span class="p">[</span><span class="n">zaid</span><span class="p">]</span>
+            
+            <span class="n">nuc_pass</span><span class="o">.</span><span class="n">mass</span> <span class="o">=</span> <span class="n">mass</span>
+
+
+    <span class="k">def</span> <span class="nf">_set_decay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">decay_lib_b</span><span class="p">,</span> <span class="n">decay_lib_a</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read and set the decay constants for each nuclide in the passports list.&quot;&quot;&quot;</span>
+
+        <span class="n">passport_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">passport_list</span>
+
+        <span class="n">decay_b_dict</span> <span class="o">=</span> <span class="n">decay_lib_b</span>
+        <span class="n">decay_a_dict</span> <span class="o">=</span> <span class="n">decay_lib_a</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)):</span>
+
+            <span class="n">nuc_pass</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">zamid</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">zamid</span>
+            <span class="k">if</span> <span class="n">zamid</span> <span class="ow">in</span> <span class="n">decay_b_dict</span><span class="p">:</span>
+                <span class="n">decay_b</span> <span class="o">=</span> <span class="n">decay_b_dict</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span>
+                <span class="n">decay_a</span> <span class="o">=</span> <span class="n">decay_a_dict</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span>
+                <span class="n">nuc_pass</span><span class="o">.</span><span class="n">set_decay</span><span class="p">(</span><span class="n">decay_a</span><span class="p">,</span> <span class="n">decay_b</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_xs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xs_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read and set the cross sections for each nuclide in the passports list&quot;&quot;&quot;</span>
+
+        <span class="n">passport_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">passport_list</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)):</span>
+
+            <span class="n">nuc_pass</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">zamid</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">zamid</span>
+            <span class="k">if</span> <span class="n">zamid</span> <span class="ow">in</span> <span class="n">xs_dict</span><span class="p">:</span>
+                <span class="n">xs</span> <span class="o">=</span> <span class="n">xs_dict</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span>
+                <span class="n">nuc_pass</span><span class="o">.</span><span class="n">_set_xs</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_overwrite_xs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xs_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read and set the cross sections for each nuclide in the passports list&quot;&quot;&quot;</span>
+
+        <span class="n">passport_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">passport_list</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)):</span>
+
+            <span class="n">nuc_pass</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">zamid</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">zamid</span>
+            <span class="k">if</span> <span class="n">zamid</span> <span class="ow">in</span> <span class="n">xs_dict</span><span class="p">:</span>
+                <span class="n">xs</span> <span class="o">=</span> <span class="n">xs_dict</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span>
+                <span class="c1"># If there is already a XS set, overwrite with None</span>
+                <span class="c1"># _set_xs(xs) will automatically reinitialize xs_seq</span>
+                <span class="k">if</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">current_xs</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">nuc_pass</span><span class="o">.</span><span class="n">current_xs</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">nuc_pass</span><span class="o">.</span><span class="n">_set_xs</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_set_fy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fy_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read and set the fission yields for fission products in the passports list&quot;&quot;&quot;</span>
+
+        <span class="n">passport_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">passport_list</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)):</span>
+
+            <span class="n">nuc_pass</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">zamid</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">zamid</span>
+            <span class="k">if</span> <span class="n">zamid</span> <span class="ow">in</span> <span class="n">fy_dict</span><span class="p">:</span>
+                <span class="n">fy</span> <span class="o">=</span> <span class="n">fy_dict</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span>
+                <span class="n">nuc_pass</span><span class="o">.</span><span class="n">fy</span> <span class="o">=</span> <span class="n">fy</span>
+
+    <span class="k">def</span> <span class="nf">_set_initial_dens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dens_dict</span><span class="p">):</span>
+
+        <span class="n">sample_key</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dens_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">passport_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">passport_list</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)):</span>
+            <span class="n">nuc_pass</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">utils</span><span class="o">.</span><span class="n">is_zamid</span><span class="p">(</span><span class="n">sample_key</span><span class="p">):</span>
+                <span class="n">zamid</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">zamid</span>
+                <span class="k">if</span> <span class="n">zamid</span> <span class="ow">in</span> <span class="n">dens_dict</span><span class="p">:</span>
+                    <span class="n">dens</span> <span class="o">=</span> <span class="n">dens_dict</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span>
+                    <span class="n">nuc_pass</span><span class="o">.</span><span class="n">_set_initial_dens</span><span class="p">(</span><span class="n">dens</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">nuc_pass</span><span class="o">.</span><span class="n">_set_initial_dens</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">utils</span><span class="o">.</span><span class="n">is_name</span><span class="p">(</span><span class="n">sample_key</span><span class="p">):</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">name</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">dens_dict</span><span class="p">:</span>
+                    <span class="n">dens</span> <span class="o">=</span> <span class="n">dens_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+                    <span class="n">nuc_pass</span><span class="o">.</span><span class="n">_set_initial_dens</span><span class="p">(</span><span class="n">dens</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">nuc_pass</span><span class="o">.</span><span class="n">_set_initial_dens</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_set_zero_dens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">passport_list</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">nucl</span> <span class="ow">in</span> <span class="n">passport_list</span><span class="p">:</span>
+            <span class="n">nucl</span><span class="o">.</span><span class="n">_set_initial_dens</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+        
+
+
+    <span class="c1"># if the fission yield are updated, this should be regenerated</span>
+    <span class="c1"># This function only add a child in the fission child list of parents if the fy is non-zero</span>
+    <span class="c1"># Another way of doing would be to just add all fission_child from fy_lib to the child list of parents</span>
+    <span class="k">def</span> <span class="nf">_set_fission_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fy_nucl</span><span class="p">,</span> <span class="n">fy_parent</span><span class="p">):</span>
+
+        <span class="n">passport_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_zamid_passport_dict</span><span class="p">()</span>
+
+        <span class="n">fission_child</span> <span class="o">=</span> <span class="n">fy_nucl</span>
+        <span class="n">fission_parent</span> <span class="o">=</span> <span class="n">fy_parent</span>
+        <span class="n">fission_child_per_parent</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">fission_parent</span><span class="p">:</span>
+            <span class="n">fission_child_per_parent</span><span class="p">[</span><span class="n">parent</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">zamid</span> <span class="ow">in</span> <span class="n">fission_child</span><span class="p">:</span>
+            <span class="n">nuc_pass</span> <span class="o">=</span> <span class="n">passport_dict</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span>
+            <span class="n">nuc_fy</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">fy</span>
+
+            <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">nuc_fy</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">nuc_fy</span><span class="p">[</span><span class="n">parent</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">fission_child_per_parent</span><span class="p">[</span><span class="n">parent</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zamid</span><span class="p">)</span>
+
+        <span class="c1"># Set the fission child list for each parent passport</span>
+        <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">fission_child_per_parent</span><span class="p">:</span>
+            <span class="n">nuc_pass</span> <span class="o">=</span> <span class="n">passport_dict</span><span class="p">[</span><span class="n">parent</span><span class="p">]</span>
+            <span class="n">child_list</span> <span class="o">=</span> <span class="n">fission_child_per_parent</span><span class="p">[</span><span class="n">parent</span><span class="p">]</span>
+            <span class="n">nuc_pass</span><span class="o">.</span><span class="n">fission_child</span> <span class="o">=</span> <span class="n">child_list</span>
+
+
+    <span class="k">def</span> <span class="nf">neg_reac_warning</span><span class="p">(</span><span class="n">passport_list</span><span class="p">):</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;NEGATIVE REACTION WARNING CALLED&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">passport_list</span><span class="p">:</span>
+            <span class="n">nuc_name</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">decay_a</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">decay_a</span>
+            <span class="n">xs_dic</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">xs</span>
+
+            <span class="k">if</span> <span class="n">decay_a</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+
+                <span class="k">for</span> <span class="n">decay</span> <span class="ow">in</span> <span class="n">decay_a</span><span class="p">:</span>
+                    <span class="n">decay_val</span> <span class="o">=</span> <span class="n">decay_a</span><span class="p">[</span><span class="n">decay</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">decay_val</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">Neg_decay</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> has its </span><span class="si">{}</span><span class="s1"> reaction negative with value </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nuc_name</span><span class="p">,</span> <span class="n">decay</span><span class="p">,</span> <span class="n">decay_val</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">xs_dic</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        
+                <span class="k">for</span> <span class="n">xs</span> <span class="ow">in</span> <span class="n">xs_dic</span><span class="p">:</span>
+                    <span class="n">xs_val</span> <span class="o">=</span> <span class="n">xs_dic</span><span class="p">[</span><span class="n">xs</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">xs_val</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">Neg_xs</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> has its </span><span class="si">{}</span><span class="s1"> reaction negative with value </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nuc_name</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">xs_val</span><span class="p">))</span>
+
+
+    <span class="k">def</span> <span class="nf">order_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">passport_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">passport_list</span>
+
+        <span class="n">azm_sort</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)</span>
+
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">N</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="n">nuc_pass</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">L</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="k">return</span> <span class="n">L</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="k">class</span> <span class="nc">Nuc_xs_not_found</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raise when the user requests a cross-sections of a nuclide that is not in the nuclide set &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">Neg_decay</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raise when a negative decay constant is found&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">Neg_xs</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raise when a negative cross-section is found&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Julien de Troullioud de Lanversin
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+ 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30411614-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>

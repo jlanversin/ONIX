@@ -1,0 +1,391 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>onix.salameche.cram &mdash; ONIX Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #0d0d0d" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pythonapi/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License Agreement</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ONIX</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>onix.salameche.cram</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for onix.salameche.cram</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Compute the solution of the matricial depletion equation using the CRAM method&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<div class="viewcode-block" id="CRAM16"><a class="viewcode-back" href="../../../pythonapi/generated/onix.salameche.CRAM16.html#onix.salameche.CRAM16">[docs]</a><span class="k">def</span> <span class="nf">CRAM16</span><span class="p">(</span><span class="n">At</span><span class="p">,</span><span class="n">N_0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;CRAM uses a Chebishev Rational Approximation Method of order 16 to compute the solution of the matricial depletion equation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    At: numpy.array</span>
+<span class="sd">        Depletion matrix multiplied by the time interval over which nuclides are depleted</span>
+<span class="sd">    N_0: numpy.array</span>
+<span class="sd">        Initial nuclides&#39; densities vector</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;CRAM CALLED&#39;</span><span class="p">)</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="n">lN</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">N_0</span><span class="p">)</span>
+
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="o">-</span><span class="mf">1.0843917078696988026e1</span> <span class="o">+</span><span class="mf">1.9277446167181652284e1</span><span class="n">j</span><span class="p">,</span>
+    <span class="o">-</span><span class="mf">5.2649713434426468895</span> <span class="o">+</span><span class="mf">1.6220221473167927305e1</span><span class="n">j</span><span class="p">,</span>
+    <span class="o">+</span><span class="mf">5.9481522689511774808</span> <span class="o">+</span><span class="mf">3.5874573620183222829</span><span class="n">j</span><span class="p">,</span>
+    <span class="o">+</span><span class="mf">3.5091036084149180974</span> <span class="o">+</span><span class="mf">8.4361989858843750826</span><span class="n">j</span><span class="p">,</span>
+    <span class="o">+</span><span class="mf">6.4161776990994341923</span> <span class="o">+</span><span class="mf">1.1941223933701386874</span><span class="n">j</span><span class="p">,</span>
+    <span class="o">+</span><span class="mf">1.4193758971856659786</span> <span class="o">+</span><span class="mf">1.0925363484496722585e1</span><span class="n">j</span><span class="p">,</span>
+    <span class="o">+</span><span class="mf">4.9931747377179963991</span> <span class="o">+</span><span class="mf">5.9968817136039422260</span><span class="n">j</span><span class="p">,</span>
+    <span class="o">-</span><span class="mf">1.4139284624888862114</span> <span class="o">+</span><span class="mf">1.3497725698892745389e1</span><span class="n">j</span><span class="p">],</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">complex256</span><span class="p">)</span>
+
+    <span class="n">alpha_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">complex256</span><span class="p">(</span><span class="mf">2.1248537104952237488e-16</span> <span class="o">+</span> <span class="mf">0.0</span><span class="n">j</span><span class="p">)</span> 
+
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="o">-</span><span class="mf">5.0901521865224915650e-7</span> <span class="o">-</span><span class="mf">2.4220017652852287970e-5</span><span class="n">j</span><span class="p">,</span>
+    <span class="o">+</span><span class="mf">2.1151742182466030907e-4</span> <span class="o">+</span><span class="mf">4.3892969647380673918e-3</span><span class="n">j</span><span class="p">,</span>
+    <span class="o">+</span><span class="mf">1.1339775178483930527e2</span> <span class="o">+</span><span class="mf">1.0194721704215856450e2</span><span class="n">j</span><span class="p">,</span>
+    <span class="o">+</span><span class="mf">1.5059585270023467528e1</span> <span class="o">-</span><span class="mf">5.7514052776421819979</span><span class="n">j</span><span class="p">,</span>
+    <span class="o">-</span><span class="mf">6.4500878025539646595e1</span> <span class="o">-</span><span class="mf">2.2459440762652096056e2</span><span class="n">j</span><span class="p">,</span>
+    <span class="o">-</span><span class="mf">1.4793007113557999718</span> <span class="o">+</span><span class="mf">1.7686588323782937906</span><span class="n">j</span><span class="p">,</span>
+    <span class="o">-</span><span class="mf">6.2518392463207918892e1</span> <span class="o">-</span><span class="mf">1.1190391094283228480e1</span><span class="n">j</span><span class="p">,</span>
+    <span class="o">+</span><span class="mf">4.1023136835410021273e-2</span> <span class="o">-</span><span class="mf">1.5743466173455468191e-1</span><span class="n">j</span><span class="p">],</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">complex256</span><span class="p">)</span>
+
+    <span class="n">l</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">N_0</span><span class="o">*</span><span class="mi">0</span>
+    <span class="n">_N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">lN</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+        <span class="n">term1</span> <span class="o">=</span> <span class="n">At</span> <span class="o">-</span> <span class="n">theta</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">At</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">term2</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">N_0</span>
+        <span class="n">_N</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">term1</span><span class="p">,</span><span class="n">term2</span><span class="p">)</span>
+        
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">_N</span><span class="o">.</span><span class="n">real</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">N</span> <span class="o">+</span> <span class="n">alpha_0</span><span class="o">*</span><span class="n">N_0</span>
+    <span class="c1"># For some reason here N is still complex and not only real</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;CRAM took:</span><span class="si">{}</span><span class="s1"> s&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">N</span><span class="o">.</span><span class="n">real</span></div>
+
+<span class="c1"># CRAM is yielding non zero values for nuclides that should be at zero because no one is producing them</span>
+<span class="c1"># This algorithm check which nuclide are in this situation and set their density to zero</span>
+<div class="viewcode-block" id="CRAM_reality_check"><a class="viewcode-back" href="../../../pythonapi/generated/onix.salameche.CRAM_reality_check.html#onix.salameche.CRAM_reality_check">[docs]</a><span class="k">def</span> <span class="nf">CRAM_reality_check</span><span class="p">(</span><span class="n">bucell</span><span class="p">,</span> <span class="n">index_dic</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This functions checks against negative and extremely small densities (same as onix.salameche.CRAM_density_check). In addition, it compares the calculated new densities with the BUCell.leave attribute (this attribute enables to know which isotopes should be produced or not during depletion). The comparison enables the function to detect nuclides that have a non-zero density but should have a zero density. Likewise, it can detect nuclides that should be produced but have zero density.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bucell: onix.Cell</span>
+<span class="sd">        BUCell being depleted</span>
+<span class="sd">    index_dict: dict</span>
+<span class="sd">        Dictionnary where keys are nuclides z-a-m id and entries are their indexes in the density vector</span>
+<span class="sd">    N: numpy.array</span>
+<span class="sd">        New density vector solution to the depletion equation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;reality check called&#39;</span><span class="p">)</span>
+    <span class="n">passlist</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">passlist</span>
+    <span class="n">leaves</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">leaves</span>
+    <span class="n">fission_leaves</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">fission_leaves</span>
+    <span class="n">total_leaves</span> <span class="o">=</span> <span class="n">leaves</span> <span class="o">+</span> <span class="n">fission_leaves</span>
+
+    <span class="n">negative_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">small_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">intruder_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">missing_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">nuc_pass</span> <span class="ow">in</span> <span class="n">passlist</span><span class="p">:</span>
+        <span class="n">nuc_zamid</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">zamid</span>
+        <span class="n">nuc_name</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">nuc_dens</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">dens</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">index_dic</span><span class="p">[</span><span class="n">nuc_pass</span><span class="o">.</span><span class="n">zamid</span><span class="p">]</span>
+        <span class="n">N_val</span> <span class="o">=</span> <span class="n">N</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+        <span class="c1"># if nuc_name == &#39;Au-200&#39;:</span>
+        <span class="c1">#     print nuc_name, nuc_zamid</span>
+        <span class="c1">#     print nuc_dens</span>
+
+        <span class="k">if</span> <span class="n">N_val</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="c1">#  warnings.warn(&#39;NEGATIVE: Nuclide {}/{} has a negative density of {}&#39;.format(nuc_name, nuc_zamid, N_val))</span>
+            <span class="n">N</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">negative_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">N_val</span> <span class="o">=</span> <span class="n">N</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">N_val</span> <span class="o">&lt;</span> <span class="mf">1e-24</span><span class="p">:</span>
+          <span class="c1">#  warnings.warn(&#39;TOO SMALL: Nuclide {}/{} has a density of {} below 1e-24&#39;.format(nuc_name, nuc_zamid, N_val))</span>
+            <span class="n">N</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">small_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">N_val</span> <span class="o">=</span> <span class="n">N</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">nuc_zamid</span> <span class="ow">in</span> <span class="n">total_leaves</span> <span class="ow">and</span> <span class="n">N_val</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+          <span class="c1">#  warnings.warn(&#39;MISSING: Nuclide {} has a density of 0 while it belongs to the creation tree&#39;.format(nuc_name))</span>
+            <span class="n">missing_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">elif</span> <span class="n">nuc_zamid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">total_leaves</span> <span class="ow">and</span> <span class="n">N_val</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+
+          <span class="c1">#  warnings.warn(&#39;INTRUDER: Nuclide {} has a density of {} while it is not in the creation tree&#39;.format(nuc_name, N_val ))</span>
+            <span class="n">intruder_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;There are </span><span class="si">{}</span><span class="s1"> negative&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">negative_count</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;There are </span><span class="si">{}</span><span class="s1"> too small&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">small_count</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;There are </span><span class="si">{}</span><span class="s1"> intruders&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">intruder_count</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;There are </span><span class="si">{}</span><span class="s1"> missings&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">missing_count</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="CRAM_density_check"><a class="viewcode-back" href="../../../pythonapi/generated/onix.salameche.CRAM_density_check.html#onix.salameche.CRAM_density_check">[docs]</a><span class="k">def</span> <span class="nf">CRAM_density_check</span><span class="p">(</span><span class="n">bucell</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This function checks for extremely low densities and negative densities. Densities below one atom per cubic centimeter are set to zero. Negative densities are produced by mathematical approximations inherent to the CRAM method and therefore do not bear any physical meaning. They are also set to zero.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bucell: onix.Cell</span>
+<span class="sd">        BUCell being depleted</span>
+<span class="sd">    N: numpy.array</span>
+<span class="sd">        New density vector solution to the depletion equation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">passlist</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">passlist</span>
+    <span class="n">index_dict</span> <span class="o">=</span> <span class="n">passlist</span><span class="o">.</span><span class="n">get_index_dict</span><span class="p">()</span>
+    <span class="n">passport_list</span> <span class="o">=</span> <span class="n">passlist</span><span class="o">.</span><span class="n">passport_list</span>
+
+    <span class="n">negative_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">small_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">nuc_pass</span> <span class="ow">in</span> <span class="n">passport_list</span><span class="p">:</span>
+        <span class="n">nuc_zamid</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">zamid</span>
+        <span class="n">nuc_name</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">index_dict</span><span class="p">[</span><span class="n">nuc_pass</span><span class="o">.</span><span class="n">zamid</span><span class="p">]</span>
+        <span class="n">N_val</span> <span class="o">=</span> <span class="n">N</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">N_val</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1">#warnings.warn(&#39;NEGATIVE: Nuclide {}/{} has a negative density of {}&#39;.format(nuc_name, nuc_zamid, N_val))</span>
+            <span class="n">N</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">negative_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">N_val</span> <span class="o">=</span> <span class="n">N</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">N_val</span> <span class="o">&lt;</span> <span class="mf">1e-24</span><span class="p">:</span>
+            <span class="c1">#warnings.warn(&#39;TOO SMALL: Nuclide {}/{} has a density of {} below 1e-24&#39;.format(nuc_name, nuc_zamid, N_val))</span>
+            <span class="n">N</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">small_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;There are </span><span class="si">{}</span><span class="s1"> negative&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">negative_count</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;There are </span><span class="si">{}</span><span class="s1"> too small&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">small_count</span><span class="p">)))</span></div>
+
+
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Julien de Troullioud de Lanversin
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+ 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30411614-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>

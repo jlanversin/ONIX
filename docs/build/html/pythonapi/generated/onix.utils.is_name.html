@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>onix.utils.is_name &mdash; ONIX Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="onix.utils.is_list_redundant" href="onix.utils.is_list_redundant.html" />
+    <link rel="prev" title="onix.utils.is_zamid" href="onix.utils.is_zamid.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #0d0d0d" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../main_class.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Main Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../couple.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Couple module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nax.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Nuclear Archaeology (NAX) module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../salameche.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Salamèche: the burnup solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Data and library readers</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Utilities and functions</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../utils.html#reaction-classes">Reaction classes</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../utils.html#functions">Functions</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.decay_to_halflife.html">onix.utils.decay_to_halflife</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.halflife_to_decay.html">onix.utils.halflife_to_decay</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.halflife_to_second.html">onix.utils.halflife_to_second</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.is_int.html">onix.utils.is_int</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.is_zamid.html">onix.utils.is_zamid</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">onix.utils.is_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.is_list_redundant.html">onix.utils.is_list_redundant</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_list_redundant_elt.html">onix.utils.get_list_redundant_elt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.zamid_list_to_name_list.html">onix.utils.zamid_list_to_name_list</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.name_list_to_zamid_list.html">onix.utils.name_list_to_zamid_list</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_zamid_z.html">onix.utils.get_zamid_z</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_name_z.html">onix.utils.get_name_z</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_zamid_a.html">onix.utils.get_zamid_a</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_zamid_n.html">onix.utils.get_zamid_n</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_zamid_s.html">onix.utils.get_zamid_s</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.zamid_to_name.html">onix.utils.zamid_to_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.name_to_zamid.html">onix.utils.name_to_zamid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_hm.html">onix.utils.get_hm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_nucl_atomic_mass.html">onix.utils.get_nucl_atomic_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.convert_mass_to_atom.html">onix.utils.convert_mass_to_atom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.convert_atom_to_mass.html">onix.utils.convert_atom_to_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_bu_sec_conv_factor.html">onix.utils.get_bu_sec_conv_factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_decay_nucl.html">onix.utils.get_decay_nucl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_xs_nucl.html">onix.utils.get_xs_nucl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_fy_nucl.html">onix.utils.get_fy_nucl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.is_lista_in_listb.html">onix.utils.is_lista_in_listb</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_fy_parent_nucl.html">onix.utils.get_fy_parent_nucl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.is_number.html">onix.utils.is_number</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.openmc_name_to_onix_name.html">onix.utils.openmc_name_to_onix_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.onix_name_to_openmc_name.html">onix.utils.onix_name_to_openmc_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.bu_namelist_to_mc_namelist.html">onix.utils.bu_namelist_to_mc_namelist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.mc_namelist_to_bu_namelist.html">onix.utils.mc_namelist_to_bu_namelist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.order_nuclide_per_z.html">onix.utils.order_nuclide_per_z</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.order_nuclide_name_per_z.html">onix.utils.order_nuclide_name_per_z</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.order_nuclide_per_a.html">onix.utils.order_nuclide_per_a</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_openmc_xs_nucl_list.html">onix.utils.get_openmc_xs_nucl_list</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.convert_spectrum_to_janis_weighting_format.html">onix.utils.convert_spectrum_to_janis_weighting_format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_zamid_natural_abundance.html">onix.utils.get_zamid_natural_abundance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_name_natural_abundance.html">onix.utils.get_name_natural_abundance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.find_zamid_precursor.html">onix.utils.find_zamid_precursor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.interpolation_between_two_points.html">onix.utils.interpolation_between_two_points</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../utils.html#data-processors">Data processors</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License Agreement</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ONIX</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Python API</a> &raquo;</li>
+        
+          <li><a href="../utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Utilities and functions</a> &raquo;</li>
+        
+      <li>onix.utils.is_name</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/pythonapi/generated/onix.utils.is_name.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="onix-utils-is-name">
+<h1>onix.utils.is_name<a class="headerlink" href="#onix-utils-is-name" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="onix.utils.is_name">
+<code class="sig-prename descclassname">onix.utils.</code><code class="sig-name descname">is_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">string</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/utils/functions.html#is_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.utils.is_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether a string is a nuclide’s name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>string</strong> (<em>str</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="onix.utils.is_list_redundant.html" class="btn btn-neutral float-right" title="onix.utils.is_list_redundant" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="onix.utils.is_zamid.html" class="btn btn-neutral float-left" title="onix.utils.is_zamid" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Julien de Troullioud de Lanversin
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+ 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30411614-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>

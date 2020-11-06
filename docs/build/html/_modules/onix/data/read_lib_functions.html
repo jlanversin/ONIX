@@ -1,0 +1,685 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>onix.data.read_lib_functions &mdash; ONIX Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #0d0d0d" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pythonapi/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License Agreement</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ONIX</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>onix.data.read_lib_functions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for onix.data.read_lib_functions</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">math</span> <span class="k">as</span> <span class="nn">m</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">.list_and_dict</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">openmc</span>
+
+<div class="viewcode-block" id="read_mass_lib"><a class="viewcode-back" href="../../../pythonapi/generated/onix.data.read_mass_lib.html#onix.data.read_mass_lib">[docs]</a><span class="k">def</span> <span class="nf">read_mass_lib</span><span class="p">(</span><span class="n">mass_lib_path</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;Reads a mass library and returns a Python dictionnary with nuclides&#39; zamid as keys and mass in grams as entries.</span>
+
+<span class="sd">    **Note**: Library must be compatible with ONIX format.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mass_lib_path: str</span>
+<span class="sd">        Path to the mass library</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">mass_list</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mass_lib_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">atm_mass_file</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">atm_mass_file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">3352</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39; &#39;</span><span class="p">:</span>
+                <span class="n">nz</span><span class="p">,</span> <span class="n">na</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">2</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">3</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">line</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;0&#39;</span><span class="p">:</span>
+                <span class="n">nz</span><span class="p">,</span> <span class="n">na</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">3</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">4</span><span class="p">])</span>
+
+            <span class="n">zaid</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="mi">1000</span><span class="o">*</span><span class="n">nz</span> <span class="o">+</span> <span class="n">na</span><span class="p">)</span>
+            <span class="n">_mass</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="o">-</span><span class="mi">3</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># This part is to convert the weird number format of mass.mass12 into a normal format</span>
+            <span class="n">mass_deci</span> <span class="o">=</span> <span class="n">_mass</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="c1">#  mass_deci = &#39;{}{}&#39;.format(_mass[1].split(&#39;.&#39;)[0], _mass[1].split(&#39;.&#39;)[1])</span>
+            <span class="n">mass</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_mass</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mass_deci</span><span class="p">))</span>
+            <span class="n">mass_list</span><span class="p">[</span><span class="n">zaid</span><span class="p">]</span> <span class="o">=</span> <span class="n">mass</span>
+
+    <span class="k">return</span> <span class="n">mass_list</span></div>
+
+<div class="viewcode-block" id="read_decay_lib"><a class="viewcode-back" href="../../../pythonapi/generated/onix.data.read_decay_lib.html#onix.data.read_decay_lib">[docs]</a><span class="k">def</span> <span class="nf">read_decay_lib</span><span class="p">(</span><span class="n">decay_lib_path</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;Reads a decay library and returns a Python dictionnary with nuclides&#39; zamid as keys and decay sub-dictionnaries as entries. Decay sub-dictionnaries have decay reactions names as keys and corresponding decay constant as fraction of total decay constant for entries.</span>
+
+<span class="sd">    **Note**: Library must be compatible with ONIX format.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    decay_lib_path: str</span>
+<span class="sd">        Path to the decay library</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">decay_lib_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">decay_file</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">decay_file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">dict_list</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">previous_zamid</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">new_nuclide</span> <span class="o">=</span> <span class="s1">&#39;yes&#39;</span>
+        <span class="c1"># Data starts at line 4</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span><span class="o">-</span><span class="mi">3</span><span class="p">):</span>
+        <span class="c1">#for line in lines[3:]:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span>
+
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+            <span class="c1"># This part check if the new line is about a new nuclide</span>
+            <span class="k">if</span> <span class="n">count</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">col_1_val</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">col_1_val</span> <span class="o">!=</span> <span class="n">previous_zamid</span><span class="p">:</span>
+                    <span class="n">new_nuclide</span> <span class="o">=</span> <span class="s1">&#39;yes&#39;</span>
+
+
+            <span class="k">if</span> <span class="n">new_nuclide</span> <span class="o">==</span> <span class="s1">&#39;yes&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">count</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">dict_list</span><span class="p">[</span><span class="n">previous_zamid</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_dict</span>
+                <span class="n">data_dict</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">new_nuclide</span> <span class="o">=</span> <span class="s1">&#39;no&#39;</span>
+                <span class="n">zamid</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">previous_zamid</span> <span class="o">=</span> <span class="n">zamid</span>
+                <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;stable&#39;</span><span class="p">:</span>
+                    <span class="n">data_dict</span> <span class="o">=</span> <span class="s1">&#39;stable&#39;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;half-life&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+                    <span class="n">total_decay</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+                    <span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;total decay&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">total_decay</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">data_dict</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+            <span class="c1"># If this is the last line, we need to add the last dictionrary</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span><span class="o">-</span><span class="mi">4</span><span class="p">:</span>
+                <span class="n">dict_list</span><span class="p">[</span><span class="n">previous_zamid</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_dict</span>
+
+
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>      
+
+    <span class="k">return</span> <span class="n">dict_list</span></div>
+
+
+<div class="viewcode-block" id="conv_decay_b_a"><a class="viewcode-back" href="../../../pythonapi/generated/onix.data.conv_decay_b_a.html#onix.data.conv_decay_b_a">[docs]</a><span class="k">def</span> <span class="nf">conv_decay_b_a</span><span class="p">(</span><span class="n">decay_b</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Converts a fractionnal decay constant dictionnary to an absolute decay constant dictionnary (fractionnal decay dictionnary stores decay constant as fraction over total decay constant, absolute decay dictionnary stores absolute values of decay constants).</span>
+
+<span class="sd">    **Note**: Library must be compatible with ONIX format.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    decay_b: dict</span>
+<span class="sd">        The fractionnal decay constant dictionnary to be converted</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">decay_a</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">decay_b</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">decay_b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;stable&#39;</span><span class="p">:</span>
+            <span class="n">decay_a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;stable&#39;</span>
+        <span class="k">else</span><span class="p">:</span>  
+            <span class="n">decay_a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">decay_a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;half-life&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">decay_b</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;half-life&#39;</span><span class="p">]</span>
+            <span class="n">decay_a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;total decay&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">decay_b</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;total decay&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">reac</span> <span class="ow">in</span> <span class="n">decay_b</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">reac</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;half-life&#39;</span><span class="p">,</span> <span class="s1">&#39;total decay&#39;</span><span class="p">]:</span>
+                    <span class="n">decay_a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">reac</span><span class="p">]</span> <span class="o">=</span> <span class="n">decay_b</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">reac</span><span class="p">]</span><span class="o">*</span><span class="n">decay_b</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;total decay&#39;</span><span class="p">]</span>
+        
+    <span class="k">return</span> <span class="n">decay_a</span></div>
+
+<span class="c1"># Outdated version for decay. Adapted for ORIGEN lib format</span>
+
+<span class="c1"># def read_decay_lib(decay_lib_path):</span>
+
+<span class="c1">#     with open(decay_lib_path, &#39;r&#39;) as decay_file:</span>
+<span class="c1">#         line = decay_file.readlines()</span>
+<span class="c1">#         dic_list = {}</span>
+<span class="c1">#         r = 0</span>
+<span class="c1">#         for l in line:</span>
+<span class="c1">#             if r == 0:</span>
+<span class="c1">#                 if len(l.split()) &gt; 1 and l.split()[0].split(&#39;-&#39;)[0] in nuc_name_dic:</span>
+<span class="c1">#                     zamid = l.split()[1]</span>
+<span class="c1">#                     unit = l.split()[2]</span>
+<span class="c1">#                     val = l.split()[3]</span>
+<span class="c1">#                     dic_list[zamid] = {&#39;unit&#39;:val}</span>
+<span class="c1">#                     r = r + 1</span>
+<span class="c1">#             elif r &gt; 0 and r &lt; 6:</span>
+<span class="c1">#                 decay = l.split()[1]</span>
+<span class="c1">#                 val = l.split()[2]</span>
+<span class="c1">#                 dic_list[zamid][decay] = val</span>
+<span class="c1">#                 r = r + 1</span>
+<span class="c1">#             elif r == 6 :</span>
+<span class="c1">#                 decay = l.split()[1]</span>
+<span class="c1">#                 val = l.split()[2]</span>
+<span class="c1">#                 dic_list[zamid][decay] = val</span>
+<span class="c1">#                 r = 0</span>
+        
+<span class="c1">#     decay_b_dic = {}</span>
+<span class="c1">#     for i in dic_list:</span>
+<span class="c1">#         dic = dic_list[i]</span>
+<span class="c1">#         decay_b_dic[i] = {}</span>
+<span class="c1">#         if dic[&#39;unit&#39;] == &#39;stable&#39;:</span>
+<span class="c1">#             for j in range(9):</span>
+<span class="c1">#                 decay_b_dic[i][decay_key_b[j]] = stable_dic_b[j]</span>
+                
+<span class="c1">#         else:        </span>
+<span class="c1">#             hl_s = float(time_dic[dic[&#39;unit&#39;]]*float(dic[&#39;half-life&#39;]))</span>
+<span class="c1">#             total_decay = m.log(2)/hl_s</span>
+
+<span class="c1">#             # WARNING, while the X in origen are fraction of their respective decay (betanegX is shown as fraction of betaneg), here it is shown as fraction of total decay</span>
+
+<span class="c1">#             decay_b_dic[i][&#39;unit&#39;] = dic[&#39;unit&#39;]</span>
+<span class="c1">#             decay_b_dic[i][&#39;half-life&#39;] = float(dic[&#39;half-life&#39;])</span>
+<span class="c1">#             decay_b_dic[i][&#39;total&#39;] = total_decay</span>
+<span class="c1">#             rest = (1 - float(dic[&#39;betapos&#39;]) -float(dic[&#39;alpha&#39;]) - float(dic[&#39;gamma&#39;])) # The rest, i.e., what should be betaneg and betanegX</span>
+<span class="c1">#             if rest &lt; 0: # Because ORIGEN is messed up and sometimes, the addition of the other reactions is bigger than one</span>
+<span class="c1">#                 rest = 0</span>
+<span class="c1">#             decay_b_dic[i][&#39;betaneg&#39;] = rest*(1 - float(dic[&#39;betanegX&#39;]))</span>
+<span class="c1">#             decay_b_dic[i][&#39;betanegX&#39;] = rest*float(dic[&#39;betanegX&#39;])</span>
+<span class="c1">#             decay_b_dic[i][&#39;betapos&#39;] = float(dic[&#39;betapos&#39;])</span>
+<span class="c1">#             decay_b_dic[i][&#39;betaposX&#39;] = float(dic[&#39;betapos&#39;])*float(dic[&#39;betaposX&#39;])</span>
+<span class="c1">#             decay_b_dic[i][&#39;alpha&#39;] = float(dic[&#39;alpha&#39;])</span>
+<span class="c1">#             decay_b_dic[i][&#39;gamma&#39;] = float(dic[&#39;gamma&#39;])</span>
+        
+
+<span class="c1">#     return decay_b_dic</span>
+
+<span class="c1"># def conv_decay_b_a(decay_b):</span>
+
+<span class="c1">#     decay_a = {}</span>
+<span class="c1">#     for i in decay_b:</span>
+<span class="c1">#         decay_a[i] = {}</span>
+        
+<span class="c1">#         if decay_b[i][&#39;half-life&#39;] == &#39;stable&#39;:</span>
+<span class="c1">#             for j in range(8):</span>
+<span class="c1">#                 decay_a[i][decay_key_a[j]] = stable_dic_a[j]</span>
+
+<span class="c1">#         else:</span>
+<span class="c1">#             # decay_a[i][&#39;half-life&#39;] = float(decay_b[i][&#39;half-life&#39;]*time_dic[decay_b[i][&#39;unit&#39;]])</span>
+<span class="c1">#             # decay_a[i][&#39;total&#39;] = decay_b[i][&#39;total&#39;]</span>
+<span class="c1">#             # decay_a[i][&#39;betaneg&#39;] = (1 - decay_b[i][&#39;betapos&#39;] -decay_b[i][&#39;alpha&#39;] - decay_b[i][&#39;gamma&#39;])*decay_b[i][&#39;total&#39;]*(1 - decay_b[i][&#39;betanegX&#39;])</span>
+<span class="c1">#             # decay_a[i][&#39;betanegX&#39;] = (1 - decay_b[i][&#39;betapos&#39;] - decay_b[i][&#39;alpha&#39;] - decay_b[i][&#39;gamma&#39;])*decay_b[i][&#39;total&#39;]*decay_b[i][&#39;betanegX&#39;]</span>
+<span class="c1">#             # decay_a[i][&#39;betapos&#39;] = decay_b[i][&#39;betapos&#39;]*decay_b[i][&#39;total&#39;]</span>
+<span class="c1">#             # decay_a[i][&#39;betaposX&#39;] = decay_b[i][&#39;betaposX&#39;]*decay_a[i][&#39;betapos&#39;]</span>
+<span class="c1">#             # decay_a[i][&#39;alpha&#39;] = decay_b[i][&#39;alpha&#39;]*decay_b[i][&#39;total&#39;]</span>
+<span class="c1">#             # decay_a[i][&#39;gamma&#39;] = decay_b[i][&#39;gamma&#39;]*decay_b[i][&#39;total&#39;]</span>
+
+<span class="c1">#             decay_a[i][&#39;half-life&#39;] = float(decay_b[i][&#39;half-life&#39;]*time_dic[decay_b[i][&#39;unit&#39;]])</span>
+<span class="c1">#             decay_a[i][&#39;total&#39;] = decay_b[i][&#39;total&#39;]</span>
+<span class="c1">#             decay_a[i][&#39;betaneg&#39;] = decay_b[i][&#39;betaneg&#39;]*decay_b[i][&#39;total&#39;]</span>
+<span class="c1">#             decay_a[i][&#39;betanegX&#39;] = decay_b[i][&#39;betanegX&#39;]*decay_b[i][&#39;total&#39;]</span>
+<span class="c1">#             decay_a[i][&#39;betapos&#39;] = decay_b[i][&#39;betapos&#39;]*decay_b[i][&#39;total&#39;]</span>
+<span class="c1">#             decay_a[i][&#39;betaposX&#39;] = decay_b[i][&#39;betaposX&#39;]*decay_b[i][&#39;total&#39;]</span>
+<span class="c1">#             decay_a[i][&#39;alpha&#39;] = decay_b[i][&#39;alpha&#39;]*decay_b[i][&#39;total&#39;]</span>
+<span class="c1">#             decay_a[i][&#39;gamma&#39;] = decay_b[i][&#39;gamma&#39;]*decay_b[i][&#39;total&#39;]</span>
+
+<span class="c1">#             # total = decay_a[i][&#39;total&#39;]</span>
+<span class="c1">#             # expo = np.floor(m.log10(total))</span>
+<span class="c1">#             # if i == &#39;621460&#39;:</span>
+<span class="c1">#             #     print(expo)</span>
+<span class="c1">#             #     print((decay_a[i]))</span>
+        
+<span class="c1">#     return decay_a</span>
+
+
+<div class="viewcode-block" id="read_xs_lib"><a class="viewcode-back" href="../../../pythonapi/generated/onix.data.read_xs_lib.html#onix.data.read_xs_lib">[docs]</a><span class="k">def</span> <span class="nf">read_xs_lib</span><span class="p">(</span><span class="n">xs_lib_path</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;Reads a constant one-group cross section library and returns a Python dictionnary with nuclides&#39; zamid as keys and cross section sub-dictionnaries as entries. Cross section sub-dictionnaries have reactions names as keys and corresponding cross section values in barns as entries.</span>
+
+<span class="sd">    **Note**: Library must be compatible with ONIX format.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    xs_lib_path: str</span>
+<span class="sd">        Path to the constant one-group cross section library</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">xs_lib_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">xs_file</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">xs_file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">xs_dic</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="c1"># if r == 0:</span>
+            <span class="c1">#     if len(l.split()) &gt; 1 and l.split()[0].split(&#39;-&#39;)[0] in nuc_name_dic:</span>
+            <span class="c1">#         zamid = l.split()[1]</span>
+            <span class="c1">#         xs = l.split()[2]</span>
+            <span class="c1">#         val = [float(k) for k in l.split()[3:5]]</span>
+            <span class="c1">#         removal_val += removal_val + val[0]</span>
+            <span class="c1">#         xs_dic[zamid] = {xs:val}</span>
+            <span class="c1">#         summ[0] = summ[0] + val[0]</span>
+            <span class="c1">#         r = 1</span>
+            <span class="c1"># elif r &gt; 0:</span>
+            <span class="c1">#     if l.split()[1] == &#39;removal&#39;:</span>
+            <span class="c1">#         r = 0</span>
+            <span class="c1">#     xs = l.split()[1]</span>
+            <span class="c1">#     val = [float(k) for k in l.split()[2:4]]</span>
+            <span class="c1">#     xs_dic[zamid][xs] = val</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">nuc_name_dic</span><span class="p">:</span>
+                <span class="n">zamid</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">xs</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">3</span><span class="p">:</span><span class="mi">5</span><span class="p">]]</span>
+                <span class="n">xs_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">xs</span><span class="p">:</span><span class="n">val</span><span class="p">}</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">r</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">xs</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]]</span>
+                <span class="n">xs_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="n">xs</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">r</span><span class="o">=</span><span class="mi">0</span>
+
+    <span class="c1"># Add the removal entry and values to the dic</span>
+    <span class="k">for</span> <span class="n">zamid</span> <span class="ow">in</span> <span class="n">xs_dic</span><span class="p">:</span>
+        <span class="n">removal_val</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">xs</span> <span class="ow">in</span> <span class="n">xs_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">]:</span>
+            <span class="n">removal_val</span> <span class="o">+=</span> <span class="n">xs_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="n">xs</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">xs_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;removal&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">xs_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;removal&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">removal_val</span>
+
+    <span class="c1"># Add the removal uncertainty values to the dic</span>
+    <span class="k">for</span> <span class="n">zamid</span> <span class="ow">in</span> <span class="n">xs_dic</span><span class="p">:</span>
+        <span class="n">removal_unc</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">xs_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;removal&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># if removal = 0 then no need to go through the following</span>
+            <span class="k">for</span> <span class="n">xs</span> <span class="ow">in</span> <span class="n">xs_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">]:</span>
+                <span class="n">val_weight</span> <span class="o">=</span> <span class="n">xs_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="n">xs</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">xs_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;removal&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">removal_unc</span> <span class="o">+=</span> <span class="n">xs_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="n">xs</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">val_weight</span>
+            <span class="n">xs_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;removal&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">removal_unc</span>
+
+    <span class="k">return</span> <span class="n">xs_dic</span></div>
+
+
+<div class="viewcode-block" id="read_fy_lib"><a class="viewcode-back" href="../../../pythonapi/generated/onix.data.read_fy_lib.html#onix.data.read_fy_lib">[docs]</a><span class="k">def</span> <span class="nf">read_fy_lib</span><span class="p">(</span><span class="n">fy_lib_path</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;Reads a fission yield library and returns a Python dictionnary with fissio products&#39; zamid as keys and fission yield sub-dictionnaries as entries. Fission yield sub-dictionnaries have actinide parents names as keys and corresponding fission yield in percent as entries (values from 0 to 100).</span>
+
+<span class="sd">    **Note**: Library must be compatible with ONIX format.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fy_lib_path: str</span>
+<span class="sd">        Path to the fission yield library</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fy_lib_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fy_file</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">fy_file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">read</span> <span class="o">=</span>  <span class="mi">0</span>
+        <span class="n">fy_dic</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)):</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="s1">&#39;--- Fission Products Yields ---</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">:</span>
+                <span class="n">read</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">read</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># This is the first line for the nuclide</span>
+                <span class="k">if</span> <span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">nuc_name_dic</span><span class="p">:</span>
+                        <span class="n">zamid</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="n">father_nuc</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span>
+                        <span class="n">fy</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">3</span><span class="p">:</span><span class="mi">5</span><span class="p">]]</span>
+                        <span class="n">fy_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">father_nuc</span><span class="p">:</span><span class="n">fy</span><span class="p">}</span>
+                        <span class="n">r</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="c1"># This is not the first line for the nuclide</span>
+                <span class="k">elif</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">father_nuc</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">fy</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]]</span>
+                    <span class="n">fy_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="n">father_nuc</span><span class="p">]</span> <span class="o">=</span> <span class="n">fy</span>
+                    <span class="c1"># If this the last line of the file, exit of the loop</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">break</span>
+                    <span class="c1"># If next line is a new nuclide and is not empty, reset r to 0</span>
+                    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">nuc_name_dic</span><span class="p">:</span>
+                        <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">return</span> <span class="n">fy_dic</span></div>
+
+
+<div class="viewcode-block" id="xs_mat_from_Btxt"><a class="viewcode-back" href="../../../pythonapi/generated/onix.data.xs_mat_from_Btxt.html#onix.data.xs_mat_from_Btxt">[docs]</a><span class="k">def</span> <span class="nf">xs_mat_from_Btxt</span><span class="p">(</span><span class="n">Btxt_path</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;Builds a neutron-induced transmutation matrix from a compressed matrix stored in a text file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Btxt_path: str</span>
+<span class="sd">        Path to the compressed matrix file</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">Btxt</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">Btxt_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">B_line</span> <span class="o">=</span> <span class="n">Btxt</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">B_line</span><span class="p">)</span>
+    <span class="n">xs_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">B_line</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">col_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="n">col_data</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="c1">#The format of Ctxt and Btxt contains a last coma that needs to be removed</span>
+        <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">col_data</span><span class="p">:</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">xs_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span>  <span class="n">val</span>
+
+    <span class="k">return</span> <span class="n">xs_mat</span></div>
+
+<div class="viewcode-block" id="decay_mat_from_Ctxt"><a class="viewcode-back" href="../../../pythonapi/generated/onix.data.decay_mat_from_Ctxt.html#onix.data.decay_mat_from_Ctxt">[docs]</a><span class="k">def</span> <span class="nf">decay_mat_from_Ctxt</span><span class="p">(</span><span class="n">Ctxt_path</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;Builds a decay matrix from a compressed matrix stored in a text file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Ctxt_path: str</span>
+<span class="sd">        Path to the compressed matrix file</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">Ctxt</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">Ctxt_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">C_line</span> <span class="o">=</span> <span class="n">Ctxt</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">C_line</span><span class="p">)</span>
+    <span class="n">decay_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">C_line</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">col_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="n">col_data</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="c1">#The format of Ctxt and Btxt contains a last coma that needs to be removed</span>
+        <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">col_data</span><span class="p">:</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">decay_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span>  <span class="n">val</span>
+
+    <span class="k">return</span> <span class="n">decay_mat</span></div>
+
+<div class="viewcode-block" id="nucl_list_from_txt"><a class="viewcode-back" href="../../../pythonapi/generated/onix.data.nucl_list_from_txt.html#onix.data.nucl_list_from_txt">[docs]</a><span class="k">def</span> <span class="nf">nucl_list_from_txt</span><span class="p">(</span><span class="n">mattxt_path</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;Builds a list of nuclides from a compressed matrix stored in a text file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mattxt_path: str</span>
+<span class="sd">        Path to the compressed matrix file</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="n">mattxt</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">mattxt_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">mat_line</span> <span class="o">=</span> <span class="n">mattxt</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mat_line</span><span class="p">)</span>
+    <span class="n">nucl_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">mat_line</span><span class="p">:</span>
+        <span class="n">zamid</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">nucl_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zamid</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">nucl_list</span></div>
+
+<span class="c1"># This might not be appropriate to have this function here as it needs OpenMC</span>
+<div class="viewcode-block" id="read_isomeric_data"><a class="viewcode-back" href="../../../pythonapi/generated/onix.data.read_isomeric_data.html#onix.data.read_isomeric_data">[docs]</a><span class="k">def</span> <span class="nf">read_isomeric_data</span><span class="p">():</span>
+
+    <span class="sd">&quot;&quot;&quot;Reads the EAF-2010 activation transmutation neutron</span>
+<span class="sd">nuclear data library and returns a point-wise isomeric branching dictionnary for (n,gamma) reactions. The keys of the dictionnary are nuclides and entries are isomeric branching subdictionnaries. The keys of these subdictionnaries are the state of the product daughter (ground state or first excited state) and the entries are the corresponding point-wise isomeric branching ratio.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># This command will find the absolute path of read_lib_fuctions.py</span>
+    <span class="c1"># Since read_lib_fuctions.py is located in data, the default isomeric data is just in __file__path + &#39;/isomeric_data/eaf-2010-multiplicities&#39;</span>
+    <span class="n">__file__path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+
+    <span class="n">isomeric_data_path</span> <span class="o">=</span> <span class="n">__file__path</span><span class="o">+</span> <span class="s1">&#39;/isomeric_data/eaf-2010-multiplicities&#39;</span>
+
+    <span class="c1"># onix does not consider branching that goes to 2nd excited state</span>
+    <span class="n">file_name_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">isomeric_data_path</span><span class="p">)</span> <span class="k">if</span> <span class="s1">&#39;_2.&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+
+    <span class="n">isomeric_branching_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">file_name_list</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">file_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">target_name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">target_state</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">daughter_state</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">target_state</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span>
+            <span class="n">nucl_name</span> <span class="o">=</span> <span class="n">target_name</span> <span class="o">+</span> <span class="s1">&#39;_m1&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nucl_name</span> <span class="o">=</span> <span class="n">target_name</span>
+        <span class="k">if</span> <span class="n">nucl_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">isomeric_branching_dict</span><span class="p">:</span>
+            <span class="n">isomeric_branching_dict</span><span class="p">[</span><span class="n">nucl_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">isomeric_data_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">file_name</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">energy_grid</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+            <span class="n">energy_grid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="n">tabulated_data</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Tabulated1D</span><span class="p">(</span><span class="n">energy_grid</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="n">isomeric_branching_dict</span><span class="p">[</span><span class="n">nucl_name</span><span class="p">][</span><span class="n">daughter_state</span><span class="p">]</span> <span class="o">=</span> <span class="n">tabulated_data</span>
+    
+    <span class="c1"># for some reason some parasitycal element are added to the dict (ex:.~lock.I129)</span>
+    <span class="c1"># These lines remove them</span>
+    <span class="n">wrong_entries</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">isomeric_branching_dict</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;lock&#39;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+            <span class="n">wrong_entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">wrong_entries</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">isomeric_branching_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">isomeric_branching_dict</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Julien de Troullioud de Lanversin
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+ 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30411614-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>

@@ -7,12 +7,11 @@ from . import mat_builder as mb
 from . import cram
 from . import py_pade   
 
-
-""" Implement the sequence of flux update against power"""
-
-# Used for stand alone calculation
+# This function is in fact not used anymore.
+# Might need to be removed
 def burn(system):
-
+    """Depletes a System Object according to its associated Sequence object.
+    """
     sequence = system.sequence
     steps_number = sequence.steps_number
     # The norm in onix is that Step 0 is reserved for initial status
@@ -39,6 +38,18 @@ def burn(system):
 
 def burn_step(system, s, mode):
 
+    """Depletes the system for macrostep s.
+
+    Parameters
+    ----------
+    system: onix.System
+        System to be depleted
+    s: int
+        Macrostep number
+    mode: str
+        'stand alone' or 'couple'
+    """
+
     bucell_list = system.get_bucell_list()
     reac_rank = system.reac_rank
     for bucell in bucell_list:
@@ -53,10 +64,23 @@ def burn_step(system, s, mode):
 
     if reac_rank == 'on':
         system._print_current_allreacs_rank()
-    system.copy_cell_folders_to_step_folder(s)
+    system._copy_cell_folders_to_step_folder(s)
 
 def burn_cell(bucell, s, mode, reac_rank):
 
+    """Depletes a BUCell for macrostep s.
+
+    Parameters
+    ----------
+    bucell: onix.Cell
+        BUCell to be depleted
+    s: int
+        Macrostep number
+    mode: str
+        'stand alone' or 'couple'
+    reac_rank: str
+        'on' or 'off'. If set to 'on', each BUCell will compute production and destruction terms ranking for each nuclide at every macrostep.
+    """
     # Check if different nuclide lists are coherent with each other
     # This should not be called in burn_cell because bun_cell is in the sequence loop
     # This function should be only called once before burn_cell
@@ -71,9 +95,9 @@ def burn_cell(bucell, s, mode, reac_rank):
     # microsteps_number is of length s-1
     microsteps_number = sequence.microsteps_number(s-1)
     
-    B = mb._get_xs_mat(passlist)
-    C = mb._get_decay_mat(passlist)
-    N = mb._get_initial_vect(passlist)
+    B = mb.get_xs_mat(passlist)
+    C = mb.get_decay_mat(passlist)
+    N = mb.get_initial_vect(passlist)
 
     # Store B and C on compressed txt
     # there needs to be a new matrix print for every step (even substep)
@@ -81,7 +105,7 @@ def burn_cell(bucell, s, mode, reac_rank):
 
     if flux_approximation == 'iv':
         for i in range(microsteps_number):
-            N = burn_substep(bucell, B, C, N, s, i, microsteps_number, mode, reac_rank)
+            N = burn_microstep(bucell, B, C, N, s, i, microsteps_number, mode, reac_rank)
     elif flux_approximation == 'pc':
         for i in range(microsteps_number):
             burn_substep_pc(bucell, B, C, N, s, i, microsteps_number, mode)
@@ -94,7 +118,29 @@ def burn_cell(bucell, s, mode, reac_rank):
 
     # At the end of this burn sequence, the flux and power
 
-def burn_substep(bucell, B, C, N, s, ss, ssn, mode, reac_rank):
+def burn_microstep(bucell, B, C, N, s, ss, ssn, mode, reac_rank):
+
+    """Depletes a BUCell for microstep ss within macrostep s.
+
+    Parameters
+    ----------
+    bucell: onix.Cell
+        BUCell to be depleted
+    B: numpy.array
+        Neutron-induced reaction transmutation matrix
+    C: numpy.array
+        Decay matrix
+    s: int
+        Macrostep number
+    ss: int
+        Microstep number
+    ssn: int
+        Total number of microstep within macrostep s
+    mode: str
+        'stand alone' or 'couple'
+    reac_rank: str
+        'on' or 'off'. If set to 'on', each BUCell will compute production and destruction terms ranking for each nuclide at every macrostep.
+    """
 
     print ('\n\n++++ Microstep {} ++++\n\n'.format(ss))
 

@@ -1,0 +1,635 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>onix.salameche.burn &mdash; ONIX Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #0d0d0d" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pythonapi/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License Agreement</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ONIX</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>onix.salameche.burn</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for onix.salameche.burn</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">onix</span> <span class="kn">import</span> <span class="n">data</span>
+<span class="kn">from</span> <span class="nn">onix</span> <span class="kn">import</span> <span class="n">passlist</span> <span class="k">as</span> <span class="n">pl</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">mat_builder</span> <span class="k">as</span> <span class="n">mb</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">cram</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">py_pade</span>   
+
+<span class="c1"># This function is in fact not used anymore.</span>
+<span class="c1"># Might need to be removed</span>
+<div class="viewcode-block" id="burn"><a class="viewcode-back" href="../../../pythonapi/generated/onix.salameche.burn.html#onix.salameche.burn">[docs]</a><span class="k">def</span> <span class="nf">burn</span><span class="p">(</span><span class="n">system</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Depletes a System Object according to its associated Sequence object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sequence</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">sequence</span>
+    <span class="n">steps_number</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">steps_number</span>
+    <span class="c1"># The norm in onix is that Step 0 is reserved for initial status</span>
+    <span class="c1"># Step 1 is the first true step</span>
+
+    <span class="c1"># This normalization resembles the step_normalization operated in</span>
+    <span class="c1"># coupled mode. However, here, the flux density is the same in each </span>
+    <span class="c1"># cell (flux density set for system as a whole)</span>
+    <span class="c1"># This normalization will just set the step flux and step pow dens</span>
+    <span class="c1"># for each cell</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">step_normalization</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">steps_number</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n\n\n</span><span class="s1"> STEP </span><span class="si">{}</span><span class="se">\n\n\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+
+        <span class="n">sequence</span><span class="o">.</span><span class="n">_gen_step_folder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">burn_step</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;stand alone&#39;</span><span class="p">)</span>
+
+    <span class="n">system</span><span class="o">.</span><span class="n">_gen_output_summary_folder</span><span class="p">()</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">_print_summary_allreacs_rank</span><span class="p">()</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">_print_summary_subdens</span><span class="p">()</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">_print_summary_dens</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="burn_step"><a class="viewcode-back" href="../../../pythonapi/generated/onix.salameche.burn_step.html#onix.salameche.burn_step">[docs]</a><span class="k">def</span> <span class="nf">burn_step</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Depletes the system for macrostep s.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    system: onix.System</span>
+<span class="sd">        System to be depleted</span>
+<span class="sd">    s: int</span>
+<span class="sd">        Macrostep number</span>
+<span class="sd">    mode: str</span>
+<span class="sd">        &#39;stand alone&#39; or &#39;couple&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">bucell_list</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">get_bucell_list</span><span class="p">()</span>
+    <span class="n">reac_rank</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">reac_rank</span>
+    <span class="k">for</span> <span class="n">bucell</span> <span class="ow">in</span> <span class="n">bucell_list</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n\n\n</span><span class="s1"> CELL </span><span class="si">{}</span><span class="se">\n\n\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bucell</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+        <span class="c1"># Create and set the folder corresponding to that cell</span>
+        <span class="n">bucell</span><span class="o">.</span><span class="n">_set_folder</span><span class="p">()</span>
+        <span class="n">bucell</span><span class="o">.</span><span class="n">_print_xs_lib</span><span class="p">()</span>
+        <span class="n">burn_cell</span><span class="p">(</span><span class="n">bucell</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">reac_rank</span><span class="p">)</span>
+        <span class="n">bucell</span><span class="o">.</span><span class="n">_change_isotope_density</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">bucell</span><span class="o">.</span><span class="n">_change_total_density</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">bucell</span><span class="o">.</span><span class="n">_print_substep_dens</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">reac_rank</span> <span class="o">==</span> <span class="s1">&#39;on&#39;</span><span class="p">:</span>
+        <span class="n">system</span><span class="o">.</span><span class="n">_print_current_allreacs_rank</span><span class="p">()</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">_copy_cell_folders_to_step_folder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="burn_cell"><a class="viewcode-back" href="../../../pythonapi/generated/onix.salameche.burn_cell.html#onix.salameche.burn_cell">[docs]</a><span class="k">def</span> <span class="nf">burn_cell</span><span class="p">(</span><span class="n">bucell</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">reac_rank</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Depletes a BUCell for macrostep s.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bucell: onix.Cell</span>
+<span class="sd">        BUCell to be depleted</span>
+<span class="sd">    s: int</span>
+<span class="sd">        Macrostep number</span>
+<span class="sd">    mode: str</span>
+<span class="sd">        &#39;stand alone&#39; or &#39;couple&#39;</span>
+<span class="sd">    reac_rank: str</span>
+<span class="sd">        &#39;on&#39; or &#39;off&#39;. If set to &#39;on&#39;, each BUCell will compute production and destruction terms ranking for each nuclide at every macrostep.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check if different nuclide lists are coherent with each other</span>
+    <span class="c1"># This should not be called in burn_cell because bun_cell is in the sequence loop</span>
+    <span class="c1"># This function should be only called once before burn_cell</span>
+    <span class="c1">#bucell._check_nucl_list_consistency()</span>
+
+    <span class="c1"># Initial print with initial density and initial time and bu</span>
+   <span class="c1"># cell._print_initial_dens()</span>
+
+    <span class="n">passlist</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">passlist</span>
+    <span class="n">sequence</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">sequence</span>
+    <span class="n">flux_approximation</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">flux_approximation</span>
+    <span class="c1"># microsteps_number is of length s-1</span>
+    <span class="n">microsteps_number</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">microsteps_number</span><span class="p">(</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="n">B</span> <span class="o">=</span> <span class="n">mb</span><span class="o">.</span><span class="n">get_xs_mat</span><span class="p">(</span><span class="n">passlist</span><span class="p">)</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">mb</span><span class="o">.</span><span class="n">get_decay_mat</span><span class="p">(</span><span class="n">passlist</span><span class="p">)</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">mb</span><span class="o">.</span><span class="n">get_initial_vect</span><span class="p">(</span><span class="n">passlist</span><span class="p">)</span>
+
+    <span class="c1"># Store B and C on compressed txt</span>
+    <span class="c1"># there needs to be a new matrix print for every step (even substep)</span>
+    <span class="n">mb</span><span class="o">.</span><span class="n">_print_all_mat_to_text</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">bucell</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">flux_approximation</span> <span class="o">==</span> <span class="s1">&#39;iv&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">microsteps_number</span><span class="p">):</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="n">burn_microstep</span><span class="p">(</span><span class="n">bucell</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">microsteps_number</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">reac_rank</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">flux_approximation</span> <span class="o">==</span> <span class="s1">&#39;pc&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">microsteps_number</span><span class="p">):</span>
+            <span class="n">burn_substep_pc</span><span class="p">(</span><span class="n">bucell</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">microsteps_number</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">flux_approximation</span> <span class="o">==</span> <span class="s1">&#39;me&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">microsteps_number</span><span class="p">):</span>
+            <span class="n">burn_substep_pcME4</span><span class="p">(</span><span class="n">bucell</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">microsteps_number</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+
+    <span class="n">bucell</span><span class="o">.</span><span class="n">_set_step_dens</span><span class="p">()</span>
+    <span class="n">sequence</span><span class="o">.</span><span class="n">_set_macrostep_bucell_bu</span><span class="p">()</span></div>
+
+    <span class="c1"># At the end of this burn sequence, the flux and power</span>
+
+<div class="viewcode-block" id="burn_microstep"><a class="viewcode-back" href="../../../pythonapi/generated/onix.salameche.burn_microstep.html#onix.salameche.burn_microstep">[docs]</a><span class="k">def</span> <span class="nf">burn_microstep</span><span class="p">(</span><span class="n">bucell</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">,</span> <span class="n">ssn</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">reac_rank</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Depletes a BUCell for microstep ss within macrostep s.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bucell: onix.Cell</span>
+<span class="sd">        BUCell to be depleted</span>
+<span class="sd">    B: numpy.array</span>
+<span class="sd">        Neutron-induced reaction transmutation matrix</span>
+<span class="sd">    C: numpy.array</span>
+<span class="sd">        Decay matrix</span>
+<span class="sd">    s: int</span>
+<span class="sd">        Macrostep number</span>
+<span class="sd">    ss: int</span>
+<span class="sd">        Microstep number</span>
+<span class="sd">    ssn: int</span>
+<span class="sd">        Total number of microstep within macrostep s</span>
+<span class="sd">    mode: str</span>
+<span class="sd">        &#39;stand alone&#39; or &#39;couple&#39;</span>
+<span class="sd">    reac_rank: str</span>
+<span class="sd">        &#39;on&#39; or &#39;off&#39;. If set to &#39;on&#39;, each BUCell will compute production and destruction terms ranking for each nuclide at every macrostep.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">++++ Microstep </span><span class="si">{}</span><span class="s1"> ++++</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ss</span><span class="p">))</span>
+
+    <span class="n">bucell_id</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">id</span>
+    <span class="n">sequence</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">sequence</span>
+    <span class="n">norma</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">norma_unit</span>
+    <span class="c1">#norma_value = sequence.norma_vector[s]</span>
+
+    <span class="c1"># I decided that since pow dens sequence will only be updated dynamically</span>
+    <span class="c1"># and not created at the beginning, then the conversion bu-time/time-bu</span>
+    <span class="c1"># will also be done dynamically</span>
+    <span class="c1"># In case of norma = bu, time need to be calculated now, before CRAM</span>
+    <span class="n">sequence</span><span class="o">.</span><span class="n">_bucell_time_bu_substep_conversion</span><span class="p">(</span><span class="n">bucell</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span>
+
+    <span class="c1"># print (&#39;s&#39;, s, &#39;ss&#39;, ss)</span>
+    <span class="c1"># print (&#39;time subseq mat&#39;, sequence._time_subseq_mat)</span>
+    <span class="c1"># print (&#39;bu subseq mat&#39;, sequence._bucell_bu_subseq_mat)</span>
+    <span class="n">time_point</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">time_subpoint</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span>
+    <span class="n">bucell_bu_point</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">bucell_bu_subpoint</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span>
+    <span class="n">time_substep</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">get_time_subintvl</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span>
+
+    <span class="n">pow_dens</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">current_pow_dens</span>
+    <span class="n">flux</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">current_flux</span>
+
+    <span class="c1"># If this is the first substep, no need to update the flux or pow dens</span>
+    <span class="c1"># both have been already calculated </span>
+    <span class="k">if</span> <span class="n">ss</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="c1"># Check whether actinides are present in the cell</span>
+    <span class="c1"># If not, then no flux/power update should be done</span>
+        <span class="n">act</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">check_act_presence</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">act</span> <span class="o">==</span> <span class="s1">&#39;yes&#39;</span><span class="p">:</span>
+        <span class="c1"># Now that the density of nuclides is updated, calculate the new substep flux or power density</span>
+            <span class="k">if</span> <span class="n">norma</span> <span class="o">==</span> <span class="s1">&#39;power&#39;</span><span class="p">:</span>
+                <span class="n">flux</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">_update_flux</span><span class="p">(</span><span class="n">pow_dens</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">norma</span> <span class="o">==</span> <span class="s1">&#39;flux&#39;</span><span class="p">:</span>
+                <span class="n">pow_dens</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">_update_pow_dens</span><span class="p">(</span><span class="n">flux</span><span class="p">)</span>
+
+    <span class="n">sequence</span><span class="o">.</span><span class="n">_set_substep_flux</span><span class="p">(</span><span class="n">flux</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span>
+    <span class="n">sequence</span><span class="o">.</span><span class="n">_set_substep_pow_dens</span><span class="p">(</span><span class="n">pow_dens</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span>
+
+    <span class="c1"># print((&#39;current_time_point&#39;, time_point))</span>
+    <span class="c1"># print((&#39;current bucell_bu&#39;, bucell_bu_point))</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="n">B</span><span class="o">*</span><span class="mf">1e-24</span><span class="o">*</span><span class="n">flux</span> <span class="o">+</span> <span class="n">C</span><span class="p">)</span>
+    <span class="c1">#A = B*1e-24*flux</span>
+    <span class="c1"># print((&#39;current flux&#39;, flux))</span>
+    <span class="c1"># print((&#39;current time_subintvl&#39;, time_substep))</span>
+
+    <span class="n">At</span> <span class="o">=</span> <span class="n">A</span><span class="o">*</span><span class="n">time_substep</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="n">cram</span><span class="o">.</span><span class="n">CRAM16</span><span class="p">(</span><span class="n">At</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    <span class="c1">#N = py_pade.pade(At, N)</span>
+
+    <span class="n">cram</span><span class="o">.</span><span class="n">CRAM_density_check</span><span class="p">(</span><span class="n">bucell</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
+    <span class="n">bucell</span><span class="o">.</span><span class="n">_update_dens</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">ss</span><span class="p">,</span> <span class="n">ssn</span><span class="p">)</span>
+
+    <span class="c1"># Generate the allreacsdic for each nuclide</span>
+    <span class="k">if</span> <span class="n">reac_rank</span> <span class="o">==</span> <span class="s1">&#39;on&#39;</span><span class="p">:</span>
+        <span class="n">bucell</span><span class="o">.</span><span class="n">_set_allreacs_dic</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">,</span> <span class="n">ssn</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">N</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="k">def</span> <span class="nf">burn_substep_pc</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span> <span class="c1"># with predictor corrector</span>
+
+    <span class="n">cell_id</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">id</span>
+    <span class="n">passlist</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">passlist</span>
+    <span class="n">index_dic</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">index_dic</span>
+    <span class="n">sequence</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">sequence</span>
+    <span class="n">norma</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">norma_unit</span>
+    <span class="n">norma_value</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">norma_vector</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+    <span class="n">power</span> <span class="o">=</span> <span class="n">norma_value</span>
+
+    <span class="n">time_point</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">time_subpoint</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">bu_point</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">bu_subpoint</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">time_substep</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">time_substep</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="n">Ni</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">flux_pc</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">pc_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+
+        <span class="n">flux_pc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sequence</span><span class="o">.</span><span class="n">_update_flux</span><span class="p">(</span><span class="n">passlist</span><span class="p">,</span> <span class="n">power</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">pc_i</span> <span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="c1"># Corrector step</span>
+
+            <span class="n">flux_pc</span> <span class="o">=</span> <span class="p">(</span><span class="n">flux_pc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">flux_pc</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span>
+
+            <span class="c1"># Pass the flux to sequence. If power norma, seq and subseq are updated. If flux norma, only subseq needs to be updated</span>
+            <span class="n">sequence</span><span class="o">.</span><span class="n">_set_flux</span><span class="p">(</span><span class="n">flux_pc</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+            <span class="c1"># Generate the first set of reacs</span>
+            <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">pl</span><span class="o">.</span><span class="n">_set_allreacs_dic</span><span class="p">(</span><span class="n">passlist</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+
+        <span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="n">B</span><span class="o">*</span><span class="mf">1e-24</span><span class="o">*</span><span class="n">flux_pc</span> <span class="o">+</span> <span class="n">C</span><span class="p">)</span>
+        <span class="c1">#A = B*1e-24*flux</span>
+        <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;flux_pc&#39;</span><span class="p">,</span> <span class="n">flux_pc</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;time_substep&#39;</span><span class="p">,</span> <span class="n">time_substep</span><span class="p">))</span>
+
+        <span class="n">At</span> <span class="o">=</span> <span class="n">A</span><span class="o">*</span><span class="n">time_substep</span>
+
+        <span class="n">N</span> <span class="o">=</span> <span class="n">cram</span><span class="o">.</span><span class="n">CRAM16</span><span class="p">(</span><span class="n">At</span><span class="p">,</span> <span class="n">Ni</span><span class="p">)</span>
+
+        <span class="n">cram</span><span class="o">.</span><span class="n">CRAM_reality_check</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">index_dic</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
+        <span class="n">pl</span><span class="o">.</span><span class="n">_update_dens</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">passlist</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">pc_i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+          <span class="c1">#  pl.print_dens_2(cell, s, i)</span>
+
+            <span class="c1"># Store B and C on compressed txt</span>
+            <span class="c1"># there needs to be a new matrix print for every step (even substep)</span>
+            <span class="n">mb</span><span class="o">.</span><span class="n">_print_all_mat_to_text</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">flux_pc</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+            <span class="c1"># Generate the allreacsdic for each nuclide</span>
+            <span class="n">pl</span><span class="o">.</span><span class="n">_set_allreacs_dic</span><span class="p">(</span><span class="n">passlist</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">burn_substep_pcME4</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span> <span class="c1"># with predictor corrector</span>
+
+    <span class="n">cell_id</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">id</span>
+    <span class="n">passlist</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">passlist</span>
+    <span class="n">index_dic</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">index_dic</span>
+    <span class="n">sequence</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">sequence</span>
+    <span class="n">norma</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">norma_unit</span>
+    <span class="n">norma_value</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">norma_vector</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+    <span class="n">power</span> <span class="o">=</span> <span class="n">norma_value</span>
+
+    <span class="n">time_point</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">time_subpoint</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">bu_point</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">bu_subpoint</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">time_substep</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">time_substep</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="n">Ni</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">flux_pc</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Predictor</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Predictor&#39;</span><span class="p">)</span>
+
+    <span class="n">flux_pc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sequence</span><span class="o">.</span><span class="n">_update_flux</span><span class="p">(</span><span class="n">passlist</span><span class="p">,</span> <span class="n">power</span><span class="p">))</span>
+
+    <span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="n">B</span><span class="o">*</span><span class="mf">1e-24</span><span class="o">*</span><span class="n">flux_pc</span> <span class="o">+</span> <span class="n">C</span><span class="p">)</span>
+    <span class="c1">#A = B*1e-24*flux</span>
+    <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;flux_pc&#39;</span><span class="p">,</span> <span class="n">flux_pc</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;time_substep&#39;</span><span class="p">,</span> <span class="n">time_substep</span><span class="p">))</span>
+
+    <span class="n">At</span> <span class="o">=</span> <span class="n">A</span><span class="o">*</span><span class="n">time_substep</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="n">cram</span><span class="o">.</span><span class="n">CRAM16</span><span class="p">(</span><span class="n">At</span><span class="p">,</span> <span class="n">Ni</span><span class="p">)</span>
+
+    <span class="n">cram</span><span class="o">.</span><span class="n">CRAM_reality_check</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">index_dic</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
+    <span class="n">pl</span><span class="o">.</span><span class="n">_update_dens</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">passlist</span><span class="p">)</span>
+
+
+
+    <span class="c1"># Corrector</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Corrector&#39;</span><span class="p">)</span>
+
+    <span class="n">flux_pc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sequence</span><span class="o">.</span><span class="n">_update_flux</span><span class="p">(</span><span class="n">passlist</span><span class="p">,</span> <span class="n">power</span><span class="p">))</span>
+    <span class="n">flux_av</span> <span class="o">=</span> <span class="p">(</span><span class="n">flux_pc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">flux_pc</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span>
+
+    <span class="c1"># Pass the flux to sequence. If power norma, seq and subseq are updated. If flux norma, only subseq needs to be updated</span>
+    <span class="n">sequence</span><span class="o">.</span><span class="n">_set_flux</span><span class="p">(</span><span class="n">flux_av</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+    <span class="c1"># Generate the first set of reacs</span>
+    <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">pl</span><span class="o">.</span><span class="n">_set_allreacs_dic</span><span class="p">(</span><span class="n">passlist</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+
+    <span class="c1"># Apct</span>
+    <span class="n">Apc</span> <span class="o">=</span> <span class="p">(</span><span class="n">B</span><span class="o">*</span><span class="mf">1e-24</span><span class="o">*</span><span class="n">flux_av</span> <span class="o">+</span> <span class="n">C</span><span class="p">)</span>
+    <span class="c1">#A = B*1e-24*flux</span>
+    <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;flux_pc&#39;</span><span class="p">,</span> <span class="n">flux_pc</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;time_substep&#39;</span><span class="p">,</span> <span class="n">time_substep</span><span class="p">))</span>
+    <span class="n">Apct</span> <span class="o">=</span> <span class="n">A</span><span class="o">*</span><span class="n">time_substep</span>
+
+    <span class="c1"># Correction from ME4</span>
+    <span class="n">BC_CB</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="n">C</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">C</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
+    <span class="n">correction</span> <span class="o">=</span> <span class="n">BC_CB</span><span class="o">*</span><span class="p">((</span><span class="n">flux_pc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">flux_pc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="n">time_substep</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">12</span>
+
+    <span class="n">Apct_corrected</span> <span class="o">=</span> <span class="n">Apct</span> <span class="o">+</span> <span class="n">correction</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="s1">&#39;nan&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;Apct&quot;</span><span class="p">,</span> <span class="n">Apct</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;determinant Apct&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">Apct</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;norm At&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">Apct</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+
+    <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;BC_CB&quot;</span><span class="p">,</span> <span class="n">BC_CB</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;determinant BC_CB&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">BC_CB</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;norm BC_CB&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">BC_CB</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+
+
+
+
+    <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;Correction&quot;</span><span class="p">,</span> <span class="n">correction</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;Apct_corrected&quot;</span><span class="p">,</span> <span class="n">Apct_corrected</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;determinant corrected&#39;</span><span class="p">,</span>   <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">Apct</span><span class="p">)))</span>
+    <span class="n">norm_corrected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">Apct_corrected</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;NORM corrected&#39;</span><span class="p">,</span> <span class="n">norm_corrected</span><span class="p">))</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="n">cram</span><span class="o">.</span><span class="n">CRAM16</span><span class="p">(</span><span class="n">Apct_corrected</span><span class="p">,</span> <span class="n">Ni</span><span class="p">)</span>
+
+    <span class="n">cram</span><span class="o">.</span><span class="n">CRAM_reality_check</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">index_dic</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
+    <span class="n">pl</span><span class="o">.</span><span class="n">_update_dens</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">passlist</span><span class="p">)</span>
+
+  <span class="c1">#  pl.print_dens_2(cell, s, i)</span>
+
+    <span class="c1"># Store B and C on compressed txt</span>
+    <span class="c1"># there needs to be a new matrix print for every step (even substep)</span>
+    <span class="n">mb</span><span class="o">.</span><span class="n">_print_all_mat_to_text</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">flux_pc</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+    <span class="c1"># Generate the allreacsdic for each nuclide</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">_set_allreacs_dic</span><span class="p">(</span><span class="n">passlist</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Julien de Troullioud de Lanversin
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+ 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30411614-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>

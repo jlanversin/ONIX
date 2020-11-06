@@ -1,8 +1,8 @@
 .. _overview:
 
-================
-Overview of ONIX
-================
+========
+Overview
+========
 
 ONIX (for OpeN IsotopiX) is a state-of-the-art nuclear depletion software that is open-source. It can be used to model nuclear reactors simulation, estimate the production of fissile materials in reactors, support work in nuclear archaeology and for other applications. Because ONIX is open-source, anyone can use it for any type of applications (no export control or proprietary restrictions). This makes ONIX an ideal tools for innovative, community-based research on nuclear reactors and nuclear arms control.
 

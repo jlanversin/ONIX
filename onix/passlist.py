@@ -11,6 +11,17 @@ import operator
 
 class Passlist(object):
 
+    """Passlist manages the list of nuclides' passports.
+
+    It can for example order the list of nuclides in a certain order and is tasked with distributing nuclear data to individual nuclides.
+    
+    Parameters
+    ----------
+    nucl_list: list
+        (Optiontal) List of nuclides for which Passlist should build the Passports list. A passlist object can be instantiated without providing a nuclides list
+
+    """
+
     def __init__(self, *nucl_list):
 
 
@@ -25,7 +36,7 @@ class Passlist(object):
             if utils.is_name(sample_elt):
                 nucl_list = utils.name_list_to_zamid_list(nucl_list)
 
-            passport_list = self.get_passport_list(nucl_list)
+            passport_list = self.create_passport_list(nucl_list)
 
             self._nucl_list = nucl_list
             self._passport_list = passport_list
@@ -35,18 +46,19 @@ class Passlist(object):
 
     @property
     def nucl_list(self):
+        """Returns the list of nuclides' names."""
 
         return self._nucl_list
 
 
     @property
     def passport_list(self):
-
+        """Returns the list of Passport objects."""
         return self._passport_list
 
         
     def _get_zamid_passport_dict(self):
-        """Convert the list of passport into a dictionnary of passports where entries are the zamid of the nuclides"""
+        """Convert the list of Passport objects into a dictionnary of Passport objects where keys are the zamid of the nuclides and entries are Passport objects."""
 
         passport_list = self.passport_list
 
@@ -58,7 +70,7 @@ class Passlist(object):
         return passport_dict
 
     def _get_name_passport_dict(self):
-        """Convert the list of passport into a dictionnary of passports where entries are the zamid of the nuclides"""
+        """Convert the list of passport into a dictionnary of passports where entries are the zamid of the nuclides."""
 
         passport_list = self.passport_list
 
@@ -70,7 +82,8 @@ class Passlist(object):
         return passport_dict
 
     def azm_order_passport_list(self):
-
+        """Orders the list of Passport objects after mass number first and then atomic number.
+        """
         passport_list = self.passport_list
         print('AZM ORDER CALLED')
         changed = True
@@ -92,6 +105,8 @@ class Passlist(object):
 
 
     def zam_order_passport_list(self):
+        """Orders the list of Passport objects after atomic number first and then mass number.
+        """
         passport_list = self.passport_list
         changed = True
         while changed:
@@ -120,7 +135,8 @@ class Passlist(object):
 
 
     def zam_order_passport_list_2(self):
-
+        """Orders the list of Passport objects after atomic number first and then mass number with Python list.sort() method.
+        """
         passport_list = self.passport_list
         #passport_list = sorted(passport_list, key = lambda pp: int(pp.zamid))
         passport_list.sort(key = lambda pp: int(pp.zamid))
@@ -129,7 +145,8 @@ class Passlist(object):
 
 
     def get_index_dict(self):
-
+        """Returns a dictionnary where keys are z-a-m id of nuclides and entries are the index of their Passport in the Passport list.
+        """
         passport_list = self.passport_list
 
         index_dict = {}
@@ -150,15 +167,21 @@ class Passlist(object):
         current_nucl_list = self.nucl_list
         new_extra_nuclides = list(set(nucl_list) - set(current_nucl_list))
 
-        new_extra_passport_list = self.get_passport_list(new_extra_nuclides)
+        new_extra_passport_list = self.create_passport_list(new_extra_nuclides)
         self._set_mass(new_extra_passport_list)
         self._set_zero_dens(new_extra_passport_list)
         for nucl_pass in new_extra_passport_list:
             self.passport_list.append(nucl_pass)
             self.nucl_list.append(nucl_pass.zamid)
 
-    def get_passport_list(self, nucl_list):
+    def create_passport_list(self, nucl_list):
+        """Create a Passport objects list after a provided list of nuclides.
 
+        Parameters
+        ----------
+        nucl_list: list
+            List of nuclides' names
+        """
         passport_list = []
         for nucl in nucl_list:
             passport_list.append(Passport(nucl))
@@ -167,7 +190,7 @@ class Passlist(object):
 
 
     def _set_mass(self, passport_list):
-        """Read and set the atomic mass for each nuclide in the passports list"""
+        """Read and set the atomic mass for each nuclide in the passports list."""
 
         for i in range(len(passport_list)):
 
@@ -186,7 +209,7 @@ class Passlist(object):
 
 
     def _set_decay(self, decay_lib_b, decay_lib_a):
-        """Read and set the decay constants for each nuclide in the passports list"""
+        """Read and set the decay constants for each nuclide in the passports list."""
 
         passport_list = self.passport_list
 

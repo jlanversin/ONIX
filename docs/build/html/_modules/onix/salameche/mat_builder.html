@@ -1,0 +1,668 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>onix.salameche.mat_builder &mdash; ONIX Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #0d0d0d" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pythonapi/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License Agreement</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ONIX</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>onix.salameche.mat_builder</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for onix.salameche.mat_builder</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; Uses the passport list to build the transmutation matrix&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<div class="viewcode-block" id="get_xs_mat"><a class="viewcode-back" href="../../../pythonapi/generated/onix.salameche.get_xs_mat.html#onix.salameche.get_xs_mat">[docs]</a><span class="k">def</span> <span class="nf">get_xs_mat</span><span class="p">(</span><span class="n">passlist</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Builds the cross section matrix.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    passlist: onix.Passlist</span>
+<span class="sd">        Passlist object associated with the BUCell being depleted</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># order the list by mass number</span>
+    <span class="c1">#azm_sort(passport_list)</span>
+
+    <span class="c1"># create a dic that stores the index of each nuclide in the list</span>
+    <span class="n">passport_list</span> <span class="o">=</span> <span class="n">passlist</span><span class="o">.</span><span class="n">passport_list</span>
+    <span class="n">index_dict</span> <span class="o">=</span> <span class="n">passlist</span><span class="o">.</span><span class="n">get_index_dict</span><span class="p">()</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)</span>
+    <span class="n">xs_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">nucli</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">row</span><span class="p">]</span>
+        <span class="n">zaidi</span> <span class="o">=</span> <span class="n">nucli</span><span class="o">.</span><span class="n">zamid</span>
+        <span class="n">FAM</span> <span class="o">=</span> <span class="n">nucli</span><span class="o">.</span><span class="n">get_FAM</span><span class="p">()</span>
+
+        <span class="c1"># Diagonal term</span>
+        <span class="n">nucli_xs</span> <span class="o">=</span> <span class="n">nucli</span><span class="o">.</span><span class="n">current_xs</span>
+        <span class="k">if</span> <span class="n">nucli_xs</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">xs_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">nucli_xs</span><span class="p">[</span><span class="s1">&#39;removal&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># Non diagonal terms (non fission)</span>
+        <span class="n">xs_parent</span> <span class="o">=</span> <span class="n">nucli</span><span class="o">.</span><span class="n">xs_parent</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">xs_parent</span><span class="p">:</span>
+            <span class="c1"># If the parent nuclide is not in passport_list, skip</span>
+            <span class="k">if</span> <span class="n">xs_parent</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">index_dict</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">index_dict</span><span class="p">[</span><span class="n">xs_parent</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>
+            <span class="n">parent_pass</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">parent_xs</span> <span class="o">=</span> <span class="n">parent_pass</span><span class="o">.</span><span class="n">current_xs</span>
+            <span class="c1"># If there are no xs for the parent nuclide, skip</span>
+            <span class="k">if</span> <span class="n">parent_xs</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># In the xs_parent dic, reaction that start from an excited state have an &#39;X&#39; at the beginning of the reaction name. This </span>
+            <span class="c1"># is not the case in the xs dic. Therefore, we need to remove the starting X to match the reaction name in parent_xs</span>
+            <span class="k">if</span> <span class="n">parent_pass</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+            <span class="c1"># if zaidi == &#39;10030&#39;:</span>
+            <span class="c1">#     print (&#39;tritium&#39;)</span>
+            <span class="c1">#     print (&#39;xs&#39;, nucli_xs)</span>
+            <span class="c1">#     print (&#39;parent dict&#39;, xs_parent)</span>
+            <span class="c1">#     print (&#39;xs name before&#39;, j)</span>
+            <span class="c1">#     print (&#39;parent&#39;, xs_parent[j])</span>
+            <span class="c1">#     print (&#39;parent xs&#39;, parent_xs)</span>
+
+            <span class="c1"># Certain nuclides are produced by several parents through the same reaction</span>
+            <span class="c1"># Ex: tritium with (n,t) from Li6 and B10</span>
+            <span class="c1"># In the xs_parent dict, these reactions are differentiated with prefixes (&#39;&lt;parent_name&gt;(n,t)&#39;)</span>
+            <span class="c1"># But in the xs dict of each nuclide, this is not the case. Each reaction is only represented once</span>
+            <span class="c1"># To find the corresponding reactions in parent&#39;s xs dic, we need to strip the reaction name</span>
+            <span class="c1"># found in the xs_parent dic from its prefix</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="s1">&#39;(&#39;</span> <span class="o">+</span> <span class="n">j</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># if zaidi == &#39;10030&#39;:</span>
+            <span class="c1">#     print (&#39;xs name after&#39;, j)</span>
+
+            <span class="c1"># If the specific xs that produce nucli does not exist for the parent, skip</span>
+            <span class="k">if</span> <span class="n">j</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">parent_xs</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">xs_val</span> <span class="o">=</span> <span class="n">parent_xs</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1"># If the xs that produces nucli is zero, skip</span>
+            <span class="k">if</span> <span class="n">xs_val</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">xs_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">xs_val</span>
+
+
+
+        <span class="c1">####################### WARNING, TO BE REMOVED ##########################</span>
+        <span class="c1">######FOR ARGONNE BENCHMARK ONLY</span>
+
+        <span class="c1"># if zaidi ==&#39;611490&#39;:</span>
+        <span class="c1">#     indexpm148X = index_dict[&#39;611481&#39;]</span>
+        <span class="c1">#     pm148X_passport = passport_list[indexpm148X]</span>
+        <span class="c1">#     indexpm148X_xs_val = pm148X_passport.current_xs[&#39;ngamma&#39;][0]</span>
+        <span class="c1">#     xs_mat[row][indexpm148X] = indexpm148X_xs_val</span>
+
+        <span class="c1"># if zaidi ==&#39;952430&#39;:</span>
+        <span class="c1">#     indexam242X = index_dict[&#39;952421&#39;]</span>
+        <span class="c1">#     am242X_passport = passport_list[indexam242X]</span>
+        <span class="c1">#     indexam242X_xs_val = am242X_passport.current_xs[&#39;ngamma&#39;][0]</span>
+        <span class="c1">#     xs_mat[row][indexam242X] = indexam242X_xs_val</span>
+        <span class="c1">####################### WARNING, TO BE REMOVED ##########################</span>
+
+
+        <span class="c1"># fission products yields  </span>
+        <span class="k">if</span> <span class="n">FAM</span> <span class="o">==</span> <span class="s1">&#39;FP&#39;</span><span class="p">:</span>
+            <span class="n">fy</span> <span class="o">=</span> <span class="n">nucli</span><span class="o">.</span><span class="n">fy</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">fy</span><span class="p">:</span>
+                <span class="c1"># If the parent nuclide not in passport_list, skip</span>
+                <span class="k">if</span> <span class="n">j</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">index_dict</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="c1"># If the fission yield is zero, skip</span>
+                <span class="k">if</span> <span class="n">fy</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">index_dict</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">parent_pass</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+                <span class="n">parent_xs</span> <span class="o">=</span> <span class="n">parent_pass</span><span class="o">.</span><span class="n">current_xs</span>
+                <span class="c1"># If there are no xs for the parent nuclide, skip</span>
+                <span class="k">if</span> <span class="n">parent_xs</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="c1"># if fission is not in parent cross section</span>
+                <span class="k">if</span> <span class="s1">&#39;fission&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">parent_xs</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">fission_val</span> <span class="o">=</span> <span class="n">parent_xs</span><span class="p">[</span><span class="s1">&#39;fission&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c1"># If the fission that produces nucli is zero, skip</span>
+                <span class="k">if</span> <span class="n">fission_val</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">fission_val</span><span class="o">*</span><span class="n">fy</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">1e-2</span>
+
+                <span class="c1"># if j == &#39;922350&#39; and zaidi == &#39;571490&#39;:</span>
+
+                <span class="n">xs_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+
+    <span class="k">return</span> <span class="n">xs_mat</span></div>
+
+
+
+
+
+
+<div class="viewcode-block" id="get_decay_mat"><a class="viewcode-back" href="../../../pythonapi/generated/onix.salameche.get_decay_mat.html#onix.salameche.get_decay_mat">[docs]</a><span class="k">def</span> <span class="nf">get_decay_mat</span><span class="p">(</span><span class="n">passlist</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Builds the decay matrix.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    passlist: onix.Passlist</span>
+<span class="sd">        Passlist object associated with the BUCell being depleted</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># order the list by mass number</span>
+    <span class="c1">#azm_sort(passport_list)</span>
+
+    <span class="c1"># create a dic that stores the index of each nuclide in the list</span>
+    <span class="n">passport_list</span> <span class="o">=</span> <span class="n">passlist</span><span class="o">.</span><span class="n">passport_list</span>
+    <span class="n">index_dict</span> <span class="o">=</span> <span class="n">passlist</span><span class="o">.</span><span class="n">get_index_dict</span><span class="p">()</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)</span>
+    
+    <span class="n">decay_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">nucli</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">row</span><span class="p">]</span>
+        <span class="n">zaidi</span> <span class="o">=</span> <span class="n">nucli</span><span class="o">.</span><span class="n">zamid</span>
+
+
+        <span class="c1"># Diagonal term</span>
+        <span class="n">nucli_decay</span> <span class="o">=</span> <span class="n">nucli</span><span class="o">.</span><span class="n">decay_a</span>
+        <span class="k">if</span> <span class="n">nucli_decay</span> <span class="o">!=</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">nucli_decay</span> <span class="o">!=</span> <span class="s1">&#39;stable&#39;</span><span class="p">:</span>
+            <span class="n">decay_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">nucli_decay</span><span class="p">[</span><span class="s1">&#39;total decay&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Non diagonal terms</span>
+        <span class="n">decay_parent</span> <span class="o">=</span> <span class="n">nucli</span><span class="o">.</span><span class="n">decay_parent</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">decay_parent</span><span class="p">:</span>
+            <span class="c1"># If the parent nuclide is not in passport_list, skip</span>
+            <span class="k">if</span> <span class="n">decay_parent</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">index_dict</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">index</span> <span class="o">=</span> <span class="n">index_dict</span><span class="p">[</span><span class="n">decay_parent</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>
+            <span class="n">parent_pass</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">parent_decay</span> <span class="o">=</span> <span class="n">parent_pass</span><span class="o">.</span><span class="n">decay_a</span>
+            <span class="c1"># If there are no decay for the parent nuclide, skip</span>
+            <span class="k">if</span> <span class="n">parent_decay</span> <span class="o">==</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">parent_decay</span> <span class="o">==</span> <span class="s1">&#39;stable&#39;</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># In the decay_parent dic, reaction that start from an excited state have an &#39;X&#39; at the beginning of the reaction name. This </span>
+            <span class="c1"># is not the case in the parent_decay dic. Therefore, we need to remove the starting X to match the reaction name in parent_decay</span>
+            <span class="k">if</span> <span class="n">parent_pass</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+            <span class="c1"># If i is not in parent_decay</span>
+            <span class="k">if</span> <span class="n">j</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">parent_decay</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">decay_val</span> <span class="o">=</span> <span class="n">parent_decay</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="c1"># If the decay that produces nucli is zero, skip</span>
+            <span class="k">if</span> <span class="n">decay_val</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">decay_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">decay_val</span>
+
+    <span class="k">return</span> <span class="n">decay_mat</span></div>
+
+
+<div class="viewcode-block" id="get_initial_vect"><a class="viewcode-back" href="../../../pythonapi/generated/onix.salameche.get_initial_vect.html#onix.salameche.get_initial_vect">[docs]</a><span class="k">def</span> <span class="nf">get_initial_vect</span><span class="p">(</span><span class="n">passlist</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Gets the initial density vector.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    passlist: onix.Passlist</span>
+<span class="sd">        Passlist object associated with the BUCell being depleted</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">passport_list</span> <span class="o">=</span> <span class="n">passlist</span><span class="o">.</span><span class="n">passport_list</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)</span>
+    
+    <span class="n">vect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">nuc_pass</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">vect</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">current_dens</span>
+
+    <span class="k">return</span> <span class="n">vect</span></div>
+
+
+
+
+
+
+
+    
+
+
+<span class="k">def</span> <span class="nf">_print_all_mat_to_text</span><span class="p">(</span><span class="n">xs_mat</span><span class="p">,</span> <span class="n">decay_mat</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+
+    <span class="n">mat_folder_path</span> <span class="o">=</span> <span class="n">_get_mat_folder_path</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+
+    <span class="n">_gen_mat_folder</span><span class="p">(</span><span class="n">mat_folder_path</span><span class="p">)</span>
+
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;get_xs_mat_text_1&#39;</span><span class="p">)</span>
+    <span class="n">xs_mat_txt</span> <span class="o">=</span> <span class="n">_get_xs_mat_text_1</span><span class="p">(</span><span class="n">xs_mat</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span>
+   <span class="c1"># xsphi_mat_txt = _get_xs_mat_text_2(xs_mat, cell, flux)</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;get_decay_mat_text&#39;</span><span class="p">)</span>
+    <span class="n">decay_mat_txt</span> <span class="o">=</span> <span class="n">_get_decay_mat_text</span><span class="p">(</span><span class="n">decay_mat</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span>
+
+    <span class="n">xs_mat_name</span> <span class="o">=</span> <span class="n">mat_folder_path</span> <span class="o">+</span> <span class="s1">&#39;/xs_mat&#39;</span>
+ <span class="c1">#   xsphi_mat_name = mat_folder_path + &#39;/{}_xsphi_mat&#39;.format(step_point)</span>
+    <span class="n">decay_mat_name</span> <span class="o">=</span> <span class="n">mat_folder_path</span> <span class="o">+</span> <span class="s1">&#39;/decay_mat&#39;</span>
+
+    <span class="n">xs_mat</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">xs_mat_name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+  <span class="c1">#  xsphi_mat = open(xsphi_mat_name, &#39;w&#39;)</span>
+    <span class="n">decay_mat</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">decay_mat_name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+
+    <span class="n">xs_mat</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">xs_mat_txt</span><span class="p">)</span>
+  <span class="c1">#  xsphi_mat.write(xsphi_mat_txt)</span>
+    <span class="n">decay_mat</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">decay_mat_txt</span><span class="p">)</span>
+
+    <span class="n">xs_mat</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+  <span class="c1">#  xsphi_mat.close()</span>
+    <span class="n">decay_mat</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">_gen_mat_folder</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+
+    <span class="n">mat_folder_path</span> <span class="o">=</span> <span class="n">path</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">mat_folder_path</span><span class="p">):</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">mat_folder_path</span><span class="p">)</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">mat_folder_path</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_get_mat_folder_path</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+
+    <span class="n">cell_folder_path</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">folder_path</span>
+    <span class="n">mat_folder</span> <span class="o">=</span> <span class="s1">&#39;matrix&#39;</span>
+
+    <span class="n">mat_folder_path</span> <span class="o">=</span> <span class="n">cell_folder_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">mat_folder</span>
+
+    <span class="k">return</span> <span class="n">mat_folder_path</span>
+
+
+<span class="k">def</span> <span class="nf">_get_xs_mat_text_1</span><span class="p">(</span><span class="n">xs_mat</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+
+    <span class="n">passlist</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">passlist</span>
+    <span class="n">passport_list</span> <span class="o">=</span> <span class="n">passlist</span><span class="o">.</span><span class="n">passport_list</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)</span>
+    <span class="n">Btxt</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">nuc_pass</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">row</span><span class="p">]</span>
+        <span class="n">nuc_zamid</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">zamid</span>
+        <span class="n">Btxt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">|</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nuc_zamid</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span>
+
+        <span class="c1"># Diag terms</span>
+        <span class="n">diag_val</span> <span class="o">=</span> <span class="n">xs_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">row</span><span class="p">]</span>
+        <span class="n">Btxt</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">diag_val</span><span class="p">)</span>
+
+        <span class="c1"># Non diag terms</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">col</span> <span class="o">==</span> <span class="n">row</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">xs_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">Btxt</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">xs_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">])</span>
+
+        <span class="n">Btxt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+    <span class="k">return</span> <span class="n">Btxt</span>
+
+    <span class="c1"># B = open(&#39;xs_mat&#39;, &#39;w&#39;)</span>
+    <span class="c1"># B.write(Btxt)</span>
+
+<span class="k">def</span> <span class="nf">_get_xs_mat_text_2</span><span class="p">(</span><span class="n">xs_mat</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">flux</span><span class="p">):</span>
+
+    <span class="n">passlist</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">passlist</span>
+    <span class="n">passport_list</span> <span class="o">=</span> <span class="n">passlist</span><span class="o">.</span><span class="n">passport_list</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)</span>
+    <span class="n">Btxt</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">nuc_pass</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">row</span><span class="p">]</span>
+        <span class="n">nuc_zamid</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">zamid</span>
+        <span class="n">Btxt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">|</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nuc_zamid</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span>
+
+        <span class="c1"># Diag terms</span>
+        <span class="n">diag_val</span> <span class="o">=</span> <span class="n">xs_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">row</span><span class="p">]</span><span class="o">*</span><span class="n">flux</span><span class="o">*</span><span class="mf">1e-24</span>
+        <span class="n">Btxt</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">diag_val</span><span class="p">)</span>
+
+        <span class="c1"># Non diag terms</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">col</span> <span class="o">==</span> <span class="n">row</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">xs_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">Btxt</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">xs_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span><span class="o">*</span><span class="n">flux</span><span class="o">*</span><span class="mf">1e-24</span><span class="p">)</span>
+
+        <span class="n">Btxt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+    <span class="k">return</span> <span class="n">Btxt</span>
+    <span class="c1"># B = open(&#39;xsphi_mat&#39;, &#39;w&#39;)</span>
+    <span class="c1"># B.write(Btxt)</span>
+
+
+<span class="k">def</span> <span class="nf">_get_decay_mat_text</span><span class="p">(</span><span class="n">decay_mat</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+
+
+    <span class="n">passlist</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">passlist</span>
+    <span class="n">passport_list</span> <span class="o">=</span> <span class="n">passlist</span><span class="o">.</span><span class="n">passport_list</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">passport_list</span><span class="p">)</span>
+    <span class="n">Ctxt</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">nuc_pass</span> <span class="o">=</span> <span class="n">passport_list</span><span class="p">[</span><span class="n">row</span><span class="p">]</span>
+        <span class="n">nuc_zamid</span> <span class="o">=</span> <span class="n">nuc_pass</span><span class="o">.</span><span class="n">zamid</span>
+        <span class="n">Ctxt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">|</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nuc_zamid</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span>
+
+        <span class="c1"># Diag terms</span>
+        <span class="n">diag_val</span> <span class="o">=</span> <span class="n">decay_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">row</span><span class="p">]</span>
+        <span class="n">Ctxt</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">diag_val</span><span class="p">)</span>
+
+        <span class="c1"># Non diag terms</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">col</span> <span class="o">==</span> <span class="n">row</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">decay_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">Ctxt</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">decay_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">])</span>
+
+        <span class="n">Ctxt</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+    <span class="k">return</span> <span class="n">Ctxt</span>
+    <span class="c1"># C = open(txt_mat_name, &#39;w&#39;)</span>
+    <span class="c1"># C.write(Ctxt)</span>
+
+
+<span class="c1"># Old methods that create matrixes from txt versions</span>
+<span class="c1"># Need to decide if keep or not</span>
+<span class="c1"># There are not used anymore within the code so far</span>
+
+<span class="k">def</span> <span class="nf">xs_mat_from_txt</span><span class="p">(</span><span class="n">Btxt_name</span><span class="p">):</span>
+
+    <span class="n">Btxt_rel_path</span> <span class="o">=</span> <span class="s1">&#39;/data/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Btxt_name</span><span class="p">)</span>
+    <span class="n">dir_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">Btxt_path</span> <span class="o">=</span> <span class="n">dir_path</span> <span class="o">+</span> <span class="n">Btxt_rel_path</span>
+    <span class="n">Btxt</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">Btxt_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">B_line</span> <span class="o">=</span> <span class="n">Btxt</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">B_line</span><span class="p">)</span>
+    <span class="n">xs_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">B_line</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">col_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="n">col_data</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="c1">#The format of Ctxt and Btxt contains a last coma that needs to be removed</span>
+        <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">col_data</span><span class="p">:</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">xs_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span>  <span class="n">val</span>
+
+    <span class="k">return</span> <span class="n">xs_mat</span>
+
+<span class="k">def</span> <span class="nf">decay_mat_from_txt</span><span class="p">(</span><span class="n">Ctxt_name</span><span class="p">):</span>
+
+    <span class="n">Ctxt_rel_path</span> <span class="o">=</span> <span class="s1">&#39;/data/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Ctxt_name</span><span class="p">)</span>
+    <span class="n">dir_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">Ctxt_path</span> <span class="o">=</span> <span class="n">dir_path</span> <span class="o">+</span> <span class="n">Ctxt_rel_path</span>
+    <span class="n">Ctxt</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">Ctxt_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">C_line</span> <span class="o">=</span> <span class="n">Ctxt</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">C_line</span><span class="p">)</span>
+    <span class="n">decay_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">C_line</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">col_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="n">col_data</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="c1">#The format of Ctxt and Btxt contains a last coma that needs to be removed</span>
+        <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">col_data</span><span class="p">:</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">decay_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span>  <span class="n">val</span>
+
+    <span class="k">return</span> <span class="n">decay_mat</span>
+
+
+<span class="k">def</span> <span class="nf">initial_vect_from_txt</span><span class="p">(</span><span class="n">mattxt_name</span><span class="p">,</span> <span class="n">passdic</span><span class="p">):</span>
+
+    <span class="n">mattxt_rel_path</span> <span class="o">=</span> <span class="s1">&#39;/data/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mattxt_name</span><span class="p">)</span>
+    <span class="n">dir_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">mattxt_path</span> <span class="o">=</span> <span class="n">dir_path</span> <span class="o">+</span> <span class="n">mattxt_rel_path</span>
+    <span class="n">mattxt</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">mattxt_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">mat_line</span> <span class="o">=</span> <span class="n">mattxt</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mat_line</span><span class="p">)</span>
+    <span class="n">vect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">))</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">mat_line</span><span class="p">:</span>
+        <span class="n">zamid</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">zamid</span> <span class="ow">in</span> <span class="n">passdic</span><span class="p">:</span>
+            <span class="n">vect</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">passdic</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span><span class="o">.</span><span class="n">current_dens</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">vect</span>
+
+<span class="k">def</span> <span class="nf">nucl_list_from_txt</span><span class="p">(</span><span class="n">mattxt_name</span><span class="p">):</span>
+
+    <span class="n">mattxt_rel_path</span> <span class="o">=</span> <span class="s1">&#39;/data/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mattxt_name</span><span class="p">)</span>
+    <span class="n">dir_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">mattxt_path</span> <span class="o">=</span> <span class="n">dir_path</span> <span class="o">+</span> <span class="n">mattxt_rel_path</span>
+    <span class="n">mattxt</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">mattxt_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">mat_line</span> <span class="o">=</span> <span class="n">mattxt</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mat_line</span><span class="p">)</span>
+    <span class="n">nucl_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">mat_line</span><span class="p">:</span>
+        <span class="n">zamid</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">nucl_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zamid</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">nucl_list</span>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Julien de Troullioud de Lanversin
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+ 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30411614-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>

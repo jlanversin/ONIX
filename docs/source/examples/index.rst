@@ -12,11 +12,22 @@ examples for how to use various features of ONIX by using the
 Reactor Simulation
 ------------------
 
+Coupled simulations
+-------------------
+
 .. toctree::
     :maxdepth: 1
     
     pincell_nb
+    assembly_nb
 
+Standalone simulation
+---------------------
+
+.. toctree::
+    :maxdepth: 1
+    
+    largo6_nb
 
 -------------------
 Nuclear Archaeology

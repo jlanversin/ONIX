@@ -12,2265 +12,2428 @@ import time
 
 
 class Cell(object):
+    """Cells (or BUCells), represent burnup regions and contain a unique onix.Passlist object with a specific list of nuclides.
+
+    Parameters
+    ----------
+    cell_id: int
+        The id number of the BUCell
+    name: str
+        The name of the BUCell
+    """
+
+    _NA = 6.02214086e+23
+    zero_dens_1_atm = 1E-24
+
+    def __init__(self, cell_id, name):
+
+        self._id = cell_id
+        self._name = name
+
+        self._passlist = None
+        self._initial_nucl = None
+        self._decay_b_lib = None
+        self._decay_a_lib = None
+        self._xs_lib = None
+        self._MC_XS_nucl_list = None
+        self._fy_lib = None
+        self._nucl_set = None
+        # self._MC_flux = None
+        # self._MC_flux_seq = None
+        # self._flux = None
+        self._FMF = None
+        self._output_summary_path = None
 
-	_NA = 6.02214086e+23
-	zero_dens_1_atm = 1E-24
+    # Mainly designed for the code. Used when the user use text input rather than python module
+    # probably obsolete
+    # def set_from_input(self, input):
 
-	def __init__(self, cell_id, name):
+    #   cell_id = self._cell_id
+    #   self._vol = input.vol(cell_id)
+    #   self._hm_vol = input.hm_vol(cell_id)
+    #   self._initial_nuc = input.initial_nuc(cell_id)
 
-		self._id = cell_id
-		self._name = name
+    #   self._nuc_list = input.nucl_list
+    #   self._passlist = pl.gen_passlist_from_input(input, cell_id)
+    #   self._passdic = pl.passlist_to_passdic(self._passlist)
+    #   self._index_dic = pl.index_dic(self._passlist)
+
+    #   # Generate the list of fission child for each fissile nuclide
+    #   pl.gen_fission_child(self._passdic, input)
+
+    #   self.set_ihm(self._passlist, self._hm_vol)
+    #   self.set_bu_sec_conv_factor(self._vol, self._ihm)
 
-		self._passlist = None
-		self._initial_nucl = None
-		self._decay_b_lib = None
-		self._decay_a_lib = None
-		self._xs_lib = None
-		self._MC_XS_nucl_list = None
-		self._fy_lib = None
-		self._nucl_set = None
-		# self._MC_flux = None
-		# self._MC_flux_seq = None
-		# self._flux = None
-		self._FMF = None
-		self._output_summary_path = None
+    #   self.link_sequence_from_input(input, cell_id, self._bu_sec_conv_factor)
 
-	# Mainly designed for the code. Used when the user use text input rather than python module
-	# probably obsolete
-	# def set_from_input(self, input):
+    #   self._set_tree()
+    #   self._set_leaves()
+    #   fy_parent = input.fy_parent
+    #   self._set_fission_tree()
+    #   self._set_fission_leaves()
+    #   self._fission_tree = self.build_fission_tree(self._tree, fy_parent)
+    #   self._fission_leaves = self.build_fission_leaves()
+
+    @property
+    def id(self):
+        """Returns number id of BUCell"""
+
+        return self._id
 
-	# 	cell_id = self._cell_id
-	# 	self._vol = input.vol(cell_id)
-	# 	self._hm_vol = input.hm_vol(cell_id)
-	# 	self._initial_nuc = input.initial_nuc(cell_id)
+    @property
+    def name(self):
+        """Returns name of BUCell"""
+        return self._name
 
-	# 	self._nuc_list = input.nucl_list
-	# 	self._passlist = pl.gen_passlist_from_input(input, cell_id)
-	# 	self._passdic = pl.passlist_to_passdic(self._passlist)
-	# 	self._index_dic = pl.index_dic(self._passlist)
+
 
-	# 	# Generate the list of fission child for each fissile nuclide
-	# 	pl.gen_fission_child(self._passdic, input)
+    # Set the initial densities to nuclides and create the initial nuc list
+    def set_initial_dens(self, dens_dict):
+        """Sets the initial densities of nuclides in :math:`10^{24}cm^{-3}`.
 
-	# 	self.set_ihm(self._passlist, self._hm_vol)
-	# 	self.set_bu_sec_conv_factor(self._vol, self._ihm)
+        Parameters
+        ----------
+        dens_dict: dict
+            A dictionnary where keys are nuclides' names and entries are densities in :math:`10^{24}cm^{-3}`
+        """
+        nucl_list = list(dens_dict.keys())
 
-	# 	self.link_sequence_from_input(input, cell_id, self._bu_sec_conv_factor)
+        if utils.is_name(nucl_list[0]):
+            nucl_list = utils.name_list_to_zamid_list(nucl_list)
 
-	# 	self._set_tree()
-	# 	self._set_leaves()
-	# 	fy_parent = input.fy_parent
-	#	self._set_fission_tree()
-	#	self._set_fission_leaves()
-	# 	self._fission_tree = self.build_fission_tree(self._tree, fy_parent)
-	# 	self._fission_leaves = self.build_fission_leaves()
+        passlist = self.passlist
+        if passlist == None:
+            self.set_passlist(nucl_list)
+        else:
+            passlist._add_nucl_list(nucl_list)
 
-	@property
-	def id(self):
 
-		return self._id
+        passlist = self.passlist
+        passlist._set_initial_dens(dens_dict)
 
-	@property
-	def name(self):
+        self._set_initial_nucl(nucl_list)
 
-		return self._name
+    def _check_nucl_list_consistency(self):
 
+        # Return lib_nucl and will also stop code if there are no decay/xs libs set
+        lib_nucl = self.get_lib_nucl()
+        # If no nucl_set set, nucl_set is set to default to lib_nucl
+        # If nucl_set set, check if it is included in lib_nucl
+        if self.nucl_set == None:
+            self.nucl_set = lib_nucl
+        elif not utils.is_lista_in_listb(self.nucl_set, lib_nucl):
+            raise Nucl_set_not_in_Lib_nucl('Some of bucell {} nuclide-set"s nuclides are not in data libraries'.format(self.name))
 
+        initial_nucl = self.initial_nucl
 
-	# Set the initial densities to nuclides and create the initial nuc list
-	def set_initial_dens(self, dens_dict):
+        nucl_set = self.nucl_set
 
-		nucl_list = list(dens_dict.keys())
+        if initial_nucl == None:
+            raise Initial_nucl_not_set('Cell {} has not been attributed initial nuclides'.format(self.name))
+        elif not utils.is_lista_in_listb(initial_nucl, nucl_set):
+            raise Initial_nucl_not_in_Nucl_set('Some of bucell {} initial nuclides {} are not in nuclide set'.format(self.name, initial_nucl))
 
-		if utils.is_name(nucl_list[0]):
-			nucl_list = utils.name_list_to_zamid_list(nucl_list)
+    def _set_step_dens(self):
 
-		passlist = self.passlist
-		if passlist == None:
-			self.set_passlist(nucl_list)
-		else:
-			passlist._add_nucl_list(nucl_list)
+        passlist = self.passlist
+        passport_list = passlist.passport_list
 
+        for i in range(len(passport_list)):
+            nuc_pass = passport_list[i]
+            nuc_pass._set_step_dens()
 
-		passlist = self.passlist
-		passlist._set_initial_dens(dens_dict)
+    # This is effectively set_substep_dens
+    def _update_dens(self, N, ss, ssn):
 
-		self._set_initial_nucl(nucl_list)
+        # Technically I don't need to use N_dic since passport_list
+        # is actually automatically ordered in the same way as N via mb
+        # (the argument passport_list is a pointer to the object, not a copy of the object)
+        # You need to be sure that N and passport_list are ordered in the same
+        passlist = self.passlist
+        passport_list = passlist.passport_list
 
-	def _check_nucl_list_consistency(self):
+        for i in range(len(passport_list)):
+            nuc_pass = passport_list[i]
+            nuc_pass._set_substep_dens(N[i], ss)
 
-		# Return lib_nucl and will also stop code if there are no decay/xs libs set
-		lib_nucl = self.get_lib_nucl()
-		# If no nucl_set set, nucl_set is set to default to lib_nucl
-		# If nucl_set set, check if it is included in lib_nucl
-		if self.nucl_set == None:
-			self.nucl_set = lib_nucl
-		elif not utils.is_lista_in_listb(self.nucl_set, lib_nucl):
-			raise Nucl_set_not_in_Lib_nucl('Some of bucell {} nuclide-set"s nuclides are not in data libraries'.format(self.name))
+    @property
+    def initial_nucl(self):
+        """Returns the initial list of nuclides.
+        """
 
-		initial_nucl = self.initial_nucl
+        return self._initial_nucl
 
-		nucl_set = self.nucl_set
+    def _set_initial_nucl(self, nucl_id_list: str):
 
-		if initial_nucl == None:
-			raise Initial_nucl_not_set('Cell {} has not been attributed initial nuclides'.format(self.name))
-		elif not utils.is_lista_in_listb(initial_nucl, nucl_set):
-			raise Initial_nucl_not_in_Nucl_set('Some of bucell {} initial nuclides {} are not in nuclide set'.format(self.name, initial_nucl))
+        # Here a copy is made because the list nucl_id_list is latter
+        # modified by other functions (set_default_decay and others)
+        # This will accidentally modify initial_nucl if it is simply equalled to nucl_id_list
+        self._initial_nucl = nucl_id_list.copy()
 
-	def _set_step_dens(self):
+    # These two functions are probably useless now
+    @property
+    def MC_XS_nucl_list(self):
+        return self._MC_XS_nucl_list
 
-		passlist = self.passlist
-		passport_list = passlist.passport_list
+    @MC_XS_nucl_list.setter
+    def MC_XS_nucl_list(self, MC_XS_nucl_list):
 
-		for i in range(len(passport_list)):
-			nuc_pass = passport_list[i]
-			nuc_pass._set_step_dens()
+        self._MC_XS_nucl_list = MC_XS_nucl_list
+    
+    # These two functions are probably useless now
+    @property
+    def nucl_set(self):
 
-	# This is effectively set_substep_dens
-	def _update_dens(self, N, ss, ssn):
+        return self._nucl_set
 
-		# Technically I don't need to use N_dic since passport_list
-		# is actually automatically ordered in the same way as N via mb
-		# (the argument passport_list is a pointer to the object, not a copy of the object)
-		# You need to be sure that N and passport_list are ordered in the same
-		passlist = self.passlist
-		passport_list = passlist.passport_list
+    @nucl_set.setter
+    def nucl_set(self, nucl_set):
 
-		for i in range(len(passport_list)):
-			nuc_pass = passport_list[i]
-			nuc_pass._set_substep_dens(N[i], ss)
+        self._nucl_set = nucl_set
 
-	@property
-	def initial_nucl(self):
+    # This property is just to know which nuclides
+    # are initially present (dens non-0) in the cell
+    # These two functions are probably useless now
+    # @property
+    # def init_nucl(self):
 
-		return self._initial_nucl
+    #   return self._init_nucl
 
-	# def _get_initial_nucl(self, dens_dic):
+    # @init_nucl.setter
+    # def init_nucl(self, init_nucl):
 
-	# 	initial_nuc = []
-	# 	for zamid in dens_dic:
-	# 		initial_nuc.append(zamid)
+    #   self._init_nucl = init_nucl
+    
 
-	# 	return initial_nuc
+    def get_total_dens(self):
+        """Returns the total density of all nuclides in the BUCell in :math:`10^{24}cm^{-3}`.
+        """
 
-	def _set_initial_nucl(self, nucl_id_list: str):
+        total_dens = 0
+        passlist = self.passlist
+        passport_list = passlist.passport_list
+        for nuc_pass in passport_list:
+            total_dens += nuc_pass.current_dens
 
-		# Here a copy is made because the list nucl_id_list is latter
-		# modified by other functions (set_default_decay and others)
-		# This will accidentally modify initial_nucl if it is simply equalled to nucl_id_list
-		self._initial_nucl = nucl_id_list.copy()
+        return total_dens
 
-	@property
-	def MC_XS_nucl_list(self):
-		return self._MC_XS_nucl_list
+    def get_subtotal_dens(self, nucl_list):
+        """Returns the total density of sub-set of nuclides in the BUCell in :math:`10^{24}cm^{-3}`.
 
-	@MC_XS_nucl_list.setter
-	def MC_XS_nucl_list(self, MC_XS_nucl_list):
+        Parameters
+        ----------
+        nucl_list: list
+            A list of nuclides' names
+        """
 
-		self._MC_XS_nucl_list = MC_XS_nucl_list
-	
+        subtotal_dens = 0
+        passlist = self.passlist
+        passport_list = passlist.passport_list
+        for nuc_pass in passport_list:
+            if nuc_pass.name in nucl_list:
 
-	@property
-	def nucl_set(self):
+                subtotal_dens += nuc_pass.current_dens
 
-		return self._nucl_set
+        return subtotal_dens
 
-	@nucl_set.setter
-	def nucl_set(self, nucl_set):
+    # This version of the method counts zero dens atom as 1E-24. It is used
+    # when computing the density of material for OpenMC
+    def _get_subtotal_dens_counting_zero_dens(self, nucl_list):
 
-		self._nucl_set = nucl_set
+        subtotal_dens = 0
+        passlist = self.passlist
+        passport_list = passlist.passport_list
+        for nuc_pass in passport_list:
+            if nuc_pass.name in nucl_list:
 
-	# User choose among the prepared nucl set
-	# Development for latter
-	# def choose_nucl_set(self, nucl_set_family):
+                # following is a possible solution to the xs drop problem
+                # nuclide that are zero in onix and supposed to be tallied
+                # are actually set to 1E-24 in openmc
+                # therefore, we count them as 1E-24 not zero
 
-	# This property is just to know which nuclides
-	# are initially present (dens non-0) in the cell
-	@property
-	def init_nucl(self):
+                if nuc_pass.current_dens == 0:
+                    dens = self.zero_dens_1_atm
+                else:
+                    dens = nuc_pass.current_dens
 
-		return self._init_nucl
+                subtotal_dens += dens
 
-	@init_nucl.setter
-	def init_nucl(self, init_nucl):
+                #subtotal_dens += nuc_pass.current_dens
 
-		self._init_nucl = init_nucl
-	
 
-	def get_total_dens(self):
+        return subtotal_dens
 
-		total_dens = 0
-		passlist = self.passlist
-		passport_list = passlist.passport_list
-		for nuc_pass in passport_list:
-			total_dens += nuc_pass.current_dens
+    # Gets nuclides' densities for openmc materials object
+    # Densities which are set to 0 in onix (because below threeshold) should still have one atom to allow openmc to calculate cross sections
+    def _get_nucl_dens_for_openmc(self, nucl_id):
 
-		return total_dens
+        nucl = self.get_nuclide(nucl_id)
+        nucl_dens = nucl.current_dens
 
-	def get_subtotal_dens(self, nucl_list):
+        if nucl_dens == 0:
+            return self.zero_dens_1_atm
+        else:
+            return nucl_dens
 
-		subtotal_dens = 0
-		passlist = self.passlist
-		passport_list = passlist.passport_list
-		for nuc_pass in passport_list:
-			if nuc_pass.name in nucl_list:
+    def get_nucl_ao(self, nucl_id):
+        """Returns the atom fraction of a nuclide over the total number of atoms in the BUCell.
 
-				subtotal_dens += nuc_pass.current_dens
+        Parameters
+        ----------
+        nucl_id: str
+            The z-a-m id or the name of the nuclide
 
-		return subtotal_dens
+        """
+        nucl = self.get_nuclide(nucl_id)
+        nucl_dens = nucl.current_dens
+        total_dens = self.get_total_dens()
 
-	# This version of the method counts zero dens atom as 1E-24. It is used
-	# when computing the density of material for OpenMC
-	def get_subtotal_dens_counting_zero_dens(self, nucl_list):
+        return nucl_dens*100/total_dens
 
-		subtotal_dens = 0
-		passlist = self.passlist
-		passport_list = passlist.passport_list
-		for nuc_pass in passport_list:
-			if nuc_pass.name in nucl_list:
+    def get_nucl_subao(self, nucl_id, nucl_list):
+        """Returns the atom fraction of a nuclide over the number of atoms of a sub-set of nuclides in the BUCell.
 
-				# following is a possible solution to the xs drop problem
-				# nuclide that are zero in onix and supposed to be tallied
-				# are actually set to 1E-24 in openmc
-				# therefore, we count them as 1E-24 not zero
+        Parameters
+        ----------
+        nucl_id: str
+            The z-a-m id or the name of the nuclide
+        nucl_list: list
+            The list of nuclides that constitute the sub-set of nuclides
 
-				if nuc_pass.current_dens == 0:
-					dens = self.zero_dens_1_atm
-				else:
-					dens = nuc_pass.current_dens
+        """
 
-				subtotal_dens += dens
+        nucl = self.get_nuclide(nucl_id)
+        nucl_dens = nucl.current_dens
 
-				#subtotal_dens += nuc_pass.current_dens
+        # OpenMC behaves in a bizzare way when certain nuclides are set to 0.0
+        # in material
+        # Here we replaced any 0.0 dens nuclide with 1E-24
+        if nucl_dens == 0.0:
 
+            return self.zero_dens_1_atm
 
-		return subtotal_dens
+        else:
 
-	def get_nucl_dens_for_openmc(self, nucl_id):
+            subtotal_dens = self._get_subtotal_dens_counting_zero_dens(nucl_list)
 
-		nucl = self.get_nuclide(nucl_id)
-		nucl_dens = nucl.current_dens
+            return nucl_dens/subtotal_dens
 
-		if nucl_dens == 0:
-			return self.zero_dens_1_atm
-		else:
-			return nucl_dens
+    @property
+    def vol(self):
+        """Returns the volume of the BUCell in :math:`cm^{-3}`.
+        """
+        return self._vol
 
-	def get_nucl_ao(self, nucl_id):
+    @vol.setter
+    def vol(self, vol):
 
-		nucl = self.get_nuclide(nucl_id)
-		nucl_dens = nucl.current_dens
-		total_dens = self.get_total_dens()
+        self._vol = vol
 
-		return nucl_dens*100/total_dens
+    @property
+    def hm_vol(self):
+        """Returns the volume of the heavy metal regions of the BUCell in :math:`cm^{-3}`.
+        """
+        return self._hm_vol
 
-	def get_nucl_subao(self, nucl_id, nucl_list):
+    @hm_vol.setter
+    def hm_vol(self, hm_vol):
 
-		nucl = self.get_nuclide(nucl_id)
-		nucl_dens = nucl.current_dens
+        self._hm_vol = hm_vol
 
-		# OpenMC behaves in a bizzare way when certain nuclides are set to 0.0
-		# in material
-		# Here we replaced any 0.0 dens nuclide with 1E-24
-		if nucl_dens == 0.0:
 
-			return self.zero_dens_1_atm
+    def set_passlist(self, nucl_list):
+        """Creates and sets a Passlist object to the BUCell using the provided nuclides list.
 
-		else:
+        Parameters
+        ----------
+        nucl_list: list
+            List of nuclides to create a Passlist object for the BUCell
+        """
+        if utils.is_list_redundant(nucl_list) == True:
+            redundant_elt = utils.get_list_redundant_elt(nucl_list)
+            raise Nuclide_list_redundant('Cell {} passlist object has been given a redundant nuclide list with following redundant element {}'.format(self.id, redundant_elt))
 
-			subtotal_dens = self.get_subtotal_dens_counting_zero_dens(nucl_list)
+        self.passlist = self._get_passlist(nucl_list)
 
-			return nucl_dens/subtotal_dens
+    def _get_passlist(self, nucl_list):
 
-	@property
-	def vol(self):
+        passlist = pl(nucl_list)
 
-		return self._vol
+        return passlist
 
-	@vol.setter
-	def vol(self, vol):
+    def get_nucl_list(self):
+        """Gets the list of nuclides contained in the Passlist object of the BUCell.
+        """
 
-		self._vol = vol
+        passlist = self.passlist
 
-	@property
-	def hm_vol(self):
+        return passlist.nucl_list
 
-		return self._hm_vol
+    def get_nuclide(self, nuclide_id):
+        """Returns the Passport object of a nuclide.
 
-	@hm_vol.setter
-	def hm_vol(self, hm_vol):
+        Parameters
+        ----------
+        nuclide_id: str
+            Name or z-a-m id of a nuclide
+        """
 
-		self._hm_vol = hm_vol
+        if utils.is_name(nuclide_id):
+            nuclide_id = utils.name_to_zamid(nuclide_id)
 
+        passport_dict = self.passlist._get_zamid_passport_dict()
 
-	def set_passlist(self, nucl_list):
+        return passport_dict[nuclide_id]
 
-		if utils.is_list_redundant(nucl_list) == True:
-			redundant_elt = utils.get_list_redundant_elt(nucl_list)
-			raise Nuclide_list_redundant('Cell {} passlist object has been given a redundant nuclide list with following redundant element {}'.format(self.id, redundant_elt))
+    # def update_passlist(self, new_nucl_list):
 
-		self.passlist = self.get_passlist(nucl_list)
+    #   current_passlist = self.passlist
+    #   current_passlist.add_nucl_list(new_extra_nuclides)
+    #   merged_nucl_list = current_passlist_nucl_list + list(set(new_nucl_list) - set(current_passlist_nucl_list))
 
-	def get_passlist(self, nucl_list):
+    #   self.set_passlist(merged_nucl_list)
 
-		passlist = pl(nucl_list)
+    @property
+    def passlist(self):
+        """Returns the Passlist object of the BUCell.
+        """
 
-		return passlist
+        return self._passlist
 
-	def get_nucl_list(self):
+    @passlist.setter
+    def passlist(self, passlist):
 
-		passlist = self.passlist
+        self._passlist = passlist
 
-		return passlist.nucl_list
+    # These four functions seem obsolete.
+    # @property
+    # def index_dict(self):
 
-	def get_nuclide(self, nuclide_id):
+    #     return self._index_dict
 
-		if utils.is_name(nuclide_id):
-			nuclide_id = utils.name_to_zamid(nuclide_id)
+    # @index_dict.setter
+    # def index_dict(self, index_dict):
 
-		passport_dict = self.passlist._get_zamid_passport_dict()
+    #     self._index_dict = index_dict
 
-		return passport_dict[nuclide_id]
+    # @property
+    # def passdic(self):
 
-	# def update_passlist(self, new_nucl_list):
+    #     return self._passdic
 
-	# 	current_passlist = self.passlist
-	# 	current_passlist.add_nucl_list(new_extra_nuclides)
-	# 	merged_nucl_list = current_passlist_nucl_list + list(set(new_nucl_list) - set(current_passlist_nucl_list))
+    # @passdic.setter
+    # def passdic(self, passdic):
 
-	# 	self.set_passlist(merged_nucl_list)
+    #     self._passdic = passdic
 
-	@property
-	def passlist(self):
 
-		return self._passlist
 
-	@passlist.setter
-	def passlist(self, passlist):
+    # def _set_sequence_from_input(self, sequence_dict):
 
-		self._passlist = passlist
 
-	@property
-	def index_dict(self):
+    #   cell_id = self._cell_id
+    #   sequence = seq(cell_id)
 
-		return self._index_dict
+    #   self._set_ihm()
+    #   self._set_bu_sec_conv_factor()
 
-	@index_dict.setter
-	def index_dict(self, index_dict):
+    #   passlist = self.passlist
+    #   bu_sec_conv_factor = self._bu_sec_conv_factor
 
-		self._index_dict = index_dict
+    #   sequence._set_from_input(sequence_dict, passlist, bu_sec_conv_factor)
 
-	@property
-	def passdic(self):
+    #   self._sequence = sequence
 
-		return self._passdic
+    # User is not supposed to use this function.
+    # Instead user should use set_sequence from Standalone, System or Couple
+    def _set_sequence(self, sequence, mode = 'stand_alone'):
 
-	@passdic.setter
-	def passdic(self, passdic):
+        # A copy of the sequence is done because when setting bu_sec_conv_factor, we don't want the original to 
+        # be changed too because it might be used for other  cells
+        sequence_copy = copy.deepcopy(sequence)
 
-		self._passdic = passdic
+        self._set_ihm()
+        self._set_bu_sec_conv_factor()
 
+        passlist = self.passlist
+        bu_sec_conv_factor = self._bu_sec_conv_factor
 
+        #The _cell_conversion method was actually just calling _set_initial_bucell_bu()
+        #sequence_copy._cell_conversion(passlist, bu_sec_conv_factor, mode)
+        sequence_copy._set_initial_bucell_bu()
+        self._sequence = sequence_copy
 
-	# def _set_sequence_from_input(self, sequence_dict):
+    @property
+    def sequence(self):
 
+        return self._sequence
 
-	# 	cell_id = self._cell_id
-	# 	sequence = seq(cell_id)
 
-	# 	self._set_ihm()
-	# 	self._set_bu_sec_conv_factor()
 
-	# 	passlist = self.passlist
-	# 	bu_sec_conv_factor = self._bu_sec_conv_factor
 
-	# 	sequence._set_from_input(sequence_dict, passlist, bu_sec_conv_factor)
+    # WARNING: ihm is the initial mass
+    # As long as it is set before burn that's good
+    # But if it is set during or after burn, the value
+    # retrieved by @property will not be the initial mass anymore
 
-	# 	self._sequence = sequence
+    @property
+    def ihm(self):
+        """Returns the initial heavy metal (IHM) mass contained in the BUCell (g)."""
+        ihm = self._ihm
+        if ihm is None:
+            pass  # define exception for undefined variable
 
-	def set_sequence(self, sequence, mode = 'stand_alone'):
+        return ihm
 
-		# A copy of the sequence is done because when setting bu_sec_conv_factor, we don't want the original to 
-		# be changed too because it might be used for other	 cells
-		sequence_copy = copy.deepcopy(sequence)
+    def get_hm(self):
+        """Returns the current heavy metal mass contained in the BUCell (g)."""
 
-		self._set_ihm()
-		self._set_bu_sec_conv_factor()
+        passlist = self.passlist
+        vol = self.vol
+        hm = utils.get_hm(passlist, vol)
 
-		passlist = self.passlist
-		bu_sec_conv_factor = self._bu_sec_conv_factor
+        return hm
 
-		#The _cell_conversion method was actually just calling _set_initial_bucell_bu()
-		#sequence_copy._cell_conversion(passlist, bu_sec_conv_factor, mode)
-		sequence_copy._set_initial_bucell_bu()
-		self._sequence = sequence_copy
 
-	@property
-	def sequence(self):
+    def _set_ihm(self):
 
-		return self._sequence
+        passlist = self._passlist
+    #   hm_vol = self._hm # when user had to define the hm_vol
+        vol = self.vol
+    #   ihm = utils.get_ihm(passlist, hm_vol) # when user had to define the hm_vol
+        ihm = utils.get_hm(passlist, vol)
 
+        self._ihm = ihm
 
+    def check_act_presence(self):
+        """Check whether actinides are present in the material of the BUCell.
+        """
+        hm = utils.get_hm(self.passlist, self.vol)
+        if hm == 0.0:
+            return 'no'
+        elif hm > 0.0:
+            return 'yes'
 
+    @property
+    def bu_sec_conv_factor(self):
+        """Returns the conversion factor to go from time (seconds) to burnup (MWd/kg) for the BUCell."""
+        bu_sec_conv_factor = self._bu_sec_conv_factor
+        if bu_sec_conv_factor is None:
+            pass  # define exception for undefined variable
+        return bu_sec_conv_factor
 
-	# WARNING: ihm is the initial mass
-	# As long as it is set before burn that's good
-	# But if it is set during or qfter burn, the value
-	# retrieved by @property will not be the initial mass anymore
+    # def set_bu_sec_conv_factor(self, vol, ihm):
 
-	@property
-	def ihm(self):
-		"""Returns the absolute values of the decay constant of the nuclide"""
-		ihm = self._ihm
-		if ihm is None:
-			pass  # define exception for undefined variable
+    #     if ihm == 0:
+    #         self._bu_sec_conv_factor = 0
+    #     else:
+    #         self._bu_sec_conv_factor = utils.get_bu_sec_conv_factor(vol, ihm)
 
-		return ihm
+    def _set_bu_sec_conv_factor(self):
 
-	# Not used?
-	def set_ihm(self, passlist, hm_vol):
+        vol = self._vol
+        ihm = self._ihm
 
-		ihm = utils.get_hm(passlist, hm_vol)
+        if ihm == 0:
+            self._bu_sec_conv_factor = 0
+        else:
+            self._bu_sec_conv_factor = utils.get_bu_sec_conv_factor(vol, ihm)
 
-		self._ihm = self.ihm
+    # Update power density from flux in each cell at each substep
+    def _update_pow_dens(self, flux):
 
-	def get_hm(self):
+        passlist = self.passlist
+        fission_energy_rate = 0
+        conv_Mev_J = 1.60218e-13
+        for i in passlist.passport_list:
+            if i.current_xs != None:
+                if i.fission_E != None and 'fission' in i.current_xs:
+                    fission_xs = i.current_xs['fission'][0] # cm2 10^-24
+                    fission_E = i.fission_E # MeV
+                    dens = i.current_dens # cm-1 barn-1 (cm-3 10+24)
 
-		passlist = self.passlist
-		vol = self.vol
-		hm = utils.get_hm(passlist, vol)
+                    # print (i.name)
+                    # print (fission_E)
+                    # print (fission_xs)
+                    # print (dens)
 
-		return hm
+                    fission_energy_rate += fission_xs*fission_E*dens
 
 
-	def _set_ihm(self):
+        # print ('fission_energy_rate',fission_energy_rate)
 
-		passlist = self._passlist
-	#	hm_vol = self._hm # when user had to define the hm_vol
-		vol = self.vol
-	#	ihm = utils.get_ihm(passlist, hm_vol) # when user had to define the hm_vol
-		ihm = utils.get_hm(passlist, vol)
+        new_pow_dens = flux*(fission_energy_rate*conv_Mev_J) # W/cm3 = kW/l
 
-		self._ihm = ihm
+        #print ('new_pow_dens',new_pow_dens)
 
-	def check_act_presence(self):
+        return new_pow_dens
 
-		hm = utils.get_hm(self.passlist, self.vol)
-		if hm == 0.0:
-			return 'no'
-		elif hm > 0.0:
-			return 'yes'
+    # Update flux from power density in each cell at each substep
+    def _update_flux(self, pow_dens):
 
-	@property
-	def bu_sec_conv_factor(self):
-		"""Returns the absolute values of the decay constant of the nuclide"""
-		bu_sec_conv_factor = self._bu_sec_conv_factor
-		if bu_sec_conv_factor is None:
-			pass  # define exception for undefined variable
-		return bu_sec_conv_factor
+        passlist = self.passlist
+        passport_list = passlist.passport_list
+        print('update_flux called')
+        fission_energy_rate = 0
+        conv_Mev_J = 1.60218e-13
+        for i in passport_list:
+            if i.fission_E != None and i.current_xs != None:
+                if 'fission' in i.current_xs:
+                    fission_xs = i.current_xs['fission'][0]
+                    fission_E = i.fission_E
+                    dens = i.current_dens
 
-	def set_bu_sec_conv_factor(self, vol, ihm):
+                    fission_energy_rate += fission_xs*fission_E*dens
 
-		if ihm == 0:
-			self._bu_sec_conv_factor = 0
-		else:
-			self._bu_sec_conv_factor = utils.get_bu_sec_conv_factor(vol, ihm)
+        new_flux = pow_dens/(fission_energy_rate*conv_Mev_J)
 
-	def _set_bu_sec_conv_factor(self):
+        return new_flux
 
-		vol = self._vol
-		ihm = self._ihm
+    def _change_total_density(self, s):
 
-		if ihm == 0:
-			self._bu_sec_conv_factor = 0
-		else:
-			self._bu_sec_conv_factor = utils.get_bu_sec_conv_factor(vol, ihm)
+        sequence = self.sequence
+        density_change_dict = sequence.density_change_dict
+        if density_change_dict != None:
 
-	# Update power density from flux in each cell at each substep
-	def _update_pow_dens(self, flux):
+            if self.name in density_change_dict:
+                bucell_density_change_dict = density_change_dict[self.name]
+                # When user sets a new density for step s+1, the Monte Carlo simulation of step s+1
+                # needs to run with this new density
+                # For conveniency, ONIX thus changes the density at the end of step s
+                # This means that if we are now at step s, we need to look if the user has specified a new 
+                # density for step s+1
+                if s+1 in bucell_density_change_dict:
 
-		passlist = self.passlist
-		fission_energy_rate = 0
-		conv_Mev_J = 1.60218e-13
-		for i in passlist.passport_list:
-			if i.current_xs != None:
-				if i.fission_E != None and 'fission' in i.current_xs:
-					fission_xs = i.current_xs['fission'][0] # cm2 10^-24
-					fission_E = i.fission_E # MeV
-					dens = i.current_dens # cm-1 barn-1 (cm-3 10+24)
+                    new_tot_dens = bucell_density_change_dict[s+1]
+                    current_total_dens = self.get_total_dens()
+                    factor = new_tot_dens/current_total_dens
+                    passport_list = self.passlist.passport_list
+                    for nuc_pass in passport_list:
+                        current_dens = nuc_pass.current_dens
+                        nuc_pass.current_dens = current_dens*factor
 
-					# print (i.name)
-					# print (fission_E)
-					# print (fission_xs)
-					# print (dens)
+    def _change_isotope_density(self,s):
 
-					fission_energy_rate += fission_xs*fission_E*dens
+        sequence = self.sequence
+        isotopic_change_dict = sequence.isotopic_change_dict
+        if isotopic_change_dict != None:
+            if self.name in isotopic_change_dict:
+                bucell_isotopic_change_dict = isotopic_change_dict[self.name]
+                unit = bucell_isotopic_change_dict['unit']
+                current_total_dens = self.get_total_dens()
+                for nucl_name in bucell_isotopic_change_dict:
+                    if nucl_name == 'unit':
+                        continue
+                    nuclide_isotopic_change_dict = bucell_isotopic_change_dict[nucl_name]
 
+                    # When user sets a new density for step s+1, the Monte Carlo simulation of step s+1
+                    # needs to run with this new density
+                    # For conveniency, ONIX thus changes the density at the end of step s
+                    # This means that if we are now at step s, we need to look if the user has specified a new 
+                    # density for step s+1
+                    if s+1 in nuclide_isotopic_change_dict:
+                        nucl_passport = self.get_nuclide(nucl_name)
+                        # Only the current_dens is set to the user-defined density
+                        # the dens_seq and dens_subseq_mat last value are left unchanged
+                        # However both set_dens_cells (which updates material for new openmc simulation)
+                        # and mat_builder (which prepares the matrix for new depletion calculation) uses
+                        # current_dens. Therefore, only changing current_dens will update calculation without
+                        # changing stored value that will be printed
 
-		# print ('fission_energy_rate',fission_energy_rate)
+                        # If unit is number density
+                        if unit == 'number density':
+                            new_dens = nuclide_isotopic_change_dict[s+1]
+                        # else if unit is atom fraction
+                        if unit == 'atom fraction':
+                            new_dens = nuclide_isotopic_change_dict[s+1]*current_total_dens
 
-		new_pow_dens = flux*(fission_energy_rate*conv_Mev_J) # W/cm3 = kW/l
+                        nucl_passport.current_dens = new_dens
 
-		#print ('new_pow_dens',new_pow_dens)
 
-		return new_pow_dens
+    # Get the a sub passport list of all actinides
+    def get_act_passport_list(self):
+        """Returns a list of Passport objects of all actinides present in the BUCell.
+        """
+        passport_list = self.passlist.passport_list
+        act_passport_list = []
+        for nucl in passport_list:
+            if nucl.get_FAM() == 'ACT':
+                act_passport_list.append(nucl)
 
-	# Update flux from power density in each cell at each substep
-	def _update_flux(self, pow_dens):
+        return act_passport_list
 
-		passlist = self.passlist
-		passport_list = passlist.passport_list
-		print('update_flux called')
-		fission_energy_rate = 0
-		conv_Mev_J = 1.60218e-13
-		for i in passport_list:
-			if i.fission_E != None and i.current_xs != None:
-				if 'fission' in i.current_xs:
-					fission_xs = i.current_xs['fission'][0]
-					fission_E = i.fission_E
-					dens = i.current_dens
+    # Get the a sub passport list of all fission products
+    def get_fp_passport_list(self):
+        """Returns a list of Passport objects of all fission products present in the BUCell.
+        """
 
-					fission_energy_rate += fission_xs*fission_E*dens
+        passport_list = self.passlist.passport_list
+        fp_passport_list = []
+        for nucl in passport_list:
+            if nucl.get_FAM() == 'FP':
+                fp_passport_list.append(nucl)
 
-		new_flux = pow_dens/(fission_energy_rate*conv_Mev_J)
+        return fp_passport_list
 
-		return new_flux
+    # Get the a sub passport list of all activation products
+    def get_avt_passport_list(self):
+        """Returns a list of Passport objects of all activation products present in the BUCell.
+        """
+        passport_list = self.passlist.passport_list
+        avt_passport_list = []
+        for nucl in passport_list:
+            if nucl.get_FAM() == 'AVT':
+                avt_passport_list.append(nucl)
 
-	def _change_total_density(self, s):
+        return avt_passport_list
 
-		sequence = self.sequence
-		density_change_dict = sequence.density_change_dict
-		if density_change_dict != None:
+    def _set_libs_from_input(self, lib):
 
-			if self.name in density_change_dict:
-				bucell_density_change_dict = density_change_dict[self.name]
-				# When user sets a new density for step s+1, the Monte Carlo simulation of step s+1
-				# needs to run with this new density
-				# For conveniency, ONIX thus changes the density at the end of step s
-				# This means that if we are now at step s, we need to look if the user has specified a new 
-				# density for step s+1
-				if s+1 in bucell_density_change_dict:
+        self._decay_a_lib = lib['decay_a']
+        self._decay_b_lib = lib['decay_b']
+        self._xs_lib = lib['xs']
+        self._fy_lib = lib['fy']
 
-					new_tot_dens = bucell_density_change_dict[s+1]
-					current_total_dens = self.get_total_dens()
-					factor = new_tot_dens/current_total_dens
-					passport_list = self.passlist.passport_list
-					for nuc_pass in passport_list:
-						current_dens = nuc_pass.current_dens
-						nuc_pass.current_dens = current_dens*factor
 
-	def _change_isotope_density(self,s):
+    # Set decay dictionary from a decay text library which path is indicated by the user
+    def set_decay_lib(self, decay_lib_path):
+        """Sets the decay library for the BUCell.
 
-		sequence = self.sequence
-		isotopic_change_dict = sequence.isotopic_change_dict
-		if isotopic_change_dict != None:
-			if self.name in isotopic_change_dict:
-				bucell_isotopic_change_dict = isotopic_change_dict[self.name]
-				unit = bucell_isotopic_change_dict['unit']
-				current_total_dens = self.get_total_dens()
-				for nucl_name in bucell_isotopic_change_dict:
-					if nucl_name == 'unit':
-						continue
-					nuclide_isotopic_change_dict = bucell_isotopic_change_dict[nucl_name]
+        This function will add all nuclides for which there are decay data in the library but which are not yet in the onix.Passlist object of the BUCell. This means that the depletion system will be significantly enlarged.
 
-					# When user sets a new density for step s+1, the Monte Carlo simulation of step s+1
-					# needs to run with this new density
-					# For conveniency, ONIX thus changes the density at the end of step s
-					# This means that if we are now at step s, we need to look if the user has specified a new 
-					# density for step s+1
-					if s+1 in nuclide_isotopic_change_dict:
-						nucl_passport = self.get_nuclide(nucl_name)
-						# Only the current_dens is set to the user-defined density
-						# the dens_seq and dens_subseq_mat last value are left unchanged
-						# However both set_dens_cells (which updates material for new openmc simulation)
-						# and mat_builder (which prepares the matrix for new depletion calculation) uses
-						# current_dens. Therefore, only changing current_dens will update calculation without
-						# changing stored value that will be printed
+        Parameters
+        ----------
+        decay_lib_path: str
+            Path to the decay library provided by the user
+        """
 
-						# If unit is number density
-						if unit == 'number density':
-							new_dens = nuclide_isotopic_change_dict[s+1]
-						# else if unit is atom fraction
-						if unit == 'atom fraction':
-							new_dens = nuclide_isotopic_change_dict[s+1]*current_total_dens
+        decay_b = data.read_lib_functions.read_decay_lib(decay_lib_path)
+        decay_a = data.read_lib_functions.conv_decay_b_a(decay_b)
 
-						nucl_passport.current_dens = new_dens
+        nucl_list = list(decay_a.keys())
 
+        passlist = self.passlist
+        if passlist == None:
+            self.set_passlist(nucl_list)
+        else:
+            passlist._add_nucl_list(nucl_list)
+        #   self.update_passlist(nucl_list)
 
-	# Get the a sub passport list of all actinides
-	def get_act_passport_list(self):
+        self._decay_b_lib = decay_b
+        self._decay_a_lib = decay_a
 
-		passport_list = self.passlist.passport_list
-		act_passport_list = []
-		for nucl in passport_list:
-			if nucl.get_FAM() == 'ACT':
-				act_passport_list.append(nucl)
+        self.passlist._set_decay(decay_b, decay_a)
 
-		return act_passport_list
+    # Set decay dictionary from the default decay text library
+    # Will add to passlist those nuclides present in the lib that are not present in passlist
+    def set_default_decay_lib(self):
+        """Sets the decay library to the default one (ENDF/B-VIII.0) for the BUCell.
 
-	# Get the a sub passport list of all fission products
-	def get_fp_passport_list(self):
+        This function will add all nuclides for which there are decay data in the library but which are not yet in the onix.Passlist object of the BUCell. This means that the depletion system will be significantly enlarged.
+        """
 
-		passport_list = self.passlist.passport_list
-		fp_passport_list = []
-		for nucl in passport_list:
-			if nucl.get_FAM() == 'FP':
-				fp_passport_list.append(nucl)
+        # This command will find the absolute path of cell.py
+        # Since cell.py is located in onix, the default library is just in __file__path + ./data/default_libs/decay_lib
+        #__file__path = os.path.abspath(os.path.dirname(__file__))
 
-		return fp_passport_list
+        #default_decay_lib_path = __file__path+ '/data/default_libs/decay_lib'
+        default_decay_lib_path = data.default_decay_b_lib_path
+        #default_decay_lib_path = '/home/julien/Open-Burnup.dev/onix/data/default_libs/decay_lib'
 
-	# Get the a sub passport list of all activation products
-	def get_avt_passport_list(self):
+        decay_b = data.read_lib_functions.read_decay_lib(default_decay_lib_path)
+        decay_a = data.read_lib_functions.conv_decay_b_a(decay_b)
 
-		passport_list = self.passlist.passport_list
-		avt_passport_list = []
-		for nucl in passport_list:
-			if nucl.get_FAM() == 'AVT':
-				avt_passport_list.append(nucl)
+        nucl_list = list(decay_a.keys())
 
-		return avt_passport_list
+        passlist = self.passlist
+        if passlist == None:
+            self.set_passlist(nucl_list)
+        else:
+            passlist._add_nucl_list(nucl_list)
 
-	def _set_libs_from_input(self, lib):
+        self._decay_b_lib = decay_b
+        self._decay_a_lib = decay_a
 
-		self._decay_a_lib = lib['decay_a']
-		self._decay_b_lib = lib['decay_b']
-		self._xs_lib = lib['xs']
-		self._fy_lib = lib['fy']
+        # If the passlist has already been defined, pass the decay to each nuclide in passlist
+        self.passlist._set_decay(decay_b, decay_a)
 
+    # Set decay dictionary from the default decay text library
+    # Will NOT add to passlist those nuclides present in the lib that are not present in passlist
+    def set_default_decay_lib_no_add(self):
+        """Sets the decay library to the default one (ENDF/B-VIII.0) for the BUCell.
 
-	# Set decay dictionary from a decay text library which path is indicated by the user
-	def set_decay_lib(self, decay_lib_path):
+        This function will only take nuclear decay data for nuclides that are already in the onix.Passlist object of the BUCell. This enables to run simulation where the depletion system is not enlarged when adding decay data.
+        """
 
-		decay_b = data.read_lib_functions.read_decay_lib(decay_lib_path)
-		decay_a = data.read_lib_functions.conv_decay_b_a(decay_b)
+        # This command will find the absolute path of cell.py
+        # Since cell.py is located in onix, the default library is just in __file__path + ./data/default_libs/decay_lib
+        __file__path = os.path.abspath(os.path.dirname(__file__))
 
-		nucl_list = list(decay_a.keys())
+        default_decay_lib_path = __file__path+ '/data/default_libs/decay_lib'
 
-		passlist = self.passlist
-		if passlist == None:
-			self.set_passlist(nucl_list)
-		else:
-			passlist._add_nucl_list(nucl_list)
-		#	self.update_passlist(nucl_list)
+        #default_decay_lib_path = '/home/julien/Open-Burnup.dev/onix/data/default_libs/decay_lib'
 
-		self._decay_b_lib = decay_b
-		self._decay_a_lib = decay_a
+        decay_b = data.read_lib_functions.read_decay_lib(default_decay_lib_path)
+        decay_a = data.read_lib_functions.conv_decay_b_a(decay_b)
 
-		self.passlist._set_decay(decay_b, decay_a)
+        passlist = self.passlist
+        if passlist == None:
+            raise Passlist_not_defined('No passlist for this cell {} has been defined'.format(cell.id))
 
-	# Set decay dictionary from the default decay text library
-	# Will add to passlist those nuclides present in the lib that are not present in passlist
-	def set_default_decay_lib(self):
+        self._decay_b_lib = decay_b
+        self._decay_a_lib = decay_a
 
-		# This command will find the absolute path of cell.py
-		# Since cell.py is located in onix, the default library is just in __file__path + ./data/default_libs/decay_lib
-		#__file__path = os.path.abspath(os.path.dirname(__file__))
+        self.passlist._set_decay(decay_b, decay_a)
 
-		#default_decay_lib_path = __file__path+ '/data/default_libs/decay_lib'
-		default_decay_lib_path = data.default_decay_b_lib_path
-		#default_decay_lib_path = '/home/julien/Open-Burnup.dev/onix/data/default_libs/decay_lib'
+    # Set the decay dictionary from a decay object defined by the user
+    def set_decay(self, decay_object):
+        """Sets the decay library from an ONIX decay object defined by the user for the BUCell.
 
-		decay_b = data.read_lib_functions.read_decay_lib(default_decay_lib_path)
-		decay_a = data.read_lib_functions.conv_decay_b_a(decay_b)
+        Parameters
+        ----------
+        object: onix.utils.decay_lib
+            A decay library object constructed by the user with onix.utils.decay_lib.
+        """
 
-		nucl_list = list(decay_a.keys())
+        decay_b = decay_object.decay_b
+        decay_a = decay_object.decay_a
 
-		passlist = self.passlist
-		if passlist == None:
-			self.set_passlist(nucl_list)
-		else:
-			passlist._add_nucl_list(nucl_list)
+        nucl_list = list(decay_a.keys())
 
-		self._decay_b_lib = decay_b
-		self._decay_a_lib = decay_a
+        passlist = self.passlist
+        if passlist == None:
+            self.set_passlist(nucl_list)
+        else:
+            passlist._add_nucl_list(nucl_list)  
 
-		# If the passlist has already been defined, pass the decay to each nuclide in passlist
-		self.passlist._set_decay(decay_b, decay_a)
+        self._decay_b_lib = decay_b
+        self._decay_a_lib = decay_a
 
-	# Set decay dictionary from the default decay text library
-	# Will NOT add to passlist those nuclides present in the lib that are not present in passlist
-	def set_default_decay_lib_no_add(self):
+        # If the passlist has already been defined, pass the decay to each nuclide in passlist
+        self.passlist._set_decay(decay_b, decay_a)
 
-		# This command will find the absolute path of cell.py
-		# Since cell.py is located in onix, the default library is just in __file__path + ./data/default_libs/decay_lib
-		__file__path = os.path.abspath(os.path.dirname(__file__))
+    @property
+    def decay_b_lib(self):
+        """Returns a fractionnal decay dictionnary where keys are nuclides' names and entries are decay sub-dictionnaries. The keys of these sub-dictionnaries are the names of the decay reactions and the entries are the fractions of the corresponding decay constant over the total decay constant.
 
-		default_decay_lib_path = __file__path+ '/data/default_libs/decay_lib'
+        """
 
-		#default_decay_lib_path = '/home/julien/Open-Burnup.dev/onix/data/default_libs/decay_lib'
+        return self._decay_b_lib
 
-		decay_b = data.read_lib_functions.read_decay_lib(default_decay_lib_path)
-		decay_a = data.read_lib_functions.conv_decay_b_a(decay_b)
+    @property
+    def decay_a_lib(self):
+        """Returns an absolute decay dictionnary where keys are nuclides' names and entries are decay sub-dictionnaries. The keys of these sub-dictionnaries are the names of the decay reactions and the entries are the absolute values of the corresponding decay constant in :math:`s^{-1}`.
+ 
+        """
 
-		passlist = self.passlist
-		if passlist == None:
-			raise Passlist_not_defined('No passlist for this cell {} has been defined'.format(cell.id))
+        return self._decay_a_lib
 
-		self._decay_b_lib = decay_b
-		self._decay_a_lib = decay_a
 
-		self.passlist._set_decay(decay_b, decay_a)
 
-	# Set the decay dictionary from a decay object defined by the user
-	def set_decay(self, decay_object):
+    def set_xs_lib(self, xs_lib_path):
+        """Sets the cross section library for the BUCell.
 
-		decay_b = decay_object.decay_b
-		decay_a = decay_object.decay_a
+        This function will add all nuclides for which there are cross section data in the library but which are not yet in the onix.Passlist object of the BUCell. This means that the depletion system will be significantly enlarged.
 
-		nucl_list = list(decay_a.keys())
+        Parameters
+        ----------
+        xs_lib_path: str
+            Path to the cross section library provided by the user
+        """
 
-		passlist = self.passlist
-		if passlist == None:
-			self.set_passlist(nucl_list)
-		else:
-			passlist._add_nucl_list(nucl_list)	
+        xs_dic = data.read_lib_functions.read_xs_lib(xs_lib_path)
 
-		self._decay_b_lib = decay_b
-		self._decay_a_lib = decay_a
+        nucl_list = list(xs_dic.keys())
 
-		# If the passlist has already been defined, pass the decay to each nuclide in passlist
-		self.passlist._set_decay(decay_b, decay_a)
+        passlist = self.passlist
+        if passlist == None:
+            self.set_passlist(nucl_list)
+        else:
+            passlist._add_nucl_list(nucl_list)
 
-	@property
-	def decay_b_lib(self):
+        self._xs_lib = xs_dic
 
-		return self._decay_b_lib
+        self.passlist._set_xs(xs_dic)
 
-	@property
-	def decay_a_lib(self):
+    def set_default_xs_lib(self):
+        """Sets the cross section library to the default one. The default cross section library in ONIX has been obtained by computing middle-burnup one-group cross section for a coupled simumation of a LWR fuel pin-cell. Therefore, this library is only adapted for LWR reactors.
 
-		return self._decay_a_lib
+        """
 
+        # This command will find the absolute path of cell.py
+        # Since cell.py is located in onix, the default library is just in __file__path + ./data/default_libs/decay_lib
+        __file__path = os.path.abspath(os.path.dirname(__file__))
 
+        default_xs_lib_path = __file__path+ '/data/default_libs/xs_lib'
 
-	def set_xs_lib(self, xs_lib_path):
+        # default_xs_lib_path = '/home/julien/Open-Burnup.dev/onix/data/default_libs/xs_lib'
+        # pupu_xs_lib_path = '/home/julien/Open-Burnup.dev/onix/data/default_libs/xs_lib_pupu'
 
-		xs_dic = data.read_lib_functions.read_xs_lib(xs_lib_path)
+        xs_dic = data.read_lib_functions.read_xs_lib(default_xs_lib_path)
 
-		nucl_list = list(xs_dic.keys())
+        nucl_list = list(xs_dic.keys())
 
-		passlist = self.passlist
-		if passlist == None:
-			self.set_passlist(nucl_list)
-		else:
-			passlist._add_nucl_list(nucl_list)
+        passlist = self.passlist
+        if passlist == None:
+            self.set_passlist(nucl_list)
+        else:
+            passlist._add_nucl_list(nucl_list)
 
-		self._xs_lib = xs_dic
+        self._xs_lib = xs_dic
 
-		self.passlist._set_xs(xs_dic)
+        self.passlist._set_xs(xs_dic)
 
-	def set_default_xs_lib(self):
+    def set_default_xs_lib_no_add(self):
+        """Sets the cross section library to the default one. The default cross section library in ONIX has been obtained by computing middle-burnup one-group cross section for a coupled simumation of a LWR fuel pin-cell. Therefore, this library is only adapted for LWR reactors.
 
-		# This command will find the absolute path of cell.py
-		# Since cell.py is located in onix, the default library is just in __file__path + ./data/default_libs/decay_lib
-		__file__path = os.path.abspath(os.path.dirname(__file__))
+        This function will only take nuclear decay data for nuclides that are already in the onix.Passlist object of the BUCell. This enables to run simulation where the depletion system is not enlarged when adding cross section data.
+        """
 
-		default_xs_lib_path = __file__path+ '/data/default_libs/xs_lib'
+        # This command will find the absolute path of cell.py
+        # Since cell.py is located in onix, the default library is just in __file__path + ./data/default_libs/decay_lib
+        __file__path = os.path.abspath(os.path.dirname(__file__))
 
-		# default_xs_lib_path = '/home/julien/Open-Burnup.dev/onix/data/default_libs/xs_lib'
-		# pupu_xs_lib_path = '/home/julien/Open-Burnup.dev/onix/data/default_libs/xs_lib_pupu'
+        default_xs_lib_path = __file__path+ '/data/default_libs/xs_lib'
 
-		xs_dic = data.read_lib_functions.read_xs_lib(default_xs_lib_path)
+        # default_xs_lib_path = '/home/julien/Open-Burnup.dev/onix/data/default_libs/xs_lib'
+        # pupu_xs_lib_path = '/home/julien/Open-Burnup.dev/onix/data/default_libs/xs_lib_pupu'
 
-		nucl_list = list(xs_dic.keys())
+        xs_dic = data.read_lib_functions.read_xs_lib(default_xs_lib_path)
 
-		passlist = self.passlist
-		if passlist == None:
-			self.set_passlist(nucl_list)
-		else:
-			passlist._add_nucl_list(nucl_list)
+        xs_dic = data.read_lib_functions.read_xs_lib(default_xs_lib_path)
 
-		self._xs_lib = xs_dic
+        nucl_list = list(xs_dic.keys())
 
-		self.passlist._set_xs(xs_dic)
+        passlist = self.passlist
+        if passlist == None:
+            raise Passlist_not_defined('No passlist for this cell {} has been defined'.format(cell.id))
 
-	def set_default_xs_lib_no_add(self):
+        self._xs_lib = xs_dic
 
-		# This command will find the absolute path of cell.py
-		# Since cell.py is located in onix, the default library is just in __file__path + ./data/default_libs/decay_lib
-		__file__path = os.path.abspath(os.path.dirname(__file__))
+        self.passlist._set_xs(xs_dic)
 
-		default_xs_lib_path = __file__path+ '/data/default_libs/xs_lib'
+    # Set the xs dictionary from a xs object
+    def set_xs(self, xs_object):
+        """Sets the cross section data from an ONIX cross section object defined by the user for a specific BUCell.
 
-		# default_xs_lib_path = '/home/julien/Open-Burnup.dev/onix/data/default_libs/xs_lib'
-		# pupu_xs_lib_path = '/home/julien/Open-Burnup.dev/onix/data/default_libs/xs_lib_pupu'
+        Parameters
+        ----------
+        object: onix.utils.xs_lib
+            A cross section library object constructed by the user with onix.utils.xs_lib.
+        """
 
-		xs_dic = data.read_lib_functions.read_xs_lib(default_xs_lib_path)
+        xs_dic = xs_object.xs
 
-		xs_dic = data.read_lib_functions.read_xs_lib(default_xs_lib_path)
+        nucl_list = list(xs_dic.keys())
 
-		nucl_list = list(xs_dic.keys())
+        passlist = self.passlist
+        if passlist == None:
+            self.set_passlist(nucl_list)
+        else:
+            passlist._add_nucl_list(nucl_list)
 
-		passlist = self.passlist
-		if passlist == None:
-			raise Passlist_not_defined('No passlist for this cell {} has been defined'.format(cell.id))
+        self._xs_lib = xs_dic
 
-		self._xs_lib = xs_dic
+        self.passlist._set_xs(xs_dic)
 
-		self.passlist._set_xs(xs_dic)
+    # Overwrittes xs at first step if mode is set to constant lib (xs will have already been set from txt library)
+    def _overwrite_xs(self, xs_object):
 
-	# Set the xs dictionary from a xs object
-	def set_xs(self, xs_object):
+        xs_dic = xs_object.xs
 
-		xs_dic = xs_object.xs
+        nucl_list = list(xs_dic.keys())
 
-		nucl_list = list(xs_dic.keys())
+        passlist = self.passlist
+        if passlist == None:
+            self.set_passlist(nucl_list)
+        else:
+            passlist._add_nucl_list(nucl_list)
 
-		passlist = self.passlist
-		if passlist == None:
-			self.set_passlist(nucl_list)
-		else:
-			passlist._add_nucl_list(nucl_list)
+        self._xs_lib = xs_dic
 
-		self._xs_lib = xs_dic
+        self.passlist._overwrite_xs(xs_dic)
 
-		self.passlist._set_xs(xs_dic)
+    @property
+    def xs_lib(self):
+        """Returns a dictionnary where keys are nuclides' names and entries are cross section sub-dictionnaries. The keys of these sub-dictionnaries are neutron-induced reactions names and the entries are the value the corresponding cross sections in barn.
+        """
 
-	def overwrite_xs(self, xs_object):
+        return self._xs_lib
 
-		xs_dic = xs_object.xs
 
-		nucl_list = list(xs_dic.keys())
+    def set_fy_lib(self, fy_lib_path, complete):
+        """Sets the fission yield library for the BUCell.
 
-		passlist = self.passlist
-		if passlist == None:
-			self.set_passlist(nucl_list)
-		else:
-			passlist._add_nucl_list(nucl_list)
+        This function will add all nuclides for which there are fission yield data in the library but which are not yet in the onix.Passlist object of the BUCell. This means that the depletion system will be significantly enlarged.
 
-		self._xs_lib = xs_dic
+        Setting the *complete* parameter to True allows ONIX to complement the data of the provided library with additional data found in ENDF/B-VIII.0.
 
-		self.passlist._overwrite_xs(xs_dic)
+        Parameters
+        ----------
+        fy_lib_path: str
+            Path to the fission yield library provided by the user
+        complete: bool
+            Indicates to ONIX whether or not to complement the provided library with additional fission yields from ENDF:B-VIII.0 library.
+        """
 
-	@property
-	def xs_lib(self):
+        if complete == False:
 
-		return self._xs_lib
+            fy_dic = data.read_lib_functions.read_fy_lib(fy_lib_path)
 
+            nucl_list = list(fy_dic.keys())
 
-	def set_fy_lib(self, fy_lib_path, complete):
+            passlist = self.passlist
+            if passlist == None:
+                self.set_passlist(nucl_list)
+            else:
+                passlist._add_nucl_list(nucl_list)
 
-		if complete == False:
+        # elif complete == True:
 
-			fy_dic = data.read_lib_functions.read_fy_lib(fy_lib_path)
+        #   fy_dic = {}
 
-			nucl_list = list(fy_dic.keys())
+        #   user_fy_dic = data.read_lib_functions.read_fy_lib(fy_lib_path)
 
-			passlist = self.passlist
-			if passlist == None:
-				self.set_passlist(nucl_list)
-			else:
-				passlist._add_nucl_list(nucl_list)
+        #   default_fy_lib_path = data.default_fy_lib_path
+        #   default_fy_dic = data.read_lib_functions.read_fy_lib(default_fy_lib_path)
 
-		# elif complete == True:
+        #   # Create nucl_list from merging of two fy_dic key list
+        #   user_fy_nucl_list = list(user_fy_dic.keys())
+        #   default_fy_nucl_list = list(default_fy_dic.keys())
+        #   user_fy_nucl_set = set(user_fy_nucl_list)
+        #   default_fy_nucl_set = set(default_fy_nucl_list)
+        #   in_default_not_in_user = default_fy_nucl_set - user_fy_nucl_set
+        #   nucl_list = user_fy_nucl_list + list(in_default_not_in_user)
 
-		# 	fy_dic = {}
+        #   # Creation of a merged dictionnary
+        #   for fp in nucl_list:
+        #       # if fp is not in user_fy but in default, add it to fy_dic with all the parents' data
+        #       if fp not in user_fy_nucl_list:
+        #           fy_dic[fp] = default_fy_dic[fp]
 
-		# 	user_fy_dic = data.read_lib_functions.read_fy_lib(fy_lib_path)
+        #       # if fp is not in default but in user, add it to fy_dic with all the parents' data
+        #       elif fp not in default_fy_nucl_list:
+        #           fy_dic[fp] = user_fy_dic[fp]
 
-		# 	default_fy_lib_path = data.default_fy_lib_path
-		# 	default_fy_dic = data.read_lib_functions.read_fy_lib(default_fy_lib_path)
+        #       # if fp is in both libraries
+        #       elif fp in user_fy_nucl_list and fp in default_fy_nucl_list:
 
-		# 	# Create nucl_list from merging of two fy_dic key list
-		# 	user_fy_nucl_list = list(user_fy_dic.keys())
-		# 	default_fy_nucl_list = list(default_fy_dic.keys())
-		# 	user_fy_nucl_set = set(user_fy_nucl_list)
-		# 	default_fy_nucl_set = set(default_fy_nucl_list)
-		# 	in_default_not_in_user = default_fy_nucl_set - user_fy_nucl_set
-		# 	nucl_list = user_fy_nucl_list + list(in_default_not_in_user)
+        #           # Start by copying the entry from the user library
+        #           fy_dic[fp] = user_fy_dic[fp]
 
-		# 	# Creation of a merged dictionnary
-		# 	for fp in nucl_list:
-		# 		# if fp is not in user_fy but in default, add it to fy_dic with all the parents' data
-		# 		if fp not in user_fy_nucl_list:
-		# 			fy_dic[fp] = default_fy_dic[fp]
+        #           # Then see what additional parents' data the default has for this specific fp and add it
+        #           user_fy_parents = list(user_fy_dic[fp].keys())
+        #           default_fy_parents = list(default_fy_dic[fp].keys())
+        #           for parent in default_fy_parents:
+        #               if parent not in user_fy_parents:
+        #                   fy_dic[fp][parent] = default_fy_dic[fp][parent] 
 
-		# 		# if fp is not in default but in user, add it to fy_dic with all the parents' data
-		# 		elif fp not in default_fy_nucl_list:
-		# 			fy_dic[fp] = user_fy_dic[fp]
+        elif complete == True:
+                    fy_dic = {}
+                    user_fy_dic = data.read_lib_functions.read_fy_lib(fy_lib_path)
+                    default_fy_lib_path = data.default_fy_lib_path
+                    default_fy_dic = data.read_lib_functions.read_fy_lib(default_fy_lib_path)
+                    # Create list of actinides in user fy
+                    user_fy_nucl_list = list(user_fy_dic.keys())
+                    user_act = []
+                    for fp in user_fy_nucl_list:
+                        for act in user_fy_dic[fp]:
+                            if act not in user_act:
+                                user_act.append(act)
+                    # Create list of additional actinides from default fy
+                    default_fy_nucl_list = list(default_fy_dic.keys())
+                    default_add_act = []
+                    for fp in default_fy_nucl_list:
+                        for act in default_fy_dic[fp]:
+                            if (act not in user_act) and (act not in default_add_act):
+                                default_add_act.append(act)   
+                    # Create nucl_list from merging of two fy_dic key list
+                    full_fy_nucl_list = user_fy_nucl_list + default_fy_nucl_list
+                    # remove duplicates
+                    nucl_list = list(dict.fromkeys(full_fy_nucl_list))
+                    # Creation of a merged dictionary
+                    for fp in nucl_list:
+                        # empty dictionary
+                        fy_dic[fp] = {}
+                        # first add fy from user provided actinides
+                        for act in user_act:
+                            # need to check if fp exist in user lib, otherwise yield zero (second condition is a safety check)
+                            if (fp in user_fy_dic) and (act in user_fy_dic[fp]):
+                                fy_dic[fp][act] = user_fy_dic[fp][act]
+                            else: 
+                                # First zero for FY value, second zero for uncertainty
+                                fy_dic[fp][act] = [0,0]
+                        # now add fy from additional actinides from default
+                        for act in default_add_act:   
+                            # need to check if fp exist in default lib, otherwise yield zero (second condition is a safety check)
+                            if (fp in default_fy_dic) and (act in default_fy_dic[fp]):
+                                fy_dic[fp][act] = default_fy_dic[fp][act]
+                            else: 
+                                # First zero for FY value, second zero for uncertainty
+                                fy_dic[fp][act] = [0,0]
+                    passlist = self.passlist
+                    if passlist == None:
+                        self.set_passlist(nucl_list)
+                    else:
+                        passlist._add_nucl_list(nucl_list)  
 
-		# 		# if fp is in both libraries
-		# 		elif fp in user_fy_nucl_list and fp in default_fy_nucl_list:
 
-		# 			# Start by copying the entry from the user library
-		# 			fy_dic[fp] = user_fy_dic[fp]
+        self._fy_lib = fy_dic
+        self.passlist._set_fy(fy_dic)
 
-		# 			# Then see what additional parents' data the default has for this specific fp and add it
-		# 			user_fy_parents = list(user_fy_dic[fp].keys())
-		# 			default_fy_parents = list(default_fy_dic[fp].keys())
-		# 			for parent in default_fy_parents:
-		# 				if parent not in user_fy_parents:
-		# 					fy_dic[fp][parent] = default_fy_dic[fp][parent] 
+    def set_default_fy_lib(self):
+        """Sets the fission yield library to the default one (ENDF/B-VIII.0) for the BUCell.
 
-		elif complete == True:
-					fy_dic = {}
-					user_fy_dic = data.read_lib_functions.read_fy_lib(fy_lib_path)
-					default_fy_lib_path = data.default_fy_lib_path
-					default_fy_dic = data.read_lib_functions.read_fy_lib(default_fy_lib_path)
-					# Create list of actinides in user fy
-					user_fy_nucl_list = list(user_fy_dic.keys())
-					user_act = []
-					for fp in user_fy_nucl_list:
-						for act in user_fy_dic[fp]:
-							if act not in user_act:
-								user_act.append(act)
-					# Create list of additional actinides from default fy
-					default_fy_nucl_list = list(default_fy_dic.keys())
-					default_add_act = []
-					for fp in default_fy_nucl_list:
-						for act in default_fy_dic[fp]:
-							if (act not in user_act) and (act not in default_add_act):
-								default_add_act.append(act)   
-					# Create nucl_list from merging of two fy_dic key list
-					full_fy_nucl_list = user_fy_nucl_list + default_fy_nucl_list
-					# remove duplicates
-					nucl_list = list(dict.fromkeys(full_fy_nucl_list))
-					# Creation of a merged dictionary
-					for fp in nucl_list:
-						# empty dictionary
-						fy_dic[fp] = {}
-						# first add fy from user provided actinides
-						for act in user_act:
-							# need to check if fp exist in user lib, otherwise yield zero (second condition is a safety check)
-							if (fp in user_fy_dic) and (act in user_fy_dic[fp]):
-								fy_dic[fp][act] = user_fy_dic[fp][act]
-							else: 
-								# First zero for FY value, second zero for uncertainty
-								fy_dic[fp][act] = [0,0]
-						# now add fy from additional actinides from default
-						for act in default_add_act:   
-							# need to check if fp exist in default lib, otherwise yield zero (second condition is a safety check)
-							if (fp in default_fy_dic) and (act in default_fy_dic[fp]):
-								fy_dic[fp][act] = default_fy_dic[fp][act]
-							else: 
-								# First zero for FY value, second zero for uncertainty
-								fy_dic[fp][act] = [0,0]
-					passlist = self.passlist
-					if passlist == None:
-						self.set_passlist(nucl_list)
-					else:
-						passlist._add_nucl_list(nucl_list)  
+        This function will add all nuclides for which there are fission yield data in the library but which are not yet in the onix.Passlist object of the BUCell. This means that the depletion system will be significantly enlarged.
+        """
 
+        # This command will find the absolute path of cell.py
+        # Since cell.py is located in onix, the default library is just in __file__path + ./data/default_libs/decay_lib
+        # Probably obsolete
+        __file__path = os.path.abspath(os.path.dirname(__file__))
 
-		self._fy_lib = fy_dic
-		self.passlist._set_fy(fy_dic)
+        #default_fy_lib_path = __file__path+ '/data/default_libs/fy_lib'
 
-	def set_default_fy_lib(self):
+        default_fy_lib_path = data.default_fy_lib_path
 
-		# This command will find the absolute path of cell.py
-		# Since cell.py is located in onix, the default library is just in __file__path + ./data/default_libs/decay_lib
-		# Probably obsolete
-		__file__path = os.path.abspath(os.path.dirname(__file__))
+        #default_fy_lib_path = '/home/julien/Open-Burnup.dev/onix/data/default_libs/fy_lib'
 
-		#default_fy_lib_path = __file__path+ '/data/default_libs/fy_lib'
+        fy_dic = data.read_lib_functions.read_fy_lib(default_fy_lib_path)
 
-		default_fy_lib_path = data.default_fy_lib_path
+        nucl_list = list(fy_dic.keys())
 
-		#default_fy_lib_path = '/home/julien/Open-Burnup.dev/onix/data/default_libs/fy_lib'
+        passlist = self.passlist
+        if passlist == None:
+            self.set_passlist(nucl_list)
+        else:
+            passlist._add_nucl_list(nucl_list)
 
-		fy_dic = data.read_lib_functions.read_fy_lib(default_fy_lib_path)
+        self._fy_lib = fy_dic
 
-		nucl_list = list(fy_dic.keys())
+        self.passlist._set_fy(fy_dic)
 
-		passlist = self.passlist
-		if passlist == None:
-			self.set_passlist(nucl_list)
-		else:
-			passlist._add_nucl_list(nucl_list)
+    # Warning, for fy, only the FP in the dic are automatically
+    # Added to passlist nucl list. The parents nuclide defined are not
+    # User must make be sure parents nuclide are already in nucl list
 
-		self._fy_lib = fy_dic
+    def set_default_fy_lib_no_add(self):
+        """Sets the fission yield library to the default one (ENDF/B-VIII.0) for the BUCell.
 
-		self.passlist._set_fy(fy_dic)
+        This function will only take fission yield data for nuclides that are already in the onix.Passlist object of the BUCell. This enables to run simulation where the depletion system is not enlarged when adding fission yield data.
+        """
 
-	# Warning, for fy, only the FP in the dic are automatically
-	# Added to passlist nucl list. The parents nuclide defined are not
-	# User must make be sure parents nuclide are already in nucl list
+        # This command will find the absolute path of cell.py
+        # Since cell.py is located in onix, the default library is just in __file__path + ./data/default_libs/decay_lib
+        __file__path = os.path.abspath(os.path.dirname(__file__))
 
-	def set_default_fy_lib_no_add(self):
+        default_fy_lib_path = __file__path+ '/data/default_libs/fy_lib'
 
-		# This command will find the absolute path of cell.py
-		# Since cell.py is located in onix, the default library is just in __file__path + ./data/default_libs/decay_lib
-		__file__path = os.path.abspath(os.path.dirname(__file__))
+        #default_fy_lib_path = '/home/julien/Open-Burnup.dev/onix/data/default_libs/fy_lib'
 
-		default_fy_lib_path = __file__path+ '/data/default_libs/fy_lib'
+        fy_dic = data.read_lib_functions.read_fy_lib(default_fy_lib_path)
 
-		#default_fy_lib_path = '/home/julien/Open-Burnup.dev/onix/data/default_libs/fy_lib'
+        passlist = self.passlist
+        if passlist == None:
+            raise Passlist_not_defined('No passlist for this cell {} has been defined'.format(cell.id))
 
-		fy_dic = data.read_lib_functions.read_fy_lib(default_fy_lib_path)
+        self._fy_lib = fy_dic
 
-		passlist = self.passlist
-		if passlist == None:
-			raise Passlist_not_defined('No passlist for this cell {} has been defined'.format(cell.id))
+        self.passlist._set_fy(fy_dic)
 
-		self._fy_lib = fy_dic
+    def set_fy(self, fy_object):
+        """Sets the fission yield library from an ONIX fission yield object defined by the user for the BUCell.
 
-		self.passlist._set_fy(fy_dic)
+        Parameters
+        ----------
+        object: onix.utils.fy_lib
+            A fission yield library object constructed by the user with onix.utils.fy_lib.
+        """
 
-	def set_fy(self, fy_object):
+        fy_dic = fy_object.fy
 
-		fy_dic = fy_object.fy
+        nucl_list = list(fy_dic.keys())
 
-		nucl_list = list(fy_dic.keys())
+        passlist = self.passlist
+        if passlist == None:
+            self.set_passlist(nucl_list)
+        else:
+            passlist._add_nucl_list(nucl_list)
 
-		passlist = self.passlist
-		if passlist == None:
-			self.set_passlist(nucl_list)
-		else:
-			passlist._add_nucl_list(nucl_list)
+        self._fy_lib = fy_dic
 
-		self._fy_lib = fy_dic
+        self.passlist._set_fy(fy_dic)
 
-		self.passlist._set_fy(fy_dic)
+    @property
+    def fy_lib(self):
+        """Returns a dictionnary where keys are fission products' names and entries are fission yield sub-dictionnaries. The keys of these sub-dictionnaries are fissionning parents' z-a-m id and the entries are the value the corresponding fission yield in percent (values between 0 to 100).
+        """
 
-	@property
-	def fy_lib(self):
+        return self._fy_lib
 
-		return self._fy_lib
 
 
 
+    def _print_dens(self, time_point, bu_point, s):
 
-	def _print_dens(self, time_point, bu_point, s):
+        self._print_dens_1(s)
+        self._print_dens_2(time_point, bu_point, s)
 
-		self._print_dens_1(s)
-		self._print_dens_2(time_point, bu_point, s)
+    def _print_initial_dens(self):
 
-	def _print_initial_dens(self):
 
+        sequence = self.sequence
+        initial_time = sequence.time_seq_vect[0]
+        initial_bu = sequence.bu_seq_vect[0]
+        i = 0 # dummy i
+        s = -1
 
-		sequence = self.sequence
-		initial_time = sequence.time_seq_vect[0]
-		initial_bu = sequence.bu_seq_vect[0]
-		i = 0 # dummy i
-		s = -1
+        self._print_dens_1(s)
+        self._print_dens_2(s, i)
 
-		self._print_dens_1(s)
-		self._print_dens_2(s, i)
 
+    def _print_xs_lib(self):
 
-	def _print_xs_lib(self):
+        cell_id = self.id
+        passlist = self.passlist
+        xs_lib = self.xs_lib
+        passport_list = passlist.passport_list
+        cell_folder_path = self.folder_path
 
-		cell_id = self.id
-		passlist = self.passlist
-		xs_lib = self.xs_lib
-		passport_list = passlist.passport_list
-		cell_folder_path = self.folder_path
+        file_name = cell_folder_path + '/xs_lib'
 
-		file_name = cell_folder_path + '/xs_lib'
+        write_file = open(file_name, 'w')
+        txt = ''
+        txt += '\n\n--- Actinides ---\n\n'
+        txt += utils.printer.xs_lib_header
 
-		write_file = open(file_name, 'w')
-		txt = ''
-		txt += '\n\n--- Actinides ---\n\n'
-		txt += utils.printer.xs_lib_header
+        #loop over actinides
+        for nucl in self.get_act_passport_list():
+            nucl_name = nucl.name
+            nucl_zamid = nucl.zamid
+            nucl_xs = nucl.current_xs
+            # If this nuclide has not been assigned cross section, continue
+            if nucl_xs == None:
+                continue
+            count = 0
+            for xs_name in nucl_xs:
+                # removal should not be printed on the lib
+                if xs_name ==  'removal':
+                    continue
+                xs_val = nucl_xs[xs_name][0]
+                xs_unc = nucl_xs[xs_name][1]
+                if count == 0:
+                    txt += '{:^19}'.format(nucl_name)
+                else:
+                    txt += '{:^19}'.format('')
+                txt += '{:^12}'.format(nucl_zamid)
+                txt += '{:^17}'.format(xs_name) 
+                txt += '{:^17.16E}'.format(xs_val)
+                txt += '{:^17}'.format(xs_unc)
+                txt += '\n'
+                count += 1
 
-		#loop over actinides
-		for nucl in self.get_act_passport_list():
-			nucl_name = nucl.name
-			nucl_zamid = nucl.zamid
-			nucl_xs = nucl.current_xs
-			# If this nuclide has not been assigned cross section, continue
-			if nucl_xs == None:
-				continue
-			count = 0
-			for xs_name in nucl_xs:
-				# removal should not be printed on the lib
-				if xs_name ==  'removal':
-					continue
-				xs_val = nucl_xs[xs_name][0]
-				xs_unc = nucl_xs[xs_name][1]
-				if count == 0:
-					txt += '{:^19}'.format(nucl_name)
-				else:
-					txt += '{:^19}'.format('')
-				txt += '{:^12}'.format(nucl_zamid)
-				txt += '{:^17}'.format(xs_name)	
-				txt += '{:^17.16E}'.format(xs_val)
-				txt += '{:^17}'.format(xs_unc)
-				txt += '\n'
-				count += 1
+        txt += '\n\n--- Fission Products ---\n\n'
+        txt += utils.printer.xs_lib_header
 
-		txt += '\n\n--- Fission Products ---\n\n'
-		txt += utils.printer.xs_lib_header
+        #loop over fission products
+        for nucl in self.get_fp_passport_list():
+            nucl_name = nucl.name
+            nucl_zamid = nucl.zamid
+            nucl_xs = nucl.current_xs
+            # If this nuclide has not been assigned cross section, continue
+            if nucl_xs == None:
+                continue
+            count = 0
+            for xs_name in nucl_xs:
+                # removal should not be printed on the lib
+                if xs_name ==  'removal':
+                    continue
+                xs_val = nucl_xs[xs_name][0]
+                xs_unc = nucl_xs[xs_name][1]
+                if count == 0:
+                    txt += '{:^19}'.format(nucl_name)
+                else:
+                    txt += '{:^19}'.format('')
+                txt += '{:^12}'.format(nucl_zamid)
+                txt += '{:^17}'.format(xs_name)
+                txt += '{:^17.16E}'.format(xs_val)
+                txt += '{:^17}'.format(xs_unc)
+                txt += '\n'
+                count += 1
 
-		#loop over fission products
-		for nucl in self.get_fp_passport_list():
-			nucl_name = nucl.name
-			nucl_zamid = nucl.zamid
-			nucl_xs = nucl.current_xs
-			# If this nuclide has not been assigned cross section, continue
-			if nucl_xs == None:
-				continue
-			count = 0
-			for xs_name in nucl_xs:
-				# removal should not be printed on the lib
-				if xs_name ==  'removal':
-					continue
-				xs_val = nucl_xs[xs_name][0]
-				xs_unc = nucl_xs[xs_name][1]
-				if count == 0:
-					txt += '{:^19}'.format(nucl_name)
-				else:
-					txt += '{:^19}'.format('')
-				txt += '{:^12}'.format(nucl_zamid)
-				txt += '{:^17}'.format(xs_name)
-				txt += '{:^17.16E}'.format(xs_val)
-				txt += '{:^17}'.format(xs_unc)
-				txt += '\n'
-				count += 1
+        txt += '\n\n--- Activation Products ---\n\n'
+        txt += utils.printer.xs_lib_header
 
-		txt += '\n\n--- Activation Products ---\n\n'
-		txt += utils.printer.xs_lib_header
+        #loop over activation products
+        for nucl in self.get_avt_passport_list():
+            nucl_name = nucl.name
+            nucl_zamid = nucl.zamid
+            nucl_xs = nucl.current_xs
+            # If this nuclide has not been assigned cross section, continue
+            if nucl_xs == None:
+                continue
+            count = 0
+            for xs_name in nucl_xs:
+                # removal should not be printed on the lib
+                if xs_name ==  'removal':
+                    continue
+                xs_val = nucl_xs[xs_name][0]
+                xs_unc = nucl_xs[xs_name][1]
+                if count == 0:
+                    txt += '{:^19}'.format(nucl_name)
+                else:
+                    txt += '{:^19}'.format('')
+                txt += '{:^12}'.format(nucl_zamid)
+                txt += '{:^17}'.format(xs_name)
+                txt += '{:^17.16E}'.format(xs_val)
+                txt += '{:^17}'.format(xs_unc)
+                txt += '\n'
+                count += 1
 
-		#loop over activation products
-		for nucl in self.get_avt_passport_list():
-			nucl_name = nucl.name
-			nucl_zamid = nucl.zamid
-			nucl_xs = nucl.current_xs
-			# If this nuclide has not been assigned cross section, continue
-			if nucl_xs == None:
-				continue
-			count = 0
-			for xs_name in nucl_xs:
-				# removal should not be printed on the lib
-				if xs_name ==  'removal':
-					continue
-				xs_val = nucl_xs[xs_name][0]
-				xs_unc = nucl_xs[xs_name][1]
-				if count == 0:
-					txt += '{:^19}'.format(nucl_name)
-				else:
-					txt += '{:^19}'.format('')
-				txt += '{:^12}'.format(nucl_zamid)
-				txt += '{:^17}'.format(xs_name)
-				txt += '{:^17.16E}'.format(xs_val)
-				txt += '{:^17}'.format(xs_unc)
-				txt += '\n'
-				count += 1
+        write_file.write(txt)
+        write_file.close()
 
-		write_file.write(txt)
-		write_file.close()
+    def _print_general_dens_1(self, s):
 
-	def _print_general_dens_1(self, s):
+        sequence = self.sequence
+        time_point = sequence.time_point(s)
+        bu_point = sequence.bu_point(s)
+        cell_id = self.id
+        passlist = self.passlist
+        passport_list = passlist.passport_list
+        cell_folder_path = self.folder_path
+        total_dens = self.get_total_dens()
 
-		sequence = self.sequence
-		time_point = sequence.time_point(s)
-		bu_point = sequence.bu_point(s)
-		cell_id = self.id
-		passlist = self.passlist
-		passport_list = passlist.passport_list
-		cell_folder_path = self.folder_path
-		total_dens = self.get_total_dens()
+        file_name = cell_folder_path + '/cell_{}_dens'.format(cell_id)
 
-		file_name = cell_folder_path + '/cell_{}_dens'.format(cell_id)
+       # if os.stat(file_name).st_size == 0:
+        if s == -1:
+            write_file = open(file_name, 'w')
+            txt = ''
+            txt += '       {}\n'.format(time_point)
+            txt += '       {}\n'.format(bu_point)
+            for i in passport_list:
+                zamid = i.zamid
+                dens = i.current_dens
+                txt += '{}  {}\n'.format(zamid, dens)
+            txt += 'Total  {}'.format(total_dens)
+            write_file.write(txt)
+            write_file.close()
 
-	   # if os.stat(file_name).st_size == 0:
-		if s == -1:
-			write_file = open(file_name, 'w')
-			txt = ''
-			txt += '       {}\n'.format(time_point)
-			txt += '       {}\n'.format(bu_point)
-			for i in passport_list:
-				zamid = i.zamid
-				dens = i.current_dens
-				txt += '{}  {}\n'.format(zamid, dens)
-			txt += 'Total  {}'.format(total_dens)
-			write_file.write(txt)
-			write_file.close()
+    # #    elif os.stat(file_name).st_size != 0:
+        elif s >= -1:
+            print('file already exists')
+            read_file = open(file_name, 'r')
+            lines = read_file.readlines()
+            append_file = open(file_name, 'w')
+            for i in range(len(lines)):
+                line = lines[i]
+                if i == 0:
+                    append_txt = ' {}\n'.format(time_point)
+                    append_file.write(line.strip('\n') + append_txt)
+                elif i == 1:
+                    append_txt = ' {}\n'.format(bu_point)
+                    append_file.write(line.strip('\n') + append_txt)
+                elif i == len(lines) - 1:
+                    append_txt = ' {}'.format(total_dens)
+                    append_file.write(line + append_txt)
+                else:
+                    j = i-2
+                    nuc_pass = passport_list[j]
+                    dens = nuc_pass.current_dens
+                    append_txt = ' {}\n'.format(nuc_pass.current_dens)
+                    append_file.write(line.strip('\n') + append_txt)
 
-	# #    elif os.stat(file_name).st_size != 0:
-		elif s >= -1:
-			print('file already exists')
-			read_file = open(file_name, 'r')
-			lines = read_file.readlines()
-			append_file = open(file_name, 'w')
-			for i in range(len(lines)):
-				line = lines[i]
-				if i == 0:
-					append_txt = ' {}\n'.format(time_point)
-					append_file.write(line.strip('\n') + append_txt)
-				elif i == 1:
-					append_txt = ' {}\n'.format(bu_point)
-					append_file.write(line.strip('\n') + append_txt)
-				elif i == len(lines) - 1:
-					append_txt = ' {}'.format(total_dens)
-					append_file.write(line + append_txt)
-				else:
-					j = i-2
-					nuc_pass = passport_list[j]
-					dens = nuc_pass.current_dens
-					append_txt = ' {}\n'.format(nuc_pass.current_dens)
-					append_file.write(line.strip('\n') + append_txt)
+            read_file.close()
+            append_file.close()
 
-			read_file.close()
-			append_file.close()
+    def _print_substep_dens(self, s):
 
-	def _print_substep_dens(self, s):
+        cell_id = self.id
+        passlist = self.passlist
+        passport_list = passlist.passport_list
+        cell_folder_path = self.folder_path
+        sequence = self.sequence
 
-		cell_id = self.id
-		passlist = self.passlist
-		passport_list = passlist.passport_list
-		cell_folder_path = self.folder_path
-		sequence = self.sequence
+        time_subseq = sequence.time_subseq_mat[s] # sequence time subsequence starts with initial point
+        
+        # you can't calculate system_bu_subseq_mat here if the norma is flux and sequence in time
+        # because time to bu requires total power but total power is only known once you have the subseq
+        # evolution of all cells
+        system_bu_subseq = sequence.system_bu_subseq_mat[s]
+        
+        bucell_bu_subseq = sequence.bucell_bu_subseq_mat[s]
+        flux_subseq = sequence.flux_subseq_mat[s]
+        pow_dens_subseq = sequence.pow_dens_subseq_mat[s]
+        # substeps length is s-1
+        substeps = sequence.microsteps_number(s-1)
 
-		time_subseq = sequence.time_subseq_mat[s] # sequence time subsequence starts with initial point
-		
-		# you can't calculate system_bu_subseq_mat here if the norma is flux and sequence in time
-		# because time to bu requires total power but total power is only known once you have the subseq
-		# evolution of all cells
-		system_bu_subseq = sequence.system_bu_subseq_mat[s]
-		
-		bucell_bu_subseq = sequence.bucell_bu_subseq_mat[s]
-		flux_subseq = sequence.flux_subseq_mat[s]
-		pow_dens_subseq = sequence.pow_dens_subseq_mat[s]
-		# substeps length is s-1
-		substeps = sequence.microsteps_number(s-1)
+        file_name = cell_folder_path + '/subdens'
 
-		file_name = cell_folder_path + '/subdens'
+        write_file = open(file_name, 'w')
+        txt = ''
 
-		write_file = open(file_name, 'w')
-		txt = ''
+        txt += '{:<10}'.format('TIME')
+        for ss in range(substeps):
+            txt += '{:^13}'.format(time_subseq[ss])
 
-		txt += '{:<10}'.format('TIME')
-		for ss in range(substeps):
-			txt += '{:^13}'.format(time_subseq[ss])
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<10}'.format('SYS BU')
+        for ss in range(substeps):
+            txt += '{:<13.5E}'.format(system_bu_subseq[ss])
 
-		txt += '{:<10}'.format('SYS BU')
-		for ss in range(substeps):
-			txt += '{:<13.5E}'.format(system_bu_subseq[ss])
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<10}'.format('CELL BU')
+        for ss in range(substeps):
+            txt += '{:<13.5E}'.format(bucell_bu_subseq[ss])
 
-		txt += '{:<10}'.format('CELL BU')
-		for ss in range(substeps):
-			txt += '{:<13.5E}'.format(bucell_bu_subseq[ss])
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<10}'.format('FLUX')
+        for ss in range(substeps):
+            txt += '{:<13.5E}'.format(flux_subseq[ss])
 
-		txt += '{:<10}'.format('FLUX')
-		for ss in range(substeps):
-			txt += '{:<13.5E}'.format(flux_subseq[ss])
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<10}'.format('POW DENS')
+        for ss in range(substeps):
+            txt += '{:<13.5E}'.format(pow_dens_subseq[ss])
 
-		txt += '{:<10}'.format('POW DENS')
-		for ss in range(substeps):
-			txt += '{:<13.5E}'.format(pow_dens_subseq[ss])
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<10}'.format('POW')
+        for ss in range(substeps):
+            txt += '{:<13.5E}'.format(pow_dens_subseq[ss]*self.vol*1E-3)
 
-		txt += '{:<10}'.format('POW')
-		for ss in range(substeps):
-			txt += '{:<13.5E}'.format(pow_dens_subseq[ss]*self.vol*1E-3)
+        txt += '\n\n'
 
-		txt += '\n\n'
+        for nucl in passport_list:
+            zamid = nucl.zamid
+            dens = nucl.get_dens_subseq(s)
+            txt += '{:<10}'.format(zamid)
 
-		for nucl in passport_list:
-			zamid = nucl.zamid
-			dens = nucl.get_dens_subseq(s)
-			txt += '{:<10}'.format(zamid)
+            for ss in range(substeps):
+                txt += '{:<13.5E}'.format(dens[ss])
 
-			for ss in range(substeps):
-				txt += '{:<13.5E}'.format(dens[ss])
+            txt += '\n'
 
-			txt += '\n'
+        write_file.write(txt)
+        write_file.close()
 
-		write_file.write(txt)
-		write_file.close()
+    def _print_summary_subdens(self, summary_path):
 
-	def _print_summary_subdens(self, summary_path):
+        cell_name = self.name
+        passlist = self.passlist
+        passport_list = passlist.passport_list
+        cell_folder_path = self.folder_path
+        sequence = self.sequence
+        time_subseq_mat = sequence.time_subseq_mat
+        system_bu_subseq_mat = sequence.system_bu_subseq_mat
+        bucell_bu_subseq_mat = sequence.bucell_bu_subseq_mat
+        flux_subseq_mat = sequence.flux_subseq_mat
+        pow_dens_subseq_mat = sequence.pow_dens_subseq_mat
+        steps_number = sequence.macrosteps_number
+        file_name = summary_path + '/{}_subdens'.format(cell_name)
 
-		cell_name = self.name
-		passlist = self.passlist
-		passport_list = passlist.passport_list
-		cell_folder_path = self.folder_path
-		sequence = self.sequence
-		time_subseq_mat = sequence.time_subseq_mat
-		system_bu_subseq_mat = sequence.system_bu_subseq_mat
-		bucell_bu_subseq_mat = sequence.bucell_bu_subseq_mat
-		flux_subseq_mat = sequence.flux_subseq_mat
-		pow_dens_subseq_mat = sequence.pow_dens_subseq_mat
-		steps_number = sequence.macrosteps_number
-		file_name = summary_path + '/{}_subdens'.format(cell_name)
+        write_file = open(file_name, 'w')
+        txt = ''
 
-		write_file = open(file_name, 'w')
-		txt = ''
+        txt += '{:<10}'.format('TIME')
+        txt += '{:^13}'.format(time_subseq_mat[0][0]/(24*3600))# in days
+        for s in range(steps_number):
+            substeps_number = sequence.microsteps_number(s)
+            for ss in range(substeps_number):
+                txt += '{:<13.5E}'.format(time_subseq_mat[s+1][ss]/(24*3600))# in days
 
-		txt += '{:<10}'.format('TIME')
-		txt += '{:^13}'.format(time_subseq_mat[0][0]/(24*3600))# in days
-		for s in range(steps_number):
-			substeps_number = sequence.microsteps_number(s)
-			for ss in range(substeps_number):
-				txt += '{:<13.5E}'.format(time_subseq_mat[s+1][ss]/(24*3600))# in days
 
+        # Having onix storing the system bu subseq is a little laborious
+        # I let it aside for now
 
-		# Having onix storing the system bu subseq is a little laborious
-		# I let it aside for now
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<10}'.format('SYS BU')
+        txt += '{:^13}'.format(system_bu_subseq_mat[0][0])
+        for s in range(steps_number):
+            substeps_number = sequence.microsteps_number(s)
+            for ss in range(substeps_number):
+                txt += '{:<13.5E}'.format(system_bu_subseq_mat[s+1][ss])
 
-		txt += '{:<10}'.format('SYS BU')
-		txt += '{:^13}'.format(system_bu_subseq_mat[0][0])
-		for s in range(steps_number):
-			substeps_number = sequence.microsteps_number(s)
-			for ss in range(substeps_number):
-				txt += '{:<13.5E}'.format(system_bu_subseq_mat[s+1][ss])
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<10}'.format('CELL BU')
+        txt += '{:^13}'.format(bucell_bu_subseq_mat[0][0])
+        for s in range(steps_number):
+            substeps_number = sequence.microsteps_number(s)
+            for ss in range(substeps_number):
+                txt += '{:<13.5E}'.format(bucell_bu_subseq_mat[s+1][ss])
 
-		txt += '{:<10}'.format('CELL BU')
-		txt += '{:^13}'.format(bucell_bu_subseq_mat[0][0])
-		for s in range(steps_number):
-			substeps_number = sequence.microsteps_number(s)
-			for ss in range(substeps_number):
-				txt += '{:<13.5E}'.format(bucell_bu_subseq_mat[s+1][ss])
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<10}'.format('FLUX')
+        txt += '{:^13}'.format('')
+        for s in range(steps_number):
+            substeps_number = sequence.microsteps_number(s)
+            for ss in range(substeps_number):
+                txt += '{:<13.5E}'.format(flux_subseq_mat[s+1][ss])
 
-		txt += '{:<10}'.format('FLUX')
-		txt += '{:^13}'.format('')
-		for s in range(steps_number):
-			substeps_number = sequence.microsteps_number(s)
-			for ss in range(substeps_number):
-				txt += '{:<13.5E}'.format(flux_subseq_mat[s+1][ss])
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<10}'.format('POW DENS')
+        txt += '{:^13}'.format('')
+        for s in range(steps_number):
+            substeps_number = sequence.microsteps_number(s)
+            for ss in range(substeps_number):
+                txt += '{:<13.5E}'.format(pow_dens_subseq_mat[s+1][ss])
 
-		txt += '{:<10}'.format('POW DENS')
-		txt += '{:^13}'.format('')
-		for s in range(steps_number):
-			substeps_number = sequence.microsteps_number(s)
-			for ss in range(substeps_number):
-				txt += '{:<13.5E}'.format(pow_dens_subseq_mat[s+1][ss])
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<10}'.format('POW')
+        txt += '{:^13}'.format('')
+        for s in range(steps_number):
+            substeps_number = sequence.microsteps_number(s)
+            for ss in range(substeps_number):
+                txt += '{:<13.5E}'.format(pow_dens_subseq_mat[s+1][ss]*self.vol*1E-3)
 
-		txt += '{:<10}'.format('POW')
-		txt += '{:^13}'.format('')
-		for s in range(steps_number):
-			substeps_number = sequence.microsteps_number(s)
-			for ss in range(substeps_number):
-				txt += '{:<13.5E}'.format(pow_dens_subseq_mat[s+1][ss]*self.vol*1E-3)
+        txt += '\n\n'
 
-		txt += '\n\n'
+        for nucl in passport_list:
+            zamid = nucl.zamid
 
-		for nucl in passport_list:
-			zamid = nucl.zamid
+            dens = nucl.dens_subseq_mat[s+1]
+            txt += '{:<10}'.format(zamid)
+            init_dens = nucl.dens_seq[0]
+            txt += '{:<13.5E}'.format(init_dens)
+            for s in range(steps_number):
+                substeps_number = sequence.microsteps_number(s)
+                for ss in range(substeps_number):
+                    dens = nucl.dens_subseq_mat[s+1]
+                    txt += '{:<13.5E}'.format(dens[ss])
 
-			dens = nucl.dens_subseq_mat[s+1]
-			txt += '{:<10}'.format(zamid)
-			init_dens = nucl.dens_seq[0]
-			txt += '{:<13.5E}'.format(init_dens)
-			for s in range(steps_number):
-				substeps_number = sequence.microsteps_number(s)
-				for ss in range(substeps_number):
-					dens = nucl.dens_subseq_mat[s+1]
-					txt += '{:<13.5E}'.format(dens[ss])
+            txt += '\n'
 
-			txt += '\n'
+        write_file.write(txt)
+        write_file.close()
 
-		write_file.write(txt)
-		write_file.close()
+    def _print_summary_dens(self, summary_path):
 
-	def _print_summary_dens(self, summary_path):
+        cell_name = self.name
+        passlist = self.passlist
+        passport_list = passlist.passport_list
+        cell_folder_path = self.folder_path
+        sequence = self.sequence
+        time_seq = sequence.time_seq
+        system_bu_seq = sequence.system_bu_seq
+        bucell_bu_seq = sequence.bucell_bu_seq
+        flux_seq = sequence.flux_seq
+        pow_dens_seq = sequence.pow_dens_seq
+        steps_number = sequence.macrosteps_number
+        file_name = summary_path + '/{}_dens'.format(cell_name)
 
-		cell_name = self.name
-		passlist = self.passlist
-		passport_list = passlist.passport_list
-		cell_folder_path = self.folder_path
-		sequence = self.sequence
-		time_seq = sequence.time_seq
-		system_bu_seq = sequence.system_bu_seq
-		bucell_bu_seq = sequence.bucell_bu_seq
-		flux_seq = sequence.flux_seq
-		pow_dens_seq = sequence.pow_dens_seq
-		steps_number = sequence.macrosteps_number
-		file_name = summary_path + '/{}_dens'.format(cell_name)
+        write_file = open(file_name, 'w')
+        txt = ''
 
-		write_file = open(file_name, 'w')
-		txt = ''
+        txt += '{:<10}'.format('NUCL')
+        txt += '{:<10}'.format('ZAMID')
+        txt += '{:<13}'.format('TIME [days]')
+        txt += '{:<13.5E}'.format(time_seq[0]/(24*3600))# in days
+        for s in range(steps_number):
+            txt += '{:<13.5E}'.format(time_seq[s+1]/(24*3600))# in days
 
-		txt += '{:<10}'.format('NUCL')
-		txt += '{:<10}'.format('ZAMID')
-		txt += '{:<13}'.format('TIME [days]')
-		txt += '{:<13.5E}'.format(time_seq[0]/(24*3600))# in days
-		for s in range(steps_number):
-			txt += '{:<13.5E}'.format(time_seq[s+1]/(24*3600))# in days
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<20}'.format('')
+        txt += '{:<13}'.format('SYSTEM-BU')
+        txt += '{:<13.5E}'.format(system_bu_seq[0])
+        for s in range(steps_number):
+            txt += '{:<13.5E}'.format(system_bu_seq[s+1])
 
-		txt += '{:<20}'.format('')
-		txt += '{:<13}'.format('SYSTEM-BU')
-		txt += '{:<13.5E}'.format(system_bu_seq[0])
-		for s in range(steps_number):
-			txt += '{:<13.5E}'.format(system_bu_seq[s+1])
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<20}'.format('')
+        txt += '{:<13}'.format('CELL-BU')
+        txt += '{:<13.5E}'.format(bucell_bu_seq[0])
+        for s in range(steps_number):
+            txt += '{:<13.5E}'.format(bucell_bu_seq[s+1])
 
-		txt += '{:<20}'.format('')
-		txt += '{:<13}'.format('CELL-BU')
-		txt += '{:<13.5E}'.format(bucell_bu_seq[0])
-		for s in range(steps_number):
-			txt += '{:<13.5E}'.format(bucell_bu_seq[s+1])
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<20}'.format('')
+        txt += '{:<13}'.format('FLUX')
+        txt += '{:^13}'.format('')
+        for s in range(steps_number):
+                txt += '{:<13.5E}'.format(flux_seq[s])
 
-		txt += '{:<20}'.format('')
-		txt += '{:<13}'.format('FLUX')
-		txt += '{:^13}'.format('')
-		for s in range(steps_number):
-				txt += '{:<13.5E}'.format(flux_seq[s])
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<20}'.format('')
+        txt += '{:<13}'.format('POW-DENS')
+        txt += '{:^13}'.format('')
+        for s in range(steps_number):
+            txt += '{:<13.5E}'.format(pow_dens_seq[s])
 
-		txt += '{:<20}'.format('')
-		txt += '{:<13}'.format('POW-DENS')
-		txt += '{:^13}'.format('')
-		for s in range(steps_number):
-			txt += '{:<13.5E}'.format(pow_dens_seq[s])
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<20}'.format('')
+        txt += '{:<13}'.format('POW')
+        txt += '{:^13}'.format('')
+        for s in range(steps_number):
+                txt += '{:<13.5E}'.format(pow_dens_seq[s]*self.vol*1E-3)
 
-		txt += '{:<20}'.format('')
-		txt += '{:<13}'.format('POW')
-		txt += '{:^13}'.format('')
-		for s in range(steps_number):
-				txt += '{:<13.5E}'.format(pow_dens_seq[s]*self.vol*1E-3)
+        txt += '\n\n'
 
-		txt += '\n\n'
+        for nucl in passport_list:
+            zamid = nucl.zamid
+            name = nucl.name
 
-		for nucl in passport_list:
-			zamid = nucl.zamid
-			name = nucl.name
+            txt += '{:<10}'.format(name)
+            txt += '{:<10}'.format(zamid)
+            txt += '{:^13}'.format('')
+            init_dens = nucl.dens_seq[0]
+            txt += '{:<13.5E}'.format(init_dens)
+            for s in range(steps_number):
+                dens = nucl.dens_seq[s+1]
+                txt += '{:<13.5E}'.format(dens)
 
-			txt += '{:<10}'.format(name)
-			txt += '{:<10}'.format(zamid)
-			txt += '{:^13}'.format('')
-			init_dens = nucl.dens_seq[0]
-			txt += '{:<13.5E}'.format(init_dens)
-			for s in range(steps_number):
-				dens = nucl.dens_seq[s+1]
-				txt += '{:<13.5E}'.format(dens)
+            txt += '\n'
 
-			txt += '\n'
+        write_file.write(txt)
+        write_file.close()
 
-		write_file.write(txt)
-		write_file.close()
+    def _print_summary_activity(self, summary_path):
 
-	def _print_summary_activity(self, summary_path):
+        cell_name = self.name
+        passlist = self.passlist
+        passport_list = passlist.passport_list
+        cell_folder_path = self.folder_path
+        sequence = self.sequence
+        time_seq = sequence.time_seq
+        system_bu_seq = sequence.system_bu_seq
+        bucell_bu_seq = sequence.bucell_bu_seq
+        flux_seq = sequence.flux_seq
+        pow_dens_seq = sequence.pow_dens_seq
+        steps_number = sequence.macrosteps_number
+        file_name = summary_path + '/{}_activity'.format(cell_name)
 
-		cell_name = self.name
-		passlist = self.passlist
-		passport_list = passlist.passport_list
-		cell_folder_path = self.folder_path
-		sequence = self.sequence
-		time_seq = sequence.time_seq
-		system_bu_seq = sequence.system_bu_seq
-		bucell_bu_seq = sequence.bucell_bu_seq
-		flux_seq = sequence.flux_seq
-		pow_dens_seq = sequence.pow_dens_seq
-		steps_number = sequence.macrosteps_number
-		file_name = summary_path + '/{}_activity'.format(cell_name)
+        write_file = open(file_name, 'w')
+        txt = ''
 
-		write_file = open(file_name, 'w')
-		txt = ''
+        txt += '{:<10}'.format('NUCL')
+        txt += '{:<10}'.format('ZAMID')
+        txt += '{:<13}'.format('HL [s]')
+        txt += '{:<13}'.format('TIME [days]')
+        txt += '{:<13.5E}'.format(time_seq[0]/(24*3600))# in days
+        for s in range(steps_number):
+            txt += '{:<13.5E}'.format(time_seq[s+1]/(24*3600))# in days
 
-		txt += '{:<10}'.format('NUCL')
-		txt += '{:<10}'.format('ZAMID')
-		txt += '{:<13}'.format('HL [s]')
-		txt += '{:<13}'.format('TIME [days]')
-		txt += '{:<13.5E}'.format(time_seq[0]/(24*3600))# in days
-		for s in range(steps_number):
-			txt += '{:<13.5E}'.format(time_seq[s+1]/(24*3600))# in days
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<33}'.format('')
+        txt += '{:<13}'.format('SYSTEM-BU')
+        txt += '{:<13.5E}'.format(system_bu_seq[0])
+        for s in range(steps_number):
+            txt += '{:<13.5E}'.format(system_bu_seq[s+1])
 
-		txt += '{:<33}'.format('')
-		txt += '{:<13}'.format('SYSTEM-BU')
-		txt += '{:<13.5E}'.format(system_bu_seq[0])
-		for s in range(steps_number):
-			txt += '{:<13.5E}'.format(system_bu_seq[s+1])
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<33}'.format('')
+        txt += '{:<13}'.format('CELL-BU')
+        txt += '{:<13.5E}'.format(bucell_bu_seq[0])
+        for s in range(steps_number):
+            txt += '{:<13.5E}'.format(bucell_bu_seq[s+1])
 
-		txt += '{:<33}'.format('')
-		txt += '{:<13}'.format('CELL-BU')
-		txt += '{:<13.5E}'.format(bucell_bu_seq[0])
-		for s in range(steps_number):
-			txt += '{:<13.5E}'.format(bucell_bu_seq[s+1])
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<33}'.format('')
+        txt += '{:<13}'.format('FLUX')
+        txt += '{:^13}'.format('')
+        for s in range(steps_number):
+                txt += '{:<13.5E}'.format(flux_seq[s])
 
-		txt += '{:<33}'.format('')
-		txt += '{:<13}'.format('FLUX')
-		txt += '{:^13}'.format('')
-		for s in range(steps_number):
-				txt += '{:<13.5E}'.format(flux_seq[s])
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<33}'.format('')
+        txt += '{:<13}'.format('POW-DENS')
+        txt += '{:^13}'.format('')
+        for s in range(steps_number):
+            txt += '{:<13.5E}'.format(pow_dens_seq[s])
 
-		txt += '{:<33}'.format('')
-		txt += '{:<13}'.format('POW-DENS')
-		txt += '{:^13}'.format('')
-		for s in range(steps_number):
-			txt += '{:<13.5E}'.format(pow_dens_seq[s])
+        txt += '\n'
 
-		txt += '\n'
+        txt += '{:<33}'.format('')
+        txt += '{:<13}'.format('POW')
+        txt += '{:^13}'.format('')
+        for s in range(steps_number):
+                txt += '{:<13.5E}'.format(pow_dens_seq[s]*self.vol*1E-3)
 
-		txt += '{:<33}'.format('')
-		txt += '{:<13}'.format('POW')
-		txt += '{:^13}'.format('')
-		for s in range(steps_number):
-				txt += '{:<13.5E}'.format(pow_dens_seq[s]*self.vol*1E-3)
+        txt += '\n\n'
 
-		txt += '\n\n'
+        for nucl in passport_list:
+            zamid = nucl.zamid
+            name = nucl.name
+            decay = nucl.decay_a
 
-		for nucl in passport_list:
-			zamid = nucl.zamid
-			name = nucl.name
-			decay = nucl.decay_a
+            if decay == None:
 
-			if decay == None:
+                txt += '{:<10}'.format(name)
+                txt += '{:<10}'.format(zamid)
+                txt += '{:<13}'.format('N/A')
+                init_act = 0.0
+                txt += '{:<13}'.format('')
+                txt += '{:<13.5E}'.format(init_act)
+                for s in range(steps_number):
+                    act = 0.0
+                    txt += '{:<13.5E}'.format(act)
 
-				txt += '{:<10}'.format(name)
-				txt += '{:<10}'.format(zamid)
-				txt += '{:<13}'.format('N/A')
-				init_act = 0.0
-				txt += '{:<13}'.format('')
-				txt += '{:<13.5E}'.format(init_act)
-				for s in range(steps_number):
-					act = 0.0
-					txt += '{:<13.5E}'.format(act)
 
+            elif decay == 'stable':
 
-			elif decay == 'stable':
+                txt += '{:<10}'.format(name)
+                txt += '{:<10}'.format(zamid)
+                txt += '{:<13}'.format('stable')
+                init_act = 0.0
+                txt += '{:<13}'.format('')
+                txt += '{:<13.5E}'.format(init_act)
+                for s in range(steps_number):
+                    act = 0.0
+                    txt += '{:<13.5E}'.format(act)
 
-				txt += '{:<10}'.format(name)
-				txt += '{:<10}'.format(zamid)
-				txt += '{:<13}'.format('stable')
-				init_act = 0.0
-				txt += '{:<13}'.format('')
-				txt += '{:<13.5E}'.format(init_act)
-				for s in range(steps_number):
-					act = 0.0
-					txt += '{:<13.5E}'.format(act)
 
+            else:
 
-			else:
+                decay_val = decay['total decay']
+                hl = decay['half-life']
+                txt += '{:<10}'.format(name)
+                txt += '{:<10}'.format(zamid)
+                txt += '{:<13.5E}'.format(hl)
+                init_act = nucl.dens_seq[0]*decay_val
+                txt += '{:<13}'.format('')
+                txt += '{:<13.5E}'.format(init_act)
+                for s in range(steps_number):
+                    dens = nucl.dens_seq[s+1]
+                    act = dens*decay_val
+                    txt += '{:<13.5E}'.format(act)
 
-				decay_val = decay['total decay']
-				hl = decay['half-life']
-				txt += '{:<10}'.format(name)
-				txt += '{:<10}'.format(zamid)
-				txt += '{:<13.5E}'.format(hl)
-				init_act = nucl.dens_seq[0]*decay_val
-				txt += '{:<13}'.format('')
-				txt += '{:<13.5E}'.format(init_act)
-				for s in range(steps_number):
-					dens = nucl.dens_seq[s+1]
-					act = dens*decay_val
-					txt += '{:<13.5E}'.format(act)
+            txt += '\n'
 
-			txt += '\n'
+        write_file.write(txt)
+        write_file.close()
 
-		write_file.write(txt)
-		write_file.close()
 
+    def _print_summary_flux_spectrum(self, summary_path, mg_energy_bin):
 
-	def _print_summary_flux_spectrum(self, summary_path, mg_energy_bin):
+        bucell_id = self.id
+        passlist = self.passlist
+        passport_list = passlist.passport_list
+        sequence = self.sequence
+        time_seq = sequence.time_seq
+        system_bu_seq = sequence.system_bu_seq
+        bucell_bu_seq = sequence.bucell_bu_seq
+        flux_spectrum_seq = sequence.flux_spectrum_seq
 
-		bucell_id = self.id
-		passlist = self.passlist
-		passport_list = passlist.passport_list
-		sequence = self.sequence
-		time_seq = sequence.time_seq
-		system_bu_seq = sequence.system_bu_seq
-		bucell_bu_seq = sequence.bucell_bu_seq
-		flux_spectrum_seq = sequence.flux_spectrum_seq
+        bin_len = [x-y for x,y in zip(mg_energy_bin[1:],mg_energy_bin[:-1])]
+        mid_points = [(x+y)/2 for x,y in zip(mg_energy_bin[1:],mg_energy_bin[:-1])]
 
-		bin_len = [x-y for x,y in zip(mg_energy_bin[1:],mg_energy_bin[:-1])]
-		mid_points = [(x+y)/2 for x,y in zip(mg_energy_bin[1:],mg_energy_bin[:-1])]
+        file_name = summary_path + '/{}_flux_spectrum'.format(self.name)
+        write_file = open(file_name, 'w')
 
-		file_name = summary_path + '/{}_flux_spectrum'.format(self.name)
-		write_file = open(file_name, 'w')
+        txt = '{:<34}'.format('ENERGY-BIN')
+        for val in mg_energy_bin:
+            txt += '{:^18.10E}'.format(val)
+        txt += '\n'
+        txt += '{:<52}'.format('ENERGY-BIN-LEN')
+        for val in bin_len:
+            txt += '{:^18.10E}'.format(val)
+        txt += '\n'
+        txt += '{:<52}'.format('ENERGY-MID-POINTS')
+        for val in mid_points:
+            txt += '{:^18.10E}'.format(val)
+        txt += '\n\n'
 
-		txt = '{:<34}'.format('ENERGY-BIN')
-		for val in mg_energy_bin:
-			txt += '{:^18.10E}'.format(val)
-		txt += '\n'
-		txt += '{:<52}'.format('ENERGY-BIN-LEN')
-		for val in bin_len:
-			txt += '{:^18.10E}'.format(val)
-		txt += '\n'
-		txt += '{:<52}'.format('ENERGY-MID-POINTS')
-		for val in mid_points:
-			txt += '{:^18.10E}'.format(val)
-		txt += '\n\n'
+        flux_spectrum_seq_lethargy = []
+        for i in range(len(flux_spectrum_seq)):
+            flux_spectrum_seq_lethargy.append([x*y/z for x,y,z in zip(flux_spectrum_seq[i], mid_points, bin_len)])
 
-		flux_spectrum_seq_lethargy = []
-		for i in range(len(flux_spectrum_seq)):
-			flux_spectrum_seq_lethargy.append([x*y/z for x,y,z in zip(flux_spectrum_seq[i], mid_points, bin_len)])
+        txt += '  TIME    SYSTEM-BU    BUCELL-BU  \n\n'
 
-		txt += '  TIME    SYSTEM-BU    BUCELL-BU  \n\n'
+        for i in range(len(time_seq)-1):
+            time = time_seq[i]/(24*3600) # in day
+            system_bu = system_bu_seq[i]
+            bucell_bu = bucell_bu_seq[i]
 
-		for i in range(len(time_seq)-1):
-			time = time_seq[i]/(24*3600) # in day
-			system_bu = system_bu_seq[i]
-			bucell_bu = bucell_bu_seq[i]
+            txt += '{:^8.6}'.format(float(time))
+            txt += '{:^13.6}'.format(float(system_bu))
+            txt += '{:^13.6}'.format(float(bucell_bu))
+            txt += '{:18}'.format('')
 
-			txt += '{:^8.6}'.format(float(time))
-			txt += '{:^13.6}'.format(float(system_bu))
-			txt += '{:^13.6}'.format(float(bucell_bu))
-			txt += '{:18}'.format('')
+            for val in flux_spectrum_seq_lethargy[i]:
+                txt += '{:^18.10E}'.format(val)
 
-			for val in flux_spectrum_seq_lethargy[i]:
-				txt += '{:^18.10E}'.format(val)
+            txt += '\n'
 
-			txt += '\n'
 
+        write_file.write(txt)
+        write_file.close()
 
-		write_file.write(txt)
-		write_file.close()
 
+    def _print_summary_xs(self, summary_path):
+
+        bucell_id = self.id
+        passlist = self.passlist
+        passport_list = passlist.passport_list
+        sequence = self.sequence
+        time_seq = sequence.time_seq
+        system_bu_seq = sequence.system_bu_seq
+        bucell_bu_seq = sequence.bucell_bu_seq
+
+        file_name = summary_path + '/{}_xs_lib'.format(self.name)
+        write_file = open(file_name, 'w')
+
+        # Write time, system burnup and cell burnup
+        txt = '{:<51}'.format('TIME')
+        for time in time_seq[1:]: # initial time is discarded as no XS are defined for it
+            time = time/(24*3600)
+            txt += '{:^17}'.format(time)
+        txt += '\n'
+
+        txt += '{:<51}'.format('SYSTEM-BU')
+        for bu in system_bu_seq[1:]: # initial time is discarded as no XS are defined for it
+            txt += '{:^17.5E}'.format(bu)
+        txt += '\n'
+
+        txt += '{:<51}'.format('BUCELL-BU')
+        for bu in bucell_bu_seq[1:]: # initial time is discarded as no XS are defined for it
+            txt += '{:^17.5E}'.format(bu)
+        txt += '\n'
+
+        txt += '\n\n--- Actinides ---\n\n'
+        #txt += utils.printer.xs_lib_header
+
+        #loop over actinides
+        for nucl in self.get_act_passport_list():
+            nucl_name = nucl.name
+            nucl_zamid = nucl.zamid
+            nucl_xs_seq = nucl.xs_seq
+            # If this nuclide has not been assigned cross section, continue
+            if nucl_xs_seq == None:
+                continue
+            count = 0
+            sample_dict = nucl_xs_seq[0] # the xs names should be the same at each step
+            for xs_name in sample_dict:
+                # removal should not be printed on the lib
+                if xs_name ==  'removal':
+                    continue
+                if count == 0:
+                    txt += '{:^17}'.format(nucl_name)
+                else:
+                    txt += '{:^17}'.format('')
+                txt += '{:^17}'.format(nucl_zamid)
+                txt += '{:^17}'.format(xs_name)
+                for xs_dict in nucl_xs_seq:
+                    xs_val = xs_dict[xs_name][0]
+                    txt += '{:^17.8E}'.format(xs_val)
+
+                txt += '\n'
+                count += 1
+
+        txt += '\n\n--- Fission Products ---\n\n'
+        txt += utils.printer.xs_lib_header
+
+        #loop over fission products
+        for nucl in self.get_fp_passport_list():
+            nucl_name = nucl.name
+            nucl_zamid = nucl.zamid
+            nucl_xs_seq = nucl.xs_seq
+            # If this nuclide has not been assigned cross section, continue
+            if nucl_xs_seq == None:
+                continue
+            count = 0
+            sample_dict = nucl_xs_seq[0] # the xs names should be the same at each step
+            for xs_name in sample_dict:
+                # removal should not be printed on the lib
+                if xs_name ==  'removal':
+                    continue
+                if count == 0:
+                    txt += '{:^17}'.format(nucl_name)
+                else:
+                    txt += '{:^17}'.format('')
+                txt += '{:^17}'.format(nucl_zamid)
+                txt += '{:^17}'.format(xs_name)
+                for xs_dict in nucl_xs_seq:
+                    xs_val = xs_dict[xs_name][0]
+                    txt += '{:^17.8E}'.format(xs_val)
+
+                txt += '\n'
+                count += 1
+
+        txt += '\n\n--- Activation Products ---\n\n'
+        txt += utils.printer.xs_lib_header
+
+        #loop over activation products
+        for nucl in self.get_avt_passport_list():
+            nucl_name = nucl.name
+            nucl_zamid = nucl.zamid
+            nucl_xs_seq = nucl.xs_seq
+            # If this nuclide has not been assigned cross section, continue
+            if nucl_xs_seq == None:
+                continue
+            count = 0
+            sample_dict = nucl_xs_seq[0] # the xs names should be the same at each step
+            for xs_name in sample_dict:
+                # removal should not be printed on the lib
+                if xs_name ==  'removal':
+                    continue
+                if count == 0:
+                    txt += '{:^17}'.format(nucl_name)
+                else:
+                    txt += '{:^17}'.format('')
+                txt += '{:^17}'.format(nucl_zamid)
+                txt += '{:^17}'.format(xs_name)
+                for xs_dict in nucl_xs_seq:
+                    xs_val = xs_dict[xs_name][0]
+                    txt += '{:^17.8E}'.format(xs_val)
 
-	def _print_summary_xs(self, summary_path):
+                txt += '\n'
+                count += 1
 
-		bucell_id = self.id
-		passlist = self.passlist
-		passport_list = passlist.passport_list
-		sequence = self.sequence
-		time_seq = sequence.time_seq
-		system_bu_seq = sequence.system_bu_seq
-		bucell_bu_seq = sequence.bucell_bu_seq
+        write_file.write(txt)
+        write_file.close()
 
-		file_name = summary_path + '/{}_xs_lib'.format(self.name)
-		write_file = open(file_name, 'w')
+    # Decay lib shoult not change. But I still implement an on the fly get
 
-		# Write time, system burnup and cell burnup
-		txt = '{:<51}'.format('TIME')
-		for time in time_seq[1:]: # initial time is discarded as no XS are defined for it
-			time = time/(24*3600)
-			txt += '{:^17}'.format(time)
-		txt += '\n'
+    def _print_summary_isomeric_branching_ratio(self, summary_path):
 
-		txt += '{:<51}'.format('SYSTEM-BU')
-		for bu in system_bu_seq[1:]: # initial time is discarded as no XS are defined for it
-			txt += '{:^17.5E}'.format(bu)
-		txt += '\n'
+        bucell_id = self.id
+        sequence = self.sequence
+        time_seq = sequence.time_seq
+        system_bu_seq = sequence.system_bu_seq
+        bucell_bu_seq = sequence.bucell_bu_seq
+        isomeric_branching_ratio_seq = sequence.isomeric_branching_ratio_seq
 
-		txt += '{:<51}'.format('BUCELL-BU')
-		for bu in bucell_bu_seq[1:]: # initial time is discarded as no XS are defined for it
-			txt += '{:^17.5E}'.format(bu)
-		txt += '\n'
 
-		txt += '\n\n--- Actinides ---\n\n'
-		#txt += utils.printer.xs_lib_header
+        file_name = summary_path + '/{}_isomeric_branching_ratio'.format(self.name)
+        write_file = open(file_name, 'w')
 
-		#loop over actinides
-		for nucl in self.get_act_passport_list():
-			nucl_name = nucl.name
-			nucl_zamid = nucl.zamid
-			nucl_xs_seq = nucl.xs_seq
-			# If this nuclide has not been assigned cross section, continue
-			if nucl_xs_seq == None:
-				continue
-			count = 0
-			sample_dict = nucl_xs_seq[0] # the xs names should be the same at each step
-			for xs_name in sample_dict:
-				# removal should not be printed on the lib
-				if xs_name ==  'removal':
-					continue
-				if count == 0:
-					txt += '{:^17}'.format(nucl_name)
-				else:
-					txt += '{:^17}'.format('')
-				txt += '{:^17}'.format(nucl_zamid)
-				txt += '{:^17}'.format(xs_name)
-				for xs_dict in nucl_xs_seq:
-					xs_val = xs_dict[xs_name][0]
-					txt += '{:^17.8E}'.format(xs_val)
+        # Write time, system burnup and cell burnup
+        txt = '{:<17}'.format('TIME')
+        for time in time_seq[1:]: # initial time is discarded as no XS are defined for it
+            time = time/(24*3600)
+            txt += '{:^17}'.format(time)
+        txt += '\n'
 
-				txt += '\n'
-				count += 1
+        txt += '{:<17}'.format('SYSTEM-BU')
+        for bu in system_bu_seq[1:]: # initial time is discarded as no XS are defined for it
+            txt += '{:^17.5E}'.format(bu)
+        txt += '\n'
 
-		txt += '\n\n--- Fission Products ---\n\n'
-		txt += utils.printer.xs_lib_header
+        txt += '{:<17}'.format('BUCELL-BU')
+        for bu in bucell_bu_seq[1:]: # initial time is discarded as no XS are defined for it
+            txt += '{:^17.5E}'.format(bu)
+        txt += '\n\n'
 
-		#loop over fission products
-		for nucl in self.get_fp_passport_list():
-			nucl_name = nucl.name
-			nucl_zamid = nucl.zamid
-			nucl_xs_seq = nucl.xs_seq
-			# If this nuclide has not been assigned cross section, continue
-			if nucl_xs_seq == None:
-				continue
-			count = 0
-			sample_dict = nucl_xs_seq[0] # the xs names should be the same at each step
-			for xs_name in sample_dict:
-				# removal should not be printed on the lib
-				if xs_name ==  'removal':
-					continue
-				if count == 0:
-					txt += '{:^17}'.format(nucl_name)
-				else:
-					txt += '{:^17}'.format('')
-				txt += '{:^17}'.format(nucl_zamid)
-				txt += '{:^17}'.format(xs_name)
-				for xs_dict in nucl_xs_seq:
-					xs_val = xs_dict[xs_name][0]
-					txt += '{:^17.8E}'.format(xs_val)
+        #loop over nucl in isomeric branching 
+        unordered_nucl_list = []
+        for nucl in isomeric_branching_ratio_seq[0]:
+            unordered_nucl_list.append(nucl)
 
-				txt += '\n'
-				count += 1
+        ordered_nucl_list = utils.order_nuclide_name_per_z(unordered_nucl_list)
 
-		txt += '\n\n--- Activation Products ---\n\n'
-		txt += utils.printer.xs_lib_header
+        for nucl in ordered_nucl_list:
 
-		#loop over activation products
-		for nucl in self.get_avt_passport_list():
-			nucl_name = nucl.name
-			nucl_zamid = nucl.zamid
-			nucl_xs_seq = nucl.xs_seq
-			# If this nuclide has not been assigned cross section, continue
-			if nucl_xs_seq == None:
-				continue
-			count = 0
-			sample_dict = nucl_xs_seq[0] # the xs names should be the same at each step
-			for xs_name in sample_dict:
-				# removal should not be printed on the lib
-				if xs_name ==  'removal':
-					continue
-				if count == 0:
-					txt += '{:^17}'.format(nucl_name)
-				else:
-					txt += '{:^17}'.format('')
-				txt += '{:^17}'.format(nucl_zamid)
-				txt += '{:^17}'.format(xs_name)
-				for xs_dict in nucl_xs_seq:
-					xs_val = xs_dict[xs_name][0]
-					txt += '{:^17.8E}'.format(xs_val)
+            txt += '{:<17}'.format(nucl)
 
-				txt += '\n'
-				count += 1
+            # First loop over the ground state ratio
+            for isomeric_branching_ratio in isomeric_branching_ratio_seq:
 
-		write_file.write(txt)
-		write_file.close()
+                nucl_data = isomeric_branching_ratio[nucl]
+                ratio_to_gs = nucl_data['(n,gamma)']
+                txt += '{:^17.4}'.format(ratio_to_gs)
 
-	# Decay lib shoult not change. But I still implement an on the fly get
+            txt += '\n'
 
-	def _print_summary_isomeric_branching_ratio(self, summary_path):
+            # then loop over the metastable state ratio
+            txt += '{:<17}'.format('')
+            for isomeric_branching_ratio in isomeric_branching_ratio_seq:
 
-		bucell_id = self.id
-		sequence = self.sequence
-		time_seq = sequence.time_seq
-		system_bu_seq = sequence.system_bu_seq
-		bucell_bu_seq = sequence.bucell_bu_seq
-		isomeric_branching_ratio_seq = sequence.isomeric_branching_ratio_seq
+                nucl_data = isomeric_branching_ratio[nucl]
+                ratio_to_ms = nucl_data['(n,gamma)X']
+                txt += '{:^17.4}'.format(ratio_to_ms)
 
+            txt += '\n'
 
-		file_name = summary_path + '/{}_isomeric_branching_ratio'.format(self.name)
-		write_file = open(file_name, 'w')
+        write_file.write(txt)
+        write_file.close()
 
-		# Write time, system burnup and cell burnup
-		txt = '{:<17}'.format('TIME')
-		for time in time_seq[1:]: # initial time is discarded as no XS are defined for it
-			time = time/(24*3600)
-			txt += '{:^17}'.format(time)
-		txt += '\n'
+    @property
+    def get_decay_nucl(self):
+        """Returns the list of nuclides for which decay data exists in the provided decay library.
+        """
+        decay_lib = self._decay_a_lib
+        decay_nucl = utils.get_decay_nucl(decay_lib)
 
-		txt += '{:<17}'.format('SYSTEM-BU')
-		for bu in system_bu_seq[1:]: # initial time is discarded as no XS are defined for it
-			txt += '{:^17.5E}'.format(bu)
-		txt += '\n'
+        return decay_nucl
 
-		txt += '{:<17}'.format('BUCELL-BU')
-		for bu in bucell_bu_seq[1:]: # initial time is discarded as no XS are defined for it
-			txt += '{:^17.5E}'.format(bu)
-		txt += '\n\n'
 
-		#loop over nucl in isomeric branching 
-		unordered_nucl_list = []
-		for nucl in isomeric_branching_ratio_seq[0]:
-			unordered_nucl_list.append(nucl)
 
-		ordered_nucl_list = utils.order_nuclide_name_per_z(unordered_nucl_list)
+    # xs lib can change so I implement a get on the fly
 
-		for nucl in ordered_nucl_list:
 
-			txt += '{:<17}'.format(nucl)
+    @property
+    def get_xs_nucl(self):
+        """Returns the list of nuclides for which cross section data exists in the provided cross section library.
+        """
+        xs_lib = self._xs_lib
+        xs_nucl = utils.get_xs_nucl(xs_lib)
 
-			# First loop over the ground state ratio
-			for isomeric_branching_ratio in isomeric_branching_ratio_seq:
+        return xs_nucl
 
-				nucl_data = isomeric_branching_ratio[nucl]
-				ratio_to_gs = nucl_data['(n,gamma)']
-				txt += '{:^17.4}'.format(ratio_to_gs)
 
-			txt += '\n'
+    # fy lib can change so I implement a get on the fly
 
-			# then loop over the metastable state ratio
-			txt += '{:<17}'.format('')
-			for isomeric_branching_ratio in isomeric_branching_ratio_seq:
+    def get_fy_nucl(self):
+        """Returns the list of fission products for which fission yields data exists in the provided fission yield data library.
+        """
+        fy_lib = self._fy_lib
+        fy_nucl = utils.get_fy_nucl(fy_lib)
 
-				nucl_data = isomeric_branching_ratio[nucl]
-				ratio_to_ms = nucl_data['(n,gamma)X']
-				txt += '{:^17.4}'.format(ratio_to_ms)
+        return fy_nucl
 
-			txt += '\n'
 
-		write_file.write(txt)
-		write_file.close()
 
-	@property
-	def get_decay_nucl(self):
 
-		decay_lib = self._decay_a_lib
-		decay_nucl = utils.get_decay_nucl(decay_lib)
+    def get_lib_nucl(self):
+        """Returns the full list of nuclides for which there are data in the nuclear libraries (deay, cross section or fission yield). This is the full list of nuclides modelled in the depletion network.
 
-		return decay_nucl
+        This command does not work when the mode for cross sections is set to 'constant lib'.
 
+        """
 
+        decay_a_lib = self._decay_a_lib
 
-	# xs lib can change so I implement a get on the fly
+        # In couple mode, the xs_lib is only set after MC simulation. Therefore, it would only be possible
+        # to build lib_nucl after MC call. This is not practical as lib_nucl is needed before the loop begins
+        # Instead, MC_XS_nucl_list is used. It is not a lib but a list of nuclides.
+        # This change is however not compatible if user wants to use constant cross section as lib nucl will rely
+        # only on MC_nucl_list for nuclides with xs data
+        #xs_lib = self._xs_lib
+        MC_XS_nucl_list = self.MC_XS_nucl_list
 
+        fy_lib = self.fy_lib
 
-	@property
-	def get_xs_nucl(self):
+        decay_fy_lib_list = [decay_a_lib, fy_lib]
 
-		xs_lib = self._xs_lib
-		xs_nucl = utils.get_xs_nucl(xs_lib)
+        #if decay_a_lib == None and xs_lib == None and fy_lib == None:
+        if decay_a_lib == None and fy_lib == None:
+            raise No_nuclear_lib_set('Cell {} has not been attributed decay and fy data library'.format(self.id))
 
-		return xs_nucl
+        decay_fy_lib_list = [dic for dic in decay_fy_lib_list if dic != None]
 
+        decay_fy_lib_nucl = utils.get_all_nucl(decay_fy_lib_list)
+        #print (decay_fy_lib_nucl)
+        unfiltered_lib_nucl = decay_fy_lib_nucl + MC_XS_nucl_list
+        lib_nucl = list(set(unfiltered_lib_nucl))
 
-	# fy lib can change so I implement a get on the fly
 
-	def get_fy_nucl(self):
+        return lib_nucl
 
-		fy_lib = self._fy_lib
-		fy_nucl = utils.get_fy_nucl(fy_lib)
 
-		return fy_nucl
+    def get_fy_parent_nucl(self):
+        """Returns the list of fissioning parents for which data exist in the fission yield library.
+        """
 
+        fy_lib = self._fy_lib
+        fy_parent = utils.get_fy_parent_nucl(fy_lib)
 
+        return fy_parent
 
 
-	def get_lib_nucl(self):
+    # This set somehow uptset the on the fly nature of the 
+    # various nuclide list. Will have to deal with that later
 
-		decay_a_lib = self._decay_a_lib
+    # def _set_nucl_list(self):
 
-		# In couple mode, the xs_lib is only set after MC simulation. Therefore, it would only be possible
-		# to build lib_nucl after MC call. This is not practical as lib_nucl is needed before the loop begins
-		# Instead, MC_XS_nucl_list is used. It is not a lib but a list of nuclides.
-		# This change is however not compatible if user wants to use constant cross section as lib nucl will rely
-		# only on MC_nucl_list for nuclides with xs data
-		#xs_lib = self._xs_lib
-		MC_XS_nucl_list = self.MC_XS_nucl_list
+    #   decay_a_lib = self._decay_a_lib
+    #   xs_lib = self._xs_lib
+    #   fy_lib = self._fy_lib
 
-		fy_lib = self.fy_lib
+    #   self._decay_nucl = self.get_decay_nucl
+    #   self._xs_nucl = self.get_xs_nucl
+    #   self._fy_nucl = self.get_fy_nucl
+    #   self._fy_parent_nucl = self.get_fy_parent_nucl
+    #   self._all_nucl = self.get_all_nucl
 
-		decay_fy_lib_list = [decay_a_lib, fy_lib]
 
-		#if decay_a_lib == None and xs_lib == None and fy_lib == None:
-		if decay_a_lib == None and fy_lib == None:
-			raise No_nuclear_lib_set('Cell {} has not been attributed decay and fy data library'.format(self.id))
+    def _set_MC_tallies(self, mc_nuclide_densities, flux_tally, flux_spectrum_tally, rxn_rate_tally, sampled_isomeric_branching_data, sampled_ng_cross_section_data, xs_mode, s):
 
-		decay_fy_lib_list = [dic for dic in decay_fy_lib_list if dic != None]
+        MC_flux = flux_tally.mean[0][0][0]
+        self.sequence._set_macrostep_MC_flux(MC_flux)
 
-		decay_fy_lib_nucl = utils.get_all_nucl(decay_fy_lib_list)
-		#print (decay_fy_lib_nucl)
-		unfiltered_lib_nucl = decay_fy_lib_nucl + MC_XS_nucl_list
-		lib_nucl = list(set(unfiltered_lib_nucl))
+        flux_spectrum = [x[0][0] for x in flux_spectrum_tally.mean]
+        self.sequence._set_macrostep_flux_spectrum(flux_spectrum)
 
+        self._set_step_isomeric_branching_ratio(flux_spectrum, sampled_isomeric_branching_data, sampled_ng_cross_section_data)
 
-		return lib_nucl
+        # rxn_rate_tally are distributed in a xs_dict object
+        xs_lib = utils.xs_lib('{} rxn rate'.format(self.name))
+        nuclides = rxn_rate_tally.nuclides
+        scores = rxn_rate_tally.scores
+        macro_xs = rxn_rate_tally / flux_tally
+        passlist = self.passlist
+        nucl_dict = passlist._get_name_passport_dict()
+        isomeric_branching_ratio = self.sequence.current_isomeric_branching_ratio
 
 
-	def get_fy_parent_nucl(self):
+        for nucl in nuclides:
 
-		fy_lib = self._fy_lib
-		fy_parent = utils.get_fy_parent_nucl(fy_lib)
+            onix_nucl_name = utils.openmc_name_to_onix_name(nucl)
+            nucl_passport = nucl_dict[onix_nucl_name]
 
-		return fy_parent
+            # If the nuclide is artificially added to openmc material with 1 atm
+            # Its density set for onix is 0
+            # But the macro xs need to be divided by 1E-24 and not 0
 
+            if nucl_passport.current_dens == 0.0:
 
-	# This set somehow uptset the on the fly nature of the 
-	# various nuclide list. Will have to deal with that later
+                # mc_nuclide_densities gives a tuples where the first element is the nuclide name
+                # and the second element is the density
+                #nucl_dens = mc_nuclide_densities[nucl][1]
 
-	# def _set_nucl_list(self):
+                nucl_dens = self.zero_dens_1_atm
+            else:
+                nucl_dens = nucl_passport.current_dens
+            xs_dict = {}
+            for score in scores:
+                macro_xs_val = macro_xs.get_values(scores = ['({} / flux)'.format(score)], nuclides = ['({} / total)'.format(nucl)])[0][0][0]
+                xs_val = macro_xs_val/nucl_dens
+                xs_dict[score] = xs_val
+            xs_lib.add_xs_dict(nucl_passport.zamid, xs_dict)
 
-	# 	decay_a_lib = self._decay_a_lib
-	# 	xs_lib = self._xs_lib
-	# 	fy_lib = self._fy_lib
+        # This function screens the the xs_lib and look for which nuclide ngamma reactions needs to 
+        # be branched
+        xs_lib._isomeric_branching_weighting(isomeric_branching_ratio)
 
-	# 	self._decay_nucl = self.get_decay_nucl
-	# 	self._xs_nucl = self.get_xs_nucl
-	# 	self._fy_nucl = self.get_fy_nucl
-	# 	self._fy_parent_nucl = self.get_fy_parent_nucl
-	# 	self._all_nucl = self.get_all_nucl
+        # Here, in constant lib mode, if it is the first step, you need to call 
+        # overwrite xs (because the xs will have been already set by constant lib)
+        if xs_mode == 'constant lib' and s == 1:
+            self._overwrite_xs(xs_lib)
+        else:
+            self.set_xs(xs_lib)
 
+    def _set_step_isomeric_branching_ratio(self, flux_spectrum, sampled_isomeric_branching_data, sampled_ng_cross_section_data):
 
-	def _set_MC_tallies(self, mc_nuclide_densities, flux_tally, flux_spectrum_tally, rxn_rate_tally, sampled_isomeric_branching_data, sampled_ng_cross_section_data, xs_mode, s):
+        isomeric_branching_ratio = {}
+        for nucl in sampled_isomeric_branching_data:
+            if nucl in sampled_ng_cross_section_data:
+                isomeric_branching_ratio[nucl] = {}
+                branching_data = sampled_isomeric_branching_data[nucl]
+                xs_data = sampled_ng_cross_section_data[nucl]
 
-		MC_flux = flux_tally.mean[0][0][0]
-		self.sequence._set_macrostep_MC_flux(MC_flux)
+                numerator_ground = sum([x*y*z for x,y,z in zip(flux_spectrum,branching_data['0'],xs_data)])
+                numerator_excited = sum([x*y*z for x,y,z in zip(flux_spectrum,branching_data['1'],xs_data)])
+                denominator = sum([x*y for x,y in zip(flux_spectrum,xs_data)])
+                isomeric_branching_ratio[nucl]['(n,gamma)'] = numerator_ground/denominator
+                isomeric_branching_ratio[nucl]['(n,gamma)X'] = numerator_excited/denominator
 
-		flux_spectrum = [x[0][0] for x in flux_spectrum_tally.mean]
-		self.sequence._set_macrostep_flux_spectrum(flux_spectrum)
+        self.sequence._set_macrostep_isomeric_branching_ratio(isomeric_branching_ratio)
+        
 
-		self._set_step_isomeric_branching_ratio(flux_spectrum, sampled_isomeric_branching_data, sampled_ng_cross_section_data)
+    def _set_allreacs_dic(self, s, ss, ssn):
 
-		# rxn_rate_tally are distributed in a xs_dict object
-		xs_lib = utils.xs_lib('{} rxn rate'.format(self.name))
-		nuclides = rxn_rate_tally.nuclides
-		scores = rxn_rate_tally.scores
-		macro_xs = rxn_rate_tally / flux_tally
-		passlist = self.passlist
-		nucl_dict = passlist._get_name_passport_dict()
-		isomeric_branching_ratio = self.sequence.current_isomeric_branching_ratio
 
+        passlist = self.passlist
+        passport_list = passlist.passport_list
+        passport_dict = passlist._get_zamid_passport_dict()
 
-		for nucl in nuclides:
+        sequence = self.sequence
 
-			onix_nucl_name = utils.openmc_name_to_onix_name(nucl)
-			nucl_passport = nucl_dict[onix_nucl_name]
+        #flux = sequence.flux_point(s)
+        flux = sequence.current_flux
+        N = len(passport_list)
 
-			# If the nuclide is artificially added to openmc material with 1 atm
-			# Its density set for onix is 0
-			# But the macro xs need to be divided by 1E-24 and not 0
+        # EOS = 1 means that the sequence reached end of step
+        EOS = 0
+        if ss == ssn - 1:
+            EOS = 1
 
-			if nucl_passport.current_dens == 0.0:
+        for row in range(N):
+            nuc_pass = passport_list[row]
+            nuc_zamid = nuc_pass.zamid
+            nuc_name = nuc_pass.name
+            nuc_dens = nuc_pass.current_dens
+            creation_dic = {}
+            destruction_dic = {}
+            allreacs_dic = {}
 
-				# mc_nuclide_densities gives a tuples where the first element is the nuclide name
-				# and the second element is the density
-				#nucl_dens = mc_nuclide_densities[nucl][1]
+            if nuc_pass.decay_a != None and nuc_pass.decay_a != 'stable':
+                decay = nuc_pass.decay_a
+                decay_rate = decay.copy()
+                del decay_rate['total decay']
+                del decay_rate['half-life']
+                for i in decay_rate:
+                    decay_rate[i] = decay_rate[i]*nuc_dens
+                destruction_dic = decay_rate.copy()
 
-				nucl_dens = self.zero_dens_1_atm
-			else:
-				nucl_dens = nucl_passport.current_dens
-			xs_dict = {}
-			for score in scores:
-				macro_xs_val = macro_xs.get_values(scores = ['({} / flux)'.format(score)], nuclides = ['({} / total)'.format(nucl)])[0][0][0]
-				xs_val = macro_xs_val/nucl_dens
-				xs_dict[score] = xs_val
-			xs_lib.add_xs_dict(nucl_passport.zamid, xs_dict)
 
-		# This function screens the the xs_lib and look for which nuclide ngamma reactions needs to 
-		# be branched
-		xs_lib.isomeric_branching_weighting(isomeric_branching_ratio)
 
-		# Here, in constant lib mode, if it is the first step, you need to call 
-		# overwrite xs (because the xs will have been already set by constant lib)
-		if xs_mode == 'constant lib' and s == 1:
-			self.overwrite_xs(xs_lib)
-		else:
-			self.set_xs(xs_lib)
+            # Multiply xs by flux
+            if nuc_pass.current_xs != None:
+                xs = nuc_pass.current_xs
+                xs_rate = {}
+                for i in xs:
+                    xs_rate[i] = xs[i][0]*flux*1e-24*nuc_dens
+                destruction_dic.update(xs_rate)
+                del destruction_dic['removal']
 
-	def _set_step_isomeric_branching_ratio(self, flux_spectrum, sampled_isomeric_branching_data, sampled_ng_cross_section_data):
+            # Multiply fy by xs fission of father and phi
+            if nuc_pass.fy != None:
+                fy = nuc_pass.fy
+                fy_rate = {}
+                for i in fy:
+                    if i in passport_dict:
+                        father_pass = passport_dict[i]
+                        father_dens = father_pass.current_dens
+                        father_name = father_pass.name
+                        if father_pass.current_xs == None:
+                            continue
+                        if 'fission' not in father_pass.current_xs:
+                            continue
+                        father_fission_xs = father_pass.current_xs['fission'][0]
+                        entry = '{} fission'.format(father_name)
+                        fy_rate[entry] = fy[i][0]*1e-2*father_fission_xs*flux*1e-24*father_dens
+                creation_dic = fy_rate.copy()
 
-		isomeric_branching_ratio = {}
-		for nucl in sampled_isomeric_branching_data:
-			if nucl in sampled_ng_cross_section_data:
-				isomeric_branching_ratio[nucl] = {}
-				branching_data = sampled_isomeric_branching_data[nucl]
-				xs_data = sampled_ng_cross_section_data[nucl]
+            # Now we gather the creation terms (excluding fission as it has been already collected in fyxsphi)
+            xs_parent = nuc_pass.xs_parent
+            decay_parent = nuc_pass.decay_parent
 
-				numerator_ground = sum([x*y*z for x,y,z in zip(flux_spectrum,branching_data['0'],xs_data)])
-				numerator_excited = sum([x*y*z for x,y,z in zip(flux_spectrum,branching_data['1'],xs_data)])
-				denominator = sum([x*y for x,y in zip(flux_spectrum,xs_data)])
-				isomeric_branching_ratio[nucl]['(n,gamma)'] = numerator_ground/denominator
-				isomeric_branching_ratio[nucl]['(n,gamma)X'] = numerator_excited/denominator
+            xs_parent_val = {}
+            for i in xs_parent:
+                father_zamid = xs_parent[i]
+                if father_zamid in passport_dict:
+                    father_pass = passport_dict[father_zamid]
+                    father_dens = father_pass.current_dens
+                    father_state = father_pass.state
+                    father_name = father_pass.name
+                    # The reacname from xs_parent is different from parent_xs in case parent is in excited state
+                    if father_state == 1:
+                        reac_name = i[1:]
+                    elif father_state == 0:
+                        reac_name = i
+                    if father_pass.current_xs != None:
+                        if reac_name in father_pass.current_xs:
+                            father_xs_rate = father_pass.current_xs[reac_name][0]*flux*1e-24*father_dens
 
-		self.sequence._set_macrostep_isomeric_branching_ratio(isomeric_branching_ratio)
-		
+                            entry = '{} {}'.format(father_name, reac_name)
 
-	def _set_allreacs_dic(self, s, ss, ssn):
+                            xs_parent_val[entry] = father_xs_rate
+            creation_dic.update(xs_parent_val)
 
+            decay_parent_val = {}
+            for i in decay_parent:
+                father_zamid = decay_parent[i]
+                if father_zamid in passport_dict:
+                    father_pass = passport_dict[father_zamid]
+                    father_dens = father_pass.current_dens
+                    father_state = father_pass.state
+                    father_name = father_pass.name
+                    # The reacname from xs_parent is different from parent_xs in case parent is in excited state
+                    if father_state == 1:
+                        reac_name = i[1:]
+                    elif father_state == 0:
+                        reac_name = i
+                    if father_pass.decay_a != None and father_pass.decay_a != 'stable':
+                        if reac_name in father_pass.decay_a:
+                            father_decay = father_pass.decay_a[reac_name]*father_dens
 
-		passlist = self.passlist
-		passport_list = passlist.passport_list
-		passport_dict = passlist._get_zamid_passport_dict()
+                            entry = '{} {}'.format(father_name, reac_name)
 
-		sequence = self.sequence
+                            decay_parent_val[entry] = father_decay
+            creation_dic.update(decay_parent_val)
 
-		#flux = sequence.flux_point(s)
-		flux = sequence.current_flux
-		N = len(passport_list)
+            allreacs_dic = destruction_dic.copy()
+            allreacs_dic.update(creation_dic)
 
-		# EOS = 1 means that the sequence reached end of step
-		EOS = 0
-		if ss == ssn - 1:
-			EOS = 1
+            nuc_pass.destruction_dic = destruction_dic
+            nuc_pass.creation_dic = creation_dic
+            nuc_pass.allreacs_dic = allreacs_dic
+            nuc_pass._allreacs_dic_list_append(allreacs_dic)
 
-		for row in range(N):
-			nuc_pass = passport_list[row]
-			nuc_zamid = nuc_pass.zamid
-			nuc_name = nuc_pass.name
-			nuc_dens = nuc_pass.current_dens
-			creation_dic = {}
-			destruction_dic = {}
-			allreacs_dic = {}
+            sorted_allreacs = sorted(list(allreacs_dic.items()), key=operator.itemgetter(1))
 
-			if nuc_pass.decay_a != None and nuc_pass.decay_a != 'stable':
-				decay = nuc_pass.decay_a
-				decay_rate = decay.copy()
-				del decay_rate['total decay']
-				del decay_rate['half-life']
-				for i in decay_rate:
-					decay_rate[i] = decay_rate[i]*nuc_dens
-				destruction_dic = decay_rate.copy()
+            nuc_pass._append_current_sorted_allreacs_tuple_list(sorted_allreacs, ss)
 
+            if EOS == 1:
+                nuc_pass._append_sorted_allreacs_tuple_mat()
 
+    def _print_current_allreacs_rank(self):
 
-			# Multiply xs by flux
-			if nuc_pass.current_xs != None:
-				xs = nuc_pass.current_xs
-				xs_rate = {}
-				for i in xs:
-					xs_rate[i] = xs[i][0]*flux*1e-24*nuc_dens
-				destruction_dic.update(xs_rate)
-				del destruction_dic['removal']
+        passport_list = self.passlist.passport_list
+        cell_id = self.id
+        cell_folder_path = self.folder_path
 
-			# Multiply fy by xs fission of father and phi
-			if nuc_pass.fy != None:
-				fy = nuc_pass.fy
-				fy_rate = {}
-				for i in fy:
-					if i in passport_dict:
-						father_pass = passport_dict[i]
-						father_dens = father_pass.current_dens
-						father_name = father_pass.name
-						if father_pass.current_xs == None:
-							continue
-						if 'fission' not in father_pass.current_xs:
-							continue
-						father_fission_xs = father_pass.current_xs['fission'][0]
-						entry = '{} fission'.format(father_name)
-						fy_rate[entry] = fy[i][0]*1e-2*father_fission_xs*flux*1e-24*father_dens
-				creation_dic = fy_rate.copy()
+        file_name = cell_folder_path +'/cell_{}_reacs_rank'.format(cell_id)
+        file = open(file_name, 'w')
 
-			# Now we gather the creation terms (excluding fission as it has been already collected in fyxsphi)
-			xs_parent = nuc_pass.xs_parent
-			decay_parent = nuc_pass.decay_parent
+        txt = ''
+        for nucl in passport_list:
+            reacs_rank = nucl.current_sorted_allreacs_tuple_list
+            txt += '\n{}({})\n'.format(nucl.name, nucl.zamid)
+            for ss in range(len(reacs_rank)):
+                txt += 'substep = {} | dens = {}\n'.format(ss, nucl.get_current_dens_subseq()[ss])
+                txt += '{}\n'.format(reacs_rank[ss])
 
-			xs_parent_val = {}
-			for i in xs_parent:
-				father_zamid = xs_parent[i]
-				if father_zamid in passport_dict:
-					father_pass = passport_dict[father_zamid]
-					father_dens = father_pass.current_dens
-					father_state = father_pass.state
-					father_name = father_pass.name
-					# The reacname from xs_parent is different from parent_xs in case parent is in excited state
-					if father_state == 1:
-						reac_name = i[1:]
-					elif father_state == 0:
-						reac_name = i
-					if father_pass.current_xs != None:
-						if reac_name in father_pass.current_xs:
-							father_xs_rate = father_pass.current_xs[reac_name][0]*flux*1e-24*father_dens
+        file.write(txt)
+        file.close()
 
-							entry = '{} {}'.format(father_name, reac_name)
+    def _print_summary_allreacs_rank(self, summary_path):
 
-							xs_parent_val[entry] = father_xs_rate
-			creation_dic.update(xs_parent_val)
+        passport_list = self.passlist.passport_list
+        cell_name = self.name
 
-			decay_parent_val = {}
-			for i in decay_parent:
-				father_zamid = decay_parent[i]
-				if father_zamid in passport_dict:
-					father_pass = passport_dict[father_zamid]
-					father_dens = father_pass.current_dens
-					father_state = father_pass.state
-					father_name = father_pass.name
-					# The reacname from xs_parent is different from parent_xs in case parent is in excited state
-					if father_state == 1:
-						reac_name = i[1:]
-					elif father_state == 0:
-						reac_name = i
-					if father_pass.decay_a != None and father_pass.decay_a != 'stable':
-						if reac_name in father_pass.decay_a:
-							father_decay = father_pass.decay_a[reac_name]*father_dens
+        file_name = summary_path +'/cell_{}_reacs_rank'.format(cell_name)
+        file = open(file_name, 'w')
 
-							entry = '{} {}'.format(father_name, reac_name)
+        txt = ''
+        for nucl in passport_list:
+            reacs_rank = nucl.sorted_allreacs_tuple_mat
+            txt += '\n ==={}({}) ===\n'.format(nucl.name, nucl.zamid)
+            for s in range(len(reacs_rank)):
+                txt += '\nSTEP {}\n'.format(s+1)
+                for ss in range(len(reacs_rank[s])):
+                    # subseq has s+1 elements because of the initial element 
+                    txt += 'substep = {} | dens = {}\n'.format(ss, nucl.dens_subseq_mat[s+1][ss])
+                    txt += '{}\n'.format(reacs_rank[s][ss])
 
-							decay_parent_val[entry] = father_decay
-			creation_dic.update(decay_parent_val)
+        file.write(txt)
+        file.close()
 
-			allreacs_dic = destruction_dic.copy()
-			allreacs_dic.update(creation_dic)
+    # This is probably the method that generate the nuclide list that will then be used to produce reduced libraries
+    def _reduce_nucl_set(self):
 
-			nuc_pass.destruction_dic = destruction_dic
-			nuc_pass.creation_dic = creation_dic
-			nuc_pass.allreacs_dic = allreacs_dic
-			nuc_pass._allreacs_dic_list_append(allreacs_dic)
+        self._set_all_leaves()
+        total_leaves = self._total_leaves
+        NAX_nucl_list = data.NAX_nucl_list
+        reduced_nucl_set = list(set(total_leaves+NAX_nucl_list))
+        ordered_reduced_set = utils.order_nuclide_per_z(reduced_nucl_set)
 
-			sorted_allreacs = sorted(list(allreacs_dic.items()), key=operator.itemgetter(1))
 
-			nuc_pass._append_current_sorted_allreacs_tuple_list(sorted_allreacs, ss)
+    def _set_all_leaves(self):
 
-			if EOS == 1:
-				nuc_pass._append_sorted_allreacs_tuple_mat()
+        start_time = time.time()
+        self._set_tree()
+        self._set_leaves()
+        self._set_fission_tree()
+        self._set_fission_leaves()
+        run_time = time.time() - start_time
+        total_leaves = list(set(self._leaves+self._fission_leaves))
+        self._total_leaves = total_leaves
 
-	def _print_current_allreacs_rank(self):
 
-		passport_list = self.passlist.passport_list
-		cell_id = self.id
-		cell_folder_path = self.folder_path
+    @property
+    def get_tree(self):
+        """Gets the generation tree for the BUCell. This returns a dictionnary where keys are the z-a-m id of initial nuclides of the BUCell. The entry for each initial nuclide is a list of generations. Each element of this list represents a generation of daughter nuclides (they are themselves lists of all the daughters from one generation).
 
-		file_name = cell_folder_path +'/cell_{}_reacs_rank'.format(cell_id)
-		file = open(file_name, 'w')
+        Daughters of generation n will be located in the nth list. There are separated by n-1 intermediate nuclides from the initial nuclide.
 
-		txt = ''
-		for nucl in passport_list:
-			reacs_rank = nucl.current_sorted_allreacs_tuple_list
-			txt += '\n{}({})\n'.format(nucl.name, nucl.zamid)
-			for ss in range(len(reacs_rank)):
-				txt += 'substep = {} | dens = {}\n'.format(ss, nucl.get_current_dens_subseq()[ss])
-				txt += '{}\n'.format(reacs_rank[ss])
+        This method is very useful to see which nuclides will be produced from an initial nuclide. It requires, however, that nuclear data libraries are set to the BUCell (this can be a problem in coupled simulation as cross section data are only produced after OpenMC simulations).
+        """
 
-		file.write(txt)
-		file.close()
+        #Old version nucl_set, not used anymore
+        #nuc_list = self.nucl_set
 
-	def _print_summary_allreacs_rank(self, summary_path):
+        nuc_list = self.get_nucl_list()
+        initial_nuc_list = self._initial_nucl
+        # print (nuc_list)
+        initial_nuc_list = ['922350', '922380']
+        trees_dic = {}
+        passdic = self.passlist._get_zamid_passport_dict()
 
-		passport_list = self.passlist.passport_list
-		cell_name = self.name
+        # This list will dynamically store the remaining nuclide to allocate in the tree.
+        # If a nuclide has already been put in the tree but there is a chain loop, because the nuclide will not appear anymore in this list
+        # the infinite looping will be prevented
+        # Here we remove the initial nuclides
+        #reduced_nuc_list = [x for x in nuc_list if x not in initial_nuc_list]
+        reduced_nuc_list = list(nuc_list)
 
-		file_name = summary_path +'/cell_{}_reacs_rank'.format(cell_name)
-		file = open(file_name, 'w')
+        # Initialize the dictionary where each entry is the name of the initial nuclide and the first element of the list is their direct child
+        for nuc in initial_nuc_list:
+            nuc_pass = passdic[nuc]
+            nuc_zamid = nuc_pass.zamid
+            nuc_name = nuc_pass.name
+            
+            reduced_nuc_list.remove(nuc_zamid)
 
-		txt = ''
-		for nucl in passport_list:
-			reacs_rank = nucl.sorted_allreacs_tuple_mat
-			txt += '\n ==={}({}) ===\n'.format(nucl.name, nucl.zamid)
-			for s in range(len(reacs_rank)):
-				txt += '\nSTEP {}\n'.format(s+1)
-				for ss in range(len(reacs_rank[s])):
-					# subseq has s+1 elements because of the initial element 
-					txt += 'substep = {} | dens = {}\n'.format(ss, nucl.dens_subseq_mat[s+1][ss])
-					txt += '{}\n'.format(reacs_rank[s][ss])
+            nuc_non0_child = nuc_pass.get_all_non0_child()
+            nuc_child = list(set(nuc_non0_child).intersection(nuc_list))
+            trees_dic[nuc_zamid] = [nuc_child]
 
-		file.write(txt)
-		file.close()
+            reduced_nuc_list_copy = list(reduced_nuc_list)
+            reduced_nuc_list = [x for x in reduced_nuc_list_copy if x not in nuc_child]
 
-	def _reduce_nucl_set(self):
+            # Build the tree for each initial nuclide
+            tree = trees_dic[nuc_zamid]
 
-		self._set_all_leaves()
-		total_leaves = self._total_leaves
-		NAX_nucl_list = data.NAX_nucl_list
-		reduced_nucl_set = list(set(total_leaves+NAX_nucl_list))
-		ordered_reduced_set = utils.order_nuclide_per_z(reduced_nucl_set)
+            end_of_tree = 0
+            gen = 0
 
+            # As long as there are child that exists
+            while end_of_tree == 0:
+                gen += 1
+                next_child_gen = []
+                for parent in tree[gen-1]:
+                    parent_pass = passdic[parent]
+                    parent_child = parent_pass.get_all_non0_child()
 
-	def _set_all_leaves(self):
+                    reduced_parent_child = list(set(parent_child).intersection(reduced_nuc_list))
 
-		start_time = time.time()
-		self._set_tree()
-		self._set_leaves()
-		self._set_fission_tree()
-		self._set_fission_leaves()
-		run_time = time.time() - start_time
-		total_leaves = list(set(self._leaves+self._fission_leaves))
-		self._total_leaves = total_leaves
+                    reduced_nuc_list_copy = list(reduced_nuc_list)
+                    reduced_nuc_list = [x for x in reduced_nuc_list_copy if x not in reduced_parent_child]
 
+                    next_child_gen += reduced_parent_child
 
-	@property
-	def get_tree(self):
+                if next_child_gen == []:
+                    end_of_tree = 1
+                    #reduced_nuc_list = 
+                    break
 
-		nuc_list = self.nucl_set
-		initial_nuc_list = self._initial_nucl
-		# print (nuc_list)
-		# print (initial_nuc_list)
-		trees_dic = {}
-		passdic = self.passlist._get_zamid_passport_dict()
+                tree.append(next_child_gen)
 
-		# This list will dynamically store the remaining nuclide to allocate in the tree.
-		# If a nuclide has already been put in the tree but there is a chain loop, because the nuclide will not appear anymore in this list
-		# the infinite looping will be prevented
-		# Here we remove the initial nuclides
-		#reduced_nuc_list = [x for x in nuc_list if x not in initial_nuc_list]
-		reduced_nuc_list = list(nuc_list)
+            reduced_nuc_list = list(nuc_list)
 
-		# Initialize the dictionary where each entry is the name of the initial nuclide and the first element of the list is their direct child
-		for nuc in initial_nuc_list:
-			nuc_pass = passdic[nuc]
-			nuc_zamid = nuc_pass.zamid
-			nuc_name = nuc_pass.name
-			
-			reduced_nuc_list.remove(nuc_zamid)
+        return trees_dic
 
-			nuc_non0_child = nuc_pass.get_all_non0_child()
-			nuc_child = list(set(nuc_non0_child).intersection(nuc_list))
-			trees_dic[nuc_zamid] = [nuc_child]
+    def _set_tree(self):
 
-			reduced_nuc_list_copy = list(reduced_nuc_list)
-			reduced_nuc_list = [x for x in reduced_nuc_list_copy if x not in nuc_child]
+        self._tree = self.get_tree
 
-			# Build the tree for each initial nuclide
-			tree = trees_dic[nuc_zamid]
 
-			end_of_tree = 0
-			gen = 0
 
-			# As long as there are child that exists
-			while end_of_tree == 0:
-				gen += 1
-				next_child_gen = []
-				for parent in tree[gen-1]:
-					parent_pass = passdic[parent]
-					parent_child = parent_pass.get_all_non0_child()
 
-					reduced_parent_child = list(set(parent_child).intersection(reduced_nuc_list))
 
-					reduced_nuc_list_copy = list(reduced_nuc_list)
-					reduced_nuc_list = [x for x in reduced_nuc_list_copy if x not in reduced_parent_child]
+    @property
+    def leaves(self):
 
-					next_child_gen += reduced_parent_child
+        return self._leaves
 
-				if next_child_gen == []:
-					end_of_tree = 1
-					#reduced_nuc_list = 
-					break
+    def _gen_leaves(self):
 
-				tree.append(next_child_gen)
+        tree_dic = self._tree
 
-			reduced_nuc_list = list(nuc_list)
+        conca_tree = []
+        for initial_nuc in tree_dic:
+            conca_tree += [initial_nuc]
+            for gen in tree_dic[initial_nuc]:
+                    conca_tree += gen
 
-		return trees_dic
+        # Set is a set of unique element in the list. List convert that back into a new list
+        conca_tree_no_redundance = list(set(conca_tree))
 
-	def _set_tree(self):
+        return conca_tree_no_redundance
 
-		self._tree = self.get_tree
+    def _set_leaves(self):
 
-
-
-
-
-	@property
-	def leaves(self):
-
-		return self._leaves
-
-	def _gen_leaves(self):
-
-		tree_dic = self._tree
-
-		conca_tree = []
-		for initial_nuc in tree_dic:
-			conca_tree += [initial_nuc]
-			for gen in tree_dic[initial_nuc]:
-					conca_tree += gen
-
-		# Set is a set of unique element in the list. List convert that back into a new list
-		conca_tree_no_redundance = list(set(conca_tree))
-
-		return conca_tree_no_redundance
-
-	def _set_leaves(self):
-
-		self._leaves = self._gen_leaves()
+        self._leaves = self._gen_leaves()
 
 
 
@@ -2282,215 +2445,216 @@ class Cell(object):
 
 
 
-	@property
-	def fission_tree(self):
+    @property
+    def fission_tree(self):
 
-		return self._fission_tree
+        return self._fission_tree
 
-	def _gen_fission_tree(self):
+    def _gen_fission_tree(self):
 
-		passlist = self.passlist
-		passdic = self.passlist._get_zamid_passport_dict()
-		initial_nuc_list = self._initial_nucl
-		nuc_list = self.nucl_set
-		leaves = self._leaves
-		fy_parent = self.get_fy_parent_nucl()
-		fy_nucl = self.get_fy_nucl()
-		fission_trees_dic = {}
+        passlist = self.passlist
+        passdic = self.passlist._get_zamid_passport_dict()
+        initial_nuc_list = self._initial_nucl
+        nuc_list = self.nucl_set
+        leaves = self._leaves
+        fy_parent = self.get_fy_parent_nucl()
+        fy_nucl = self.get_fy_nucl()
+        fission_trees_dic = {}
 
-		passlist._set_fission_child(fy_nucl, fy_parent)
+        passlist._set_fission_child(fy_nucl, fy_parent)
 
-		reduced_nuc_list = list(nuc_list)
+        reduced_nuc_list = list(nuc_list)
 
-		# First we enter the initial nuc that are also fissile
-		for parent in fy_parent:
-			if parent in leaves:
-				nuc_pass = passdic[parent]
-				nuc_zamid = nuc_pass.zamid
+        # First we enter the initial nuc that are also fissile
+        for parent in fy_parent:
+            if parent in leaves:
+                nuc_pass = passdic[parent]
+                nuc_zamid = nuc_pass.zamid
 
-				reduced_nuc_list.remove(nuc_zamid)
+                reduced_nuc_list.remove(nuc_zamid)
 
-				fission_child = nuc_pass.fission_child
+                fission_child = nuc_pass.fission_child
 
-				reduced_fission_child = list(set(fission_child).intersection(reduced_nuc_list))
+                reduced_fission_child = list(set(fission_child).intersection(reduced_nuc_list))
 
-				fission_trees_dic[parent] = [reduced_fission_child]
+                fission_trees_dic[parent] = [reduced_fission_child]
 
-				reduced_nuc_list_copy = list(reduced_nuc_list)
-				reduced_nuc_list = [x for x in reduced_nuc_list_copy if x not in reduced_fission_child]
+                reduced_nuc_list_copy = list(reduced_nuc_list)
+                reduced_nuc_list = [x for x in reduced_nuc_list_copy if x not in reduced_fission_child]
 
-			# Then we build the tree from the fission products
-		#	for initial_nuc in fission_trees_dic:
-				tree = fission_trees_dic[parent]
-				end_of_tree = 0
+            # Then we build the tree from the fission products
+        #   for initial_nuc in fission_trees_dic:
+                tree = fission_trees_dic[parent]
+                end_of_tree = 0
 
-				gen = 0
+                gen = 0
 
-				# As long as there are child that exists
-				while end_of_tree == 0:
-					gen += 1
-					next_child_gen = []
-					for parent in tree[gen-1]:
-						parent_pass = passdic[parent]
-						parent_child = parent_pass.get_all_non0_child()
+                # As long as there are child that exists
+                while end_of_tree == 0:
+                    gen += 1
+                    next_child_gen = []
+                    for parent in tree[gen-1]:
+                        parent_pass = passdic[parent]
+                        parent_child = parent_pass.get_all_non0_child()
 
-						reduced_parent_child = list(set(parent_child).intersection(reduced_nuc_list))
+                        reduced_parent_child = list(set(parent_child).intersection(reduced_nuc_list))
 
-						reduced_nuc_list_copy = list(reduced_nuc_list)
-						reduced_nuc_list = [x for x in reduced_nuc_list_copy if x not in reduced_parent_child]
+                        reduced_nuc_list_copy = list(reduced_nuc_list)
+                        reduced_nuc_list = [x for x in reduced_nuc_list_copy if x not in reduced_parent_child]
 
-						next_child_gen += reduced_parent_child
+                        next_child_gen += reduced_parent_child
 
-					if next_child_gen == []:
-						end_of_tree = 1
-						#reduced_nuc_list = 
-						break
+                    if next_child_gen == []:
+                        end_of_tree = 1
+                        #reduced_nuc_list = 
+                        break
 
-					tree.append(next_child_gen)
+                    tree.append(next_child_gen)
 
-				reduced_nuc_list = list(nuc_list)
+                reduced_nuc_list = list(nuc_list)
 
-		return fission_trees_dic
+        return fission_trees_dic
 
-	def _set_fission_tree(self):
+    def _set_fission_tree(self):
 
-		self._fission_tree = self._gen_fission_tree()
+        self._fission_tree = self._gen_fission_tree()
 
 
 
 
 
-	@property
-	def fission_leaves(self):
+    @property
+    def fission_leaves(self):
 
-		return self._fission_leaves
+        return self._fission_leaves
 
 
-	def _gen_fission_leaves(self):
+    def _gen_fission_leaves(self):
 
-		fission_tree_dic = self._fission_tree
+        fission_tree_dic = self._fission_tree
 
-		conca_fission_tree = []
-		for initial_nuc in fission_tree_dic:
-			conca_fission_tree += [initial_nuc]
-			for gen in fission_tree_dic[initial_nuc]:
-					conca_fission_tree += gen
+        conca_fission_tree = []
+        for initial_nuc in fission_tree_dic:
+            conca_fission_tree += [initial_nuc]
+            for gen in fission_tree_dic[initial_nuc]:
+                    conca_fission_tree += gen
 
-		# Set is a set of unique element in the list. List convert that back into a new list
-		conca_fission_tree_no_redundance = list(set(conca_fission_tree))
+        # Set is a set of unique element in the list. List convert that back into a new list
+        conca_fission_tree_no_redundance = list(set(conca_fission_tree))
 
-		return conca_fission_tree_no_redundance
+        return conca_fission_tree_no_redundance
 
-	def _set_fission_leaves(self):
+    def _set_fission_leaves(self):
 
-		self._fission_leaves = self._gen_fission_leaves()
+        self._fission_leaves = self._gen_fission_leaves()
 
 
-	def _print_tree(self):
+    def _print_tree(self):
 
-		folder_path = self.folder_path + '/tree_&_leaves'
-		if os.path.exists(folder_path):
-			shutil.rmtree(folder_path)
+        folder_path = self.folder_path + '/tree_&_leaves'
+        if os.path.exists(folder_path):
+            shutil.rmtree(folder_path)
 
-		os.makedirs(folder_path)
+        os.makedirs(folder_path)
 
-		tree = self.get_tree
+        tree = self.get_tree
 
-		for branch_zamid in tree:
+        for branch_zamid in tree:
 
-			branch_zamid_pass = pp(branch_zamid)
-			branch_name = branch_zamid_pass.name
-			branch_path = folder_path + '/{}_branch'.format(branch_name)
-			txt =''
-			branch = tree[branch_zamid]
-			count = 0
+            branch_zamid_pass = pp(branch_zamid)
+            branch_name = branch_zamid_pass.name
+            branch_path = folder_path + '/{}_branch'.format(branch_name)
+            txt =''
+            branch = tree[branch_zamid]
+            count = 0
 
-			for leaves in branch:
-				txt += '{}\n{}\n\n'.format(count, leaves)
-				count = count + 1
+            for leaves in branch:
+                txt += '{}\n{}\n\n'.format(count, leaves)
+                count = count + 1
 
-			f = open(branch_path, 'w')
-			f.write(txt)
-			f.close()
+            f = open(branch_path, 'w')
+            f.write(txt)
+            f.close()
 
-		fission_tree = self.fission_tree
+        fission_tree = self.fission_tree
 
-		for branch_zamid in fission_tree:
+        for branch_zamid in fission_tree:
 
-			branch_zamid_pass = pp(branch_zamid)
-			branch_name = branch_zamid_pass.name
+            branch_zamid_pass = pp(branch_zamid)
+            branch_name = branch_zamid_pass.name
 
-			branch_path = folder_path + '/{}_fission_branch'.format(branch_name)
-			txt =''
-			branch = fission_tree[branch_zamid]
-			count = 0
+            branch_path = folder_path + '/{}_fission_branch'.format(branch_name)
+            txt =''
+            branch = fission_tree[branch_zamid]
+            count = 0
 
-			for leaves in branch:
-				txt += '{}\n{}\n\n'.format(count, leaves)
-				count = count + 1
+            for leaves in branch:
+                txt += '{}\n{}\n\n'.format(count, leaves)
+                count = count + 1
 
-			f = open(branch_path, 'w')
-			f.write(txt)
-			f.close()
+            f = open(branch_path, 'w')
+            f.write(txt)
+            f.close()
 
 
 
 
-	def _gen_allreacs_ranking(self):
+    def _gen_allreacs_ranking(self):
 
-		allreacs_ranking = pl._gen_allreacs_dic()
+        allreacs_ranking = pl._gen_allreacs_dic()
 
 
-	@property
-	def folder_path(self):
+    @property
+    def folder_path(self):
 
-		return self._folder_path
+        return self._folder_path
 
-	# Create a folder for the cell in the directory indicated in the argument
-	# If no directory is passed as argument, the default directory is the current directory
+    # Create a folder for the cell in the directory indicated in the argument
+    # If no directory is passed as argument, the default directory is the current directory
 
-	def gen_folder(self):
+    # Seems not used
+    # def gen_folder(self):
 
-		cell_name = self.name
+    #     cell_name = self.name
 
-		utils.gen_cell_folder(cell_name)
+    #     utils.gen_cell_folder(cell_name)
 
-	def _set_folder(self):
+    def _set_folder(self):
 
-		cell_name = self.name
+        cell_name = self.name
 
-		utils.gen_cell_folder(cell_name)
-		self._folder_path = utils.get_cell_folder_path(cell_name)
+        utils.gen_cell_folder(cell_name)
+        self._folder_path = utils.get_cell_folder_path(cell_name)
 
-	def copy_cell_folders_to_step_folder(self, s):
+    def _copy_cell_folders_to_step_folder(self, s):
 
-		cell_folder_path = self.folder_path
-		shutil.copytree(cell_folder_path, os.getcwd() + '/step_{}/{}_cell'.format(s, self.name))
-		shutil.rmtree(cell_folder_path)
+        cell_folder_path = self.folder_path
+        shutil.copytree(cell_folder_path, os.getcwd() + '/step_{}/{}_cell'.format(s, self.name))
+        shutil.rmtree(cell_folder_path)
 
-	# def _gen_output_summary_folder(self):
+    # def _gen_output_summary_folder(self):
 
-	# 	name = 'output_summary'
-	# 	self._output_summary_path = utils.get_folder_path(name)
-	# 	utils.gen_folder(name)
+    #   name = 'output_summary'
+    #   self._output_summary_path = utils.get_folder_path(name)
+    #   utils.gen_folder(name)
 
 
 class Initial_nucl_not_set(Exception):
-	"""Raise when the user forgot to set the initial nuclide of the cell and tries to burn cell"""
-	pass
+    """Raise when the user forgot to set the initial nuclide of the cell and tries to burn cell"""
+    pass
 
 class Nucl_set_not_in_Lib_nucl(Exception):
-	"""Raise when the user forgot to set the initial nuclide of the cell and tries to burn cell"""
-	pass
+    """Raise when the user forgot to set the initial nuclide of the cell and tries to burn cell"""
+    pass
 
 class Initial_nucl_not_in_Nucl_set(Exception):
-	"""Raise when the user forgot to set the initial nuclide of the cell and tries to burn cell"""
-	pass
+    """Raise when the user forgot to set the initial nuclide of the cell and tries to burn cell"""
+    pass
 
 class Nuclide_list_redundant(Exception):
 
-	pass
+    pass
 
 class Passlist_not_defined(Exception):
-	"""Raise when the user forgot to defined passlist for a cell"""
-	pass
+    """Raise when the user forgot to defined passlist for a cell"""
+    pass

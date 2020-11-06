@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../releasenotes/index.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../pythonapi/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License Agreement</a></li>
 </ul>
 
             
@@ -701,7 +702,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">all_child</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns all daughter products of the nuclide&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns all daughter products of the nuclide.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_child</span>
 
     <span class="k">def</span> <span class="nf">_set_all_child</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -719,7 +720,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">fission_child</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns daughter products of the nuclide via fission reactions&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns daughter products of the nuclide via fission reactions.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fission_child</span>
 
     <span class="nd">@fission_child</span><span class="o">.</span><span class="n">setter</span>
@@ -760,7 +761,7 @@
 
     <span class="c1"># On the fly calculation</span>
 <div class="viewcode-block" id="Passport.get_all_non0_child"><a class="viewcode-back" href="../../pythonapi/generated/onix.Passport.html#onix.Passport.get_all_non0_child">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_non0_child</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets all daughter products of the nuclide produced via reactions that are non-zero in the library used in the simulation&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Gets all daughter products of the nuclide produced via reactions that are non-zero (i.e., the reaction cross section or decay constant is not null) in the library used in the simulation&quot;&quot;&quot;</span>
         <span class="n">xs_child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xs_child</span>
         <span class="n">decay_child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decay_child</span>
         <span class="n">non0_child_list</span> <span class="o">=</span> <span class="p">[]</span>

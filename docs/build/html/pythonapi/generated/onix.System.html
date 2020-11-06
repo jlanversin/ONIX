@@ -1,0 +1,462 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>onix.System &mdash; ONIX Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="onix.Sequence" href="onix.Sequence.html" />
+    <link rel="prev" title="onix.Cell" href="onix.Cell.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #0d0d0d" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../main_class.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Main Classes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="onix.Passport.html">onix.Passport</a></li>
+<li class="toctree-l3"><a class="reference internal" href="onix.Passlist.html">onix.Passlist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="onix.Cell.html">onix.Cell</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">onix.System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="onix.Sequence.html">onix.Sequence</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../couple.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Couple module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nax.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Nuclear Archaeology (NAX) module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../salameche.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Salamèche: the burnup solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Data and library readers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Utilities and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License Agreement</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ONIX</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Python API</a> &raquo;</li>
+        
+          <li><a href="../main_class.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Main Classes</a> &raquo;</li>
+        
+      <li>onix.System</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/pythonapi/generated/onix.System.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="onix-system">
+<h1>onix.System<a class="headerlink" href="#onix-system" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="onix.System">
+<em class="property">class </em><code class="sig-prename descclassname">onix.</code><code class="sig-name descname">System</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">system_id</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/system.html#System"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.System" title="Permalink to this definition">¶</a></dt>
+<dd><p>The system oject contains and organizes the ensemble of BUCells.</p>
+<p>When running a standalone simulation, the system object is the the object with which the user can set certain attributes and parameters for the simulation (nuclear data libraries, burnup sequence, new BUCells).
+In a coupled simulation, the class onix.couple.Couple_openmc fullfills that role and passes-on directives to the system object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>system_id</strong> (<em>int</em>) – Number id for the system object</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="onix.System.add_bucell">
+<code class="sig-name descname">add_bucell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_bucell</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/system.html#System.add_bucell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.System.add_bucell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new BUCell to System.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_BUCell</strong> (<a class="reference internal" href="onix.Cell.html#onix.Cell" title="onix.Cell"><em>onix.Cell</em></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.bounding_box">
+<em class="property">property </em><code class="sig-name descname">bounding_box</code><a class="headerlink" href="#onix.System.bounding_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the bounding box defined by the user for the system</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.bucell_dict">
+<em class="property">property </em><code class="sig-name descname">bucell_dict</code><a class="headerlink" href="#onix.System.bucell_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionnary where keys are BUCell number ids and entries are corresponding BUCells objects</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.burn">
+<code class="sig-name descname">burn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/system.html#System.burn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.System.burn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Launches a standalone simulation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.get_bucell">
+<code class="sig-name descname">get_bucell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/system.html#System.get_bucell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.System.get_bucell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the BUCell object with corresponding name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – Name of the BUCell</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.get_bucell_list">
+<code class="sig-name descname">get_bucell_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/system.html#System.get_bucell_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.System.get_bucell_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of the BUCell objects</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.get_tot_hm">
+<code class="sig-name descname">get_tot_hm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/system.html#System.get_tot_hm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.System.get_tot_hm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current total heavy metal mass contained in System (g).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.get_tot_ihm">
+<code class="sig-name descname">get_tot_ihm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/system.html#System.get_tot_ihm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.System.get_tot_ihm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the total initial heavy metal (IHM) mass contained in System (g).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.id">
+<em class="property">property </em><code class="sig-name descname">id</code><a class="headerlink" href="#onix.System.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number id of the system object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.reac_rank_on">
+<code class="sig-name descname">reac_rank_on</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/system.html#System.reac_rank_on"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.System.reac_rank_on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calling this method will tell ONIX to produce production and destrubtion reaction rates ranking for each nuclide and print the data for each BUCells.
+By default ONIX does not produce reaction rates ranking as it takes a lot of memory.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.sequence">
+<em class="property">property </em><code class="sig-name descname">sequence</code><a class="headerlink" href="#onix.System.sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the sequence object associated with System</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.set_decay_for_all">
+<code class="sig-name descname">set_decay_for_all</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">decay_lib_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/system.html#System.set_decay_for_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.System.set_decay_for_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the decay library for all BUCells.</p>
+<p>This function will add all nuclides for which there are decay data in the library but which are not yet in the onix.Passlist object of the BUCells. This means that the depletion system will be significantly enlarged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>decay_lib_path</strong> (<em>str</em>) – Path to the decay library provided by the user</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.set_default_decay_for_all">
+<code class="sig-name descname">set_default_decay_for_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/system.html#System.set_default_decay_for_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.System.set_default_decay_for_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the decay library to the default one (ENDF/B-VIII.0) for all BUCells.</p>
+<p>This function will add all nuclides for which there are decay data in the library but which are not yet in the onix.Passlist object of the BUCells. This means that the depletion system will be significantly enlarged.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.set_default_decay_for_all_no_add">
+<code class="sig-name descname">set_default_decay_for_all_no_add</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/system.html#System.set_default_decay_for_all_no_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.System.set_default_decay_for_all_no_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the decay library to the default one (ENDF/B-VIII.0) for all BUCells.</p>
+<p>This function will only take nuclear decay data for nuclides that are already in the onix.Passlist object of the BUCells. This enables to run simulation where the depletion system is not enlarged when adding decay data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.set_default_fy_for_all">
+<code class="sig-name descname">set_default_fy_for_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/system.html#System.set_default_fy_for_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.System.set_default_fy_for_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the fission yield library to the default one (ENDF/B-VIII.0) for all BUCells.</p>
+<p>This function will add all fission products for which there are fission yield data in the library but which are not yet in the onix.Passlist object of the BUCells. This means that the depletion system will be significantly enlarged.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.set_default_fy_for_all_no_add">
+<code class="sig-name descname">set_default_fy_for_all_no_add</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/system.html#System.set_default_fy_for_all_no_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.System.set_default_fy_for_all_no_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the fission yield library to the default one (ENDF/B-VIII.0) for all BUCells.</p>
+<p>This function will only take fission yield data for fission products that are already in the onix.Passlist object of the BUCells. This enables to run simulation where the depletion system is not enlarged when adding fission yield data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.set_default_xs_for_all">
+<code class="sig-name descname">set_default_xs_for_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/system.html#System.set_default_xs_for_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.System.set_default_xs_for_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the cross section library to the default one for all BUCells.</p>
+<p>The default cross section library in ONIX has been obtained by computing middle-burnup one-group cross section for a coupled simumation of a LWR fuel pin-cell. Therefore, this library is only adapted for LWR reactors.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.set_fy_for_all">
+<code class="sig-name descname">set_fy_for_all</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fy_lib_path</span></em>, <em class="sig-param"><span class="n">complete</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/system.html#System.set_fy_for_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.System.set_fy_for_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the fission yield library for all BUCells. Setting the <em>complete</em> parameter to True allows ONIX to complement the data of the provided library with additional data found in ENDF/B-VIII.0.</p>
+<p>This function will add all fission products for which there are fission yield data in the library but which are not yet in the onix.Passlist object of the BUCells. This means that the depletion system will be significantly enlarged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>decay_lib_path</strong> (<em>str</em>) – Path to the decay library provided by the user</p></li>
+<li><p><strong>complete</strong> (<em>bool</em>) – Indicates to ONIX whether or not to complement the provided library with additional fission yields from ENDF:B-VIII.0 library.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.set_sequence">
+<code class="sig-name descname">set_sequence</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sequence</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'stand alone'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/system.html#System.set_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.System.set_sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a sequence object to the System and distributes unique copies of the sequence object to each BUCells.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sequence</strong> (<a class="reference internal" href="onix.Sequence.html#onix.Sequence" title="onix.Sequence"><em>onix.Sequence</em></a>) – ONIX sequence object defined by the user</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.set_xs_for_all">
+<code class="sig-name descname">set_xs_for_all</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xs_lib_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/system.html#System.set_xs_for_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.System.set_xs_for_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the cross section library for all BUCells.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xs_lib_path</strong> (<em>str</em>) – Path to the cross section library provided by the user</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.System.total_vol">
+<em class="property">property </em><code class="sig-name descname">total_vol</code><a class="headerlink" href="#onix.System.total_vol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the total volume of the system. The total volume of the system is the volume of all BUCells plus the volume of regions that are not depleted (moderator for instance if no BUCell is created for the moderator).</p>
+<p>In standalone mode, the total volume will simply be the addition of all BUCells’ volume as all regions should be depleted.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="onix.Sequence.html" class="btn btn-neutral float-right" title="onix.Sequence" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="onix.Cell.html" class="btn btn-neutral float-left" title="onix.Cell" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Julien de Troullioud de Lanversin
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+ 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30411614-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>

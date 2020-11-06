@@ -4,10 +4,19 @@ import numpy
 import uncertainties
 
 class Sequence(object):
-    """The sequence object contains information about the burnup sequence for the system,
-     including the macrostep vector and its associated units, which are set by the user
+    """The sequence object contains information about the burnup and time sequence that ONIX will follow during simulations.
 
-    The sequence object also contains information on the flux or power normalization
+    With the sequence object, the user can:
+
+    - Set the macrosteps for the simultion (points in time or burnup at which ONIX will call OpenMC to update the neutron flux and one-group reaction rates)
+
+    - Set the microsteps that divide each macrostep (ONIX depletes the system over each microstep)
+
+    - Set the normalization for each macrostep (flux or power density)
+
+    - Set operational change during the simulation such as temperature changes, density changes or isotopic changes
+
+    Each BUCell is automatically associated with a unique copy of the 'master' sequence defined by the user. Each sequence object contains data on the evolution of all relevant quantities (:math:`k_{inf}`, isomeric branchings, neutron flux spectrum, power, flux, burnup and time).
      """
 
     def __init__(self, id_number):
@@ -602,86 +611,94 @@ class Sequence(object):
 
     @property
     def macrostep_vector(self):
-        """Returns the macrostep vector"""
+        """Returns the macrostep vector."""
         return self._macrostep_vector
 
     @macrostep_vector.setter
     def macrostep_vector(self, macrostep_vector):
-        """Sets the macrostep vector"""
+
         self._macrostep_vector = macrostep_vector
 
     @property
     def macrostep_unit(self):
-        """Returns the units of the macrosteps
-
-        Units can be time in second or burnup in MWd/kg
+        """Returns the units of the macrosteps.
         """
         return self._macrostep_unit
 
     @macrostep_unit.setter
     def macrostep_unit(self, macrostep_unit):
-        """Sets the units of the macrosteps
 
-        Units can be time in second or burnup in MWd/kg"""
         self._macrostep_unit = macrostep_unit
 
     @property
     def macrosteps_number(self):
-        """Returns the number of macrosteps"""
+        """Returns the number of macrosteps."""
         return self._macrosteps_number
 
     @macrosteps_number.setter
     def macrosteps_number(self, macrosteps_number):
-        """Sets the number of macrosteps"""
         self._macrosteps_number = macrosteps_number
 
 
+    def set_macrostep(self, macrostep_vector, macrostep_unit):
+        """Sets the macrosteps and its units.
+
+        Parameters
+        ----------
+        macrostep_vector:list
+            List of integers defining the points in time or burnup for which OpenMC will be run to update neutron flux and one-group reaction rates.
+        macrostep_unit: str
+            'MWd/kg' for burnup units or 's' for seconds, 'm' for minutes, 'd' for days, and 'y' for years.
+
+        """
+        self.macrostep_vector = macrostep_vector
+        self.macrostep_unit = macrostep_unit
+        self.macrosteps_number = len(macrostep_vector)
+
+
     def set_norma(self, norma_vector, norma_unit):
-        """Sets information on normalization
+        """Sets the normalization for each macrostep.
 
-        In version 0.10, the couple mode can only accept normalizations of the flux
-        where the total power of the system is held constant
-        The standalone mode can only accept normalization of the total power
-        where the flux of the system if held constant
-
-        In version 0.10, in standalone mode, the flux set by the user is going to be
+        **Note 1**: In version 0.10, in standalone mode, the flux set by the user is going to be
         used for all BUCells of the system. In other words, all BUCells will have the
-        same neutron flux"""
+        same neutron flux.
+
+        **Note 2**: The user should specify the power density as the total power
+        divided by the total volume of the system. The total volume of the system should include
+        all regions of the system, even regions that are not BUCells (for example, it should include the water region around the fuel BUCell).
+
+        **Note 3**: In version 0.10, the couple mode can only accept constant power depletion (i.e. the normalization should be against power).
+        The standalone mode can only accept constant flux depletion (i.e. the normalization should be against flux)
+
+        Parameters
+        ----------
+        norma_vector:list
+            List of float defining the value of the normalization (kW/l for power density, :math:`cm^{-2}s^{-1}` for neutron flux).
+        macrostep_unit: str
+            'power' for power density, 'flux' for neutron flux
+
+        """
+
         self._norma_vector = norma_vector
         self._norma_unit = norma_unit
 
     @property
     def norma_vector(self):
-        """Returns the normalization vector"""
+        """Returns the normalization vector."""
         return self._norma_vector
 
     @norma_vector.setter
     def norma_vector(self, norma_vector):
-        """Sets the normalization vector
 
-        One value for normalization should be set per macrostep
-        Hence, the size of the vector norma_vector should be the same
-        as the size of macrostep_vector
-        """
         self._norma_vector = norma_vector
 
     @property
     def norma_unit(self):
-        """Returns the normalization unit"""
+        """Returns the normalization unit."""
         return self._norma_unit
 
     @norma_unit.setter
     def norma_unit(self, norma_unit):
-        """Sets the normalization unit
-
-        Power density: kW/l
-        In version 0.10, the user should specify the power density as the total power
-        divided by the total volume of the system. The total volume of the system should includes
-        all regions of the system, even regions that are not BUCells (for example, it should include
-        the water region around the fuel BUCell)
-
-        Neutron flux: cm^-2 s^-1
-        """
 
         self._norma_unit = norma_unit
 
@@ -689,7 +706,7 @@ class Sequence(object):
     def master_bucell(self):
         return self._master_bucell
     
-
+    # This method is not yet implemented.
     def set_master_bucell(BUCell):
         """Sets the BUCell against which macrostep normalization is implemented
 
@@ -705,19 +722,31 @@ class Sequence(object):
     @property
     def isotopic_change_dict(self):
         return self._isotopic_change_dict
+        """Returns the isotopic change dictionnary set by the user.""
+        """
 
     def set_isotopic_change(self, cell, cell_isotopic_change, unit='number density'):
-        """Manually changes the isotopic densities of user-specified nuclides in the BUCell for user-specified
-        macrosteps
-
-        Parameter:
-
-        unit: specifies the unit of the new isotopic density
-        'number density' (default) for density in atm per cm3
-        'atom fraction' for density as atomic fraction
+        """Manually changes the isotopic densities of user-specified nuclides in a BUCell for user-specified
+        macrosteps.  
         
-        IMPORTANT: If the method "set_density_change" is also used for the same BUCell, the isotopic change set by the user
-        must be in atom fraction"""
+        **Note**: If the method onix.Sequence.set_density_change is also used for the same BUCell, the isotopic change set by the user
+        must be in atom fraction.
+
+        Parameters
+        ----------
+        cell: onix.Cell
+            BUCell in which the isotopic change is to be operated
+        cell_isotopic_change: dict
+            A dictionnary where keys are nuclides' name and entries are evolution sub-dictionnaries. The sub-dictionnaries contain desired density evolution per macrostep where keys are macrostep numbers (int) and entries are densities (unit specified by the user). 
+        unit: str
+            Specifies the unit for isotopic density evolution.
+            'number density' (default) for density in atm per :math:`cm^{3}`
+            'atom fraction' for density as atomic fraction
+
+        """
+
+
+
         # If this is the first cell which is set isotopic change, create the dict
         if self.isotopic_change_dict == None:
             self._isotopic_change_dict = {}
@@ -730,14 +759,25 @@ class Sequence(object):
 
     @property
     def density_change_dict(self):
+        """Returns the density change dictionnary set by the user.""
+        """
         return self._density_change_dict
 
     def set_density_change(self, cell, cell_density_change):
-        """Manually changes the total density (in atm per cm3) of the material of the BUCell for user-specified
-        macrosteps
+        """Manually changes the total density (in atm per :math:`cm^{3}`) of the material of the BUCell for user-specified macrosteps.
         
-        IMPORTANT: This method trumps the other method "set_isotopic_change", i.e., the new isotopic densities set in
-        set_isotopic_change will be renormalized by the new value from set_density_change"""
+        **Note**: This method trumps the other method "onix.Sequence.set_isotopic_change", i.e., the new isotopic densities set in
+        set_isotopic_change will be renormalized by the new value from set_density_change
+
+        Parameters
+        ----------
+        cell: onix.Cell
+            BUCell in which the density change is to be operated
+        cell_density_change: dict
+            A dictionnary where keys are macrostep numbers (int) and entries are densities in atm per :math:`cm^{3}`. 
+
+
+        """
 
         # If this is the first cell which is set density change, create the dict
         if self.density_change_dict == None:
@@ -747,11 +787,23 @@ class Sequence(object):
 
     @property
     def temperature_change_dict(self):
+        """Returns the density change dictionnary set by the user.""
+        """
         return self._temperature_change_dict
 
     def set_temperature_change(self, cell, cell_temperature_change):
         """Manually changes the temperature (Kelvin) of the material of the BUCell for user-specified
-        macrosteps"""
+        macrosteps
+
+        Parameters
+        ----------
+        cell: onix.Cell
+            BUCell in which the temperature change is to be operated
+        cell_temperature_change: dict
+            A dictionnary where keys are macrostep numbers (int) and entries are temperature in Kelvin. 
+
+
+        """
         # If this is the first cell which is set density change, create the dict
         if self.temperature_change_dict == None:
             self._temperature_change_dict = {}
@@ -762,34 +814,25 @@ class Sequence(object):
     def flux_approximation(self):
         """Returns the method used for approximating the flux between two microsteps
 
-        Warning: This method should not be used by the user in version 0.10"""
+        **Note**: This method should not be used by the user in version 0.1"""
         return self._flux_approximation
 
     @flux_approximation.setter
     def flux_approximation(self, flux_approximation):
         """Sets the method used for approximating the flux between two microsteps
 
-        Warning: This method should not be used by the user in version 0.10"""
+        **Note**: This method should not be used by the user in version 0.1"""
         self._flux_approximation = flux_approximation
 
     @property
     def microstep_vector(self):
         """Returns the microstep vector
-        
-        Time: seconds
-
-        Burnup: MWd/kg
         """
         return self._microstep_vector
 
     @microstep_vector.setter
     def microstep_vector(self, microstep_vector):
-        """Sets the microstep vector
-        
-        Time: seconds
 
-        Burnup: MWd/kg
-        """
         self._microstep_vector = microstep_vector
 
     # bu_sec_conv_factor should be set to each cell or system, not sequence
@@ -811,14 +854,14 @@ class Sequence(object):
         utils.gen_folder(name)
 
     def microsteps_number(self, s):
-        """Returns the number of microsteps for macrostep s"""
-        return self._microstep_vector[s]
+        """Returns the number of microsteps for macrostep s.
 
-    def set_macrostep(self, macrostep_vector, macrostep_unit):
-        """Sets the macrostep vector and the macrostep units"""
-        self.macrostep_vector = macrostep_vector
-        self.macrostep_unit = macrostep_unit
-        self.macrosteps_number = len(macrostep_vector)
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
+        """
+        return self._microstep_vector[s]
 
 
 ######## Set initial values
@@ -1043,7 +1086,7 @@ class Sequence(object):
     # Power density that is currently set
     @property
     def current_tot_pow(self):
-        """Returns the current total power of the system
+        """Returns the current total power of the system.
         """
         if self._current_tot_pow is None:
             pass  # define exception for undefined variable
@@ -1051,20 +1094,18 @@ class Sequence(object):
 
     @current_tot_pow.setter
     def current_tot_pow(self, new_tot_pow):
-        """Sets the current total power of the system
-        """
+
         self._current_tot_pow = new_tot_pow
 
     @property
     def tot_pow_seq(self):
-        """Returns the sequence of total power of the system
+        """Returns the sequence of total power of the system.
         """
         return self._tot_pow_seq
 
     @tot_pow_seq.setter
     def tot_pow_seq(self, new_tot_pow_seq):
-        """Sets the sequence of total power of the system
-        """
+
         self._tot_pow_seq = new_tot_pow_seq
 
     def _append_tot_pow_seq(self, new_tot_pow):
@@ -1074,6 +1115,11 @@ class Sequence(object):
     
     def tot_pow_point(self, s):
         """Returns the total power value for macrostep s
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
         """
         return self._tot_pow_seq[s]
 
@@ -1083,28 +1129,26 @@ class Sequence(object):
 
     @property
     def current_time(self):
-        """Returns the time in second corresponding to the current macrostep or microstep
-        """    
+        #Returns the time in second corresponding to the current macrostep or microstep
+   
         if self._current_time is None:
             pass  # define exception for undefined variable
         return self._current_time
 
     @current_time.setter
     def current_time(self, new_time):
-        """Sets the time in second corresponding to the current microstep (or macrostep)
-        """ 
+        #Sets the time in second corresponding to the current microstep (or macrostep)
+
         self._current_time = new_time
 
     @property
     def time_seq(self):
-        """Returns the time macrosequence
+        """Returns the macrostep vector in time (seconds).
         """       
         return self._time_seq
 
     @time_seq.setter
     def time_seq(self, new_time_seq):
-        """Sets the time macrosequence
-        """ 
         self._time_seq = new_time_seq
 
     def _append_time_seq(self, new_time):
@@ -1113,8 +1157,7 @@ class Sequence(object):
     
     @property
     def current_time_subseq(self):
-        """Returns the time microsequence in second corresponding to the current macrostep
-        """ 
+        #Returns the time microsequence in second corresponding to the current macrostep
         return self._current_time_subseq
 
     def _append_current_time_subseq(self, new_time, ss):
@@ -1126,16 +1169,15 @@ class Sequence(object):
 
     @property
     def time_subseq_mat(self):
-        """Returns a list of time microsequences in second where each microsequence correspond 
-        to one macrostep
+        """Returns a list of time microstep vectors (seconds) where each microstep vector corresponds 
+        to one macrostep.
         """ 
         return self._time_subseq_mat
 
     @time_subseq_mat.setter
     def time_subseq_mat(self, time_subseq_mat):
-        """Sets a list of time microsequences in second where each microsequence correspond 
-        to one macrostep
-        """
+        #Sets a list of time microsequences in second where each microsequence correspond to one macrostep
+
         self._time_subseq_mat = time_subseq_mat
 
     def _append_time_subseq_mat(self, time, ss):
@@ -1146,17 +1188,35 @@ class Sequence(object):
         self._time_subseq_mat[-1].append(time)
 
     def time_point(self, s):
-        """Returns the time in second for macrostep s
+        """Returns the time (seconds) for macrostep s
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
         """
         return self._time_seq[s]
 
     def time_subpoint(self, s, ss):
-        """Returns the time in second for macrostep s and microstep ss
+        """Returns the time (seconds) for macrostep s and microstep ss
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
+        ss: int
+            Microstep number ss.
         """
+
         return self._time_subseq_mat[s][ss]
 
     def get_time_intvl(self, s):
-        """Gets the time interval in second between macrostep s nd macrostep s-1
+        """Gets the time interval (seconds) between macrostep s nd macrostep s-1
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
         """
         if s == 0:
             raise Step_0 ('Step 0 has no interval')
@@ -1166,7 +1226,14 @@ class Sequence(object):
         return time_intvl
 
     def get_time_subintvl(self, s, ss):
-        """Gets the time interval in second between macrostep s and macrostep s-1
+        """Gets the time interval (seconds) between macrostep s and macrostep s-1
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
+        ss: int
+            Microstep number ss.
         """
         if s == 0:
             raise Step_0 ('Step 0 has no subinterval')
@@ -1185,28 +1252,22 @@ class Sequence(object):
 
     @property
     def current_system_bu(self):
-        """Returns burnup level of current macro or microstep
-        """
         if self._current_system_bu is None:
             pass  # define exception for undefined variable
         return self._current_system_bu
 
     @current_system_bu.setter
     def current_system_bu(self, new_system_bu):
-        """Sets burnup level of current macro or microstep
-        """
         self._current_system_bu = new_system_bu
 
     @property
     def system_bu_seq(self):
-        """Returns the burnup macrosequence
+        """Returns the average burnup macrostep vector (MWd/kg) for the whole system.
         """  
         return self._system_bu_seq
 
     @system_bu_seq.setter
     def system_bu_seq(self, new_system_bu_seq):
-        """Sets the burnup macrosequence
-        """ 
         self._system_bu_seq = new_system_bu_seq
 
     def _append_system_bu_seq(self, new_system_bu):
@@ -1215,8 +1276,6 @@ class Sequence(object):
     
     @property
     def current_system_bu_subseq(self):
-        """Returns the burnup microsequence of current macrostep
-        """ 
         return self._current_system_bu_subseq
 
     def _append_current_system_bu_subseq(self, new_system_bu, ss):
@@ -1228,14 +1287,13 @@ class Sequence(object):
 
     @property
     def system_bu_subseq_mat(self):
-        """Returns the list of burnup microsequences with one microsequences per macrostep
+        """Returns a list of average burnup microstep vectors (MWd/kg) for the whole system where each microstep vector corresponds 
+        to one macrostep.
         """ 
         return self._system_bu_subseq_mat
 
     @system_bu_subseq_mat.setter
     def system_bu_subseq_mat(self, system_bu_subseq_mat):
-        """Sets the list of burnup microsequences with one microsequences per macrostep
-        """ 
         self._bu_subseq_mat = bu_subseq_mat 
 
     def _append_system_bu_subseq_mat(self, new_system_bu, ss):
@@ -1245,15 +1303,38 @@ class Sequence(object):
         self._system_bu_subseq_mat[-1].append(new_system_bu)
 
     def system_bu_point(self, s):
-        """Returns the burnup level at macrostep s"""
+        """Returns the average burnup level of the whole system at macrostep s.
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
+        """
+
         return self._system_bu_seq[s]
 
     def system_bu_subpoint(self, s, ss):
-        """Returns the burnup level at macrostep s and microstep ss"""
+        """Returns the average burnup level of the whole system at macrostep s and microstep ss.
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
+        ss: int
+            Microstep number ss.
+        """
+
         return self._system_bu_subseq_mat[s][ss]
 
     def get_system_bu_intvl(self, s):
-        """Gets the burnup interval between macrostep s-1 and macrostep s"""
+        """Gets the average burnup interval for the whole system between macrostep s-1 and macrostep s.
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
+
+        """
         if s == 0:
             raise Step_0 ('Step 0 has no interval')
 
@@ -1262,7 +1343,16 @@ class Sequence(object):
         return system_bu_intvl
 
     def get_system_bu_subintvl(self, s, ss):
-        """Gets the burnup interval between microstep ss-1 and microstep ss for macrostep s"""
+        """Gets the average burnup interval for the whole system between microstep ss-1 and microstep ss for macrostep s.
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
+        ss: int
+            Microstep number ss.
+        """
+
         if s == 0:
             raise Step_0 ('Step 0 has no subinterval')
 
@@ -1281,28 +1371,24 @@ class Sequence(object):
     # Power density that is currently set
     @property
     def current_bucell_bu(self):
-        """Returns burnup level of current macro or microstep
-        for BUCell"""
+        #Returns burnup level of current macro or microstep for the BUCell
         if self._current_bucell_bu is None:
             pass  # define exception for undefined variable
         return self._current_bucell_bu
 
     @current_bucell_bu.setter
     def current_bucell_bu(self, new_bucell_bu):
-        """Returns burnup level of current macro or microstep
-        for BUCell"""
+        #Returns burnup level of current macro or microstep for the BUCell
         self._current_bucell_bu = new_bucell_bu
 
     @property
     def bucell_bu_seq(self):
-        """Returns the burnup macrosequence for BUCell
+        """Returns the burnup macrostep vector (MWd/kg) for the BUCell.
         """ 
         return self._bucell_bu_seq
 
     @bucell_bu_seq.setter
     def bucell_bu_seq(self, new_bucell_bu_seq):
-        """Sets the burnup macrosequence for BUCell
-        """ 
         self._bucell_bu_seq = new_bucell_bu_seq
 
     def _append_bucell_bu_seq(self, new_bucell_bu):
@@ -1311,8 +1397,7 @@ class Sequence(object):
     
     @property
     def current_bucell_bu_subseq(self):
-        """Returns the burnup microsequence of current macrostep
-        for BUCell""" 
+ 
         return self._current_bucell_bu_subseq
 
     def _append_current_bucell_bu_subseq(self, new_bucell_bu, ss):
@@ -1324,14 +1409,13 @@ class Sequence(object):
 
     @property
     def bucell_bu_subseq_mat(self):
-        """Returns the list of burnup microsequences with one microsequences per macrostep
-        for BUCell"""
+        """Returns a list of burnup microstep vectors (MWd/kg) for the BUCell where each microstep vector corresponds 
+        to one macrostep.
+        """ 
         return self._bucell_bu_subseq_mat
 
     @bucell_bu_subseq_mat.setter
     def bucell_bu_subseq_mat(self, bucell_bu_subseq_mat):
-        """Sets the list of burnup microsequences with one microsequences per macrostep
-        for BUCell""" 
         self._bu_subseq_mat = bu_subseq_mat 
 
     def _append_bucell_bu_subseq_mat(self, new_bucell_bu, ss):
@@ -1341,15 +1425,36 @@ class Sequence(object):
         self._bucell_bu_subseq_mat[-1].append(new_bucell_bu)
 
     def bucell_bu_point(self, s):
-        """Returns the burnup level at macrostep s for BUCell"""
+        """Returns the burnup level of the BUCell at macrostep s.
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
+        """
         return self._bucell_bu_seq[s]
 
     def bucell_bu_subpoint(self, s, ss):
-        """Returns the burnup level at macrostep s and microstep ss for BUCell"""
+        """Returns the burnup level of the BUCell at macrostep s and microstep ss.
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
+        ss: int
+            Microstep number ss.
+        """
         return self._bucell_bu_subseq_mat[s][ss]
 
     def get_bucell_bu_intvl(self, s):
-        """Gets the burnup interval between macrostep s-1 and macrostep s for BUCell"""
+        """Gets the burnup interval for the BUCell between macrostep s-1 and macrostep s.
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
+
+        """
         if s == 0:
             raise Step_0 ('Step 0 has no interval')
 
@@ -1358,7 +1463,15 @@ class Sequence(object):
         return bucell_bu_intvl
 
     def get_bucell_bu_subintvl(self, s, ss):
-        """Gets the burnup interval between microstep ss-1 and microstep ss for macrostep s for BUCell"""
+        """Gets the burnup interval for the BUCell between microstep ss-1 and microstep ss for macrostep s.
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
+        ss: int
+            Microstep number ss.
+        """
         if s == 0:
             raise Step_0 ('Step 0 has no subinterval')
 
@@ -1376,28 +1489,24 @@ class Sequence(object):
     # Power density that is currently set
     @property
     def current_flux(self):
-        """Returns neutron flux of current macro or microstep
-        for BUCell"""
+        #Returns neutron flux of current macro or microstep for BUCell
         if self._current_flux is None:
             pass  # define exception for undefined variable
         return self._current_flux
 
     @current_flux.setter
     def current_flux(self, new_flux):
-        """Sets neutron flux of current macro or microstep
-        for BUCell"""
+        #Sets neutron flux of current macro or microstep for BUCell
         self._current_flux = new_flux
 
     @property
     def flux_seq(self):
-        """Returns the neutron flux macrosequence for BUCell
+        """Returns the neutron flux macrostep vector (:math:`cm^{-2}s^{-1}`) for the BUCell.
         """ 
         return self._flux_seq
 
     @flux_seq.setter
     def flux_seq(self, new_flux_seq):
-        """Sets the neutron flux macrosequence for BUCell
-        """ 
         self._flux_seq = new_flux_seq
 
     def _append_flux_seq(self, new_flux):
@@ -1406,8 +1515,6 @@ class Sequence(object):
     
     @property
     def current_flux_subseq(self):
-        """Returns the neutron flux microsequence of current macrostep
-        for BUCell""" 
         return self._current_flux_subseq
 
     def _append_current_flux_subseq(self, new_flux, ss):
@@ -1419,8 +1526,9 @@ class Sequence(object):
 
     @property
     def flux_subseq_mat(self):
-        """Returns the list of neuron flux microsequences with one microsequences per macrostep
-        for BUCell"""
+        """Returns a list of neutron flux microstep vectors (:math:`cm^{-2}s^{-1}`) for the BUCell where each microstep vector corresponds 
+        to one macrostep.
+        """ 
         return self._flux_subseq_mat  
 
     def _append_flux_subseq_mat(self, flux, ss):
@@ -1431,12 +1539,26 @@ class Sequence(object):
         self._flux_subseq_mat[-1].append(flux)
 
     def flux_point(self, s):
-        """Returns the neutron flux at macrostep s for BUCell"""
+        """Returns the neutron flux of the BUCell at macrostep s.
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
+        """
         return self._flux_seq[s]
 
-    def flux_subpoint(self, s, i):
-        """Returns the neutron flux at macrostep s and microstep ss for BUCell"""
-        return self._flux_subseq_mat[s][i]
+    def flux_subpoint(self, s, ss):
+        """Returns the neutron flux of the BUCell at macrostep s and microstep ss.
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
+        ss: int
+            Microstep number ss.
+        """
+        return self._flux_subseq_mat[s][ss]
 
 
 
@@ -1445,28 +1567,23 @@ class Sequence(object):
     # Power density that is currently set
     @property
     def current_pow_dens(self):
-        """Returns power density of current macro or microstep
-        for BUCell"""
+        #Returns power density of current macro or microstep for BUCell
         if self._current_pow_dens is None:
             pass  # define exception for undefined variable
         return self._current_pow_dens
 
     @current_pow_dens.setter
     def current_pow_dens(self, new_pow_dens):
-        """Sets power density of current macro or microstep
-        for BUCell"""
         self._current_pow_dens = new_pow_dens
 
     @property
     def pow_dens_seq(self):
-        """Returns the power density macrosequence for BUCell
+        """Returns the power density macrostep vector (:math:`kW/l`) for the BUCell.
         """ 
         return self._pow_dens_seq
 
     @pow_dens_seq.setter
     def pow_dens_seq(self, new_pow_dens_seq):
-        """Sets the power density macrosequence for BUCell
-        """
         self._pow_dens_seq = new_pow_dens_seq
 
     def _append_pow_dens_seq(self, new_pow_dens):
@@ -1488,8 +1605,9 @@ class Sequence(object):
 
     @property
     def pow_dens_subseq_mat(self):
-        """Returns the list of neuron flux microsequences with one microsequences per macrostep
-        for BUCell"""
+        """Returns a list of power density microstep vectors (:math:`kW/l`) for the BUCell where each microstep vector corresponds 
+        to one macrostep.
+        """ 
         return self._pow_dens_subseq_mat  
 
     def _append_pow_dens_subseq_mat(self, pow_dens, ss):
@@ -1500,12 +1618,26 @@ class Sequence(object):
         self._pow_dens_subseq_mat[-1].append(pow_dens)
 
     def pow_dens_point(self, s):
-        """Returns the power density at macrostep s for BUCell"""
+        """Returns the power density of the BUCell at macrostep s.
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
+        """
         return self._pow_dens_seq[s]
 
-    def pow_dens_subpoint(self, s, i):
-        """Returns the power density at macrostep s and microstep ss for BUCell"""
-        return self._pow_dens_subseq_mat[s][i]
+    def pow_dens_subpoint(self, s, ss):
+        """Returns the neutron flux of the BUCell at macrostep s and microstep ss.
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
+        ss: int
+            Microstep number ss.
+        """
+        return self._pow_dens_subseq_mat[s][ss]
 
 
 
@@ -1514,28 +1646,23 @@ class Sequence(object):
     # Power density that is currently set
     @property
     def current_MC_flux(self):
-        """Returns normalized neutron flux of current macro or microstep
-        for BUCell"""
+        #Returns normalized neutron flux of current macro or microstep for BUCell
         if self._current_MC_flux is None:
             pass  # define exception for undefined variable
         return self._current_MC_flux
 
     @current_MC_flux.setter
     def current_MC_flux(self, new_MC_flux):
-        """Sets normalized neutron flux of current macro or microstep
-        for BUCell"""
         self._current_MC_flux = new_MC_flux
 
     @property
     def MC_flux_seq(self):
-        """Returns the normalized neutron flux macrosequence for BUCell
+        """Returns the Monte Carlo neutron flux macrostep vector (:math:`cm^{-2}s^{-1}` per source particle) for the BUCell.
         """ 
         return self._MC_flux_seq
 
     @MC_flux_seq.setter
     def MC_flux_seq(self, new_MC_flux_seq):
-        """Sets the normalized neutron flux macrosequence for BUCell
-        """ 
         self._MC_flux_seq = new_MC_flux_seq
 
     def _append_MC_flux_seq(self, new_MC_flux):
@@ -1543,7 +1670,13 @@ class Sequence(object):
         self._MC_flux_seq.append(new_MC_flux)
 
     def MC_flux_point(self, s):
-        """Returns the normalized neutron flux at macrostep s for BUCell"""
+        """Returns the Monte Carlo neutron flux of the BUCell at macrostep s.
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
+        """
         return self._MC_flux_seq[s]
 
 
@@ -1551,28 +1684,23 @@ class Sequence(object):
 
     @property
     def current_flux_spectrum(self):
-        """Returns flux spectrum of current macrostep
-        for BUCell"""
+        #Returns flux spectrum of current macrostep for BUCell
         if self._current_flux_spectrum is None:
             pass  # define exception for undefined variable
         return self._current_flux_spectrum
 
     @current_flux_spectrum.setter
     def current_flux_spectrum(self, new_flux_spectrum):
-        """Sets flux spectrum of current macro or microstep
-        for BUCell"""
         self._current_flux_spectrum = new_flux_spectrum
 
     @property
     def flux_spectrum_seq(self):
-        """Returns the flux spectrum macrosequence for BUCell
+        """Returns a list of 300-group neutron flux arrays, one array per macrostep for the BUCell.
         """ 
         return self._flux_spectrum_seq
 
     @flux_spectrum_seq.setter
     def flux_spectrum_seq(self, new_flux_spectrum_seq):
-        """Sets the flux spectrum macrosequence for BUCell
-        """
         self._flux_spectrum_seq = new_flux_spectrum_seq
 
     def _append_flux_spectrum_seq(self, new_flux_spectrum):
@@ -1585,26 +1713,22 @@ class Sequence(object):
     # Power density that is currently set
     @property
     def current_kinf(self):
-        """Returns kinf of current macrostep of system"""
         if self._current_kinf is None:
             pass  # define exception for undefined variable
         return self._current_kinf
 
     @current_kinf.setter
     def current_kinf(self, new_kinf):
-        """Sets kinf of current macrostep of system"""
         self._current_kinf = new_kinf
 
     @property
     def kinf_seq(self):
-        """Returns the kinf macrosequence
+        """Returns the multiplication factor macrostep vector for the BUCell.
         """ 
         return self._kinf_seq
 
     @kinf_seq.setter
     def kinf_seq(self, new_kinf_seq):
-        """Sets the kinf macrosequence
-        """ 
         self._kinf_seq = new_kinf_seq
 
     def _append_kinf_seq(self, new_kinf):
@@ -1612,35 +1736,36 @@ class Sequence(object):
         self._kinf_seq.append(new_kinf)
     
     def kinf_point(self, s):
-        """Returns kinf at macrostep s"""
+        """Returns the multiplication factor of the BUCell at macrostep s.
+
+        Parameters
+        ----------
+        s: int
+            Macrostep number s.
+        """
         return self._kinf_seq[s]
 
 ##### branching ratio info ######
 
     @property
     def current_isomeric_branching_ratio(self):
-        """Returns isomeric branching ratios of current macro or microstep
-        for BUCell"""
+        #Returns isomeric branching ratios of current macro or microstep for BUCell
         if self._current_isomeric_branching_ratio is None:
             pass  # define exception for undefined variable
         return self._current_isomeric_branching_ratio
 
     @current_isomeric_branching_ratio.setter
     def current_isomeric_branching_ratio(self, new_isomeric_branching_ratio):
-        """Sets isomeric branching ratios of current macro or microstep
-        for BUCell"""
         self._current_isomeric_branching_ratio = new_isomeric_branching_ratio
 
     @property
     def isomeric_branching_ratio_seq(self):
-        """Returns the isomeric branching ratios macrosequence for BUCell
+        """Returns the isomeric branching ratios macrostep vector for the BUCell.
         """ 
         return self._isomeric_branching_ratio_seq
 
     @isomeric_branching_ratio_seq.setter
     def isomeric_branching_ratio_seq(self, new_isomeric_branching_ratio_seq):
-        """Sets the isomeric branching ratios macrosequence for BUCell
-        """ 
         self._isomeric_branching_ratio_seq = new_isomeric_branching_ratio_seq
 
     def _append_isomeric_branching_ratio_seq(self, new_isomeric_branching_ratio_seq):

@@ -1,0 +1,555 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>onix.utils.reactions_class &mdash; ONIX Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #0d0d0d" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pythonapi/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License Agreement</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ONIX</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>onix.utils.reactions_class</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for onix.utils.reactions_class</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; This module defines multiple Python class that are designed to be used by the user when using</span>
+<span class="sd">the Python environment to define and launch an onix calculation&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">math</span> <span class="k">as</span> <span class="nn">m</span>
+<span class="kn">from</span> <span class="nn">onix.data</span> <span class="kn">import</span> <span class="n">list_and_dict</span>
+<span class="kn">import</span> <span class="nn">onix.data</span> <span class="k">as</span> <span class="nn">d</span>
+<span class="kn">from</span> <span class="nn">.functions</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="decay_lib"><a class="viewcode-back" href="../../../pythonapi/generated/onix.utils.decay_lib.html#onix.utils.decay_lib">[docs]</a><span class="k">class</span> <span class="nc">decay_lib</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Decay_lib objects allow users to build and store custom, small size decay libraries.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id_number: int</span>
+<span class="sd">        The id number associated with the decay_lib object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_number</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">id_number</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_decay_a</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_decay_b</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+<div class="viewcode-block" id="decay_lib.add_data"><a class="viewcode-back" href="../../../pythonapi/generated/onix.utils.decay_lib.html#onix.utils.decay_lib.add_data">[docs]</a>    <span class="k">def</span> <span class="nf">add_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zamid</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;Add decay data for a specified nuclide to the decay object.</span>
+
+<span class="sd">        **Note**: User can either specify total decay constant (or half life) or specific reactions decay constants (the total decay constant will be deduced from these decay constants).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        zamid: int</span>
+<span class="sd">            z-a-m id of the nuclide</span>
+<span class="sd">        data: float</span>
+<span class="sd">            Keywords should be decay constants names or the halflife. Input should be the value in :math:`s^{-1}` or :math:`s`.</span>
+<span class="sd">            Possible keyword entries:</span>
+<span class="sd">                - half life</span>
+<span class="sd">                - total decay</span>
+<span class="sd">                - betaneg</span>
+<span class="sd">                - betapos</span>
+<span class="sd">                - gamma</span>
+<span class="sd">                - alpha</span>
+<span class="sd">                - neutron</span>
+<span class="sd">                - proton</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Empty_data</span><span class="p">(</span><span class="s2">&quot;No data for </span><span class="si">{}</span><span class="s2"> has been entered&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">zamid</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span>
+
+        <span class="k">if</span> <span class="s1">&#39;half life&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;half life&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;stable&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;total decay&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">total</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;half life&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;total decay&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">total</span>
+
+        <span class="k">elif</span> <span class="s1">&#39;total&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;total decay&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;half life&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;stable&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">half_life</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;total decay&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;half life&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">half_life</span>
+
+        <span class="k">elif</span> <span class="s1">&#39;total&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">and</span> <span class="s1">&#39;half life&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">total</span> <span class="o">+=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;total decay&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">total</span>
+
+            <span class="n">half_life</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">total</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;half life&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">half_life</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_decay_a</span><span class="p">(</span><span class="n">zamid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_decay_b</span><span class="p">(</span><span class="n">zamid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">])</span></div>
+
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span>
+
+    <span class="k">def</span> <span class="nf">_create_decay_a</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zamid</span><span class="p">,</span> <span class="n">dic</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_decay_a</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span> <span class="o">=</span> <span class="n">dic</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_decay_a</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;half-life&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decay_a</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;half life&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decay_a</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;half life&#39;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">decay_a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the absolute decay dictionnary of the decay object. This dictionnary has nuclides&#39; z-a-m id as keys and absolute decay sub-dictionnaries as entries. Absolute decay sub-dictionnaries have decay reactions names as keys and corresponding decay constant absolute values in seconds as entries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decay_a</span>
+
+    <span class="k">def</span> <span class="nf">_create_decay_b</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zamid</span><span class="p">,</span>  <span class="n">dic</span><span class="p">):</span>
+
+        <span class="n">decay_b</span> <span class="o">=</span> <span class="n">dic</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">entries</span> <span class="ow">in</span> <span class="n">decay_b</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entries</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;half_life&#39;</span><span class="p">,</span> <span class="s1">&#39;total decay&#39;</span><span class="p">]:</span>
+                <span class="n">decay_b</span><span class="p">[</span><span class="n">entries</span><span class="p">]</span> <span class="o">=</span> <span class="n">decay_b</span><span class="p">[</span><span class="n">entries</span><span class="p">]</span><span class="o">/</span><span class="n">decay_b</span><span class="p">[</span><span class="s1">&#39;total decay&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_decay_b</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span> <span class="o">=</span> <span class="n">decay_b</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_decay_b</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;half-life&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decay_b</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;half_life&#39;</span><span class="p">]</span>
+
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decay_b</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;half-life&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;stable&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_decay_b</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;unit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;n/a&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_decay_b</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;unit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;s&#39;</span>
+
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decay_b</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;half_life&#39;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">decay_b</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the fractionnal decay dictionnary of the decay object. This dictionnary has nuclides&#39; z-a-m id as keys and fractionnal decay sub-dictionnaries as entries. Fractionnal decay sub-dictionnaries have decay reactions names as keys and corresponding decay constant as fraction of total decay constant for entries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decay_b</span></div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="viewcode-block" id="xs_lib"><a class="viewcode-back" href="../../../pythonapi/generated/onix.utils.xs_lib.html#onix.utils.xs_lib">[docs]</a><span class="k">class</span> <span class="nc">xs_lib</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;xs_lib objects allow users to build and store custom, small size one-group cross section libraries.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id_number: int</span>
+<span class="sd">        The id number associated with the xs_lib object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_number</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_id_number</span> <span class="o">=</span> <span class="n">id_number</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xs</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="xs_lib.add_data"><a class="viewcode-back" href="../../../pythonapi/generated/onix.utils.xs_lib.html#onix.utils.xs_lib.add_data">[docs]</a>    <span class="k">def</span> <span class="nf">add_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zamid</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;Add cross section data for a specified nuclide to the cross section object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        zamid: int</span>
+<span class="sd">            z-a-m id of the nuclide</span>
+<span class="sd">        data: float</span>
+<span class="sd">            Keywords should be cross section names. Input should be the value in barn.</span>
+<span class="sd">            Possible keyword entries:</span>
+<span class="sd">                - ngamma</span>
+<span class="sd">                - n2n</span>
+<span class="sd">                - n3n</span>
+<span class="sd">                - nalpha</span>
+<span class="sd">                - fission</span>
+<span class="sd">                - removal</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Empty_data</span><span class="p">(</span><span class="s2">&quot;No data for </span><span class="si">{}</span><span class="s2"> has been entered&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">zamid</span><span class="p">))</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span>
+
+        <span class="c1"># If removal is not defined, calculate removal from xs values</span>
+        <span class="k">if</span> <span class="s1">&#39;removal&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">removal</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">removal</span> <span class="o">+=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="s1">&#39;removal&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">removal</span>
+
+
+        <span class="c1">#xs_dict = self._dict[zamid].copy()</span>
+
+        <span class="n">xs_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">[</span><span class="n">zamid</span><span class="p">]:</span>
+            <span class="n">correct_key</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">xs_lib_object_name_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">xs_dict</span><span class="p">[</span><span class="n">correct_key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">[</span><span class="n">zamid</span><span class="p">][</span><span class="n">key</span><span class="p">]</span>
+            
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">xs_dict</span><span class="p">:</span>
+            <span class="n">xs_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">xs_dict</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">]</span> <span class="c1"># Needs to reserve a spot for uncertainties</span>
+        
+        <span class="c1">#self.isomeric_branching(zamid, xs_dict)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xs</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span> <span class="o">=</span> <span class="n">xs_dict</span></div>
+
+<div class="viewcode-block" id="xs_lib.add_xs_dict"><a class="viewcode-back" href="../../../pythonapi/generated/onix.utils.xs_lib.html#onix.utils.xs_lib.add_xs_dict">[docs]</a>    <span class="k">def</span> <span class="nf">add_xs_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zamid</span><span class="p">,</span> <span class="n">xs_dict</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;Add cross section data from a cross section disctionnary for a specified nuclide to the cross section object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        zamid: int</span>
+<span class="sd">            z-a-m id of the nuclide</span>
+<span class="sd">        xs_dict: dict</span>
+<span class="sd">            A dictionnary where keys are cross section names and entries are values in barn.</span>
+<span class="sd">            Possible dictionnary entries:</span>
+<span class="sd">                - (n,gamma)</span>
+<span class="sd">                - (n,2n)</span>
+<span class="sd">                - (n,3n)</span>
+<span class="sd">                - (n,alpha)</span>
+<span class="sd">                - fission</span>
+<span class="sd">                - removal</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># If removal is not defined, calculate removal from xs values</span>
+        <span class="k">if</span> <span class="s1">&#39;removal&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">xs_dict</span><span class="p">:</span>
+            <span class="n">removal</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">xs_dict</span><span class="p">:</span>
+                <span class="n">removal</span> <span class="o">+=</span> <span class="n">xs_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">xs_dict</span><span class="p">[</span><span class="s1">&#39;removal&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">removal</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">xs_dict</span><span class="p">:</span>
+            <span class="n">xs_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">xs_dict</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">]</span> <span class="c1"># Needs to reserve a spot for uncertainties</span>
+
+        <span class="c1">#self.isomeric_branching(zamid, xs_dict)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xs</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span> <span class="o">=</span> <span class="n">xs_dict</span></div>
+
+
+    <span class="c1"># def isomeric_branching(self,zamid, xs_dict):</span>
+
+    <span class="c1">#   # This need to be developed later on</span>
+    <span class="c1">#   # For now, it only set the branching ration for Am241 to Am242/242m</span>
+    <span class="c1">#   if zamid == &#39;952410&#39; and &#39;(n,gamma)&#39; in xs_dict:</span>
+    <span class="c1">#       xs_val = xs_dict[&#39;(n,gamma)&#39;][0].copy()</span>
+    <span class="c1">#       xs_dict[&#39;(n,gamma)&#39;][0] = xs_val*0.89</span>
+    <span class="c1">#       xs_dict[&#39;(n,gamma)X&#39;] = [xs_val*0.11, 0.0]</span>
+
+    <span class="c1">#   # Pm147 to Pm148/148m (very important for Sm149)</span>
+    <span class="c1">#   if zamid == &#39;611470&#39; and &#39;(n,gamma)&#39; in xs_dict:</span>
+    <span class="c1">#       xs_val = xs_dict[&#39;(n,gamma)&#39;][0].copy()</span>
+    <span class="c1">#       xs_dict[&#39;(n,gamma)&#39;][0] = xs_val*0.6953</span>
+    <span class="c1">#       xs_dict[&#39;(n,gamma)X&#39;] = [xs_val*0.3046, 0.0]</span>
+
+    <span class="c1"># This function screens the xs_lib and look for which nuclide ngamma reactions needs to </span>
+    <span class="c1"># be branched</span>
+    <span class="k">def</span> <span class="nf">_isomeric_branching_weighting</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isomeric_branching_ratio</span><span class="p">):</span>
+
+
+        <span class="k">for</span> <span class="n">zamid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xs</span><span class="p">:</span>
+            <span class="n">xs_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xs</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">zamid_to_name</span><span class="p">(</span><span class="n">zamid</span><span class="p">)</span>
+            <span class="n">mc_name</span> <span class="o">=</span> <span class="n">onix_name_to_openmc_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mc_name</span> <span class="ow">in</span> <span class="n">isomeric_branching_ratio</span><span class="p">:</span>
+                <span class="n">ngamma_ratio</span> <span class="o">=</span> <span class="n">isomeric_branching_ratio</span><span class="p">[</span><span class="n">mc_name</span><span class="p">][</span><span class="s1">&#39;(n,gamma)&#39;</span><span class="p">]</span>
+                <span class="n">ngammaX_ratio</span> <span class="o">=</span> <span class="n">isomeric_branching_ratio</span><span class="p">[</span><span class="n">mc_name</span><span class="p">][</span><span class="s1">&#39;(n,gamma)X&#39;</span><span class="p">]</span>
+                <span class="n">xs_val</span> <span class="o">=</span> <span class="n">xs_dict</span><span class="p">[</span><span class="s1">&#39;(n,gamma)&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">xs_dict</span><span class="p">[</span><span class="s1">&#39;(n,gamma)&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">xs_val</span><span class="o">*</span><span class="n">ngamma_ratio</span>
+                <span class="n">xs_dict</span><span class="p">[</span><span class="s1">&#39;(n,gamma)X&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">xs_val</span><span class="o">*</span><span class="n">ngammaX_ratio</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+
+
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">xs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the cross section dictionnary of the cross section object. This dictionnary has nuclides&#39; z-a-m id as keys and cross section sub-dictionnaries as entries. Cross section sub-dictionnaries have cross sections&#39; names as keys and corresponding values in barn as entries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xs</span></div>
+
+
+<div class="viewcode-block" id="fy_lib"><a class="viewcode-back" href="../../../pythonapi/generated/onix.utils.fy_lib.html#onix.utils.fy_lib">[docs]</a><span class="k">class</span> <span class="nc">fy_lib</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;fy_lib objects allow users to build and store custom, small size fission yield libraries.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id_number: int</span>
+<span class="sd">        The id number associated with the fy_lib object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_number</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">id_number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="fy_lib.add_data"><a class="viewcode-back" href="../../../pythonapi/generated/onix.utils.fy_lib.html#onix.utils.fy_lib.add_data">[docs]</a>    <span class="k">def</span> <span class="nf">add_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zamid</span><span class="p">,</span> <span class="n">fy_dict</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;Add fission yield data from a fission yield dictionnary for a specified nuclide to the fission yield object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        zamid: int</span>
+<span class="sd">            z-a-m id of the nuclide</span>
+<span class="sd">        fy_dict: dict</span>
+<span class="sd">            A dictionnary where keys are parent actinides&#39; z-a-m id and entries are values in percent (values from 0 to 100).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span> <span class="o">=</span> <span class="n">fy_dict</span>
+
+        <span class="n">fy_dic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">fy_dic</span><span class="p">:</span>
+            <span class="n">fy_dic</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">fy_dic</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">]</span> <span class="c1"># Needs to reserve a spot for uncertainties</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span><span class="p">[</span><span class="n">zamid</span><span class="p">]</span> <span class="o">=</span> <span class="n">fy_dic</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">fy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the fission yield dictionnary of the fission yield object. This dictionnary has nuclides&#39; z-a-m id as keys and fission yield sub-dictionnaries as entries. Fission yield sub-dictionnaries have parent actinides z-a-m id as keys and corresponding fission yield values in percent (values from 0 to 100).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span></div>
+
+
+
+
+
+<span class="k">class</span> <span class="nc">Empty_data</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raise when the user does not enter any data while add_data has been called for a nuclide&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+
+
+
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Julien de Troullioud de Lanversin
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+ 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30411614-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>

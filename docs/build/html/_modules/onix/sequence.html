@@ -1,0 +1,2009 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>onix.sequence &mdash; ONIX Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #0d0d0d" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pythonapi/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License Agreement</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ONIX</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>onix.sequence</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for onix.sequence</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">onix.utils</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">data</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">uncertainties</span>
+
+<div class="viewcode-block" id="Sequence"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence">[docs]</a><span class="k">class</span> <span class="nc">Sequence</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The sequence object contains information about the burnup and time sequence that ONIX will follow during simulations.</span>
+
+<span class="sd">    With the sequence object, the user can:</span>
+
+<span class="sd">    - Set the macrosteps for the simultion (points in time or burnup at which ONIX will call OpenMC to update the neutron flux and one-group reaction rates)</span>
+
+<span class="sd">    - Set the microsteps that divide each macrostep (ONIX depletes the system over each microstep)</span>
+
+<span class="sd">    - Set the normalization for each macrostep (flux or power density)</span>
+
+<span class="sd">    - Set operational change during the simulation such as temperature changes, density changes or isotopic changes</span>
+
+<span class="sd">    Each BUCell is automatically associated with a unique copy of the &#39;master&#39; sequence defined by the user. Each sequence object contains data on the evolution of all relevant quantities (:math:`k_{inf}`, isomeric branchings, neutron flux spectrum, power, flux, burnup and time).</span>
+<span class="sd">     &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_number</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">id_number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_macrostep_vector</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_macrostep_unit</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_norma_vector</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_norma_unit</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_master_bucell</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_macrosteps_number</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_microsteps_number</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+        <span class="c1"># self._time_seq = [0]</span>
+        <span class="c1"># self._time_subseq = [[0]]</span>
+        <span class="c1"># self._bu_seq = [0]</span>
+        <span class="c1"># self._bu_subseq = [[0]]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_time</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_bu</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time_seq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bu_seq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_time_subseq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_bu_subseq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time_subseq_mat</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bu_subseq_mat</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Probably unecessary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_time_intvl</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_bu_intvl</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__time_intvl_seq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__bu_intvl_seq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_time_intvl_subseq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_bu_intvl_subseq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time_intvl_subseq_mat</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bu_intvl_subseq_mat</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Average power density and Total power of the system (same for all cells)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_av_pow_dens</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_tot_pow</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_av_pow_dens_seq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tot_pow_seq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_av_pow_dens_subseq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_tot_pow_subseq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_av_pow_dens_subseq_mat</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tot_pow_subseq_mat</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Average flux of the system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_av_flux_seq</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># flux and power density for each cell</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_MC_flux</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_flux_spectrum</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_flux</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_pow_dens</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_MC_flux_seq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flux_spectrum</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flux_seq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pow_dens_seq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_flux_subseq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_pow_dens_subseq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_MC_flux_subseq_mat</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flux_subseq_mat</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pow_dens_subseq_mat</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># System kinf</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_kinf</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kinf_seq</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Cell isotopic branching</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_isomeric_branching_ratio</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_isomeric_branching_ratio_seq</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Isotopic change</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_isotopic_change_dict</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Density change</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_density_change_dict</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Temperature change</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_temperature_change_dict</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># def _set_from_input(self, sequence_dict, passlist,  bu_sec_conv_factor):</span>
+
+    <span class="c1">#     sequence = sequence_dict</span>
+    <span class="c1">#     self._bu_sec_conv_factor = bu_sec_conv_factor</span>
+
+    <span class="c1">#     self.set_sequence(sequence[&#39;unit_vector&#39;], sequence[&#39;unit&#39;])</span>
+
+    <span class="c1">#     self.set_norma(sequence[&#39;norma_vector&#39;], sequence[&#39;normalization&#39;] )</span>
+
+    <span class="c1">#     self.microstep_vector = sequence[&#39;microstep_vector&#39;]</span>
+
+    <span class="c1">#     self.flux_approximation = sequence[&#39;flux_approximation&#39;]</span>
+
+    <span class="c1">#     #self.set_flux_approximation(sequence[&#39;flux_approximation&#39;])</span>
+
+    <span class="c1">#     self._cell_conversion(passlist, bu_sec_conv_factor, mode)</span>
+
+
+    <span class="c1"># I AM NOT SO SURE THIS FUNCTION IS STILL NEDDED</span>
+    <span class="c1"># SYSTEM CONVERSION ALREADY CREATE TOT_POW, AV_POW_DENS AND TIME/BU SEQ</span>
+    <span class="c1"># THE REMAINING (FLUX, POW_DENS, MC_FLUX, TIME/BU), WILL BE DYNAMICALLY</span>
+    <span class="c1"># SET DURING THE BURN LOOP</span>
+    <span class="c1"># THE ONLY THING NEEDED IS TO SET THE BU_SEC_CONV_FACTOR</span>
+    <span class="c1"># def _cell_conversion(self, passlist, bu_sec_conv_factor, mode):</span>
+
+    <span class="c1">#     #This method will convert the user input sequence into time, burnup, flux and power sequence if possible</span>
+
+    <span class="c1">#     # First, we set the bu_sec_conv_factor to the sequence</span>
+    <span class="c1">#     self._set_initial_bucell_bu()</span>
+
+    <span class="c1">#     # if self._macrostep_unit in [&#39;s&#39;, &#39;m&#39;, &#39;y&#39;, &#39;d&#39;]:</span>
+
+        <span class="c1">#     # Create the time sequence</span>
+        <span class="c1">#     # += because self._time_seq is already initialised</span>
+        <span class="c1">#     self._time_seq += self._macrostep_vector</span>
+        <span class="c1">#     for s in range(len(self._time_seq)-1):</span>
+        <span class="c1">#         substeps = self._microstep_vector[s]</span>
+        <span class="c1">#         #time_intvl += [self._time_seq[i+1]- self._time_seq[i]]</span>
+        <span class="c1">#         time_intvl = self.get_time_intvl(s+1)</span>
+        <span class="c1">#         _time_subintvl_val = time_intvl/substeps</span>
+        <span class="c1">#         self._time_subseq_mat.append([_time_subintvl_val*(j+1) + self._time_seq[s] for j in range(substeps)])</span>
+        <span class="c1">#         # self._time_subintvl.append([_time_subintvl_val for j in range(substeps)])</span>
+
+        <span class="c1">#     if mode == &#39;stand alone&#39;:</span>
+        <span class="c1">#     # If mode is stand alone and power is the normalization, you can directly convert time sequence to bu sequence</span>
+        <span class="c1">#         if self._norma_unit == &#39;power&#39;:</span>
+
+        <span class="c1">#             # Create the bu sequence</span>
+        <span class="c1">#             self._bu_seq += [a*(b*bu_sec_conv_factor) for a, b in zip(self._time_seq[1:], self._norma_vector)]</span>
+        <span class="c1">#             for i in range(len(self._bu_seq)-1):</span>
+        <span class="c1">#                 substeps = self._microstep_vector[i]</span>
+        <span class="c1">#                 self._bu_intvl += [self._bu_seq[i+1]- self._bu_seq[i]]</span>
+        <span class="c1">#                 bu_substep_val = self._bu_intvl[i]/substeps</span>
+        <span class="c1">#                 self._bu_subseq.append([bu_substep_val*(j+1) + self._bu_seq[i] for j in range(substeps)])</span>
+        <span class="c1">#                 self._bu_subintvl.append([bu_substep_val for j in range(substeps)])</span>
+
+        <span class="c1"># elif self._macrostep_unit == &#39;MWd/kg&#39;:</span>
+
+        <span class="c1">#     self._bu_seq += self._macrostep_vector</span>
+        <span class="c1">#     for i in range(len(self._bu_seq)-1):</span>
+        <span class="c1">#         substeps = self._substeps[i]</span>
+        <span class="c1">#         self._bu_intvl += [self._bu_seq[i+1]- self._bu_seq[i]]</span>
+        <span class="c1">#         bu_substep_val = self._bu_intvl[i]/substeps</span>
+        <span class="c1">#         self._bu_subseq.append([bu_substep_val*(j+1) + self._bu_seq[i] for j in range(substeps)])</span>
+        <span class="c1">#         #self._bu_subintvl.append([bu_substep_val for j in range(substeps)])</span>
+        
+        <span class="c1">#     if mode == &#39;stand alone&#39;:</span>
+        <span class="c1">#     # If mode is stand alone and power is the normalization, you can directly convert  bu sequence to time sequence</span>
+        <span class="c1">#         if self._norma_unit == &#39;power&#39;:</span>
+
+        <span class="c1">#             self._time_seq += [a/(b*bu_sec_conv_factor) for a, b in zip(self._bu_seq[1:], self._norma_vector)]</span>
+        <span class="c1">#             for i in range(len(self._time_seq)-1):</span>
+        <span class="c1">#                 substeps = self._substeps[i]</span>
+        <span class="c1">#                 self._time_intvl += [self._time_seq[i+1]- self._time_seq[i]]</span>
+        <span class="c1">#                 _time_subintvl_val = self._time_intvl[i]/substeps</span>
+        <span class="c1">#                 self._time_subseq.append([_time_subintvl_val*(j+1) + self._time_seq[i] for j in range(substeps)])</span>
+        <span class="c1">#                 self._time_subintvl.append([_time_subintvl_val for j in range(substeps)])</span>
+
+        <span class="c1"># # If norma_value is flux then flux_seq is norma_vector</span>
+        <span class="c1"># # I HAVE NO IDEA WHAT THIS MEANS IN COUPLE MODE SO FAR</span>
+        <span class="c1"># if self._norma_unit == &#39;flux&#39;:</span>
+        <span class="c1">#     # Flux</span>
+        <span class="c1">#     self._flux_seq = self._norma_vector</span>
+        <span class="c1">#     for s in range(self._steps_number):</span>
+        <span class="c1">#         flux_value = self._flux_seq[s]</span>
+        <span class="c1">#         flux_list = [flux_value]*self._microstep_vector[s]</span>
+        <span class="c1">#         self._flux_subseq.append(flux_list)</span>
+
+        <span class="c1">#     # Initial Power</span>
+        <span class="c1">#     initial_flux = self._flux_seq[0]</span>
+        <span class="c1">#     initial_power = self._update_pow_dens(passlist, initial_flux)</span>
+        <span class="c1">#     self._power_seq.append(initial_power)</span>
+
+
+        <span class="c1"># # WARNING THIS IS PROBANLY OBSOLETE</span>
+        <span class="c1"># # If mode is stand alone and norma_value is power then power_seq is norma_vector</span>
+        <span class="c1"># if mode == &#39;stand alone&#39;:</span>
+        <span class="c1">#     if self._norma_unit == &#39;power&#39;:</span>
+        <span class="c1">#         # Power</span>
+        <span class="c1">#         self._power_seq = self._norma_vector</span>
+        <span class="c1">#         for step in range(self._steps_number):</span>
+        <span class="c1">#             power_value = self._power_seq[step]</span>
+        <span class="c1">#             power_list = [power_value]*self._microstep_vector[step]</span>
+        <span class="c1">#             self._power_subseq.append(power_list)</span>
+
+        <span class="c1">#         #Initial flux</span>
+        <span class="c1">#         initial_power = self._power_seq[0]</span>
+        <span class="c1">#         initial_flux = self.update_flux(passlist, initial_power)</span>
+        <span class="c1">#         self.flux = initial_flux</span>
+        <span class="c1">#         self._flux_seq.append(initial_flux)</span>
+
+
+
+    <span class="c1"># THIS SHOULD ONLY BE IMPLEMENTED IN STAND ALONE</span>
+    <span class="c1"># COUPLED WILL USE FLUX FROM OPENMC</span>
+    <span class="c1"># def _set_initial_flux(self, passlist):</span>
+
+    <span class="c1">#     initial_power = self._power_seq[0]</span>
+    <span class="c1">#     initial_flux = self.update_flux(passlist, initial_power)</span>
+    <span class="c1">#     self.flux = initial_flux</span>
+    <span class="c1">#     self._flux_seq.append(initial_flux)</span>
+
+
+    <span class="k">def</span> <span class="nf">_initial_system_conversion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">):</span>
+
+        <span class="n">total_vol</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">total_vol</span>
+        <span class="n">norma_vector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norma_vector</span>
+        <span class="n">norma_mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norma_unit</span>
+
+        <span class="n">system</span><span class="o">.</span><span class="n">_set_bu_sec_conv_factor</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_initial_time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_initial_system_bu</span><span class="p">()</span>
+
+        <span class="c1"># Directly create the whole time seq and subseq from macrostep_vector and substeps</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_macrostep_unit</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]:</span>
+            <span class="c1"># Create the time sequence</span>
+            <span class="c1"># += because self._time_seq is already initialised</span>
+            <span class="n">conv_to_sec</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">time_dic</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_macrostep_unit</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_time_seq</span> <span class="o">+=</span> <span class="p">[</span><span class="n">x</span><span class="o">*</span><span class="n">conv_to_sec</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_macrostep_vector</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time_seq</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">microsteps_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_microstep_vector</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+                <span class="c1">#time_intvl += [self._time_seq[i+1]- self._time_seq[i]]</span>
+                <span class="n">time_intvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_time_intvl</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">time_subintvl_val</span> <span class="o">=</span> <span class="n">time_intvl</span><span class="o">/</span><span class="n">microsteps_number</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_time_subseq_mat</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">time_subintvl_val</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_seq</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">microsteps_number</span><span class="p">)])</span>
+
+            <span class="k">if</span> <span class="n">norma_mode</span> <span class="o">==</span> <span class="s1">&#39;power&#39;</span><span class="p">:</span>
+                <span class="c1"># Only when norma_unit is power</span>
+                <span class="c1"># The initial average power density is used both for s=0 and s=1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_av_pow_dens_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">norma_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">+</span><span class="n">norma_vector</span>
+                <span class="n">cm3_to_liter</span> <span class="o">=</span> <span class="mf">1E-3</span> <span class="c1"># av_pow is in kW/l</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tot_pow_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">*</span><span class="n">total_vol</span><span class="o">*</span><span class="n">cm3_to_liter</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_av_pow_dens_seq</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_initial_system_time_bu_conversion</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">norma_mode</span> <span class="o">==</span> <span class="s1">&#39;flux&#39;</span><span class="p">:</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_av_flux_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">norma_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">+</span><span class="n">norma_vector</span>
+
+
+                <span class="c1"># Right now, I set burnup seq and sub_seq to zeros</span>
+                <span class="c1"># so that the print function does not crash</span>
+                <span class="c1"># Later improvements will need to develop module to dynmically update</span>
+                <span class="c1"># bu. Look at &quot;dynamic_system_time_bu_conversion&quot;</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_seq</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time_seq</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_seq</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="n">microsteps_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_microstep_vector</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_subseq_mat</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">microsteps_number</span><span class="p">)])</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_macrostep_unit</span> <span class="o">==</span> <span class="s1">&#39;MWd/kg&#39;</span><span class="p">:</span>
+        <span class="c1"># Directly create the whole system_bu seq and subseq from macrostep_vector and microsteps_number</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_seq</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_macrostep_vector</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_seq</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">microsteps_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_microstep_vector</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+                <span class="n">system_bu_intvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_bu_intvl</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">system_bu_subintvl_val</span> <span class="o">=</span> <span class="n">system_bu_intvl</span><span class="o">/</span><span class="n">microsteps_number</span>
+                <span class="c1">#self._system_bu_subseq.append([system_bu_substep_val*(j+1) + self._system_bu_seq[i] for j in range(microsteps_number)])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_subseq_mat</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">system_bu_subintvl_val</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_seq</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">microsteps_number</span><span class="p">)])</span>
+                <span class="c1">#self._system_bu_subintvl.append([system_bu_substep_val for j in range(microsteps_number)])</span>
+
+            <span class="k">if</span> <span class="n">norma_mode</span> <span class="o">==</span> <span class="s1">&#39;power&#39;</span><span class="p">:</span>
+                <span class="c1"># Only when norma_unit is power</span>
+                <span class="c1"># The initial average power density is used both for s=0 and s=1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_av_pow_dens_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">norma_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">+</span><span class="n">norma_vector</span>
+                <span class="n">cm3_to_liter</span> <span class="o">=</span> <span class="mf">1E-3</span> <span class="c1"># av_pow is in kW/l</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tot_pow_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">*</span><span class="n">total_vol</span><span class="o">*</span><span class="n">cm3_to_liter</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_av_pow_dens_seq</span><span class="p">]</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_initial_system_bu_time_conversion</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">norma_mode</span> <span class="o">==</span> <span class="s1">&#39;flux&#39;</span><span class="p">:</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_av_flux_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">norma_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">+</span><span class="n">norma_vector</span>
+
+                <span class="c1"># Right now, I set burnup seq and sub_seq to zeros</span>
+                <span class="c1"># so that the print function does not crash</span>
+                <span class="c1"># Later improvements will need to develop module to dynmically update</span>
+                <span class="c1"># bu. Look at &quot;dynamic_system_time_bu_conversion&quot;</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_seq</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time_seq</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_seq</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="n">microsteps_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_microstep_vector</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_subseq_mat</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">microsteps_number</span><span class="p">)])</span>
+
+
+        
+
+    <span class="c1"># Old version</span>
+    <span class="c1"># def _time_bu_substep_conversion(self, powe_dens, s, ss):</span>
+
+    <span class="c1">#     if self._macrostep_unit in [&#39;s&#39;, &#39;m&#39;, &#39;y&#39;, &#39;d&#39;]:</span>
+
+    <span class="c1">#         microsteps_number = self.microsteps_number(s)</span>
+    <span class="c1">#         _time_subintvl = self._time_subintvl[s][0] # Since d is the user default unit, each time substep has the same length</span>
+    <span class="c1">#         bu_substep_val = _time_subintvl*self._bu_sec_conv_factor*power</span>
+    <span class="c1">#         if ss == 0:</span>
+    <span class="c1">#             self._bu_subintvl.append([])</span>
+    <span class="c1">#             self._bu_subseq.append([])</span>
+    <span class="c1">#             self._bu_subseq[s+1].append(bu_substep_val + self._bu_seq[-1]) #If this is a new step, the last value is the last step value</span>
+    <span class="c1">#         else:</span>
+    <span class="c1">#             self._bu_subseq[s+1].append(bu_substep_val + self._bu_subseq[s+1][-1]) #If this the same  step, the last value is the last substep value</span>
+
+    <span class="c1">#         self._bu_subintvl[s].append(bu_substep_val)</span>
+
+    <span class="c1">#         if ss == microsteps_number - 1: # Time to  update bu_step and bu_seq</span>
+    <span class="c1">#             bu_step = sum(self._bu_subintvl[s])</span>
+    <span class="c1">#             self._bu_intvl += [bu_step]</span>
+    <span class="c1">#             self._bu_seq += [self._bu_seq[-1] + bu_step]</span>
+
+
+    <span class="c1">#     elif self._macrostep_unit == &#39;MWd/kg&#39;:</span>
+
+    <span class="c1">#         microsteps_number = self._microsteps_number[s]</span>
+    <span class="c1">#         bu_substep = self._bu_subintvl[s][0] # Since MWd/kg is the user default unit, each bu substep has the same length</span>
+    <span class="c1">#         _time_subintvl_val = bu_substep/(self._bu_sec_conv_factor*power)</span>
+    <span class="c1">#         if i == 0:</span>
+    <span class="c1">#             self._time_subintvl.append([])</span>
+    <span class="c1">#             self._time_subseq.append([])</span>
+    <span class="c1">#             self._time_subseq[s+1].append(_time_subintvl_val + self._time_seq[-1]) #If this is a new step, the last value is th</span>
+    <span class="c1">#         else:</span>
+    <span class="c1">#             self._time_subseq[s+1].append(_time_subintvl_val + self._time_subseq[s][-1]) #If this the same  step, the last value is the last substep value</span>
+
+    <span class="c1">#         self._time_subintvl[s].append(_time_subintvl_val)</span>
+
+    <span class="c1">#         if i == self._microsteps_number - 1: # Time to  update time_step and time_seq</span>
+    <span class="c1">#             time_step = sum(self._time_subintvl[s])</span>
+    <span class="c1">#             self._time_intvl += [time_step]</span>
+    <span class="c1">#             self._time_seq += [self._time_seq[-1] + time_step]</span>
+
+    <span class="c1"># This convert time_seq and subseq to system bu seq and subseq using av_pow_dens</span>
+    <span class="k">def</span> <span class="nf">_initial_system_time_bu_conversion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">):</span>
+
+        <span class="n">av_pow_dens_seq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_av_pow_dens_seq</span>
+        <span class="n">bu_sec_conv_factor</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">bu_sec_conv_factor</span>
+        <span class="n">macrosteps_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">macrosteps_number</span>
+        <span class="n">time_seq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_seq</span>
+        <span class="n">time_subseq_mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_subseq_mat</span>
+        <span class="n">microstep_vector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_microstep_vector</span>
+
+        <span class="n">system_bu</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">system_bu_seq</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">macrosteps_number</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">time_intvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_time_intvl</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">system_bu_intvl</span> <span class="o">=</span> <span class="n">time_intvl</span><span class="o">*</span><span class="n">av_pow_dens_seq</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">*</span><span class="n">bu_sec_conv_factor</span> <span class="c1"># the initial power density is is set to both av_pow_dens_seq[0] and av_pow_dens_seq[1]</span>
+            <span class="n">system_bu</span> <span class="o">+=</span> <span class="n">system_bu_intvl</span>
+            <span class="n">system_bu_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">system_bu</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_seq</span> <span class="o">+=</span> <span class="n">system_bu_seq</span>
+
+        <span class="c1"># Incorrect way to calculate system bu from time</span>
+        <span class="c1">#self._system_bu_seq += [x*y*bu_sec_conv_factor for x, y in zip(time_seq[1:],av_pow_dens_seq)]</span>
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_seq</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">microsteps_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_microstep_vector</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+            <span class="n">system_bu_intvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_bu_intvl</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">system_bu_subintvl_val</span> <span class="o">=</span> <span class="n">system_bu_intvl</span><span class="o">/</span><span class="n">microsteps_number</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_subseq_mat</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">system_bu_subintvl_val</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_seq</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">microsteps_number</span><span class="p">)])</span>
+
+        <span class="c1"># Bucell can&#39;t convert bu to time. Time is converted from BU by system</span>
+        <span class="c1"># elif self._macrostep_unit == &#39;MWd/kg&#39;:</span>
+        <span class="c1">#     microsteps_number = self.microsteps_number(s-1)</span>
+        <span class="c1">#     bu_subintvl = self.get_bu_subintvl(s,0) # Since MWd/kg is the user default unit, each bu substep has the same length</span>
+        <span class="c1">#     time_subintvl_val = bu_subintvl/(self._bu_sec_conv_factor*pow_dens)</span>
+        <span class="c1">#     time_substep_val = time_subintvl_val + self.current_time</span>
+        <span class="c1">#     self._set_substep_time(time_substep_val, ss)</span>
+
+    <span class="c1"># This convert bu_seq and subseq to time seq and subseq using av_pow_dens</span>
+    <span class="k">def</span> <span class="nf">_initial_system_bu_time_conversion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">):</span>
+
+        <span class="n">av_pow_dens_seq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_av_pow_dens_seq</span>
+        <span class="n">bu_sec_conv_factor</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">bu_sec_conv_factor</span>
+        <span class="n">macrosteps_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">macrosteps_number</span>
+        <span class="n">system_bu_seq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_bu_seq</span>
+        <span class="n">system_bu_subseq_mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_bu_subseq_mat</span>
+        <span class="n">microstep_vector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_microstep_vector</span>
+
+        <span class="n">time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">time_seq</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">macrosteps_number</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">system_bu_intvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_bu_intvl</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">time_intvl</span> <span class="o">=</span> <span class="n">system_bu_intvl</span><span class="o">/</span><span class="p">(</span><span class="n">av_pow_dens_seq</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">*</span><span class="n">bu_sec_conv_factor</span><span class="p">)</span> <span class="c1"># the initial power density is is set to both av_pow_dens_seq[0] and av_pow_dens_seq[1]</span>
+            <span class="n">time</span> <span class="o">+=</span> <span class="n">time_intvl</span>
+            <span class="n">time_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time_seq</span> <span class="o">+=</span> <span class="n">time_seq</span>
+
+        <span class="c1"># Incorrect way to calculate time from system bu</span>
+        <span class="c1">#self._time_seq += [x/(y*bu_sec_conv_factor) for x, y in zip(system_bu_seq[1:],av_pow_dens_seq)]</span>
+       
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time_seq</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">microsteps_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_microstep_vector</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+            <span class="c1">#time_intvl += [self._time_seq[i+1]- self._time_seq[i]]</span>
+            <span class="n">time_intvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_time_intvl</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">time_subintvl_val</span> <span class="o">=</span> <span class="n">time_intvl</span><span class="o">/</span><span class="n">microsteps_number</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_time_subseq_mat</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">time_subintvl_val</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_seq</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">microsteps_number</span><span class="p">)])</span>
+
+    <span class="c1"># Looks obsolete</span>
+    <span class="c1"># def dynamic_system_time_bu_conversion(self, system, s):</span>
+
+    <span class="c1">#     # calculate total power</span>
+    <span class="c1">#     tot_pow = 0</span>
+    <span class="c1">#     for bucell_name in system.bucell_dict:</span>
+    <span class="c1">#         bucell = bucell_dict[bucell_name]</span>
+    <span class="c1">#         bucell_vol = bucell.vol</span>
+    <span class="c1">#         bucell_pow_dens = bucell.current_pow_dens</span>
+    <span class="c1">#         bucell_pow = bucell_vol*bucell_pow_dens</span>
+    <span class="c1">#         tot_pow += bucell_pow</span>
+
+    <span class="c1">#     system._append_tot_pow_seq(tot_pow)</span>
+
+    <span class="c1">#     # total ihm</span>
+    <span class="c1">#     tot_ihm = system.get_tot_ihm()</span>
+
+    <span class="c1">#     #current time</span>
+    <span class="c1">#     current_time = self.time</span>
+
+
+
+
+
+
+
+
+
+    <span class="c1"># This convert time to bucell bu for each substep</span>
+    <span class="k">def</span> <span class="nf">_bucell_time_bu_substep_conversion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bucell</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+        <span class="n">pow_dens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_pow_dens</span>
+        <span class="n">bu_sec_conv_factor</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">bu_sec_conv_factor</span>
+        <span class="c1"># microsteps_number length is s-1</span>
+        <span class="n">microsteps_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">microsteps_number</span><span class="p">(</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">time_subintvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_time_subintvl</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="c1"># Since d is the user default unit, each time substep has the same length</span>
+        <span class="c1"># print (time_subintvl)</span>
+        <span class="c1"># print (bu_sec_conv_factor)</span>
+        <span class="c1"># print (pow_dens)</span>
+        <span class="n">bucell_bu_subintvl_val</span> <span class="o">=</span> <span class="n">time_subintvl</span><span class="o">*</span><span class="n">bu_sec_conv_factor</span><span class="o">*</span><span class="n">pow_dens</span>
+        <span class="n">bucell_bu_substep_val</span> <span class="o">=</span> <span class="n">bucell_bu_subintvl_val</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_bucell_bu</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_substep_bucell_bu</span><span class="p">(</span><span class="n">bucell_bu_substep_val</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span>
+
+        <span class="c1"># Bucell can&#39;t convert bu to time. Time is converted from BU by system</span>
+        <span class="c1"># elif self._macrostep_unit == &#39;MWd/kg&#39;:</span>
+        <span class="c1">#     microsteps_number = self.microsteps_number(s-1)</span>
+        <span class="c1">#     bu_subintvl = self.get_bu_subintvl(s,0) # Since MWd/kg is the user default unit, each bu substep has the same length</span>
+        <span class="c1">#     time_subintvl_val = bu_subintvl/(self._bu_sec_conv_factor*pow_dens)</span>
+        <span class="c1">#     time_substep_val = time_subintvl_val + self.current_time</span>
+        <span class="c1">#     self._set_substep_time(time_substep_val, ss)</span>
+
+    <span class="c1"># Update the flux sequence</span>
+    <span class="k">def</span> <span class="nf">_set_flux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_flux</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+        <span class="c1"># Update current flux</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flux</span> <span class="o">=</span> <span class="n">new_flux</span>
+
+
+
+        <span class="c1"># If i = 0 (i.e. if we begin a new step), we need to create a new sublist in flux_subseq</span>
+        <span class="k">if</span> <span class="n">ss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_flux_subseq</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+            <span class="k">if</span> <span class="n">s</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># the first value is already initiated by conversion of openmc</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_flux_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_flux</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flux_subseq</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_flux</span><span class="p">)</span>
+
+        <span class="c1"># # In the case of power norma, the flux seq must be updated too</span>
+        <span class="c1"># if self._norma_unit == &#39;power&#39;:</span>
+        <span class="c1">#     microsteps_number = self.microsteps_number(s)</span>
+        <span class="c1">#     if i == microsteps_number - 1: # Time to  update flux_seq</span>
+        <span class="c1">#         self._flux_seq.append(flux)</span>
+
+    <span class="c1"># Update the flux subsequence (done by )</span>
+    <span class="k">def</span> <span class="nf">_set_subflux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_subflux</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+        <span class="c1"># Update current flux</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flux</span> <span class="o">=</span> <span class="n">new_flux</span>
+
+        <span class="c1"># Update current flux subseq</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_append_current_flux_subseq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_flux</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span>
+
+        <span class="c1"># # If i = 0 (i.e. if we begin a new step), we need to create a new sublist in flux_subseq</span>
+        <span class="c1"># if ss == 0:</span>
+        <span class="c1">#     self._flux_subseq.append([])</span>
+        <span class="c1">#     if s &gt; 0: # the first value is already initiated by conversion of openmc</span>
+        <span class="c1">#         self._flux_seq.append(new_flux)</span>
+
+        <span class="c1"># self._flux_subseq[-1].append(new_flux)</span>
+
+        <span class="c1"># # In the case of power norma, the flux seq must be updated too</span>
+        <span class="c1"># if self._norma_unit == &#39;power&#39;:</span>
+        <span class="c1">#     microsteps_number = self.microsteps_number(s)</span>
+        <span class="c1">#     if i == microsteps_number - 1: # Time to  update flux_seq</span>
+        <span class="c1">#         self._flux_seq.append(flux)</span>
+
+    <span class="k">def</span> <span class="nf">_set_subpower</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_subpower</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+
+        <span class="c1"># Update current power density</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pow_dens</span> <span class="o">=</span> <span class="n">new_pow_dens</span>
+
+        <span class="c1"># Update current power density subsequence</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_append_current_pow_dens_subseq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_subpower</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span>
+        <span class="c1"># # If i = 0 (i.e. if we begin a new step), we need to create a new sublist in power_subseq</span>
+        <span class="c1"># if ss == 0:</span>
+        <span class="c1">#     self._power_subseq.append([])</span>
+        <span class="c1">#     if s &gt; 0: # the first value is already initiated in conversion</span>
+        <span class="c1">#         self._power_seq.append(power)</span>
+
+        <span class="c1"># self._power_subseq[s].append(power)</span>
+
+        <span class="c1"># # In the case of flux norma, the power seq must be updated too</span>
+        <span class="c1"># if self._norma_unit == &#39;flux&#39;:</span>
+        <span class="c1">#     microsteps_number = self.microsteps_number(s)</span>
+        <span class="c1">#     if i == microsteps_number - 1: # Time to  update power_seq</span>
+        <span class="c1">#         self._power_seq.append(power)</span>
+
+    <span class="k">def</span> <span class="nf">_set_power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">power</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+        <span class="c1"># If i = 0 (i.e. if we begin a new step), we need to create a new sublist in power_subseq</span>
+        <span class="k">if</span> <span class="n">ss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_power_subseq</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+            <span class="k">if</span> <span class="n">s</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># the first value is already initiated in conversion</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_power_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">power</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_power_subseq</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">power</span><span class="p">)</span>
+
+        <span class="c1"># # In the case of flux norma, the power seq must be updated too</span>
+        <span class="c1"># if self._norma_unit == &#39;flux&#39;:</span>
+        <span class="c1">#     microsteps_number = self.microsteps_number(s)</span>
+        <span class="c1">#     if i == microsteps_number - 1: # Time to  update power_seq</span>
+        <span class="c1">#         self._power_seq.append(power)</span>
+
+
+    <span class="c1"># Method provided by MCODE</span>
+    <span class="k">def</span> <span class="nf">_get_system_FMF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+
+        <span class="n">tot_pow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tot_pow_seq</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="c1"># in kW</span>
+        <span class="n">bucell_dict</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">bucell_dict</span>
+        <span class="n">deno</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">bucell_id</span> <span class="ow">in</span> <span class="n">bucell_dict</span><span class="p">:</span>
+            <span class="n">bucell</span> <span class="o">=</span> <span class="n">bucell_dict</span><span class="p">[</span><span class="n">bucell_id</span><span class="p">]</span>
+            <span class="n">bucell_sequence</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">sequence</span>
+            <span class="n">MC_flux</span> <span class="o">=</span> <span class="n">bucell_sequence</span><span class="o">.</span><span class="n">current_MC_flux</span> <span class="c1"># MC_flux unit of neutron.cm per source particle</span>
+            <span class="n">vol</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">vol</span> <span class="c1"># probably useless, MC_flux is already volume integrated</span>
+            <span class="n">passlist</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">passlist</span>
+            <span class="n">passport_list</span> <span class="o">=</span> <span class="n">passlist</span><span class="o">.</span><span class="n">passport_list</span>
+            <span class="n">conv_Mev_J</span> <span class="o">=</span> <span class="mf">1.60218e-13</span>
+            <span class="n">conv_J_kJ</span> <span class="o">=</span> <span class="mf">1E-3</span>
+            <span class="n">fission_energy</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">nucl</span> <span class="ow">in</span> <span class="n">passport_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">nucl</span><span class="o">.</span><span class="n">get_FAM</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;ACT&#39;</span> <span class="ow">and</span> <span class="n">nucl</span><span class="o">.</span><span class="n">current_xs</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">fission_E</span> <span class="o">=</span> <span class="n">nucl</span><span class="o">.</span><span class="n">fission_E</span>
+                    <span class="c1"># xs is obtained by dividing reaction rates (rate per source neutron) by flux (neutron.cm per source neutron)</span>
+                    <span class="c1"># and density (cm-3), therefore, xs are just in cm2</span>
+                    <span class="n">fission_xs</span> <span class="o">=</span> <span class="n">nucl</span><span class="o">.</span><span class="n">current_xs</span><span class="p">[</span><span class="s1">&#39;fission&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">dens</span> <span class="o">=</span> <span class="n">nucl</span><span class="o">.</span><span class="n">current_dens</span>
+                    <span class="n">fission_energy</span> <span class="o">+=</span> <span class="n">dens</span><span class="o">*</span><span class="n">fission_xs</span><span class="o">*</span><span class="n">MC_flux</span><span class="o">*</span><span class="n">fission_E</span><span class="o">*</span><span class="n">conv_Mev_J</span><span class="o">*</span><span class="n">conv_J_kJ</span> <span class="c1">#kW</span>
+
+
+            <span class="n">deno</span> <span class="o">+=</span> <span class="n">fission_energy</span>
+
+        <span class="k">return</span> <span class="n">tot_pow</span><span class="o">/</span><span class="n">deno</span>
+
+    <span class="k">def</span> <span class="nf">_get_bucell_FMF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bucell</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+
+        <span class="n">master_pow_dens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_pow_dens_seq</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="c1"># in kW/l (for the master bucell)</span>
+        <span class="n">master_pow</span> <span class="o">=</span> <span class="n">master_pow_dens</span><span class="o">*</span><span class="n">vol</span><span class="o">*</span><span class="mf">1E-3</span> <span class="c1">#vol is in cm3, pow_dens in kW/l</span>
+        <span class="n">bucell_sequence</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">sequence</span>
+        <span class="n">MC_flux</span> <span class="o">=</span> <span class="n">bucell_sequence</span><span class="o">.</span><span class="n">current_MC_flux</span> <span class="c1"># MC_flux unit of neutron.cm per source particle</span>
+        <span class="n">vol</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">vol</span> <span class="c1"># probably useless, MC_flux is already volume integrated</span>
+        <span class="n">passlist</span> <span class="o">=</span> <span class="n">bucell</span><span class="o">.</span><span class="n">passlist</span>
+        <span class="n">passport_list</span> <span class="o">=</span> <span class="n">passlist</span><span class="o">.</span><span class="n">passport_list</span>
+        <span class="n">conv_Mev_J</span> <span class="o">=</span> <span class="mf">1.60218e-13</span>
+        <span class="n">conv_J_kJ</span> <span class="o">=</span> <span class="mf">1E-3</span>
+        <span class="n">fission_energy</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">nucl</span> <span class="ow">in</span> <span class="n">passport_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nucl</span><span class="o">.</span><span class="n">get_FAM</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;ACT&#39;</span> <span class="ow">and</span> <span class="n">nucl</span><span class="o">.</span><span class="n">current_xs</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">fission_E</span> <span class="o">=</span> <span class="n">nucl</span><span class="o">.</span><span class="n">fission_E</span>
+                <span class="c1"># xs is obtained by dividing reaction rates (rate per source neutron) by flux (neutron.cm per source neutron)</span>
+                <span class="c1"># and density (cm-3), therefore, xs are just in cm2</span>
+                <span class="n">fission_xs</span> <span class="o">=</span> <span class="n">nucl</span><span class="o">.</span><span class="n">current_xs</span><span class="p">[</span><span class="s1">&#39;fission&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">dens</span> <span class="o">=</span> <span class="n">nucl</span><span class="o">.</span><span class="n">current_dens</span>
+                <span class="n">fission_energy</span> <span class="o">+=</span> <span class="n">dens</span><span class="o">*</span><span class="n">fission_xs</span><span class="o">*</span><span class="n">MC_flux</span><span class="o">*</span><span class="n">fission_E</span><span class="o">*</span><span class="n">conv_Mev_J</span><span class="o">*</span><span class="n">conv_J_kJ</span> <span class="c1">#kW</span>
+
+
+        <span class="k">return</span> <span class="n">master_pow</span><span class="o">/</span><span class="n">fission_energy</span>
+
+
+<span class="c1">##### steps and norma info ######</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">macrostep_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the macrostep vector.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_macrostep_vector</span>
+
+    <span class="nd">@macrostep_vector</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">macrostep_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">macrostep_vector</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_macrostep_vector</span> <span class="o">=</span> <span class="n">macrostep_vector</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">macrostep_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the units of the macrosteps.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_macrostep_unit</span>
+
+    <span class="nd">@macrostep_unit</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">macrostep_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">macrostep_unit</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_macrostep_unit</span> <span class="o">=</span> <span class="n">macrostep_unit</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">macrosteps_number</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the number of macrosteps.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_macrosteps_number</span>
+
+    <span class="nd">@macrosteps_number</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">macrosteps_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">macrosteps_number</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_macrosteps_number</span> <span class="o">=</span> <span class="n">macrosteps_number</span>
+
+
+<div class="viewcode-block" id="Sequence.set_macrostep"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.set_macrostep">[docs]</a>    <span class="k">def</span> <span class="nf">set_macrostep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">macrostep_vector</span><span class="p">,</span> <span class="n">macrostep_unit</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the macrosteps and its units.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        macrostep_vector:list</span>
+<span class="sd">            List of integers defining the points in time or burnup for which OpenMC will be run to update neutron flux and one-group reaction rates.</span>
+<span class="sd">        macrostep_unit: str</span>
+<span class="sd">            &#39;MWd/kg&#39; for burnup units or &#39;s&#39; for seconds, &#39;m&#39; for minutes, &#39;d&#39; for days, and &#39;y&#39; for years.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">macrostep_vector</span> <span class="o">=</span> <span class="n">macrostep_vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">macrostep_unit</span> <span class="o">=</span> <span class="n">macrostep_unit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">macrosteps_number</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">macrostep_vector</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Sequence.set_norma"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.set_norma">[docs]</a>    <span class="k">def</span> <span class="nf">set_norma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">norma_vector</span><span class="p">,</span> <span class="n">norma_unit</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the normalization for each macrostep.</span>
+
+<span class="sd">        **Note 1**: In version 0.10, in standalone mode, the flux set by the user is going to be</span>
+<span class="sd">        used for all BUCells of the system. In other words, all BUCells will have the</span>
+<span class="sd">        same neutron flux.</span>
+
+<span class="sd">        **Note 2**: The user should specify the power density as the total power</span>
+<span class="sd">        divided by the total volume of the system. The total volume of the system should include</span>
+<span class="sd">        all regions of the system, even regions that are not BUCells (for example, it should include the water region around the fuel BUCell).</span>
+
+<span class="sd">        **Note 3**: In version 0.10, the couple mode can only accept constant power depletion (i.e. the normalization should be against power).</span>
+<span class="sd">        The standalone mode can only accept constant flux depletion (i.e. the normalization should be against flux)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        norma_vector:list</span>
+<span class="sd">            List of float defining the value of the normalization (kW/l for power density, :math:`cm^{-2}s^{-1}` for neutron flux).</span>
+<span class="sd">        macrostep_unit: str</span>
+<span class="sd">            &#39;power&#39; for power density, &#39;flux&#39; for neutron flux</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_norma_vector</span> <span class="o">=</span> <span class="n">norma_vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_norma_unit</span> <span class="o">=</span> <span class="n">norma_unit</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">norma_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the normalization vector.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_norma_vector</span>
+
+    <span class="nd">@norma_vector</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">norma_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">norma_vector</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_norma_vector</span> <span class="o">=</span> <span class="n">norma_vector</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">norma_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the normalization unit.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_norma_unit</span>
+
+    <span class="nd">@norma_unit</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">norma_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">norma_unit</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_norma_unit</span> <span class="o">=</span> <span class="n">norma_unit</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">master_bucell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_master_bucell</span>
+    
+    <span class="c1"># This method is not yet implemented.</span>
+<div class="viewcode-block" id="Sequence.set_master_bucell"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.set_master_bucell">[docs]</a>    <span class="k">def</span> <span class="nf">set_master_bucell</span><span class="p">(</span><span class="n">BUCell</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the BUCell against which macrostep normalization is implemented</span>
+
+<span class="sd">        This feature allows the user to define the sequence steps with the burnup points of the chosen</span>
+<span class="sd">        master BUCell</span>
+
+<span class="sd">        By default, the macrostep normalization is implemented against the whole system and thus the burunup</span>
+<span class="sd">        points defined for the sequence are those of the whole system&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_master_bucell</span> <span class="o">=</span> <span class="n">BUCell</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">isotopic_change_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isotopic_change_dict</span>
+        <span class="sd">&quot;&quot;&quot;Returns the isotopic change dictionnary set by the user.&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Sequence.set_isotopic_change"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.set_isotopic_change">[docs]</a>    <span class="k">def</span> <span class="nf">set_isotopic_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">cell_isotopic_change</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;number density&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Manually changes the isotopic densities of user-specified nuclides in a BUCell for user-specified</span>
+<span class="sd">        macrosteps.  </span>
+<span class="sd">        </span>
+<span class="sd">        **Note**: If the method onix.Sequence.set_density_change is also used for the same BUCell, the isotopic change set by the user</span>
+<span class="sd">        must be in atom fraction.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cell: onix.Cell</span>
+<span class="sd">            BUCell in which the isotopic change is to be operated</span>
+<span class="sd">        cell_isotopic_change: dict</span>
+<span class="sd">            A dictionnary where keys are nuclides&#39; name and entries are evolution sub-dictionnaries. The sub-dictionnaries contain desired density evolution per macrostep where keys are macrostep numbers (int) and entries are densities (unit specified by the user). </span>
+<span class="sd">        unit: str</span>
+<span class="sd">            Specifies the unit for isotopic density evolution.</span>
+<span class="sd">            &#39;number density&#39; (default) for density in atm per :math:`cm^{3}`</span>
+<span class="sd">            &#39;atom fraction&#39; for density as atomic fraction</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+
+        <span class="c1"># If this is the first cell which is set isotopic change, create the dict</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isotopic_change_dict</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_isotopic_change_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_isotopic_change_dict</span><span class="p">[</span><span class="n">cell</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell_isotopic_change</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_isotopic_change_dict</span><span class="p">[</span><span class="n">cell</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;unit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">unit</span></div>
+
+
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">density_change_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the density change dictionnary set by the user.&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_density_change_dict</span>
+
+<div class="viewcode-block" id="Sequence.set_density_change"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.set_density_change">[docs]</a>    <span class="k">def</span> <span class="nf">set_density_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">cell_density_change</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Manually changes the total density (in atm per :math:`cm^{3}`) of the material of the BUCell for user-specified macrosteps.</span>
+<span class="sd">        </span>
+<span class="sd">        **Note**: This method trumps the other method &quot;onix.Sequence.set_isotopic_change&quot;, i.e., the new isotopic densities set in</span>
+<span class="sd">        set_isotopic_change will be renormalized by the new value from set_density_change</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cell: onix.Cell</span>
+<span class="sd">            BUCell in which the density change is to be operated</span>
+<span class="sd">        cell_density_change: dict</span>
+<span class="sd">            A dictionnary where keys are macrostep numbers (int) and entries are densities in atm per :math:`cm^{3}`. </span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># If this is the first cell which is set density change, create the dict</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">density_change_dict</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_density_change_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_density_change_dict</span><span class="p">[</span><span class="n">cell</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell_density_change</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">temperature_change_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the density change dictionnary set by the user.&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temperature_change_dict</span>
+
+<div class="viewcode-block" id="Sequence.set_temperature_change"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.set_temperature_change">[docs]</a>    <span class="k">def</span> <span class="nf">set_temperature_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">cell_temperature_change</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Manually changes the temperature (Kelvin) of the material of the BUCell for user-specified</span>
+<span class="sd">        macrosteps</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cell: onix.Cell</span>
+<span class="sd">            BUCell in which the temperature change is to be operated</span>
+<span class="sd">        cell_temperature_change: dict</span>
+<span class="sd">            A dictionnary where keys are macrostep numbers (int) and entries are temperature in Kelvin. </span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># If this is the first cell which is set density change, create the dict</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">temperature_change_dict</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_temperature_change_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_temperature_change_dict</span><span class="p">[</span><span class="n">cell</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell_temperature_change</span>    </div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">flux_approximation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the method used for approximating the flux between two microsteps</span>
+
+<span class="sd">        **Note**: This method should not be used by the user in version 0.1&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flux_approximation</span>
+
+    <span class="nd">@flux_approximation</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">flux_approximation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flux_approximation</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the method used for approximating the flux between two microsteps</span>
+
+<span class="sd">        **Note**: This method should not be used by the user in version 0.1&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flux_approximation</span> <span class="o">=</span> <span class="n">flux_approximation</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">microstep_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the microstep vector</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_microstep_vector</span>
+
+    <span class="nd">@microstep_vector</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">microstep_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">microstep_vector</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_microstep_vector</span> <span class="o">=</span> <span class="n">microstep_vector</span>
+
+    <span class="c1"># bu_sec_conv_factor should be set to each cell or system, not sequence</span>
+    <span class="c1"># def set_bu_sec_conv_factor(self, bu_sec_conv_factor):</span>
+
+    <span class="c1">#     self._bu_sec_conv_factor = bu_sec_conv_factor</span>
+
+
+    <span class="c1"># Looks obsolete</span>
+    <span class="c1"># def gen_initial_step_folder(self):</span>
+
+    <span class="c1">#     name = &#39;step_0&#39;</span>
+    <span class="c1">#     utils.gen_folder(name)</span>
+
+    <span class="k">def</span> <span class="nf">_gen_step_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+
+        <span class="c1"># Folder numbering starts with 1 not 0</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;step_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">gen_folder</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Sequence.microsteps_number"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.microsteps_number">[docs]</a>    <span class="k">def</span> <span class="nf">microsteps_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the number of microsteps for macrostep s.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_microstep_vector</span><span class="p">[</span><span class="n">s</span><span class="p">]</span></div>
+
+
+<span class="c1">######## Set initial values</span>
+
+
+    <span class="k">def</span> <span class="nf">_set_initial_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_time</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_seq</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time_subseq_mat</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">]]</span>
+
+    <span class="k">def</span> <span class="nf">_set_initial_bucell_bu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_bucell_bu</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bucell_bu_seq</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bucell_bu_subseq_mat</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">]]</span>
+
+    <span class="k">def</span> <span class="nf">_set_initial_system_bu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_system_bu</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">system_bu_seq</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_subseq_mat</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">]]</span>
+
+    <span class="k">def</span> <span class="nf">_set_initial_MC_flux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_MC_flux</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_MC_flux</span> <span class="o">=</span> <span class="n">new_MC_flux</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MC_flux_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_MC_flux</span><span class="p">]</span>
+      <span class="c1">#  self._MC_flux_subseq_mat = [[new_MC_flux]]</span>
+
+    <span class="k">def</span> <span class="nf">_set_initial_kinf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_kinf</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_kinf</span> <span class="o">=</span> <span class="n">new_kinf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kinf_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_kinf</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_set_initial_flux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_flux</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_flux</span> <span class="o">=</span> <span class="n">new_flux</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flux_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_flux</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flux_subseq_mat</span> <span class="o">=</span> <span class="p">[[</span><span class="n">new_flux</span><span class="p">]]</span>
+   
+    <span class="k">def</span> <span class="nf">_set_initial_pow_dens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_pow_dens</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_pow_dens</span> <span class="o">=</span> <span class="n">new_pow_dens</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pow_dens_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_pow_dens</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pow_dens_subseq_mat</span> <span class="o">=</span> <span class="p">[[</span><span class="n">new_pow_dens</span><span class="p">]]</span>
+
+
+
+<span class="c1">######## Set Step values</span>
+
+
+    <span class="c1"># After the completion of a burn step</span>
+    <span class="c1"># Add time to time_seq and add the current time_subseq to subseq_mat</span>
+    <span class="k">def</span> <span class="nf">_set_macrostep_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_append_time_seq</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+       <span class="c1"># self._append_time_subseq_mat()</span>
+
+    <span class="c1"># After the completion of a burn step</span>
+    <span class="c1"># Add bu to bu_seq and add the current bu_subseq to subseq_mat</span>
+    <span class="k">def</span> <span class="nf">_set_macrostep_bucell_bu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">bucell_bu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_bucell_bu</span>
+        <span class="c1"># If this is the fist step</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_bu_seq</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bucell_bu_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">bucell_bu</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_append_bucell_bu_seq</span><span class="p">(</span><span class="n">bucell_bu</span><span class="p">)</span>   
+       <span class="c1"># self._append_flux_subseq_mat()</span>
+
+    <span class="c1"># After an MC simulation</span>
+    <span class="c1"># There are no substep MC_flux, therefore, set_macrostep_MC_flux should</span>
+    <span class="c1"># be the one to update the current MC_flux</span>
+    <span class="k">def</span> <span class="nf">_set_macrostep_MC_flux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">MC_flux</span><span class="p">):</span>
+
+        <span class="c1"># If this is the fist step</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_MC_flux</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">MC_flux_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">MC_flux</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_append_MC_flux_seq</span><span class="p">(</span><span class="n">MC_flux</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_MC_flux</span> <span class="o">=</span> <span class="n">MC_flux</span>
+       <span class="c1"># self._append_time_subseq_mat()</span>
+
+    <span class="c1"># After an MC simulation</span>
+    <span class="c1"># There are no substep MC_flux, therefore, set_macrostep_MC_flux should</span>
+    <span class="c1"># be the one to update the current MC_flux</span>
+    <span class="k">def</span> <span class="nf">_set_macrostep_flux_spectrum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flux_spectrum</span><span class="p">):</span>
+
+        <span class="c1"># If this is the fist step</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_flux_spectrum</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">flux_spectrum_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">flux_spectrum</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_append_flux_spectrum_seq</span><span class="p">(</span><span class="n">flux_spectrum</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_flux_spectrum</span> <span class="o">=</span> <span class="n">flux_spectrum</span>
+       <span class="c1"># self._append_time_subseq_mat()</span>
+
+    <span class="c1"># After an MC simulation</span>
+    <span class="c1"># There are no substep kinf (as least calculated by MC), therefore, set_macrostep_kinf should</span>
+    <span class="c1"># be the one to update the current kinf</span>
+    <span class="k">def</span> <span class="nf">_set_macrostep_kinf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kinf</span><span class="p">):</span>
+
+        <span class="c1"># If kinf from previous cycles have already been stored</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_kinf</span><span class="p">,</span> <span class="n">uncertainties</span><span class="o">.</span><span class="n">UFloat</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_append_kinf_seq</span><span class="p">(</span><span class="n">kinf</span><span class="p">)</span>
+        <span class="c1"># If this is the fist step</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_kinf</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kinf_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">kinf</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_kinf</span> <span class="o">=</span> <span class="n">kinf</span>
+
+    <span class="c1"># After an MC simulation</span>
+    <span class="k">def</span> <span class="nf">_set_macrostep_flux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flux</span><span class="p">):</span>
+
+        <span class="c1"># If this is the fist step</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_flux</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">flux_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">flux</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_append_flux_seq</span><span class="p">(</span><span class="n">flux</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_flux</span> <span class="o">=</span> <span class="n">flux</span>
+       <span class="c1"># self._append_flux_subseq_mat()</span>
+
+    <span class="c1"># After an MC simulation</span>
+    <span class="k">def</span> <span class="nf">_set_macrostep_pow_dens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pow_dens</span><span class="p">):</span>
+
+        <span class="c1"># If this is the fist step</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_pow_dens</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pow_dens_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">pow_dens</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_append_pow_dens_seq</span><span class="p">(</span><span class="n">pow_dens</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_pow_dens</span> <span class="o">=</span> <span class="n">pow_dens</span>
+       <span class="c1"># self._append_pow_dens_subseq_mat()</span>
+
+    <span class="k">def</span> <span class="nf">_set_macrostep_isomeric_branching_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isomeric_branching_ratio</span><span class="p">):</span>
+
+        <span class="c1"># If this is the fist step</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_isomeric_branching_ratio</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">isomeric_branching_ratio_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">isomeric_branching_ratio</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_append_isomeric_branching_ratio_seq</span><span class="p">(</span><span class="n">isomeric_branching_ratio</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_isomeric_branching_ratio</span> <span class="o">=</span> <span class="n">isomeric_branching_ratio</span>
+
+
+<span class="c1">######## Set Substep values</span>
+
+
+    <span class="c1"># Add time to time_seq and add the current time_subseq to subseq_mat</span>
+    <span class="k">def</span> <span class="nf">_set_substep_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_time</span> <span class="o">=</span> <span class="n">time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_append_time_subseq_mat</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span>
+      <span class="c1">#  self._append_current_time_subseq(time, ss)</span>
+
+    <span class="c1"># Add bu to bu_subseq and add the current bu_subseq to subseq_mat</span>
+    <span class="k">def</span> <span class="nf">_set_substep_system_bu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bu</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_system_bu</span> <span class="o">=</span> <span class="n">bu</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_append_system_bu_subseq_mat</span><span class="p">(</span><span class="n">bu</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span>
+
+    <span class="c1"># Add bu to bu_seq and add the current bu_subseq to subseq_mat</span>
+    <span class="k">def</span> <span class="nf">_set_substep_bucell_bu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bu</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_bucell_bu</span> <span class="o">=</span> <span class="n">bu</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_append_bucell_bu_subseq_mat</span><span class="p">(</span><span class="n">bu</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span>
+       <span class="c1"># self._append_current_bu_subseq(bu, ss)</span>
+
+    <span class="c1"># # After the completion of a burn step</span>
+    <span class="c1"># # Add time to time_seq and add the current time_subseq to subseq_mat</span>
+    <span class="c1"># def _set_substep_MC_flux(self, MC_flux, ss):</span>
+
+    <span class="c1">#     self.current_MC_flux = MC_flux</span>
+    <span class="c1">#     self._append_MC_flux_subseq_mat(MC_flux, ss)</span>
+    <span class="c1">#   #  self._append_current_MC_flux_subseq(MC_flux, ss)</span>
+
+    <span class="c1"># Add time to time_seq and add the current time_subseq to subseq_mat</span>
+    <span class="k">def</span> <span class="nf">_set_substep_flux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flux</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+        <span class="c1"># If this is the first step, first substep</span>
+        <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">ss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># First bracket is for flux0,0</span>
+            <span class="c1"># append_flux_subseq_mat will put flux 1,0 (but they are the same)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_flux_subseq_mat</span> <span class="o">=</span> <span class="p">[[</span><span class="n">flux</span><span class="p">]]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_append_flux_subseq_mat</span><span class="p">(</span><span class="n">flux</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_flux</span> <span class="o">=</span> <span class="n">flux</span>
+       <span class="c1"># self._append_current_flux_subseq(flux, ss)</span>
+
+    <span class="c1"># After the completion of a burn step</span>
+    <span class="c1"># Add time to time_seq and add the current time_subseq to subseq_mat</span>
+    <span class="k">def</span> <span class="nf">_set_substep_pow_dens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pow_dens</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+        <span class="c1"># If this is the first step</span>
+        <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">ss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># First bracket is for flux0,0</span>
+            <span class="c1"># append_flux_subseq_mat will put flux 1,0 (but they are the same)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pow_dens_subseq_mat</span> <span class="o">=</span> <span class="p">[[</span><span class="n">pow_dens</span><span class="p">]]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_append_pow_dens_subseq_mat</span><span class="p">(</span><span class="n">pow_dens</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_pow_dens</span> <span class="o">=</span> <span class="n">pow_dens</span>
+       <span class="c1"># self._append_current_pow_dens_subseq(pow_dens, ss)</span>
+
+
+<span class="c1">##### average power density info ######</span>
+
+
+    <span class="c1"># Looks obsolete</span>
+    <span class="c1"># @property</span>
+    <span class="c1"># def av_pow_dens_seq(self):</span>
+
+    <span class="c1">#     return self._av_pow_dens_seq</span>
+
+
+<span class="c1">##### total power info ######</span>
+
+    <span class="c1"># So fat I have decided that total power will only get updated every step</span>
+
+    <span class="c1"># Power density that is currently set</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_tot_pow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the current total power of the system.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_tot_pow</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># define exception for undefined variable</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_tot_pow</span>
+
+    <span class="nd">@current_tot_pow</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">current_tot_pow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_tot_pow</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_tot_pow</span> <span class="o">=</span> <span class="n">new_tot_pow</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tot_pow_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the sequence of total power of the system.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tot_pow_seq</span>
+
+    <span class="nd">@tot_pow_seq</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">tot_pow_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_tot_pow_seq</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tot_pow_seq</span> <span class="o">=</span> <span class="n">new_tot_pow_seq</span>
+
+    <span class="k">def</span> <span class="nf">_append_tot_pow_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_tot_pow</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_tot_pow</span> <span class="o">=</span> <span class="n">new_tot_pow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tot_pow_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_tot_pow</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="Sequence.tot_pow_point"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.tot_pow_point">[docs]</a>    <span class="k">def</span> <span class="nf">tot_pow_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the total power value for macrostep s</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tot_pow_seq</span><span class="p">[</span><span class="n">s</span><span class="p">]</span></div>
+
+
+
+<span class="c1">##### time info ######</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#Returns the time in second corresponding to the current macrostep or microstep</span>
+   
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># define exception for undefined variable</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_time</span>
+
+    <span class="nd">@current_time</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">current_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_time</span><span class="p">):</span>
+        <span class="c1">#Sets the time in second corresponding to the current microstep (or macrostep)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_time</span> <span class="o">=</span> <span class="n">new_time</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">time_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the macrostep vector in time (seconds).</span>
+<span class="sd">        &quot;&quot;&quot;</span>       
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_seq</span>
+
+    <span class="nd">@time_seq</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">time_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_time_seq</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time_seq</span> <span class="o">=</span> <span class="n">new_time_seq</span>
+
+    <span class="k">def</span> <span class="nf">_append_time_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_time</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_time</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_time_subseq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#Returns the time microsequence in second corresponding to the current macrostep</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_time_subseq</span>
+
+    <span class="k">def</span> <span class="nf">_append_current_time_subseq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_time</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+        <span class="c1"># Start of a new step</span>
+        <span class="k">if</span> <span class="n">ss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_current_time_subseq</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_time_subseq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_time</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">time_subseq_mat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a list of time microstep vectors (seconds) where each microstep vector corresponds </span>
+<span class="sd">        to one macrostep.</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_subseq_mat</span>
+
+    <span class="nd">@time_subseq_mat</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">time_subseq_mat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_subseq_mat</span><span class="p">):</span>
+        <span class="c1">#Sets a list of time microsequences in second where each microsequence correspond to one macrostep</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time_subseq_mat</span> <span class="o">=</span> <span class="n">time_subseq_mat</span>
+
+    <span class="k">def</span> <span class="nf">_append_time_subseq_mat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+        <span class="c1">#self._time_subseq_mat.append(self.current_time_subseq)</span>
+        <span class="k">if</span> <span class="n">ss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_time_subseq_mat</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time_subseq_mat</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Sequence.time_point"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.time_point">[docs]</a>    <span class="k">def</span> <span class="nf">time_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the time (seconds) for macrostep s</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_seq</span><span class="p">[</span><span class="n">s</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Sequence.time_subpoint"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.time_subpoint">[docs]</a>    <span class="k">def</span> <span class="nf">time_subpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the time (seconds) for macrostep s and microstep ss</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        ss: int</span>
+<span class="sd">            Microstep number ss.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_subseq_mat</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">ss</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Sequence.get_time_intvl"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.get_time_intvl">[docs]</a>    <span class="k">def</span> <span class="nf">get_time_intvl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the time interval (seconds) between macrostep s nd macrostep s-1</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Step_0</span> <span class="p">(</span><span class="s1">&#39;Step 0 has no interval&#39;</span><span class="p">)</span>
+
+        <span class="n">time_intvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_point</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_point</span><span class="p">(</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">time_intvl</span></div>
+
+<div class="viewcode-block" id="Sequence.get_time_subintvl"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.get_time_subintvl">[docs]</a>    <span class="k">def</span> <span class="nf">get_time_subintvl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the time interval (seconds) between macrostep s and macrostep s-1</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        ss: int</span>
+<span class="sd">            Microstep number ss.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Step_0</span> <span class="p">(</span><span class="s1">&#39;Step 0 has no subinterval&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">ss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">time_subintvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_subpoint</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_point</span><span class="p">(</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">time_subintvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_subpoint</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_subpoint</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">time_subintvl</span></div>
+
+
+
+<span class="c1">##### system bu info ######</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_system_bu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_system_bu</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># define exception for undefined variable</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_system_bu</span>
+
+    <span class="nd">@current_system_bu</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">current_system_bu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_system_bu</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_system_bu</span> <span class="o">=</span> <span class="n">new_system_bu</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">system_bu_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the average burnup macrostep vector (MWd/kg) for the whole system.</span>
+<span class="sd">        &quot;&quot;&quot;</span>  
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_seq</span>
+
+    <span class="nd">@system_bu_seq</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">system_bu_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_system_bu_seq</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_seq</span> <span class="o">=</span> <span class="n">new_system_bu_seq</span>
+
+    <span class="k">def</span> <span class="nf">_append_system_bu_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_system_bu</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_system_bu</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_system_bu_subseq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_system_bu_subseq</span>
+
+    <span class="k">def</span> <span class="nf">_append_current_system_bu_subseq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_system_bu</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+        <span class="c1"># Start of a new step</span>
+        <span class="k">if</span> <span class="n">ss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_current_system_bu_subseq</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_system_bu_subseq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_system_bu</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">system_bu_subseq_mat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a list of average burnup microstep vectors (MWd/kg) for the whole system where each microstep vector corresponds </span>
+<span class="sd">        to one macrostep.</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_subseq_mat</span>
+
+    <span class="nd">@system_bu_subseq_mat</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">system_bu_subseq_mat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_bu_subseq_mat</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bu_subseq_mat</span> <span class="o">=</span> <span class="n">bu_subseq_mat</span> 
+
+    <span class="k">def</span> <span class="nf">_append_system_bu_subseq_mat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_system_bu</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">ss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_subseq_mat</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_subseq_mat</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_system_bu</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Sequence.system_bu_point"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.system_bu_point">[docs]</a>    <span class="k">def</span> <span class="nf">system_bu_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the average burnup level of the whole system at macrostep s.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_seq</span><span class="p">[</span><span class="n">s</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Sequence.system_bu_subpoint"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.system_bu_subpoint">[docs]</a>    <span class="k">def</span> <span class="nf">system_bu_subpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the average burnup level of the whole system at macrostep s and microstep ss.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        ss: int</span>
+<span class="sd">            Microstep number ss.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_system_bu_subseq_mat</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">ss</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Sequence.get_system_bu_intvl"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.get_system_bu_intvl">[docs]</a>    <span class="k">def</span> <span class="nf">get_system_bu_intvl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the average burnup interval for the whole system between macrostep s-1 and macrostep s.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Step_0</span> <span class="p">(</span><span class="s1">&#39;Step 0 has no interval&#39;</span><span class="p">)</span>
+
+        <span class="n">system_bu_intvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_bu_point</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_bu_point</span><span class="p">(</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">system_bu_intvl</span></div>
+
+<div class="viewcode-block" id="Sequence.get_system_bu_subintvl"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.get_system_bu_subintvl">[docs]</a>    <span class="k">def</span> <span class="nf">get_system_bu_subintvl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the average burnup interval for the whole system between microstep ss-1 and microstep ss for macrostep s.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        ss: int</span>
+<span class="sd">            Microstep number ss.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Step_0</span> <span class="p">(</span><span class="s1">&#39;Step 0 has no subinterval&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">ss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">system_bu_subintvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_bu_subpoint</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_bu_point</span><span class="p">(</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">system_bu_subintvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_bu_subpoint</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_bu_subpoint</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">system_bu_subintvl</span></div>
+
+
+
+<span class="c1">##### bucell bu info ######</span>
+
+    <span class="c1"># Power density that is currently set</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_bucell_bu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#Returns burnup level of current macro or microstep for the BUCell</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_bucell_bu</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># define exception for undefined variable</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_bucell_bu</span>
+
+    <span class="nd">@current_bucell_bu</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">current_bucell_bu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_bucell_bu</span><span class="p">):</span>
+        <span class="c1">#Returns burnup level of current macro or microstep for the BUCell</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_bucell_bu</span> <span class="o">=</span> <span class="n">new_bucell_bu</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">bucell_bu_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the burnup macrostep vector (MWd/kg) for the BUCell.</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bucell_bu_seq</span>
+
+    <span class="nd">@bucell_bu_seq</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">bucell_bu_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_bucell_bu_seq</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bucell_bu_seq</span> <span class="o">=</span> <span class="n">new_bucell_bu_seq</span>
+
+    <span class="k">def</span> <span class="nf">_append_bucell_bu_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_bucell_bu</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bucell_bu_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_bucell_bu</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_bucell_bu_subseq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+ 
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_bucell_bu_subseq</span>
+
+    <span class="k">def</span> <span class="nf">_append_current_bucell_bu_subseq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_bucell_bu</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+        <span class="c1"># Start of a new step</span>
+        <span class="k">if</span> <span class="n">ss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_current_bucell_bu_subseq</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_bucell_bu_subseq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_bucell_bu</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">bucell_bu_subseq_mat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a list of burnup microstep vectors (MWd/kg) for the BUCell where each microstep vector corresponds </span>
+<span class="sd">        to one macrostep.</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bucell_bu_subseq_mat</span>
+
+    <span class="nd">@bucell_bu_subseq_mat</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">bucell_bu_subseq_mat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bucell_bu_subseq_mat</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bu_subseq_mat</span> <span class="o">=</span> <span class="n">bu_subseq_mat</span> 
+
+    <span class="k">def</span> <span class="nf">_append_bucell_bu_subseq_mat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_bucell_bu</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">ss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bucell_bu_subseq_mat</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bucell_bu_subseq_mat</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_bucell_bu</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Sequence.bucell_bu_point"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.bucell_bu_point">[docs]</a>    <span class="k">def</span> <span class="nf">bucell_bu_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the burnup level of the BUCell at macrostep s.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bucell_bu_seq</span><span class="p">[</span><span class="n">s</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Sequence.bucell_bu_subpoint"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.bucell_bu_subpoint">[docs]</a>    <span class="k">def</span> <span class="nf">bucell_bu_subpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the burnup level of the BUCell at macrostep s and microstep ss.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        ss: int</span>
+<span class="sd">            Microstep number ss.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bucell_bu_subseq_mat</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">ss</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Sequence.get_bucell_bu_intvl"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.get_bucell_bu_intvl">[docs]</a>    <span class="k">def</span> <span class="nf">get_bucell_bu_intvl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the burnup interval for the BUCell between macrostep s-1 and macrostep s.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Step_0</span> <span class="p">(</span><span class="s1">&#39;Step 0 has no interval&#39;</span><span class="p">)</span>
+
+        <span class="n">bucell_bu_intvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_bu_point</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_bu_point</span><span class="p">(</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">bucell_bu_intvl</span></div>
+
+<div class="viewcode-block" id="Sequence.get_bucell_bu_subintvl"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.get_bucell_bu_subintvl">[docs]</a>    <span class="k">def</span> <span class="nf">get_bucell_bu_subintvl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the burnup interval for the BUCell between microstep ss-1 and microstep ss for macrostep s.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        ss: int</span>
+<span class="sd">            Microstep number ss.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Step_0</span> <span class="p">(</span><span class="s1">&#39;Step 0 has no subinterval&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">ss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">bucell_bu_subintvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_bu_subpoint</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_bu_point</span><span class="p">(</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">bucell_bu_subintvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_bu_subpoint</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucell_bu_subpoint</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">bucell_bu_subintvl</span></div>
+
+
+<span class="c1">##### flux info ######</span>
+
+    <span class="c1"># Power density that is currently set</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_flux</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#Returns neutron flux of current macro or microstep for BUCell</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_flux</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># define exception for undefined variable</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_flux</span>
+
+    <span class="nd">@current_flux</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">current_flux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_flux</span><span class="p">):</span>
+        <span class="c1">#Sets neutron flux of current macro or microstep for BUCell</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_flux</span> <span class="o">=</span> <span class="n">new_flux</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">flux_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the neutron flux macrostep vector (:math:`cm^{-2}s^{-1}`) for the BUCell.</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flux_seq</span>
+
+    <span class="nd">@flux_seq</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">flux_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_flux_seq</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flux_seq</span> <span class="o">=</span> <span class="n">new_flux_seq</span>
+
+    <span class="k">def</span> <span class="nf">_append_flux_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_flux</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flux_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_flux</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_flux_subseq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_flux_subseq</span>
+
+    <span class="k">def</span> <span class="nf">_append_current_flux_subseq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_flux</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+        <span class="c1"># Start of a new step</span>
+        <span class="k">if</span> <span class="n">ss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_current_flux_subseq</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_flux_subseq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_flux</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">flux_subseq_mat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a list of neutron flux microstep vectors (:math:`cm^{-2}s^{-1}`) for the BUCell where each microstep vector corresponds </span>
+<span class="sd">        to one macrostep.</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flux_subseq_mat</span>  
+
+    <span class="k">def</span> <span class="nf">_append_flux_subseq_mat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flux</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+      <span class="c1">#  self.flux_subseq_mat.append(self.current_flux_subseq)</span>
+        <span class="k">if</span> <span class="n">ss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_flux_subseq_mat</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flux_subseq_mat</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">flux</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Sequence.flux_point"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.flux_point">[docs]</a>    <span class="k">def</span> <span class="nf">flux_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the neutron flux of the BUCell at macrostep s.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flux_seq</span><span class="p">[</span><span class="n">s</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Sequence.flux_subpoint"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.flux_subpoint">[docs]</a>    <span class="k">def</span> <span class="nf">flux_subpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the neutron flux of the BUCell at macrostep s and microstep ss.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        ss: int</span>
+<span class="sd">            Microstep number ss.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flux_subseq_mat</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">ss</span><span class="p">]</span></div>
+
+
+
+<span class="c1">##### pow_dens info ######</span>
+
+    <span class="c1"># Power density that is currently set</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_pow_dens</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#Returns power density of current macro or microstep for BUCell</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_pow_dens</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># define exception for undefined variable</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_pow_dens</span>
+
+    <span class="nd">@current_pow_dens</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">current_pow_dens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_pow_dens</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_pow_dens</span> <span class="o">=</span> <span class="n">new_pow_dens</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pow_dens_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the power density macrostep vector (:math:`kW/l`) for the BUCell.</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pow_dens_seq</span>
+
+    <span class="nd">@pow_dens_seq</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">pow_dens_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_pow_dens_seq</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pow_dens_seq</span> <span class="o">=</span> <span class="n">new_pow_dens_seq</span>
+
+    <span class="k">def</span> <span class="nf">_append_pow_dens_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_pow_dens</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pow_dens_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_pow_dens</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_pow_dens_subseq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the power density microsequence of current macrostep</span>
+<span class="sd">        for BUCell&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_pow_dens_subseq</span>
+
+    <span class="k">def</span> <span class="nf">_append_current_pow_dens_subseq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_pow_dens</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+        <span class="c1"># Start of a new step</span>
+        <span class="k">if</span> <span class="n">ss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_current_pow_dens_subseq</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_pow_dens_subseq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_pow_dens</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pow_dens_subseq_mat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a list of power density microstep vectors (:math:`kW/l`) for the BUCell where each microstep vector corresponds </span>
+<span class="sd">        to one macrostep.</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pow_dens_subseq_mat</span>  
+
+    <span class="k">def</span> <span class="nf">_append_pow_dens_subseq_mat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pow_dens</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+
+      <span class="c1">#  self.pow_dens_subseq_mat.append(self.current_pow_dens_subseq)</span>
+        <span class="k">if</span> <span class="n">ss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pow_dens_subseq_mat</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pow_dens_subseq_mat</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pow_dens</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Sequence.pow_dens_point"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.pow_dens_point">[docs]</a>    <span class="k">def</span> <span class="nf">pow_dens_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the power density of the BUCell at macrostep s.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pow_dens_seq</span><span class="p">[</span><span class="n">s</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Sequence.pow_dens_subpoint"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.pow_dens_subpoint">[docs]</a>    <span class="k">def</span> <span class="nf">pow_dens_subpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the neutron flux of the BUCell at macrostep s and microstep ss.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        ss: int</span>
+<span class="sd">            Microstep number ss.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pow_dens_subseq_mat</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">ss</span><span class="p">]</span></div>
+
+
+
+<span class="c1">##### MC_flux info ######</span>
+
+    <span class="c1"># Power density that is currently set</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_MC_flux</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#Returns normalized neutron flux of current macro or microstep for BUCell</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_MC_flux</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># define exception for undefined variable</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_MC_flux</span>
+
+    <span class="nd">@current_MC_flux</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">current_MC_flux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_MC_flux</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_MC_flux</span> <span class="o">=</span> <span class="n">new_MC_flux</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">MC_flux_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the Monte Carlo neutron flux macrostep vector (:math:`cm^{-2}s^{-1}` per source particle) for the BUCell.</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_MC_flux_seq</span>
+
+    <span class="nd">@MC_flux_seq</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">MC_flux_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_MC_flux_seq</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_MC_flux_seq</span> <span class="o">=</span> <span class="n">new_MC_flux_seq</span>
+
+    <span class="k">def</span> <span class="nf">_append_MC_flux_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_MC_flux</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_MC_flux_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_MC_flux</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Sequence.MC_flux_point"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.MC_flux_point">[docs]</a>    <span class="k">def</span> <span class="nf">MC_flux_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the Monte Carlo neutron flux of the BUCell at macrostep s.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_MC_flux_seq</span><span class="p">[</span><span class="n">s</span><span class="p">]</span></div>
+
+
+<span class="c1">##### flux_spectrum info ######</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_flux_spectrum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#Returns flux spectrum of current macrostep for BUCell</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_flux_spectrum</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># define exception for undefined variable</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_flux_spectrum</span>
+
+    <span class="nd">@current_flux_spectrum</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">current_flux_spectrum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_flux_spectrum</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_flux_spectrum</span> <span class="o">=</span> <span class="n">new_flux_spectrum</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">flux_spectrum_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a list of 300-group neutron flux arrays, one array per macrostep for the BUCell.</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flux_spectrum_seq</span>
+
+    <span class="nd">@flux_spectrum_seq</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">flux_spectrum_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_flux_spectrum_seq</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flux_spectrum_seq</span> <span class="o">=</span> <span class="n">new_flux_spectrum_seq</span>
+
+    <span class="k">def</span> <span class="nf">_append_flux_spectrum_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_flux_spectrum</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flux_spectrum_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_flux_spectrum</span><span class="p">)</span>
+
+
+<span class="c1">##### kinf info ######</span>
+
+    <span class="c1"># Power density that is currently set</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_kinf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_kinf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># define exception for undefined variable</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_kinf</span>
+
+    <span class="nd">@current_kinf</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">current_kinf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_kinf</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_kinf</span> <span class="o">=</span> <span class="n">new_kinf</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">kinf_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the multiplication factor macrostep vector for the BUCell.</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kinf_seq</span>
+
+    <span class="nd">@kinf_seq</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">kinf_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_kinf_seq</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kinf_seq</span> <span class="o">=</span> <span class="n">new_kinf_seq</span>
+
+    <span class="k">def</span> <span class="nf">_append_kinf_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_kinf</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kinf_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_kinf</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="Sequence.kinf_point"><a class="viewcode-back" href="../../pythonapi/generated/onix.Sequence.html#onix.Sequence.kinf_point">[docs]</a>    <span class="k">def</span> <span class="nf">kinf_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the multiplication factor of the BUCell at macrostep s.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s: int</span>
+<span class="sd">            Macrostep number s.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kinf_seq</span><span class="p">[</span><span class="n">s</span><span class="p">]</span></div>
+
+<span class="c1">##### branching ratio info ######</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_isomeric_branching_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#Returns isomeric branching ratios of current macro or microstep for BUCell</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_isomeric_branching_ratio</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># define exception for undefined variable</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_isomeric_branching_ratio</span>
+
+    <span class="nd">@current_isomeric_branching_ratio</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">current_isomeric_branching_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_isomeric_branching_ratio</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_isomeric_branching_ratio</span> <span class="o">=</span> <span class="n">new_isomeric_branching_ratio</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">isomeric_branching_ratio_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the isomeric branching ratios macrostep vector for the BUCell.</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isomeric_branching_ratio_seq</span>
+
+    <span class="nd">@isomeric_branching_ratio_seq</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">isomeric_branching_ratio_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_isomeric_branching_ratio_seq</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_isomeric_branching_ratio_seq</span> <span class="o">=</span> <span class="n">new_isomeric_branching_ratio_seq</span>
+
+    <span class="k">def</span> <span class="nf">_append_isomeric_branching_ratio_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_isomeric_branching_ratio_seq</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_isomeric_branching_ratio_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_isomeric_branching_ratio_seq</span><span class="p">)</span></div>
+
+<span class="k">class</span> <span class="nc">Step_0</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raise when the user try to access subinterval for the first step&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+
+
+
+
+
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Julien de Troullioud de Lanversin
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+ 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30411614-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>

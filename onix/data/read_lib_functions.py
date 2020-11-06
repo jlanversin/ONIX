@@ -6,6 +6,17 @@ import openmc
 
 def read_mass_lib(mass_lib_path):
 
+    '''Reads a mass library and returns a Python dictionnary with nuclides' zamid as keys and mass in grams as entries.
+
+    **Note**: Library must be compatible with ONIX format.
+
+    Parameters
+    ----------
+    mass_lib_path: str
+        Path to the mass library
+
+    '''
+
     mass_list = {}
     with open(mass_lib_path, 'r') as atm_mass_file:
         line = atm_mass_file.readlines()
@@ -26,6 +37,17 @@ def read_mass_lib(mass_lib_path):
     return mass_list
 
 def read_decay_lib(decay_lib_path):
+
+    '''Reads a decay library and returns a Python dictionnary with nuclides' zamid as keys and decay sub-dictionnaries as entries. Decay sub-dictionnaries have decay reactions names as keys and corresponding decay constant as fraction of total decay constant for entries.
+
+    **Note**: Library must be compatible with ONIX format.
+
+    Parameters
+    ----------
+    decay_lib_path: str
+        Path to the decay library
+
+    '''
 
     with open(decay_lib_path, 'r') as decay_file:
         lines = decay_file.readlines()
@@ -76,6 +98,17 @@ def read_decay_lib(decay_lib_path):
 
 
 def conv_decay_b_a(decay_b):
+
+    """Converts a fractionnal decay constant dictionnary to an absolute decay constant dictionnary (fractionnal decay dictionnary stores decay constant as fraction over total decay constant, absolute decay dictionnary stores absolute values of decay constants).
+
+    **Note**: Library must be compatible with ONIX format.
+
+    Parameters
+    ----------
+    decay_b: dict
+        The fractionnal decay constant dictionnary to be converted
+
+    """
 
     decay_a = {}
     for i in decay_b:
@@ -188,6 +221,17 @@ def conv_decay_b_a(decay_b):
 
 def read_xs_lib(xs_lib_path):
 
+    '''Reads a constant one-group cross section library and returns a Python dictionnary with nuclides' zamid as keys and cross section sub-dictionnaries as entries. Cross section sub-dictionnaries have reactions names as keys and corresponding cross section values in barns as entries.
+
+    **Note**: Library must be compatible with ONIX format.
+
+    Parameters
+    ----------
+    xs_lib_path: str
+        Path to the constant one-group cross section library
+
+    '''
+
     with open(xs_lib_path, 'r') as xs_file:
         line = xs_file.readlines()
         r = 0
@@ -244,6 +288,19 @@ def read_xs_lib(xs_lib_path):
 
 def read_fy_lib(fy_lib_path):
 
+    '''Reads a fission yield library and returns a Python dictionnary with fissio products' zamid as keys and fission yield sub-dictionnaries as entries. Fission yield sub-dictionnaries have actinide parents names as keys and corresponding fission yield in percent as entries (values from 0 to 100).
+
+    **Note**: Library must be compatible with ONIX format.
+
+    Parameters
+    ----------
+    fy_lib_path: str
+        Path to the fission yield library
+
+    '''
+
+
+
     with open(fy_lib_path, 'r') as fy_file:
         line = fy_file.readlines()
         r = 0
@@ -277,16 +334,22 @@ def read_fy_lib(fy_lib_path):
     return fy_dic
 
 
-def default_xs_mat_from_Btxt():
+def xs_mat_from_Btxt(Btxt_path):
 
-    Btxt_rel_path = '/default_libs/Btxt'
-    dir_path = os.path.dirname(__file__)
-    Btxt_path = dir_path + Btxt_rel_path
+    '''Builds a neutron-induced transmutation matrix from a compressed matrix stored in a text file.
+
+    Parameters
+    ----------
+    Btxt_path: str
+        Path to the compressed matrix file
+
+    '''
+
     Btxt = open(Btxt_path, 'r')
     B_line = Btxt.readlines()
 
     N = len(B_line)
-    default_xs_mat = np.zeros((N,N))
+    xs_mat = np.zeros((N,N))
     for line in B_line:
         data = line.split('|')[1]
         row = int(data.split(':')[0])
@@ -295,20 +358,26 @@ def default_xs_mat_from_Btxt():
         for data in col_data:
             col = int(data.split()[0])
             val = float(data.split()[1])
-            default_xs_mat[row][col] =  val
+            xs_mat[row][col] =  val
 
-    return default_xs_mat
+    return xs_mat
 
-def default_decay_mat_from_Ctxt():
+def decay_mat_from_Ctxt(Ctxt_path):
 
-    Ctxt_rel_path = '/default_libs/Ctxt'
-    dir_path = os.path.dirname(__file__)
-    Ctxt_path = dir_path + Ctxt_rel_path
+    '''Builds a decay matrix from a compressed matrix stored in a text file.
+
+    Parameters
+    ----------
+    Ctxt_path: str
+        Path to the compressed matrix file
+
+    '''
+
     Ctxt = open(Ctxt_path, 'r')
     C_line = Ctxt.readlines()
 
     N = len(C_line)
-    default_decay_mat = np.zeros((N,N))
+    decay_mat = np.zeros((N,N))
     for line in C_line:
         data = line.split('|')[1]
         row = int(data.split(':')[0])
@@ -317,29 +386,38 @@ def default_decay_mat_from_Ctxt():
         for data in col_data:
             col = int(data.split()[0])
             val = float(data.split()[1])
-            default_decay_mat[row][col] =  val
+            decay_mat[row][col] =  val
 
-    return default_decay_mat
+    return decay_mat
 
-def default_nucl_list_from_txt():
+def nucl_list_from_txt(mattxt_path):
 
-    mattxt_rel_path = '/default_libs/Ctxt'
-    dir_path = os.path.dirname(__file__)
-    mattxt_path = dir_path + mattxt_rel_path
+    '''Builds a list of nuclides from a compressed matrix stored in a text file.
+
+    Parameters
+    ----------
+    mattxt_path: str
+        Path to the compressed matrix file
+
+    '''
+    
     mattxt = open(mattxt_path, 'r')
     mat_line = mattxt.readlines()
 
     N = len(mat_line)
-    default_nucl_list = []
+    nucl_list = []
     for line in mat_line:
         zamid = line.split('|')[0]
-        default_nucl_list.append(zamid)
+        nucl_list.append(zamid)
 
-    return default_nucl_list
+    return nucl_list
 
 # This might not be appropriate to have this function here as it needs OpenMC
 def read_isomeric_data():
 
+    """Reads the EAF-2010 activation transmutation neutron
+nuclear data library and returns a point-wise isomeric branching dictionnary for (n,gamma) reactions. The keys of the dictionnary are nuclides and entries are isomeric branching subdictionnaries. The keys of these subdictionnaries are the state of the product daughter (ground state or first excited state) and the entries are the corresponding point-wise isomeric branching ratio.
+    """
     # This command will find the absolute path of read_lib_fuctions.py
     # Since read_lib_fuctions.py is located in data, the default isomeric data is just in __file__path + '/isomeric_data/eaf-2010-multiplicities'
     __file__path = os.path.abspath(os.path.dirname(__file__))

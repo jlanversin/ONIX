@@ -25,7 +25,9 @@ default_fy_lib = read_fy_lib(default_fy_lib_path)
 
 
 ### Generate the default matrices and nuclide lists
+### Used to auto generate default matrix.
+### Should now use the new function but where default path is input
 
-default_C = default_decay_mat_from_Ctxt()
-default_B = default_xs_mat_from_Btxt()
-default_nucl_list = default_nucl_list_from_txt()
+# default_C = default_decay_mat_from_Ctxt()
+# default_B = default_xs_mat_from_Btxt()
+# default_nucl_list = default_nucl_list_from_txt()

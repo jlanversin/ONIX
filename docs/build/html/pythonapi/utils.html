@@ -1,0 +1,635 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>onix – Utilities and functions &mdash; ONIX Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="onix.utils.decay_lib" href="generated/onix.utils.decay_lib.html" />
+    <link rel="prev" title="onix.data.read_isomeric_data" href="generated/onix.data.read_isomeric_data.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #0d0d0d" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="main_class.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Main Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couple.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Couple module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nax.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Nuclear Archaeology (NAX) module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="salameche.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Salamèche: the burnup solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Data and library readers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Utilities and functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#reaction-classes">Reaction classes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.decay_lib.html">onix.utils.decay_lib</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.xs_lib.html">onix.utils.xs_lib</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.fy_lib.html">onix.utils.fy_lib</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.decay_to_halflife.html">onix.utils.decay_to_halflife</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.halflife_to_decay.html">onix.utils.halflife_to_decay</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.halflife_to_second.html">onix.utils.halflife_to_second</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.is_int.html">onix.utils.is_int</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.is_zamid.html">onix.utils.is_zamid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.is_name.html">onix.utils.is_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.is_list_redundant.html">onix.utils.is_list_redundant</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_list_redundant_elt.html">onix.utils.get_list_redundant_elt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.zamid_list_to_name_list.html">onix.utils.zamid_list_to_name_list</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.name_list_to_zamid_list.html">onix.utils.name_list_to_zamid_list</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_zamid_z.html">onix.utils.get_zamid_z</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_name_z.html">onix.utils.get_name_z</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_zamid_a.html">onix.utils.get_zamid_a</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_zamid_n.html">onix.utils.get_zamid_n</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_zamid_s.html">onix.utils.get_zamid_s</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.zamid_to_name.html">onix.utils.zamid_to_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.name_to_zamid.html">onix.utils.name_to_zamid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_hm.html">onix.utils.get_hm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_nucl_atomic_mass.html">onix.utils.get_nucl_atomic_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.convert_mass_to_atom.html">onix.utils.convert_mass_to_atom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.convert_atom_to_mass.html">onix.utils.convert_atom_to_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_bu_sec_conv_factor.html">onix.utils.get_bu_sec_conv_factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_decay_nucl.html">onix.utils.get_decay_nucl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_xs_nucl.html">onix.utils.get_xs_nucl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_fy_nucl.html">onix.utils.get_fy_nucl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.is_lista_in_listb.html">onix.utils.is_lista_in_listb</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_fy_parent_nucl.html">onix.utils.get_fy_parent_nucl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.is_number.html">onix.utils.is_number</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.openmc_name_to_onix_name.html">onix.utils.openmc_name_to_onix_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.onix_name_to_openmc_name.html">onix.utils.onix_name_to_openmc_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.bu_namelist_to_mc_namelist.html">onix.utils.bu_namelist_to_mc_namelist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.mc_namelist_to_bu_namelist.html">onix.utils.mc_namelist_to_bu_namelist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.order_nuclide_per_z.html">onix.utils.order_nuclide_per_z</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.order_nuclide_name_per_z.html">onix.utils.order_nuclide_name_per_z</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.order_nuclide_per_a.html">onix.utils.order_nuclide_per_a</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_openmc_xs_nucl_list.html">onix.utils.get_openmc_xs_nucl_list</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.convert_spectrum_to_janis_weighting_format.html">onix.utils.convert_spectrum_to_janis_weighting_format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_zamid_natural_abundance.html">onix.utils.get_zamid_natural_abundance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_name_natural_abundance.html">onix.utils.get_name_natural_abundance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.find_zamid_precursor.html">onix.utils.find_zamid_precursor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.interpolation_between_two_points.html">onix.utils.interpolation_between_two_points</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#data-processors">Data processors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.plot_bucell_nuclide_network.html">onix.utils.plot_bucell_nuclide_network</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.plot_nuclide_dens_from_path.html">onix.utils.plot_nuclide_dens_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.plot_nuclide_group_dens_from_path.html">onix.utils.plot_nuclide_group_dens_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.plot_xs_time_evolution_from_path.html">onix.utils.plot_xs_time_evolution_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.plot_xs_bu_evolution_from_path.html">onix.utils.plot_xs_bu_evolution_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.compare_xs_bu_evolution_from_path.html">onix.utils.compare_xs_bu_evolution_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.plot_kinf_from_path.html">onix.utils.plot_kinf_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.plot_flux_from_path.html">onix.utils.plot_flux_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.plot_flux_spectrum_bu_evolution_from_path.html">onix.utils.plot_flux_spectrum_bu_evolution_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.plot_lethargy_spectrum_bu_evolution_from_path.html">onix.utils.plot_lethargy_spectrum_bu_evolution_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.plot_xs_dens_flux.html">onix.utils.plot_xs_dens_flux</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.read_time_seq.html">onix.utils.read_time_seq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_step_time_length_seq.html">onix.utils.get_step_time_length_seq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.read_bu_seq.html">onix.utils.read_bu_seq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.read_kinf_seq.html">onix.utils.read_kinf_seq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.read_flux.html">onix.utils.read_flux</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.read_flux_subseq.html">onix.utils.read_flux_subseq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_fluence_seq.html">onix.utils.get_fluence_seq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_fluence_subseq.html">onix.utils.get_fluence_subseq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.read_flux_spectrum.html">onix.utils.read_flux_spectrum</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.read_energy_mid_points.html">onix.utils.read_energy_mid_points</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.read_energy_bin_length.html">onix.utils.read_energy_bin_length</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.read_dens.html">onix.utils.read_dens</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_total_density.html">onix.utils.get_total_density</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_total_mass_density.html">onix.utils.get_total_mass_density</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.read_xs_seq.html">onix.utils.read_xs_seq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_time_averaged_xs.html">onix.utils.get_time_averaged_xs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_time_averaged_flux.html">onix.utils.get_time_averaged_flux</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.get_tot_xs.html">onix.utils.get_tot_xs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.read_xs_nucl.html">onix.utils.read_xs_nucl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.read_dens_nucl.html">onix.utils.read_dens_nucl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.rank_nuclide_per_dens.html">onix.utils.rank_nuclide_per_dens</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.plot_matrix_bysign_from_compressed_matrix.html">onix.utils.plot_matrix_bysign_from_compressed_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.plot_nuclide_chart_color_per_nuclear_data.html">onix.utils.plot_nuclide_chart_color_per_nuclear_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/onix.utils.plot_compare_two_nuclear_data_on_nuclide_chart.html">onix.utils.plot_compare_two_nuclear_data_on_nuclide_chart</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License Agreement</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ONIX</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Python API</a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Utilities and functions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/pythonapi/utils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="onix-utilities-and-functions">
+<h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Utilities and functions<a class="headerlink" href="#onix-utilities-and-functions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="reaction-classes">
+<h2>Reaction classes<a class="headerlink" href="#reaction-classes" title="Permalink to this headline">¶</a></h2>
+<p>These classes enable users to build their own custom nuclear libraries. Instantiations of these classes can be used as nuclear libraries for simulations.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.decay_lib.html#onix.utils.decay_lib" title="onix.utils.decay_lib"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.decay_lib</span></code></a></p></td>
+<td><p>Decay_lib objects allow users to build and store custom, small size decay libraries.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.xs_lib.html#onix.utils.xs_lib" title="onix.utils.xs_lib"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.xs_lib</span></code></a></p></td>
+<td><p>xs_lib objects allow users to build and store custom, small size one-group cross section libraries.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.fy_lib.html#onix.utils.fy_lib" title="onix.utils.fy_lib"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.fy_lib</span></code></a></p></td>
+<td><p>fy_lib objects allow users to build and store custom, small size fission yield libraries.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<p>Convenient functions to be used directly by users and used in the source code.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.decay_to_halflife.html#onix.utils.decay_to_halflife" title="onix.utils.decay_to_halflife"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.decay_to_halflife</span></code></a></p></td>
+<td><p>Converts a decay constant into a half life in specified units.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.halflife_to_decay.html#onix.utils.halflife_to_decay" title="onix.utils.halflife_to_decay"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.halflife_to_decay</span></code></a></p></td>
+<td><p>Converts a half life into a decay constant.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.halflife_to_second.html#onix.utils.halflife_to_second" title="onix.utils.halflife_to_second"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.halflife_to_second</span></code></a></p></td>
+<td><p>Converts a half life from specified units into seconds.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.is_int.html#onix.utils.is_int" title="onix.utils.is_int"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.is_int</span></code></a></p></td>
+<td><p>Check whether an object is an integer.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.is_zamid.html#onix.utils.is_zamid" title="onix.utils.is_zamid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.is_zamid</span></code></a></p></td>
+<td><p>Check whether a string is a nuclide’s z-a-m id.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.is_name.html#onix.utils.is_name" title="onix.utils.is_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.is_name</span></code></a></p></td>
+<td><p>Check whether a string is a nuclide’s name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.is_list_redundant.html#onix.utils.is_list_redundant" title="onix.utils.is_list_redundant"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.is_list_redundant</span></code></a></p></td>
+<td><p>Check whether a list is redundant.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.get_list_redundant_elt.html#onix.utils.get_list_redundant_elt" title="onix.utils.get_list_redundant_elt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_list_redundant_elt</span></code></a></p></td>
+<td><p>Returns the redundant elements in a list.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.zamid_list_to_name_list.html#onix.utils.zamid_list_to_name_list" title="onix.utils.zamid_list_to_name_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.zamid_list_to_name_list</span></code></a></p></td>
+<td><p>Converts a list of nuclides’ z-a-m ids into a list of names.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.name_list_to_zamid_list.html#onix.utils.name_list_to_zamid_list" title="onix.utils.name_list_to_zamid_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.name_list_to_zamid_list</span></code></a></p></td>
+<td><p>Converts a list of nuclides’ names into a list of z-a-m ids.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.get_zamid_z.html#onix.utils.get_zamid_z" title="onix.utils.get_zamid_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_zamid_z</span></code></a></p></td>
+<td><p>Gets the atomic number (z) from a nuclide’s z-a-m id.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.get_name_z.html#onix.utils.get_name_z" title="onix.utils.get_name_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_name_z</span></code></a></p></td>
+<td><p>Gets the atomic number (z) from a nuclide’s name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.get_zamid_a.html#onix.utils.get_zamid_a" title="onix.utils.get_zamid_a"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_zamid_a</span></code></a></p></td>
+<td><p>Gets the mass number (a) from a nuclide’s z-a-m id.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.get_zamid_n.html#onix.utils.get_zamid_n" title="onix.utils.get_zamid_n"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_zamid_n</span></code></a></p></td>
+<td><p>Gets the number of neutrons (n) from a nuclide’s z-a-m id.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.get_zamid_s.html#onix.utils.get_zamid_s" title="onix.utils.get_zamid_s"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_zamid_s</span></code></a></p></td>
+<td><p>Gets the state of a nuclide from a its z-a-m id.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.zamid_to_name.html#onix.utils.zamid_to_name" title="onix.utils.zamid_to_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.zamid_to_name</span></code></a></p></td>
+<td><p>Converts a nuclide’s z-a-m id into the nuclide’s name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.name_to_zamid.html#onix.utils.name_to_zamid" title="onix.utils.name_to_zamid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.name_to_zamid</span></code></a></p></td>
+<td><p>Converts a nuclide’s name into the nuclide’s z-a-m id.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.get_hm.html#onix.utils.get_hm" title="onix.utils.get_hm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_hm</span></code></a></p></td>
+<td><p>Gets the mass of heavy metal in a Passlist object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.get_nucl_atomic_mass.html#onix.utils.get_nucl_atomic_mass" title="onix.utils.get_nucl_atomic_mass"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_nucl_atomic_mass</span></code></a></p></td>
+<td><p>Gets the atomic mass of a nuclide (in grams).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.convert_mass_to_atom.html#onix.utils.convert_mass_to_atom" title="onix.utils.convert_mass_to_atom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.convert_mass_to_atom</span></code></a></p></td>
+<td><p>Converts the mass quantity (in grams) of a given nuclide type into number of atoms.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.convert_atom_to_mass.html#onix.utils.convert_atom_to_mass" title="onix.utils.convert_atom_to_mass"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.convert_atom_to_mass</span></code></a></p></td>
+<td><p>Converts the quantity of a given nuclide from number of atoms into mass (in grams).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.get_bu_sec_conv_factor.html#onix.utils.get_bu_sec_conv_factor" title="onix.utils.get_bu_sec_conv_factor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_bu_sec_conv_factor</span></code></a></p></td>
+<td><p>Computes the factor that converts seconds into burnup units (MWd/kg) from a given volume and a Initial Heavy Metal mass (IHM).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.get_decay_nucl.html#onix.utils.get_decay_nucl" title="onix.utils.get_decay_nucl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_decay_nucl</span></code></a></p></td>
+<td><p>Gets the list of nuclides from a decay dictionnary.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.get_xs_nucl.html#onix.utils.get_xs_nucl" title="onix.utils.get_xs_nucl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_xs_nucl</span></code></a></p></td>
+<td><p>Gets the list of nuclides from a cross section dictionnary.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.get_fy_nucl.html#onix.utils.get_fy_nucl" title="onix.utils.get_fy_nucl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_fy_nucl</span></code></a></p></td>
+<td><p>Gets the list of fission products from a fission yield dictionnary.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.is_lista_in_listb.html#onix.utils.is_lista_in_listb" title="onix.utils.is_lista_in_listb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.is_lista_in_listb</span></code></a></p></td>
+<td><p>Check whether elements from a list (lista) are all contained in another list (listb).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.get_fy_parent_nucl.html#onix.utils.get_fy_parent_nucl" title="onix.utils.get_fy_parent_nucl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_fy_parent_nucl</span></code></a></p></td>
+<td><p>Gets the list of fission parents from a fission yield dictionnary.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.is_number.html#onix.utils.is_number" title="onix.utils.is_number"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.is_number</span></code></a></p></td>
+<td><p>Check whether s is a float.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.openmc_name_to_onix_name.html#onix.utils.openmc_name_to_onix_name" title="onix.utils.openmc_name_to_onix_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.openmc_name_to_onix_name</span></code></a></p></td>
+<td><p>Converts a nuclide’s name written with OpenMC format (‘U235_m1’) into ONIX format (‘U-235*’).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.onix_name_to_openmc_name.html#onix.utils.onix_name_to_openmc_name" title="onix.utils.onix_name_to_openmc_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.onix_name_to_openmc_name</span></code></a></p></td>
+<td><p>Converts a nuclide’s name written with ONIX format (‘U-235*’) into OpenMC format (‘U235_m1’).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.bu_namelist_to_mc_namelist.html#onix.utils.bu_namelist_to_mc_namelist" title="onix.utils.bu_namelist_to_mc_namelist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.bu_namelist_to_mc_namelist</span></code></a></p></td>
+<td><p>Converts a list of nuclides’ names written with ONIX format (‘U-235*’) into OpenMC format (‘U235_m1’).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.mc_namelist_to_bu_namelist.html#onix.utils.mc_namelist_to_bu_namelist" title="onix.utils.mc_namelist_to_bu_namelist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.mc_namelist_to_bu_namelist</span></code></a></p></td>
+<td><p>Converts a list of nuclides’ names written with OpenMC format (‘U235_m1’) into ONIX format (‘U-235*’).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.order_nuclide_per_z.html#onix.utils.order_nuclide_per_z" title="onix.utils.order_nuclide_per_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.order_nuclide_per_z</span></code></a></p></td>
+<td><p>Orders a list of nuclides’ z-a-m ids according to their atomic number (z).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.order_nuclide_name_per_z.html#onix.utils.order_nuclide_name_per_z" title="onix.utils.order_nuclide_name_per_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.order_nuclide_name_per_z</span></code></a></p></td>
+<td><p>Orders a list of nuclides’ names (in OpenMC format) according to their atomic number (z).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.order_nuclide_per_a.html#onix.utils.order_nuclide_per_a" title="onix.utils.order_nuclide_per_a"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.order_nuclide_per_a</span></code></a></p></td>
+<td><p>Orders a list of nuclides’ z-a-m ids according to their mass number (a).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.get_openmc_xs_nucl_list.html#onix.utils.get_openmc_xs_nucl_list" title="onix.utils.get_openmc_xs_nucl_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_openmc_xs_nucl_list</span></code></a></p></td>
+<td><p>Returns the list of nuclides for which there are cross section data in a specified HDF5 cross section library directory (produced with OpenMC).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.convert_spectrum_to_janis_weighting_format.html#onix.utils.convert_spectrum_to_janis_weighting_format" title="onix.utils.convert_spectrum_to_janis_weighting_format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.convert_spectrum_to_janis_weighting_format</span></code></a></p></td>
+<td><p>Converts a neutron spectrum output file computed in an ONIX simulations to a format suitable to be used to fold cross sections in JANIS4.1.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.get_zamid_natural_abundance.html#onix.utils.get_zamid_natural_abundance" title="onix.utils.get_zamid_natural_abundance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_zamid_natural_abundance</span></code></a></p></td>
+<td><p>Gets the natural abundance of a nuclide (values from 0 to 1).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.get_name_natural_abundance.html#onix.utils.get_name_natural_abundance" title="onix.utils.get_name_natural_abundance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_name_natural_abundance</span></code></a></p></td>
+<td><p>Gets the natural abundance of a nuclide (values from 0 to 1).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.find_zamid_precursor.html#onix.utils.find_zamid_precursor" title="onix.utils.find_zamid_precursor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.find_zamid_precursor</span></code></a></p></td>
+<td><p>Finds the precursor of a nuclide via a specified reaction (except fission reactions).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.interpolation_between_two_points.html#onix.utils.interpolation_between_two_points" title="onix.utils.interpolation_between_two_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.interpolation_between_two_points</span></code></a></p></td>
+<td><p>Linearly interpolates between two points to find the ordinate to a given abscissa value (x).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="data-processors">
+<h2>Data processors<a class="headerlink" href="#data-processors" title="Permalink to this headline">¶</a></h2>
+<p>Various functions to extract, read and visualize output results.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.plot_bucell_nuclide_network.html#onix.utils.plot_bucell_nuclide_network" title="onix.utils.plot_bucell_nuclide_network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.plot_bucell_nuclide_network</span></code></a></p></td>
+<td><p>Plots a network diagram of the destruction and production reaction rates of a specified nuclide at a given macrostep for a given BUCell.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.plot_nuclide_dens_from_path.html#onix.utils.plot_nuclide_dens_from_path" title="onix.utils.plot_nuclide_dens_from_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.plot_nuclide_dens_from_path</span></code></a></p></td>
+<td><p>Plots the density evolution of a given nuclide (in <span class="math notranslate nohighlight">\(atm barn^{-2}cm{-1}\)</span>) in a given BUCell against time (in days).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.plot_nuclide_group_dens_from_path.html#onix.utils.plot_nuclide_group_dens_from_path" title="onix.utils.plot_nuclide_group_dens_from_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.plot_nuclide_group_dens_from_path</span></code></a></p></td>
+<td><p>Plots the total density evolution of a group of nuclides (in <span class="math notranslate nohighlight">\(atm barn^{-2}cm{-1}\)</span>) in a given BUCell against time (in days).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.plot_xs_time_evolution_from_path.html#onix.utils.plot_xs_time_evolution_from_path" title="onix.utils.plot_xs_time_evolution_from_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.plot_xs_time_evolution_from_path</span></code></a></p></td>
+<td><p>Plots the one-group cross section evolution (in barn) of a given reaction for a given nuclide in a given BUCell against time (in days).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.plot_xs_bu_evolution_from_path.html#onix.utils.plot_xs_bu_evolution_from_path" title="onix.utils.plot_xs_bu_evolution_from_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.plot_xs_bu_evolution_from_path</span></code></a></p></td>
+<td><p>Plots the one-group cross section evolution (in barn) of a given reaction for a given nuclide in a given BUCell against burnup (MWd/kg).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.compare_xs_bu_evolution_from_path.html#onix.utils.compare_xs_bu_evolution_from_path" title="onix.utils.compare_xs_bu_evolution_from_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.compare_xs_bu_evolution_from_path</span></code></a></p></td>
+<td><p>Plots multiple cross sections from multiple simulation directories in a series of subplots with the same burnup y-axis.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.plot_kinf_from_path.html#onix.utils.plot_kinf_from_path" title="onix.utils.plot_kinf_from_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.plot_kinf_from_path</span></code></a></p></td>
+<td><p>Plots the multiplication factor against time (in days).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.plot_flux_from_path.html#onix.utils.plot_flux_from_path" title="onix.utils.plot_flux_from_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.plot_flux_from_path</span></code></a></p></td>
+<td><p>Plots the neutron flux against time (in days).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.plot_flux_spectrum_bu_evolution_from_path.html#onix.utils.plot_flux_spectrum_bu_evolution_from_path" title="onix.utils.plot_flux_spectrum_bu_evolution_from_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.plot_flux_spectrum_bu_evolution_from_path</span></code></a></p></td>
+<td><p>Plots the neutron spectrum for different macrosteps for multiple BUCells.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.plot_lethargy_spectrum_bu_evolution_from_path.html#onix.utils.plot_lethargy_spectrum_bu_evolution_from_path" title="onix.utils.plot_lethargy_spectrum_bu_evolution_from_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.plot_lethargy_spectrum_bu_evolution_from_path</span></code></a></p></td>
+<td><p>Plots the neutron spectrum in lethargy units for different macrosteps for multiple BUCells.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.plot_xs_dens_flux.html#onix.utils.plot_xs_dens_flux" title="onix.utils.plot_xs_dens_flux"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.plot_xs_dens_flux</span></code></a></p></td>
+<td><p>Plots the evolution of a cross section, a nuclide density and the neutron flux in a specified BUCell in three subplots witht the same y-axis in days.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.read_time_seq.html#onix.utils.read_time_seq" title="onix.utils.read_time_seq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.read_time_seq</span></code></a></p></td>
+<td><p>Reads the time sequence from a simulation’s directory and returns a list of the time sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.get_step_time_length_seq.html#onix.utils.get_step_time_length_seq" title="onix.utils.get_step_time_length_seq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_step_time_length_seq</span></code></a></p></td>
+<td><p>Creates a list with time length between each macrosteps.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.read_bu_seq.html#onix.utils.read_bu_seq" title="onix.utils.read_bu_seq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.read_bu_seq</span></code></a></p></td>
+<td><p>Reads the burnup sequence from a simulation’s directory and returns a list of the burnup sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.read_kinf_seq.html#onix.utils.read_kinf_seq" title="onix.utils.read_kinf_seq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.read_kinf_seq</span></code></a></p></td>
+<td><p>Reads the multiplication factor evolution from a simulation’s directory and returns a list of the multiplication factor evolution.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.read_flux.html#onix.utils.read_flux" title="onix.utils.read_flux"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.read_flux</span></code></a></p></td>
+<td><p>Reads the macrostep-wise neutron flux evolution from a simulation’s directory and returns a list with the neutron flux evolution.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.read_flux_subseq.html#onix.utils.read_flux_subseq" title="onix.utils.read_flux_subseq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.read_flux_subseq</span></code></a></p></td>
+<td><p>Reads the microstep-wise neutron flux evolution from a simulation’s directory and returns a list with the neutron flux evolution.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.get_fluence_seq.html#onix.utils.get_fluence_seq" title="onix.utils.get_fluence_seq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_fluence_seq</span></code></a></p></td>
+<td><p>Returns a list with the macrostep-wise fluence evolution in a specificed BUCell</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.get_fluence_subseq.html#onix.utils.get_fluence_subseq" title="onix.utils.get_fluence_subseq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_fluence_subseq</span></code></a></p></td>
+<td><p>Returns a list with the microstep-wise fluence evolution in a specificed BUCell</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.read_flux_spectrum.html#onix.utils.read_flux_spectrum" title="onix.utils.read_flux_spectrum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.read_flux_spectrum</span></code></a></p></td>
+<td><p>Reads the neutron flux spectra for multiple macrosteps from a flux spectrum output file and returns it in a list.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.read_energy_mid_points.html#onix.utils.read_energy_mid_points" title="onix.utils.read_energy_mid_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.read_energy_mid_points</span></code></a></p></td>
+<td><p>Reads the mid-points of the energy groups against which the multi-group neutron flux is stored and returns it in a list.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.read_energy_bin_length.html#onix.utils.read_energy_bin_length" title="onix.utils.read_energy_bin_length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.read_energy_bin_length</span></code></a></p></td>
+<td><p>Reads the energy interval of each energy bin group used to store the multi-group neutron flux and returns it in a list.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.read_dens.html#onix.utils.read_dens" title="onix.utils.read_dens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.read_dens</span></code></a></p></td>
+<td><p>Reads the density (in <span class="math notranslate nohighlight">\(atm barn^{-2}cm^{-1}\)</span>) of a specified nuclide from the provided density file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.get_total_density.html#onix.utils.get_total_density" title="onix.utils.get_total_density"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_total_density</span></code></a></p></td>
+<td><p>Returns the total density of the material (in <span class="math notranslate nohighlight">\(atm barn^{-2}cm^{-1}\)</span>) in a BUCell at a given macrostep.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.get_total_mass_density.html#onix.utils.get_total_mass_density" title="onix.utils.get_total_mass_density"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_total_mass_density</span></code></a></p></td>
+<td><p>Returns the total mass density of the material (in <span class="math notranslate nohighlight">\(g cm^{-3}\)</span>) in a BUCell at a given macrostep.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.read_xs_seq.html#onix.utils.read_xs_seq" title="onix.utils.read_xs_seq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.read_xs_seq</span></code></a></p></td>
+<td><p>Reads the cross section evolution (in barn) for a specified reactions for a given nuclide in a given BUCell and returns it in a list.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.get_time_averaged_xs.html#onix.utils.get_time_averaged_xs" title="onix.utils.get_time_averaged_xs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_time_averaged_xs</span></code></a></p></td>
+<td><p>Computes time-averaged cross section (in barn) for a specified reactions for a given nuclide in a given BUCell.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.get_time_averaged_flux.html#onix.utils.get_time_averaged_flux" title="onix.utils.get_time_averaged_flux"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_time_averaged_flux</span></code></a></p></td>
+<td><p>Computes the time-averaged neutron flux (in <span class="math notranslate nohighlight">\(cm^{-2}s^{-1}\)</span>) in a given BUCell.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.get_tot_xs.html#onix.utils.get_tot_xs" title="onix.utils.get_tot_xs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.get_tot_xs</span></code></a></p></td>
+<td><p>Computes the total one-group cross section evolution (in barn) for a specified nuclide in a given BUCell.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.read_xs_nucl.html#onix.utils.read_xs_nucl" title="onix.utils.read_xs_nucl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.read_xs_nucl</span></code></a></p></td>
+<td><p>Returns the list of nuclides for which one-group cross sections have been calculated during a simulation in a given BUCell.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.read_dens_nucl.html#onix.utils.read_dens_nucl" title="onix.utils.read_dens_nucl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.read_dens_nucl</span></code></a></p></td>
+<td><p>Returns the list of nuclides for which densities have been calculated during a simulation in a given BUCell.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.rank_nuclide_per_dens.html#onix.utils.rank_nuclide_per_dens" title="onix.utils.rank_nuclide_per_dens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.rank_nuclide_per_dens</span></code></a></p></td>
+<td><p>Print a ranking of nuclides in a BUCell according to their densities for multiple macrosteps in a text file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.plot_matrix_bysign_from_compressed_matrix.html#onix.utils.plot_matrix_bysign_from_compressed_matrix" title="onix.utils.plot_matrix_bysign_from_compressed_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.plot_matrix_bysign_from_compressed_matrix</span></code></a></p></td>
+<td><p>Plots the transmuation matrix for a given BUCell at a given macrostep.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/onix.utils.plot_nuclide_chart_color_per_nuclear_data.html#onix.utils.plot_nuclide_chart_color_per_nuclear_data" title="onix.utils.plot_nuclide_chart_color_per_nuclear_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.plot_nuclide_chart_color_per_nuclear_data</span></code></a></p></td>
+<td><p>Plots a chart of the nuclide where nuclides are colored only if present in the decay, cross section or fission yield library.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/onix.utils.plot_compare_two_nuclear_data_on_nuclide_chart.html#onix.utils.plot_compare_two_nuclear_data_on_nuclide_chart" title="onix.utils.plot_compare_two_nuclear_data_on_nuclide_chart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onix.utils.plot_compare_two_nuclear_data_on_nuclide_chart</span></code></a></p></td>
+<td><p>Plots a chart of the nuclide where nuclides are colored only if present in the decay, cross section or fission yield library.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="generated/onix.utils.decay_lib.html" class="btn btn-neutral float-right" title="onix.utils.decay_lib" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="generated/onix.data.read_isomeric_data.html" class="btn btn-neutral float-left" title="onix.data.read_isomeric_data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Julien de Troullioud de Lanversin
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+ 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30411614-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>

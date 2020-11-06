@@ -1,0 +1,600 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>onix.couple.Couple_openmc &mdash; ONIX Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="onix – Nuclear Archaeology (NAX) module" href="../nax.html" />
+    <link rel="prev" title="onix – Couple module" href="../couple.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #0d0d0d" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../main_class.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Main Classes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../couple.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Couple module</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../couple.html#coupling-with-openmc">Coupling with OpenMC</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">onix.couple.Couple_openmc</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../nax.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Nuclear Archaeology (NAX) module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../salameche.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Salamèche: the burnup solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Data and library readers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Utilities and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License Agreement</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ONIX</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Python API</a> &raquo;</li>
+        
+          <li><a href="../couple.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Couple module</a> &raquo;</li>
+        
+      <li>onix.couple.Couple_openmc</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/pythonapi/generated/onix.couple.Couple_openmc.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="onix-couple-couple-openmc">
+<h1>onix.couple.Couple_openmc<a class="headerlink" href="#onix-couple-couple-openmc" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="onix.couple.Couple_openmc">
+<em class="property">class </em><code class="sig-prename descclassname">onix.couple.</code><code class="sig-name descname">Couple_openmc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">MC_input_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">xs_mode</span><span class="o">=</span><span class="default_value">'no constant lib'</span></em>, <em class="sig-param"><span class="n">MPI</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is used to execute coupled-mode simulations</p>
+<p>Through this class, the user can:</p>
+<ul class="simple">
+<li><p>chose to parallelize the Monte Carlo simulations via the “set_MPI” method</p></li>
+<li><p>set the nuclear data libraries to be used in the simulation</p></li>
+<li><p>set the burnup/time sequence for the simulation</p></li>
+<li><p>manually set the volume of each BUCells (note that by default, ONIX uses the OpenMC stochastic volume calculation
+to find the volume of each cell. However, this method might produce important errors on the volume and it is
+advised to set the volume manually)</p></li>
+<li><p>select which of the Cells defined in the OpenMC input should be depleted (these cells will be known as BUCells)</p></li>
+<li><p>select a list of nuclides in each BUCell which cross sections will be tallied. If the user does not specify any such list of nuclides, ONIX will by default tally the cross sections of all
+nuclides which data are found in the cross section library.</p></li>
+</ul>
+<p>The Couple_openmc class also takes care of the coupling between ONIX and OpenMC. At the beginning of a simulation,
+it imports certain initial parameters from the OpenMC input to ONIX such as the name of the BUCells and the initial
+nuclide densities of each BUCell. During the simulation, it makes sure that information such as the flux tallies,
+neutron spectrum tallies, the reaction rates and the updated nuclide densities are correctly transfered between the burnup
+module and the neutron transport module.</p>
+<p>The Couple_openmc class will also sample the isomeric branching ratios and (n,gamma) cross sections on the
+the same energy points to prepare for the calculations of one-group isomeric branching ratios.</p>
+<p><strong>IMPORTANT: the root cell in the OpenMC input should be named “root cell”</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>MC_input_path</strong> (<em>str</em>) – Specifies where the OpenMC input files in .xml format are located. This parameter should not be specified as ONIX cannot yet work without Python API.</p></li>
+<li><p><strong>xs_mode</strong> (<em>str</em>) – Choice between ‘constant lib’ and ‘no constant lib’. Default to ‘no constant lib’.
+‘constant lib’ indicates to ONIX that the user has provided a constant one-group cross section libraries to be used.
+‘no constant lib’ indicates to ONIX that it should use one-group cross section computed by OpenMC.</p></li>
+<li><p><strong>MPI</strong> (<em>str</em>) – Choice between ‘on’ and ‘off’.
+Indicates whether OpenMC will be parrallelized or not.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.MC_XS_nucl_list">
+<em class="property">property </em><code class="sig-name descname">MC_XS_nucl_list</code><a class="headerlink" href="#onix.couple.Couple_openmc.MC_XS_nucl_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of nuclides for which cross section data exist in the cross section library.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.MC_input_path">
+<em class="property">property </em><code class="sig-name descname">MC_input_path</code><a class="headerlink" href="#onix.couple.Couple_openmc.MC_input_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the path to OpenMC input files.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.MPI">
+<em class="property">property </em><code class="sig-name descname">MPI</code><a class="headerlink" href="#onix.couple.Couple_openmc.MPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns wether MPI is activated or not (‘on’ if the user chose to parallelize OpenMC with MPI, ‘off’ if not)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.bounding_box">
+<em class="property">property </em><code class="sig-name descname">bounding_box</code><a class="headerlink" href="#onix.couple.Couple_openmc.bounding_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the bounding box of the geometry.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.burn">
+<code class="sig-name descname">burn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.burn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.burn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Launches the coupled simulation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.few_isomeric_on">
+<code class="sig-name descname">few_isomeric_on</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.few_isomeric_on"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.few_isomeric_on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calling this function will force ONIX to only calculate isomeric branching ratios of Pm147 and Am241
+By default ONIX calculates all isomeric branching ratios for which data
+can be found in the EAF-2010 multiplicities library</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.import_openmc">
+<code class="sig-name descname">import_openmc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">root_cell</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.import_openmc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.import_openmc" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method import certain parameters from OpenMC to ONIX</p>
+<p>This method launches the _pre_run script which runs a first Monte Carlo
+simulation in order for ONIX to get a handle on the various OpenMC objects
+(this feature is essential when the user decides to defines input parameters
+via a text input file rather than using the Python API. However, as of now,
+ONIX only supports Python API input)</p>
+<p>The _pre_run script also requests OpenMC to calculate the volume of each OpenMC
+Cell with openmc.calculate_volume(). However, the volumes obtained
+via this method can have significant errors, especially for complex or large geometry.
+As of now, it is recommented that the user manually sets the volume of ech BUCell via
+the onix.couple.Couple_openmc.set_volume() command.</p>
+<p>Finally, a very important functionality of import_openmc is to add minute quantities
+of certain nuclides in BUCells’ materials so that OpenMC can calculate their cross sections.
+This means that ONIX is going to modify the material.xml and add all nuclides requested by the user
+for cross section calculations. This feature is necessary because OpenMC cannot tally reaction
+rates of nuclides that are not present in the material.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>root_cell</strong> (<em>openmc.Cell</em>) – Root cell object defined in OpenMC geometry.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.initial_summary">
+<em class="property">property </em><code class="sig-name descname">initial_summary</code><a class="headerlink" href="#onix.couple.Couple_openmc.initial_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the original summary.h5 file created by OpenMC before ONIX applies change to OpenMC’s objects.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.materials">
+<em class="property">property </em><code class="sig-name descname">materials</code><a class="headerlink" href="#onix.couple.Couple_openmc.materials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the materials object created in the OpenMC material input.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.no_decay">
+<code class="sig-name descname">no_decay</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.no_decay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.no_decay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Activate a “no-decay” simulation. This means that the system will not model the decay of nuclides</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.openmc_bin_path">
+<em class="property">property </em><code class="sig-name descname">openmc_bin_path</code><a class="headerlink" href="#onix.couple.Couple_openmc.openmc_bin_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the path to OpenMC executable.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.reac_rank_on">
+<code class="sig-name descname">reac_rank_on</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.reac_rank_on"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.reac_rank_on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calling this function will tell ONIX to produce reaction rates ranking and print them for each BUCells
+By default ONIX does not produce reaction rates ranking as it takes a lot of memory.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.root_cell">
+<em class="property">property </em><code class="sig-name descname">root_cell</code><a class="headerlink" href="#onix.couple.Couple_openmc.root_cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the root cell object created in the OpenMC geometry.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.select_bucells">
+<code class="sig-name descname">select_bucells</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bucell_list</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.select_bucells"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.select_bucells" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects the cells from the OpenMC input that should be depleted.</p>
+<p>The user can choose to specify the nuclides for which cross sections should be updated by OpenMC simulations. To do so, the user must enter a tuple where the first
+element is the OpenMC cell object and the second element is a list of the name of nuclides
+which cross sections should be updated.</p>
+<p>If the user does not specify for which nuclides cross sections should be updated,
+only the OpenMC cell objects should be entered. ONIX will by default calculate the cross sections
+for all nuclides available in the cross section library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bucell_list</strong> (<em>list of openmc.Cell</em><em> or </em><em>list of tuples</em>) – <p>Defines the list of cells that should be depleted by ONIX.</p>
+<p>For example, the user can set <em>bucell_list = [(fuel_cell, [‘U-235’, ‘Pu-239’], (cladding_cell, [‘Al-27’])]</em></p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.sequence">
+<em class="property">property </em><code class="sig-name descname">sequence</code><a class="headerlink" href="#onix.couple.Couple_openmc.sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the sequence assigned to the Couple_openmc() object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.set_MPI">
+<code class="sig-name descname">set_MPI</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">execu</span></em>, <em class="sig-param"><span class="n">tasks</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.set_MPI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.set_MPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the settings for the MPI parallelization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>execu</strong> (<em>str</em>) – The MPI execute command, for example ‘srun’ on cluster using slurm</p></li>
+<li><p><strong>tasks</strong> (<em>str</em>) – The number of tasks to parallelize</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.set_bounding_box">
+<code class="sig-name descname">set_bounding_box</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ll</span></em>, <em class="sig-param"><span class="n">ur</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.set_bounding_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.set_bounding_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the bounding box of the geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ll</strong> (<em>[</em><em>x</em><em>,</em><em>y</em><em>,</em><em>z</em><em>]</em>) – Extremity of the box located in the negative part of a 3-D plan</p></li>
+<li><p><strong>ur</strong> (<em>[</em><em>x</em><em>,</em><em>y</em><em>,</em><em>z</em><em>]</em>) – Extremity of the box located in the positive part of a 3-D plan</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.set_decay_from_object">
+<code class="sig-name descname">set_decay_from_object</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bucell</span></em>, <em class="sig-param"><span class="n">object</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.set_decay_from_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.set_decay_from_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the decay library from an ONIX decay object defined by the user for a specific BUCell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bucell</strong> (<a class="reference internal" href="onix.Cell.html#onix.Cell" title="onix.Cell"><em>onix.Cell</em></a>) – The BUCell for which the decay data are to be used.</p></li>
+<li><p><strong>object</strong> (<a class="reference internal" href="onix.utils.decay_lib.html#onix.utils.decay_lib" title="onix.utils.decay_lib"><em>onix.utils.decay_lib</em></a>) – A decay library object constructed by the user with onix.utils.decay_lib.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.set_decay_lib">
+<code class="sig-name descname">set_decay_lib</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">decay_lib_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.set_decay_lib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.set_decay_lib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the decay library to use for ONIX.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>decay_lib_path</strong> (<em>str</em>) – Path to a decay library. The library needs to be in ONIX format.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.set_default_decay_lib">
+<code class="sig-name descname">set_default_decay_lib</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.set_default_decay_lib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.set_default_decay_lib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the decay library to the default one (ENDF/B-VIII.0).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.set_default_fy_lib">
+<code class="sig-name descname">set_default_fy_lib</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.set_default_fy_lib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.set_default_fy_lib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the fission yield library to the default one (ENDF/B-VIII.0).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.set_default_xs_lib">
+<code class="sig-name descname">set_default_xs_lib</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.set_default_xs_lib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.set_default_xs_lib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the cross section library to the default one. The default cross section library in ONIX has been obtained by computing middle-burnup one-group cross section for a coupled simumation of a LWR fuel pin-cell. Therefore, this library is only adapted for LWR reactors.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.set_fy_from_object">
+<code class="sig-name descname">set_fy_from_object</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bucell</span></em>, <em class="sig-param"><span class="n">object</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.set_fy_from_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.set_fy_from_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the fission yield library to an ONIX fission yield object defined by the user for a specific BUCell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bucell</strong> (<a class="reference internal" href="onix.Cell.html#onix.Cell" title="onix.Cell"><em>onix.Cell</em></a>) – The BUCell for which the decay data are to be used.</p></li>
+<li><p><strong>object</strong> (<a class="reference internal" href="onix.utils.fy_lib.html#onix.utils.fy_lib" title="onix.utils.fy_lib"><em>onix.utils.fy_lib</em></a>) – A fission yield library object constructed by the user with onix.utils.fy_lib.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.set_sequence">
+<code class="sig-name descname">set_sequence</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sequence</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.set_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.set_sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a sequence object to the Couple_openmc object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sequence</strong> (<a class="reference internal" href="onix.Sequence.html#onix.Sequence" title="onix.Sequence"><em>onix.Sequence</em></a>) – ONIX sequence object defined by the user.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.set_user_fy_lib">
+<code class="sig-name descname">set_user_fy_lib</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_fy_lib_path</span></em>, <em class="sig-param"><span class="n">complete</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.set_user_fy_lib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.set_user_fy_lib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the fission yield library to use for ONIX. Setting the <em>complete</em> parameter to True allows ONIX to complement the data of the provided library with additional data found in ENDF/B-VIII.0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_fy_lib_path</strong> (<em>str</em>) – Path to a fission yield library. The library needs to be in ONIX format.</p></li>
+<li><p><strong>complete</strong> (<em>bool</em>) – Indicates to ONIX whether or not to complement the provided library with additional fission yields from ENDF:B-VIII.0 library.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.set_vol">
+<code class="sig-name descname">set_vol</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vol_dict</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.set_vol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.set_vol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the volume of each BUCell in <span class="math notranslate nohighlight">\(cm^{3}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>vol_dict</strong> (<em>dict</em>) – Dictionnary where keys are the names of BUCell (as defined by the user) and entries are volume in <span class="math notranslate nohighlight">\(cm^{3}\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.set_xs_lib">
+<code class="sig-name descname">set_xs_lib</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xs_lib_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/couple/couple_openmc.html#Couple_openmc.set_xs_lib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.couple.Couple_openmc.set_xs_lib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the cross section library to use for ONIX.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xs_lib_path</strong> (<em>str</em>) – Path to a cross section library. The library needs to be in ONIX format.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.settings">
+<em class="property">property </em><code class="sig-name descname">settings</code><a class="headerlink" href="#onix.couple.Couple_openmc.settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the setting object defined in OpenMC simulation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.system">
+<em class="property">property </em><code class="sig-name descname">system</code><a class="headerlink" href="#onix.couple.Couple_openmc.system" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the system object of the simulation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.updated_summary">
+<em class="property">property </em><code class="sig-name descname">updated_summary</code><a class="headerlink" href="#onix.couple.Couple_openmc.updated_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the updated summary.h5 file created by OpenMC before ONIX applies change to OpenMC’s objects.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="onix.couple.Couple_openmc.xs_mode">
+<em class="property">property </em><code class="sig-name descname">xs_mode</code><a class="headerlink" href="#onix.couple.Couple_openmc.xs_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the mode for cross sections library.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../nax.html" class="btn btn-neutral float-right" title="onix – Nuclear Archaeology (NAX) module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../couple.html" class="btn btn-neutral float-left" title="onix – Couple module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Julien de Troullioud de Lanversin
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+ 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30411614-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>

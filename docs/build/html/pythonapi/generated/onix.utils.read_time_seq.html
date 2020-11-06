@@ -1,0 +1,327 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>onix.utils.read_time_seq &mdash; ONIX Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="onix.utils.get_step_time_length_seq" href="onix.utils.get_step_time_length_seq.html" />
+    <link rel="prev" title="onix.utils.plot_xs_dens_flux" href="onix.utils.plot_xs_dens_flux.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #0d0d0d" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../main_class.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Main Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../couple.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Couple module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nax.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Nuclear Archaeology (NAX) module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../salameche.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Salamèche: the burnup solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Data and library readers</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Utilities and functions</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../utils.html#reaction-classes">Reaction classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils.html#functions">Functions</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../utils.html#data-processors">Data processors</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.plot_bucell_nuclide_network.html">onix.utils.plot_bucell_nuclide_network</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.plot_nuclide_dens_from_path.html">onix.utils.plot_nuclide_dens_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.plot_nuclide_group_dens_from_path.html">onix.utils.plot_nuclide_group_dens_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.plot_xs_time_evolution_from_path.html">onix.utils.plot_xs_time_evolution_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.plot_xs_bu_evolution_from_path.html">onix.utils.plot_xs_bu_evolution_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.compare_xs_bu_evolution_from_path.html">onix.utils.compare_xs_bu_evolution_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.plot_kinf_from_path.html">onix.utils.plot_kinf_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.plot_flux_from_path.html">onix.utils.plot_flux_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.plot_flux_spectrum_bu_evolution_from_path.html">onix.utils.plot_flux_spectrum_bu_evolution_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.plot_lethargy_spectrum_bu_evolution_from_path.html">onix.utils.plot_lethargy_spectrum_bu_evolution_from_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.plot_xs_dens_flux.html">onix.utils.plot_xs_dens_flux</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">onix.utils.read_time_seq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_step_time_length_seq.html">onix.utils.get_step_time_length_seq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.read_bu_seq.html">onix.utils.read_bu_seq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.read_kinf_seq.html">onix.utils.read_kinf_seq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.read_flux.html">onix.utils.read_flux</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.read_flux_subseq.html">onix.utils.read_flux_subseq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_fluence_seq.html">onix.utils.get_fluence_seq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_fluence_subseq.html">onix.utils.get_fluence_subseq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.read_flux_spectrum.html">onix.utils.read_flux_spectrum</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.read_energy_mid_points.html">onix.utils.read_energy_mid_points</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.read_energy_bin_length.html">onix.utils.read_energy_bin_length</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.read_dens.html">onix.utils.read_dens</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_total_density.html">onix.utils.get_total_density</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_total_mass_density.html">onix.utils.get_total_mass_density</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.read_xs_seq.html">onix.utils.read_xs_seq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_time_averaged_xs.html">onix.utils.get_time_averaged_xs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_time_averaged_flux.html">onix.utils.get_time_averaged_flux</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.get_tot_xs.html">onix.utils.get_tot_xs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.read_xs_nucl.html">onix.utils.read_xs_nucl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.read_dens_nucl.html">onix.utils.read_dens_nucl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.rank_nuclide_per_dens.html">onix.utils.rank_nuclide_per_dens</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.plot_matrix_bysign_from_compressed_matrix.html">onix.utils.plot_matrix_bysign_from_compressed_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.plot_nuclide_chart_color_per_nuclear_data.html">onix.utils.plot_nuclide_chart_color_per_nuclear_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="onix.utils.plot_compare_two_nuclear_data_on_nuclide_chart.html">onix.utils.plot_compare_two_nuclear_data_on_nuclide_chart</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License Agreement</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ONIX</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Python API</a> &raquo;</li>
+        
+          <li><a href="../utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onix</span></code> – Utilities and functions</a> &raquo;</li>
+        
+      <li>onix.utils.read_time_seq</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/pythonapi/generated/onix.utils.read_time_seq.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="onix-utils-read-time-seq">
+<h1>onix.utils.read_time_seq<a class="headerlink" href="#onix-utils-read-time-seq" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="onix.utils.read_time_seq">
+<code class="sig-prename descclassname">onix.utils.</code><code class="sig-name descname">read_time_seq</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/onix/utils/data_processor.html#read_time_seq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#onix.utils.read_time_seq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the time sequence from a simulation’s directory and returns a list of the time sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to the simulation’s directory</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="onix.utils.get_step_time_length_seq.html" class="btn btn-neutral float-right" title="onix.utils.get_step_time_length_seq" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="onix.utils.plot_xs_dens_flux.html" class="btn btn-neutral float-left" title="onix.utils.plot_xs_dens_flux" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Julien de Troullioud de Lanversin
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+ 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30411614-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>
