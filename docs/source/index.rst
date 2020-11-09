@@ -10,7 +10,7 @@ ONIX's documentation
 .. admonition:: Recommended publication for citing
    :class: tip
 
-   Julien de Troullioud de Lanversin, Moritz Kutt, and Alexander Glaser, "`ONIX: An open-source depletion code <https://doi.org/10.1016/j.anucene.2020.107903>`_,"
+   Julien de Troullioud de Lanversin, Moritz Kütt, and Alexander Glaser, "`ONIX: An open-source depletion code <https://doi.org/10.1016/j.anucene.2020.107903>`_,"
    *Ann. Nucl. Energy*, **151**, (2021).
 
    --------

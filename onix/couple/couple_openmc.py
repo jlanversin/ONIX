@@ -1453,9 +1453,16 @@ class Couple_openmc(object):
             bucell_sequence._set_initial_flux(flux)
             bucell_sequence._set_initial_pow_dens(pow_dens)
 
-    def _copy_MC_files(self, s):
+    def _copy_MC_files(self, s, final='no'):
 
-        step_folder = '/step_{}'.format(s)
+        if final == 'no':
+            step_folder = '/step_{}'.format(s)
+        elif final =='yes':
+            # If it is the final step, sequence has not been requested to create
+            # a step_final folder. This function needs to do it now.
+            final_step_path = utils.gen_folder('step_final')
+            step_folder = '/step_final'
+
         openmc_file_path = os.getcwd()+step_folder+'/OpenMC'
 
         os.mkdir(openmc_file_path)
@@ -1632,6 +1639,7 @@ class Couple_openmc(object):
         system._print_summary_kinf()
         system._print_summary_param()
         system._print_summary_isomeric_branching_ratio()
+        self._copy_MC_files(s, final='yes')
 
         run_time = time.time() - start_time
         print ('\n\n\n >>>>>> ONIX burn took {} seconds <<<<<<< \n\n\n'.format(run_time))
