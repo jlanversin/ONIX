@@ -1,0 +1,25 @@
+========
+ONIX 0.2
+========
+
+.. currentmodule:: onix
+
+------------
+New features
+------------
+
+This new release includes the following new features or fixes:
+
+    - Standalone simulations now print tables of activity for all nuclides at every micro and macrosteps
+    - Fission yield libraries provided by the user can now be complemented by data from ENDF/B-VIII.0
+    - ONIX now models one-group (n,t) cross section (which produces tritium)
+    - ONIX is now documented
+
+------------
+Contributors
+------------
+
+This release contains new contributions from the following people:
+
+- `Julien de Troullioud de Lanversin <https://github.com/jlanversin>`_
+- `Moritz Kütt <https://github.com/ohnemax>`_

@@ -87,7 +87,7 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview of ONIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../releasenotes/index.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Examples</a></li>
@@ -1612,9 +1612,16 @@
             <span class="n">bucell_sequence</span><span class="o">.</span><span class="n">_set_initial_flux</span><span class="p">(</span><span class="n">flux</span><span class="p">)</span>
             <span class="n">bucell_sequence</span><span class="o">.</span><span class="n">_set_initial_pow_dens</span><span class="p">(</span><span class="n">pow_dens</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_copy_MC_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_copy_MC_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">final</span><span class="o">=</span><span class="s1">&#39;no&#39;</span><span class="p">):</span>
 
-        <span class="n">step_folder</span> <span class="o">=</span> <span class="s1">&#39;/step_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">final</span> <span class="o">==</span> <span class="s1">&#39;no&#39;</span><span class="p">:</span>
+            <span class="n">step_folder</span> <span class="o">=</span> <span class="s1">&#39;/step_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">final</span> <span class="o">==</span><span class="s1">&#39;yes&#39;</span><span class="p">:</span>
+            <span class="c1"># If it is the final step, sequence has not been requested to create</span>
+            <span class="c1"># a step_final folder. This function needs to do it now.</span>
+            <span class="n">final_step_path</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">gen_folder</span><span class="p">(</span><span class="s1">&#39;step_final&#39;</span><span class="p">)</span>
+            <span class="n">step_folder</span> <span class="o">=</span> <span class="s1">&#39;/step_final&#39;</span>
+
         <span class="n">openmc_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span><span class="o">+</span><span class="n">step_folder</span><span class="o">+</span><span class="s1">&#39;/OpenMC&#39;</span>
 
         <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">openmc_file_path</span><span class="p">)</span>
@@ -1791,6 +1798,7 @@
         <span class="n">system</span><span class="o">.</span><span class="n">_print_summary_kinf</span><span class="p">()</span>
         <span class="n">system</span><span class="o">.</span><span class="n">_print_summary_param</span><span class="p">()</span>
         <span class="n">system</span><span class="o">.</span><span class="n">_print_summary_isomeric_branching_ratio</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_copy_MC_files</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">final</span><span class="o">=</span><span class="s1">&#39;yes&#39;</span><span class="p">)</span>
 
         <span class="n">run_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
         <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n\n</span><span class="s1"> &gt;&gt;&gt;&gt;&gt;&gt; ONIX burn took </span><span class="si">{}</span><span class="s1"> seconds &lt;&lt;&lt;&lt;&lt;&lt;&lt; </span><span class="se">\n\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">run_time</span><span class="p">))</span></div></div>

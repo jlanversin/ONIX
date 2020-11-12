@@ -1,18 +1,31 @@
 .. _overview:
 
-================
-Overview of ONIX
-================
+========
+Overview
+========
 
-ONIX (for OpeN IsotopiX) is a state-of-the-art nuclear depletion software that is open-source. It can be used to model nuclear reactors simulation, estimate the production of fissile materials in reactors, support work in nuclear archaeology and for other applications. Because ONIX is open-source, anyone can use it for any type of applications (no export control or proprietary restrictions). This makes ONIX an ideal tools for innovative, community-based research on nuclear reactors and nuclear arms control.
+.. fig-from-reactor-to-bomb:
 
-The reference scientific article for ONIX and its benchmark validation can be found `here <https://www.sciencedirect.com/science/article/pii/S0306454920306009>`_.
+.. figure:: _image/ONIX-overview2.png
+   :width: 600
+   :align: center
+   :figclass: align-center
+
+   ONIX has been used to model North Korea's nuclear reactor and compute past plutonium production for nuclear weapons.
+
+**ONIX** (for **O**\ pe\ **N** **I**\ sotopi\ **X**) is a state-of-the-art nuclear depletion software that is open-source. It can be used to model nuclear reactors simulation, estimate the production of fissile materials in reactors, support work in nuclear archaeology and for other applications. Because ONIX is open-source, anyone can use it for any type of applications (no export control or proprietary restrictions). This makes ONIX an ideal tools for innovative, community-based research on nuclear reactors and nuclear arms control.
+
+.. admonition:: The reference scientific article for ONIX and its benchmark validation is out!
+   :class: tip
+
+   Julien de Troullioud de Lanversin, Moritz Kütt, and Alexander Glaser, "`ONIX: An open-source depletion code <https://doi.org/10.1016/j.anucene.2020.107903>`_,"
+   *Ann. Nucl. Energy*, **151**, (2021).
 
 -----------------------
 Development and purpose
 -----------------------
 
-ONIX has been developed by `Julien de Troullioud de Lanversin <https://cisac.fsi.stanford.edu/people/julien-de-troullioud-de-lanversin>`_, `Moritz Kutt <https://ifsh.de/en/staff/kuett>`_ and `Alexander Glaser <https://sgs.princeton.edu/team/alex-glaser>`_.
+ONIX has been developed by `Julien de Troullioud de Lanversin <https://cisac.fsi.stanford.edu/people/julien-de-troullioud-de-lanversin>`_, `Moritz Kütt <https://ifsh.de/en/staff/kuett>`_ and `Alexander Glaser <https://sgs.princeton.edu/team/alex-glaser>`_.
 
 The main impetus behind the development of ONIX was the lack of open-source simulation tools for research in nuclear reactors performance and nuclear arms control, especially for modelling isotopic depletion in nuclear systems. The vast majority of nuclear reactor physics codes are either proprietary or export-controlled which considerably restricts their distribution and their use. Unfortunately, these restrctions prevent community-based research and severily complicates collaboration between groups from different countries.
 
@@ -151,7 +164,7 @@ Being able to implement scheduled changes is important when comparing simulation
 Nuclear archaeology capabilities
 --------------------------------
 
-ONIX has been designed to support research in nuclear archaeology. The :strong:`NAX` module (:strong:`N`uclear :strong:`A`rchaeology (:strong:`X` ?) contains multiple Python modules and classes that can automate calculations and tasks useful to nuclear archaeology.
+ONIX has been designed to support research in nuclear archaeology. The :strong:`NAX` module (:strong:`N`\ uclear :strong:`A`\ rchaeology  and Forensi\ :strong:`X`\ ) contains multiple Python modules and classes that can automate calculations and tasks useful to nuclear archaeology.
 
 Nuclear archaeology
 -------------------
