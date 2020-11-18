@@ -24,7 +24,7 @@ class decay_lib(object):
         self._decay_b = {}
 
 
-    def add_data(self, zamid, **data):
+    def add_data(self, zamid, **kwargs):
 
         """Add decay data for a specified nuclide to the decay object.
 
@@ -53,28 +53,28 @@ class decay_lib(object):
 
         self._dic[zamid] = kwargs
 
-        if 'half life' in kwargs:
-            if kwargs['half life'] == 'stable':
+        if 'half_life' in kwargs:
+            if kwargs['half_life'] == 'stable':
                 self._dic[zamid]['total decay'] = 0
             else:
-                total = m.log(2)/kwargs['half life']
+                total = m.log(2)/kwargs['half_life']
                 self._dic[zamid]['total decay'] = total
 
         elif 'total' in kwargs:
             if kwargs['total decay'] == 0:
-                self._dic[zamid]['half life'] = 'stable'
+                self._dic[zamid]['half_life'] = 'stable'
             else:
                 half_life = m.log(2)/kwargs['total decay']
-                self._dic[zamid]['half life'] = half_life
+                self._dic[zamid]['half_life'] = half_life
 
-        elif 'total' not in kwargs and 'half life' not in kwargs:
+        elif 'total' not in kwargs and 'half_life' not in kwargs:
             total = 0
             for i in kwargs:
                 total += kwargs[i]
             self._dic[zamid]['total decay'] = total
 
             half_life = m.log(2)/total
-            self._dic[zamid]['half life'] = half_life
+            self._dic[zamid]['half_life'] = half_life
 
         self._create_decay_a(zamid, self._dic[zamid])
         self._create_decay_b(zamid, self._dic[zamid])
@@ -89,8 +89,8 @@ class decay_lib(object):
     def _create_decay_a(self, zamid, dic):
 
         self._decay_a[zamid] = dic.copy()
-        self._decay_a[zamid]['half-life'] = self._decay_a[zamid]['half life']
-        del self._decay_a[zamid]['half life']
+        self._decay_a[zamid]['half-life'] = self._decay_a[zamid]['half_life']
+        del self._decay_a[zamid]['half_life']
 
     @property
     def decay_a(self):
