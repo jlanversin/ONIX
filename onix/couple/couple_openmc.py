@@ -425,7 +425,6 @@ class Couple_openmc(object):
 
         settings = openmc.Settings()
         settings.volume_calculations = [vol1]
-        settings.temperature = {'method':'interpolation'}
         settings.run_mode='volume'
         settings.export_to_xml(path = pre_run_path + '/settings.xml')
 
@@ -1362,7 +1361,7 @@ class Couple_openmc(object):
                 if nucl_name in ['Pm147', 'Am241']: # make it a shorter
                     nucl_path = cross_section_path+'/{}'.format(file_name)
                     xs_data = openmc.data.IncidentNeutron.from_hdf5(nucl_path)
-                    ng_xs_data = xs_data[102].xs['294K']
+                    ng_xs_data = xs_data[102].xs[xs_data.temperatures[0]]
                     print ('--- Sampling {} (n,gamma) point-wise cross section --- [{}/{}]'.format(nucl_name, count, total_count))
                     sampled_ng_xs_data = ng_xs_data(self.mg_energy_mid_points)
                     sampled_ng_cross_section_data[nucl_name] = sampled_ng_xs_data
@@ -1370,7 +1369,7 @@ class Couple_openmc(object):
             elif self._few_isomeric == 'off':
                 nucl_path = cross_section_path+'/{}'.format(file_name)
                 xs_data = openmc.data.IncidentNeutron.from_hdf5(nucl_path)
-                ng_xs_data = xs_data[102].xs['294K']
+                ng_xs_data = xs_data[102].xs[xs_data.temperatures[0]]
                 print ('--- Sampling {} (n,gamma) point-wise cross section --- [{}/{}]'.format(nucl_name, count, total_count))
                 sampled_ng_xs_data = ng_xs_data(self.mg_energy_mid_points)
                 sampled_ng_cross_section_data[nucl_name] = sampled_ng_xs_data
