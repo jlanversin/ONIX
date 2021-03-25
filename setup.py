@@ -12,7 +12,7 @@ def main():
 
     metadata = dict(
         name='ONIX',
-        version='0.1.0',
+        version='0.2.0',
         description='Open-source depletion code',
         long_description=readme,
         author='Julien de Troullioud de Lanversin',
