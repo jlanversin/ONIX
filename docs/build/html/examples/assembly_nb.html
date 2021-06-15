@@ -39,7 +39,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Irradiation of a slab of U-238" href="largo6_nb.html" />
+    <link rel="next" title="5-MWe - reactor simulation" href="5MWe_reactor_nb.html" />
     <link rel="prev" title="Fuel pin-cell simulation" href="pincell_nb.html" /> 
 </head>
 
@@ -97,6 +97,7 @@
 <li class="toctree-l3 current"><a class="reference internal" href="index.html#coupled-simulations">Coupled simulations</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="pincell_nb.html">Fuel pin-cell simulation</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Assembly simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="5MWe_reactor_nb.html">5-MWe - reactor simulation</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="index.html#standalone-simulation">Standalone simulation</a></li>
@@ -440,8 +441,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>import openmc
-import onix
+<span></span><span class="kn">import</span> <span class="nn">openmc</span>
+<span class="kn">import</span> <span class="nn">onix</span>
 </pre></div>
 </div>
 </div>
@@ -466,86 +467,86 @@ import onix
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># All densities are in atm/(barn*cm)
+<span></span><span class="c1"># All densities are in atm/(barn*cm)</span>
 
-#LEU fuel (U)
-# Enrichment 3.8 wt% in 235
-# Fuel density 10.4 g cm3
-U234_dens = 8.492176928241094e-6
-U235_dens = 8.921015824220379e-4
-U238_dens = 2.2302847635443696e-2
-O16_dens = 4.640688278958795e-2
-tot_dens =U234_dens+ U235_dens + U238_dens + O16_dens
-U = openmc.Material(name=&#39;U&#39;)
-U.set_density(&#39;atom/b-cm&#39;, tot_dens)
-U.add_nuclide(&#39;U234&#39;, U234_dens, percent_type = &#39;ao&#39;)
-U.add_nuclide(&#39;U235&#39;, U235_dens, percent_type = &#39;ao&#39;)
-U.add_nuclide(&#39;U238&#39;, U238_dens, percent_type = &#39;ao&#39;)
-U.add_nuclide(&#39;O16&#39;, O16_dens, percent_type = &#39;ao&#39;)
+<span class="c1">#LEU fuel (U)</span>
+<span class="c1"># Enrichment 3.8 wt% in 235</span>
+<span class="c1"># Fuel density 10.4 g cm3</span>
+<span class="n">U234_dens</span> <span class="o">=</span> <span class="mf">8.492176928241094e-6</span>
+<span class="n">U235_dens</span> <span class="o">=</span> <span class="mf">8.921015824220379e-4</span>
+<span class="n">U238_dens</span> <span class="o">=</span> <span class="mf">2.2302847635443696e-2</span>
+<span class="n">O16_dens</span> <span class="o">=</span> <span class="mf">4.640688278958795e-2</span>
+<span class="n">tot_dens</span> <span class="o">=</span><span class="n">U234_dens</span><span class="o">+</span> <span class="n">U235_dens</span> <span class="o">+</span> <span class="n">U238_dens</span> <span class="o">+</span> <span class="n">O16_dens</span>
+<span class="n">U</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Material</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;U&#39;</span><span class="p">)</span>
+<span class="n">U</span><span class="o">.</span><span class="n">set_density</span><span class="p">(</span><span class="s1">&#39;atom/b-cm&#39;</span><span class="p">,</span> <span class="n">tot_dens</span><span class="p">)</span>
+<span class="n">U</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;U234&#39;</span><span class="p">,</span> <span class="n">U234_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
+<span class="n">U</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;U235&#39;</span><span class="p">,</span> <span class="n">U235_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
+<span class="n">U</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;U238&#39;</span><span class="p">,</span> <span class="n">U238_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
+<span class="n">U</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;O16&#39;</span><span class="p">,</span> <span class="n">O16_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
 
-# Gd Fuel
-# Enrichment 2.6 wt% in 235
-# Fuel density 10.4 g cm3
-# Enrichment in Gd2O3 is 7%
-U235_dens = 5.6796569966758324e-4
-U238_dens = 2.100811730537396e-2
-O16_dens_fromUO2 = 4.315216601008309e-2
-Gd152_dens = 5.007610609954495e-6
-Gd154_dens = 5.3873340627459146e-5
-Gd155_dens = 3.6338064112348325e-4
-Gd156_dens = 4.993729503352673e-4
-Gd157_dens = 3.7934991657329525e-4
-Gd158_dens = 5.982987297594215e-4
-Gd160_dens = 5.199279101704396e-4
-O16_dens_fromGd2O3 = 3.628816648798981e-3
-tot_dens = U235_dens+U238_dens+Gd152_dens+Gd154_dens+Gd155_dens+Gd156_dens+Gd157_dens+Gd158_dens+Gd160_dens+O16_dens_fromUO2+O16_dens_fromGd2O3
-GD = openmc.Material(name=&#39;GD&#39;)
-GD.set_density(&#39;atom/b-cm&#39;, tot_dens)
-GD.add_nuclide(&#39;U235&#39;, U235_dens, percent_type = &#39;ao&#39;)
-GD.add_nuclide(&#39;U238&#39;, U238_dens, percent_type = &#39;ao&#39;)
-GD.add_nuclide(&#39;O16&#39;, O16_dens_fromUO2+O16_dens_fromGd2O3, percent_type = &#39;ao&#39;)
-GD.add_nuclide(&#39;Gd152&#39;, Gd152_dens, percent_type = &#39;ao&#39;)
-GD.add_nuclide(&#39;Gd154&#39;, Gd154_dens, percent_type = &#39;ao&#39;)
-GD.add_nuclide(&#39;Gd155&#39;, Gd155_dens, percent_type = &#39;ao&#39;)
-GD.add_nuclide(&#39;Gd156&#39;, Gd156_dens, percent_type = &#39;ao&#39;)
-GD.add_nuclide(&#39;Gd157&#39;, Gd157_dens, percent_type = &#39;ao&#39;)
-GD.add_nuclide(&#39;Gd158&#39;, Gd158_dens, percent_type = &#39;ao&#39;)
-GD.add_nuclide(&#39;Gd160&#39;, Gd160_dens, percent_type = &#39;ao&#39;)
+<span class="c1"># Gd Fuel</span>
+<span class="c1"># Enrichment 2.6 wt% in 235</span>
+<span class="c1"># Fuel density 10.4 g cm3</span>
+<span class="c1"># Enrichment in Gd2O3 is 7%</span>
+<span class="n">U235_dens</span> <span class="o">=</span> <span class="mf">5.6796569966758324e-4</span>
+<span class="n">U238_dens</span> <span class="o">=</span> <span class="mf">2.100811730537396e-2</span>
+<span class="n">O16_dens_fromUO2</span> <span class="o">=</span> <span class="mf">4.315216601008309e-2</span>
+<span class="n">Gd152_dens</span> <span class="o">=</span> <span class="mf">5.007610609954495e-6</span>
+<span class="n">Gd154_dens</span> <span class="o">=</span> <span class="mf">5.3873340627459146e-5</span>
+<span class="n">Gd155_dens</span> <span class="o">=</span> <span class="mf">3.6338064112348325e-4</span>
+<span class="n">Gd156_dens</span> <span class="o">=</span> <span class="mf">4.993729503352673e-4</span>
+<span class="n">Gd157_dens</span> <span class="o">=</span> <span class="mf">3.7934991657329525e-4</span>
+<span class="n">Gd158_dens</span> <span class="o">=</span> <span class="mf">5.982987297594215e-4</span>
+<span class="n">Gd160_dens</span> <span class="o">=</span> <span class="mf">5.199279101704396e-4</span>
+<span class="n">O16_dens_fromGd2O3</span> <span class="o">=</span> <span class="mf">3.628816648798981e-3</span>
+<span class="n">tot_dens</span> <span class="o">=</span> <span class="n">U235_dens</span><span class="o">+</span><span class="n">U238_dens</span><span class="o">+</span><span class="n">Gd152_dens</span><span class="o">+</span><span class="n">Gd154_dens</span><span class="o">+</span><span class="n">Gd155_dens</span><span class="o">+</span><span class="n">Gd156_dens</span><span class="o">+</span><span class="n">Gd157_dens</span><span class="o">+</span><span class="n">Gd158_dens</span><span class="o">+</span><span class="n">Gd160_dens</span><span class="o">+</span><span class="n">O16_dens_fromUO2</span><span class="o">+</span><span class="n">O16_dens_fromGd2O3</span>
+<span class="n">GD</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Material</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;GD&#39;</span><span class="p">)</span>
+<span class="n">GD</span><span class="o">.</span><span class="n">set_density</span><span class="p">(</span><span class="s1">&#39;atom/b-cm&#39;</span><span class="p">,</span> <span class="n">tot_dens</span><span class="p">)</span>
+<span class="n">GD</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;U235&#39;</span><span class="p">,</span> <span class="n">U235_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
+<span class="n">GD</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;U238&#39;</span><span class="p">,</span> <span class="n">U238_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
+<span class="n">GD</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;O16&#39;</span><span class="p">,</span> <span class="n">O16_dens_fromUO2</span><span class="o">+</span><span class="n">O16_dens_fromGd2O3</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
+<span class="n">GD</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;Gd152&#39;</span><span class="p">,</span> <span class="n">Gd152_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
+<span class="n">GD</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;Gd154&#39;</span><span class="p">,</span> <span class="n">Gd154_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
+<span class="n">GD</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;Gd155&#39;</span><span class="p">,</span> <span class="n">Gd155_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
+<span class="n">GD</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;Gd156&#39;</span><span class="p">,</span> <span class="n">Gd156_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
+<span class="n">GD</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;Gd157&#39;</span><span class="p">,</span> <span class="n">Gd157_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
+<span class="n">GD</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;Gd158&#39;</span><span class="p">,</span> <span class="n">Gd158_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
+<span class="n">GD</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;Gd160&#39;</span><span class="p">,</span> <span class="n">Gd160_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
 
-#clad
-# Zircaloy-4 (ref zircaloy-4.pdf)
-Tin_dens = 1.50
-Fe_dens = 0.20
-Cr_dens = 0.10
-Zr_dens = 100 - Tin_dens - Fe_dens - Cr_dens
-clad = openmc.Material(name=&#39;clad&#39;)
-clad.set_density(&#39;g/cm3&#39;, 6.55)
-clad.add_element(&#39;Zr&#39;, Zr_dens, percent_type = &#39;wo&#39;)
-clad.add_element(&#39;Sn&#39;, Tin_dens, percent_type = &#39;wo&#39;)
-clad.add_element(&#39;Cr&#39;, Cr_dens, percent_type = &#39;wo&#39;)
-clad.add_element(&#39;Fe&#39;, Fe_dens, percent_type = &#39;wo&#39;)
+<span class="c1">#clad</span>
+<span class="c1"># Zircaloy-4 (ref zircaloy-4.pdf)</span>
+<span class="n">Tin_dens</span> <span class="o">=</span> <span class="mf">1.50</span>
+<span class="n">Fe_dens</span> <span class="o">=</span> <span class="mf">0.20</span>
+<span class="n">Cr_dens</span> <span class="o">=</span> <span class="mf">0.10</span>
+<span class="n">Zr_dens</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">-</span> <span class="n">Tin_dens</span> <span class="o">-</span> <span class="n">Fe_dens</span> <span class="o">-</span> <span class="n">Cr_dens</span>
+<span class="n">clad</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Material</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;clad&#39;</span><span class="p">)</span>
+<span class="n">clad</span><span class="o">.</span><span class="n">set_density</span><span class="p">(</span><span class="s1">&#39;g/cm3&#39;</span><span class="p">,</span> <span class="mf">6.55</span><span class="p">)</span>
+<span class="n">clad</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="s1">&#39;Zr&#39;</span><span class="p">,</span> <span class="n">Zr_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;wo&#39;</span><span class="p">)</span>
+<span class="n">clad</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="s1">&#39;Sn&#39;</span><span class="p">,</span> <span class="n">Tin_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;wo&#39;</span><span class="p">)</span>
+<span class="n">clad</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="s1">&#39;Cr&#39;</span><span class="p">,</span> <span class="n">Cr_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;wo&#39;</span><span class="p">)</span>
+<span class="n">clad</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="s1">&#39;Fe&#39;</span><span class="p">,</span> <span class="n">Fe_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;wo&#39;</span><span class="p">)</span>
 
-# mod
-# Boron concentration:
-H_dens = 4.32002334608591e-2
-O16_dens = 2.160011673042955e-2
-B10_dens = 6.949982545596444e-06
-B11_dens = 2.7799930182385777e-05
-tot_dens = H_dens+O16_dens+B10_dens+B11_dens
-mod = openmc.Material(name=&#39;mod&#39;)
-mod.set_density(&#39;atom/b-cm&#39;, tot_dens)
-mod.add_nuclide(&#39;H1&#39;, H_dens, percent_type = &#39;ao&#39;)
-mod.add_nuclide(&#39;B10&#39;, B10_dens, percent_type = &#39;ao&#39;)
-mod.add_nuclide(&#39;B11&#39;, B11_dens, percent_type = &#39;ao&#39;)
-mod.add_nuclide(&#39;O16&#39;, O16_dens, percent_type = &#39;ao&#39;)
-mod.add_s_alpha_beta(&#39;c_H_in_H2O&#39;)
+<span class="c1"># mod</span>
+<span class="c1"># Boron concentration:</span>
+<span class="n">H_dens</span> <span class="o">=</span> <span class="mf">4.32002334608591e-2</span>
+<span class="n">O16_dens</span> <span class="o">=</span> <span class="mf">2.160011673042955e-2</span>
+<span class="n">B10_dens</span> <span class="o">=</span> <span class="mf">6.949982545596444e-06</span>
+<span class="n">B11_dens</span> <span class="o">=</span> <span class="mf">2.7799930182385777e-05</span>
+<span class="n">tot_dens</span> <span class="o">=</span> <span class="n">H_dens</span><span class="o">+</span><span class="n">O16_dens</span><span class="o">+</span><span class="n">B10_dens</span><span class="o">+</span><span class="n">B11_dens</span>
+<span class="n">mod</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Material</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;mod&#39;</span><span class="p">)</span>
+<span class="n">mod</span><span class="o">.</span><span class="n">set_density</span><span class="p">(</span><span class="s1">&#39;atom/b-cm&#39;</span><span class="p">,</span> <span class="n">tot_dens</span><span class="p">)</span>
+<span class="n">mod</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;H1&#39;</span><span class="p">,</span> <span class="n">H_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
+<span class="n">mod</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;B10&#39;</span><span class="p">,</span> <span class="n">B10_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
+<span class="n">mod</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;B11&#39;</span><span class="p">,</span> <span class="n">B11_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
+<span class="n">mod</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;O16&#39;</span><span class="p">,</span> <span class="n">O16_dens</span><span class="p">,</span> <span class="n">percent_type</span> <span class="o">=</span> <span class="s1">&#39;ao&#39;</span><span class="p">)</span>
+<span class="n">mod</span><span class="o">.</span><span class="n">add_s_alpha_beta</span><span class="p">(</span><span class="s1">&#39;c_H_in_H2O&#39;</span><span class="p">)</span>
 
-# Instantiate a Materials collection
-materials_file = openmc.Materials([U, GD, clad , mod])
-#materials_file.cross_sections = &#39;/tigress/jdtdl/openmc/cross-sections/lib80x_hdf5/cross_sections.xml&#39;
+<span class="c1"># Instantiate a Materials collection</span>
+<span class="n">materials_file</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Materials</span><span class="p">([</span><span class="n">U</span><span class="p">,</span> <span class="n">GD</span><span class="p">,</span> <span class="n">clad</span> <span class="p">,</span> <span class="n">mod</span><span class="p">])</span>
+<span class="c1">#materials_file.cross_sections = &#39;/tigress/jdtdl/openmc/cross-sections/lib80x_hdf5/cross_sections.xml&#39;</span>
 
-# Export to &quot;materials.xml&quot;
-materials_file.export_to_xml()
+<span class="c1"># Export to &quot;materials.xml&quot;</span>
+<span class="n">materials_file</span><span class="o">.</span><span class="n">export_to_xml</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -556,198 +557,198 @@ materials_file.export_to_xml()
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Create cylinders for the fuel and clad
-fuel_outer_radius = openmc.ZCylinder(x0=0.0, y0=0.0, R=0.4025)
-# The cladding inner radius was set equal to fuel outer radius for simplication
-fuel_clad_outer_radius = openmc.ZCylinder(x0=0.0, y0=0.0, R=0.475)
+<span></span><span class="c1"># Create cylinders for the fuel and clad</span>
+<span class="n">fuel_outer_radius</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">ZCylinder</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">0.4025</span><span class="p">)</span>
+<span class="c1"># The cladding inner radius was set equal to fuel outer radius for simplication</span>
+<span class="n">fuel_clad_outer_radius</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">ZCylinder</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">0.475</span><span class="p">)</span>
 
 
-# Create cylinders for the guide tube
-guide_tube_inner_radius = openmc.ZCylinder(x0=0.0, y0=0.0, R=0.555)
-guide_tube_outer_radius = openmc.ZCylinder(x0=0.0, y0=0.0, R=0.616)
+<span class="c1"># Create cylinders for the guide tube</span>
+<span class="n">guide_tube_inner_radius</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">ZCylinder</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">0.555</span><span class="p">)</span>
+<span class="n">guide_tube_outer_radius</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">ZCylinder</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">0.616</span><span class="p">)</span>
 
 
-min_z = openmc.ZPlane(z0=-0.5, boundary_type=&#39;periodic&#39;)
-max_z = openmc.ZPlane(z0=+0.5, boundary_type=&#39;periodic&#39;)
+<span class="n">min_z</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">ZPlane</span><span class="p">(</span><span class="n">z0</span><span class="o">=-</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">boundary_type</span><span class="o">=</span><span class="s1">&#39;periodic&#39;</span><span class="p">)</span>
+<span class="n">max_z</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">ZPlane</span><span class="p">(</span><span class="n">z0</span><span class="o">=+</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">boundary_type</span><span class="o">=</span><span class="s1">&#39;periodic&#39;</span><span class="p">)</span>
 
 
-# Create a Universe to encapsulate U cells
-U_cell_universe = openmc.Universe(name=&#39;U_universe&#39;)
-# Create a Universe to encapsulate GD cells
-GD_cell_universe = openmc.Universe(name=&#39;GD_universe&#39;)
-# Create a Universe to encapsulate a guide tubes
-Guide_cell_universe = openmc.Universe(name=&#39;Guide_universe&#39;)
-# Create a Universe to encapsulate measured cell
-Measured_cell_universe = openmc.Universe(name=&#39;Measured_universe&#39;)
+<span class="c1"># Create a Universe to encapsulate U cells</span>
+<span class="n">U_cell_universe</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;U_universe&#39;</span><span class="p">)</span>
+<span class="c1"># Create a Universe to encapsulate GD cells</span>
+<span class="n">GD_cell_universe</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;GD_universe&#39;</span><span class="p">)</span>
+<span class="c1"># Create a Universe to encapsulate a guide tubes</span>
+<span class="n">Guide_cell_universe</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Guide_universe&#39;</span><span class="p">)</span>
+<span class="c1"># Create a Universe to encapsulate measured cell</span>
+<span class="n">Measured_cell_universe</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Measured_universe&#39;</span><span class="p">)</span>
 
 
-# Create U Cell
-U_cell = openmc.Cell(name=&#39;U&#39;)
-U_cell.fill = U
-U_cell.region = -fuel_outer_radius
-U_cell.temperature = 1027
-U_cell_universe.add_cell(U_cell)
+<span class="c1"># Create U Cell</span>
+<span class="n">U_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;U&#39;</span><span class="p">)</span>
+<span class="n">U_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">U</span>
+<span class="n">U_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">-</span><span class="n">fuel_outer_radius</span>
+<span class="n">U_cell</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">1027</span>
+<span class="n">U_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">U_cell</span><span class="p">)</span>
 
-# Create a clad Cell for U
-U_clad_cell = openmc.Cell(name=&#39;U_clad&#39;)
-U_clad_cell.fill = clad
-U_clad_cell.region = +fuel_outer_radius &amp; -fuel_clad_outer_radius
-U_clad_cell.temperature = 1027
-U_cell_universe.add_cell(U_clad_cell)
+<span class="c1"># Create a clad Cell for U</span>
+<span class="n">U_clad_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;U_clad&#39;</span><span class="p">)</span>
+<span class="n">U_clad_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">clad</span>
+<span class="n">U_clad_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">+</span><span class="n">fuel_outer_radius</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">fuel_clad_outer_radius</span>
+<span class="n">U_clad_cell</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">1027</span>
+<span class="n">U_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">U_clad_cell</span><span class="p">)</span>
 
-# Create a moderator Cell for U
-U_moderator_cell = openmc.Cell(name=&#39;U_moderator&#39;)
-U_moderator_cell.fill = mod
-U_moderator_cell.region = +fuel_clad_outer_radius
-U_moderator_cell.temperature = 575 ################&quot; No thermac XS at 1027 so we need to set water to 575
-U_cell_universe.add_cell(U_moderator_cell)
-
-
-# Create GD Cell
-GD_cell = openmc.Cell(name=&#39;GD&#39;)
-GD_cell.fill = GD
-GD_cell.region = -fuel_outer_radius
-GD_cell.temperature = 1027
-GD_cell_universe.add_cell(GD_cell)
-
-# Create a clad Cell for GD
-GD_clad_cell = openmc.Cell(name=&#39;GD_clad&#39;)
-GD_clad_cell.fill = clad
-GD_clad_cell.region = +fuel_outer_radius &amp; -fuel_clad_outer_radius
-GD_clad_cell.temperature = 1027
-GD_cell_universe.add_cell(GD_clad_cell)
-
-# Create a moderator Cell for GD
-GD_moderator_cell = openmc.Cell(name=&#39;GD_moderator&#39;)
-GD_moderator_cell.fill = mod
-GD_moderator_cell.region = +fuel_clad_outer_radius
-GD_moderator_cell.temperature = 575 ################&quot; No thermac XS at 1027 so we need to set water to 575
-GD_cell_universe.add_cell(GD_moderator_cell)
+<span class="c1"># Create a moderator Cell for U</span>
+<span class="n">U_moderator_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;U_moderator&#39;</span><span class="p">)</span>
+<span class="n">U_moderator_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">mod</span>
+<span class="n">U_moderator_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">+</span><span class="n">fuel_clad_outer_radius</span>
+<span class="n">U_moderator_cell</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">575</span> <span class="c1">################&quot; No thermac XS at 1027 so we need to set water to 575</span>
+<span class="n">U_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">U_moderator_cell</span><span class="p">)</span>
 
 
+<span class="c1"># Create GD Cell</span>
+<span class="n">GD_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;GD&#39;</span><span class="p">)</span>
+<span class="n">GD_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">GD</span>
+<span class="n">GD_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">-</span><span class="n">fuel_outer_radius</span>
+<span class="n">GD_cell</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">1027</span>
+<span class="n">GD_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">GD_cell</span><span class="p">)</span>
 
-# Create a clad Cell for Guide
-Guide_clad_cell = openmc.Cell(name=&#39;Guide_clad&#39;)
-Guide_clad_cell.fill = clad
-Guide_clad_cell.region = +guide_tube_inner_radius &amp; -guide_tube_outer_radius
-Guide_clad_cell.temperature = 1027
-Guide_cell_universe.add_cell(Guide_clad_cell)
+<span class="c1"># Create a clad Cell for GD</span>
+<span class="n">GD_clad_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;GD_clad&#39;</span><span class="p">)</span>
+<span class="n">GD_clad_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">clad</span>
+<span class="n">GD_clad_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">+</span><span class="n">fuel_outer_radius</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">fuel_clad_outer_radius</span>
+<span class="n">GD_clad_cell</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">1027</span>
+<span class="n">GD_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">GD_clad_cell</span><span class="p">)</span>
 
-# Create a moderator Cell for inside Guide
-Guide_moderator_in_cell = openmc.Cell(name=&#39;Guide_moderator_in&#39;)
-Guide_moderator_in_cell.fill = mod
-Guide_moderator_in_cell.region = -guide_tube_inner_radius
-Guide_moderator_in_cell.temperature = 575 ################&quot; No thermal XS at 1027 so we need to set water to 575
-Guide_cell_universe.add_cell(Guide_moderator_in_cell)
-
-# Create a moderator Cell for outside Guide
-Guide_moderator_out_cell = openmc.Cell(name=&#39;Guide_moderator_out&#39;)
-Guide_moderator_out_cell.fill = mod
-Guide_moderator_out_cell.region = +guide_tube_outer_radius
-Guide_moderator_out_cell.temperature = 575 ################&quot; No thermal XS at 1027 so we need to set water to 575
-Guide_cell_universe.add_cell(Guide_moderator_out_cell)
-
-
-# Create measured Cell
-Measured_cell = openmc.Cell(name=&#39;Measured&#39;)
-Measured_cell.fill = U
-Measured_cell.region = -fuel_outer_radius
-Measured_cell.temperature = 1027
-Measured_cell_universe.add_cell(Measured_cell)
-
-# Create a clad Cell for Measured Cell
-Measured_clad_cell = openmc.Cell(name=&#39;Measured_clad&#39;)
-Measured_clad_cell.fill = clad
-Measured_clad_cell.region = +fuel_outer_radius &amp; -fuel_clad_outer_radius
-Measured_clad_cell.temperature = 1027
-Measured_cell_universe.add_cell(Measured_clad_cell)
-
-# Create a moderator Cell for Measured Cell
-Measured_moderator_cell = openmc.Cell(name=&#39;Measured_moderator&#39;)
-Measured_moderator_cell.fill = mod
-Measured_moderator_cell.region = +fuel_clad_outer_radius
-Measured_moderator_cell.temperature = 575 ################&quot; No thermal XS at 1027 so we need to set water to 575
-Measured_cell_universe.add_cell(Measured_moderator_cell)
-
-# Ceate an outer-lattice cell
-outer_cell = openmc.Cell(name = &#39;outer cell&#39;)
-outer_cell.fill = mod
-
-# Create an outer-lattice universe
-outer_universe = openmc.Universe(name = &#39;outer universe&#39;)
-outer_universe.add_cell(outer_cell)
-
-row1 = [U_cell_universe]*18
-
-row3 = [U_cell_universe]*18
-row3[2] = GD_cell_universe
-row3[6] = Guide_cell_universe
-row3[11] = Guide_cell_universe
-row3[15] = GD_cell_universe
-
-row4 = [U_cell_universe]*18
-row4[3] = Guide_cell_universe
-row4[9] = GD_cell_universe
-row4[14] = Guide_cell_universe
-
-row5 = [U_cell_universe]*18
-row5[4] = GD_cell_universe
-row5[7] = Guide_cell_universe
-row5[10] = Guide_cell_universe
-row5[13] = GD_cell_universe
-
-row6 = [U_cell_universe]*18
-row6[5] = Guide_cell_universe
-row6[12] = Guide_cell_universe
-
-row7 = [U_cell_universe]*18
-row7[2] = Guide_cell_universe
-row7[15] = Guide_cell_universe
-
-row8 =  [U_cell_universe]*18
-row8[4] = Guide_cell_universe
-row8[13] = Guide_cell_universe
-
-row9 = [U_cell_universe]*18
-row9[3] = GD_cell_universe
-
-row10 = [U_cell_universe]*18
-row10[14] = GD_cell_universe
-
-row11 = [U_cell_universe]*18
-row11[4] = Guide_cell_universe
-row11[10] = Measured_cell_universe
-row11[13] = Guide_cell_universe
-
-row15 = [U_cell_universe]*18
-row15[3] = Guide_cell_universe
-row15[8] = GD_cell_universe
-row15[14] = Guide_cell_universe
+<span class="c1"># Create a moderator Cell for GD</span>
+<span class="n">GD_moderator_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;GD_moderator&#39;</span><span class="p">)</span>
+<span class="n">GD_moderator_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">mod</span>
+<span class="n">GD_moderator_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">+</span><span class="n">fuel_clad_outer_radius</span>
+<span class="n">GD_moderator_cell</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">575</span> <span class="c1">################&quot; No thermac XS at 1027 so we need to set water to 575</span>
+<span class="n">GD_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">GD_moderator_cell</span><span class="p">)</span>
 
 
-lattice = openmc.RectLattice(name=&#39;Lattice&#39;)
-lattice.pitch = [1.27, 1.27]
-lattice.lower_left = [-11.43, -11.43]
-lattice.universes = [row1, row1, row3, row4, row5, row6, row7, row8, row9, row10, row11, row7, row6, row5, row15, row3, row1, row1]
 
-# Create root Cell
-assembly_rect = openmc.model.rectangular_prism(width=22.86, height=22.86, boundary_type=&#39;periodic&#39;)
-root_cell = openmc.Cell(name=&#39;root cell&#39;)
-root_cell.region = assembly_rect
-root_cell.fill = lattice
+<span class="c1"># Create a clad Cell for Guide</span>
+<span class="n">Guide_clad_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Guide_clad&#39;</span><span class="p">)</span>
+<span class="n">Guide_clad_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">clad</span>
+<span class="n">Guide_clad_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">+</span><span class="n">guide_tube_inner_radius</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">guide_tube_outer_radius</span>
+<span class="n">Guide_clad_cell</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">1027</span>
+<span class="n">Guide_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">Guide_clad_cell</span><span class="p">)</span>
+
+<span class="c1"># Create a moderator Cell for inside Guide</span>
+<span class="n">Guide_moderator_in_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Guide_moderator_in&#39;</span><span class="p">)</span>
+<span class="n">Guide_moderator_in_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">mod</span>
+<span class="n">Guide_moderator_in_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">-</span><span class="n">guide_tube_inner_radius</span>
+<span class="n">Guide_moderator_in_cell</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">575</span> <span class="c1">################&quot; No thermal XS at 1027 so we need to set water to 575</span>
+<span class="n">Guide_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">Guide_moderator_in_cell</span><span class="p">)</span>
+
+<span class="c1"># Create a moderator Cell for outside Guide</span>
+<span class="n">Guide_moderator_out_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Guide_moderator_out&#39;</span><span class="p">)</span>
+<span class="n">Guide_moderator_out_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">mod</span>
+<span class="n">Guide_moderator_out_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">+</span><span class="n">guide_tube_outer_radius</span>
+<span class="n">Guide_moderator_out_cell</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">575</span> <span class="c1">################&quot; No thermal XS at 1027 so we need to set water to 575</span>
+<span class="n">Guide_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">Guide_moderator_out_cell</span><span class="p">)</span>
 
 
-# Create root Universe
-root_universe = openmc.Universe(universe_id=0, name=&#39;root universe&#39;)
-root_universe.add_cell(root_cell)
-region = root_cell.region
+<span class="c1"># Create measured Cell</span>
+<span class="n">Measured_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Measured&#39;</span><span class="p">)</span>
+<span class="n">Measured_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">U</span>
+<span class="n">Measured_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">-</span><span class="n">fuel_outer_radius</span>
+<span class="n">Measured_cell</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">1027</span>
+<span class="n">Measured_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">Measured_cell</span><span class="p">)</span>
+
+<span class="c1"># Create a clad Cell for Measured Cell</span>
+<span class="n">Measured_clad_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Measured_clad&#39;</span><span class="p">)</span>
+<span class="n">Measured_clad_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">clad</span>
+<span class="n">Measured_clad_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">+</span><span class="n">fuel_outer_radius</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">fuel_clad_outer_radius</span>
+<span class="n">Measured_clad_cell</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">1027</span>
+<span class="n">Measured_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">Measured_clad_cell</span><span class="p">)</span>
+
+<span class="c1"># Create a moderator Cell for Measured Cell</span>
+<span class="n">Measured_moderator_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Measured_moderator&#39;</span><span class="p">)</span>
+<span class="n">Measured_moderator_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">mod</span>
+<span class="n">Measured_moderator_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">+</span><span class="n">fuel_clad_outer_radius</span>
+<span class="n">Measured_moderator_cell</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">575</span> <span class="c1">################&quot; No thermal XS at 1027 so we need to set water to 575</span>
+<span class="n">Measured_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">Measured_moderator_cell</span><span class="p">)</span>
+
+<span class="c1"># Ceate an outer-lattice cell</span>
+<span class="n">outer_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;outer cell&#39;</span><span class="p">)</span>
+<span class="n">outer_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">mod</span>
+
+<span class="c1"># Create an outer-lattice universe</span>
+<span class="n">outer_universe</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;outer universe&#39;</span><span class="p">)</span>
+<span class="n">outer_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">outer_cell</span><span class="p">)</span>
+
+<span class="n">row1</span> <span class="o">=</span> <span class="p">[</span><span class="n">U_cell_universe</span><span class="p">]</span><span class="o">*</span><span class="mi">18</span>
+
+<span class="n">row3</span> <span class="o">=</span> <span class="p">[</span><span class="n">U_cell_universe</span><span class="p">]</span><span class="o">*</span><span class="mi">18</span>
+<span class="n">row3</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">GD_cell_universe</span>
+<span class="n">row3</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">Guide_cell_universe</span>
+<span class="n">row3</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span> <span class="o">=</span> <span class="n">Guide_cell_universe</span>
+<span class="n">row3</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span> <span class="o">=</span> <span class="n">GD_cell_universe</span>
+
+<span class="n">row4</span> <span class="o">=</span> <span class="p">[</span><span class="n">U_cell_universe</span><span class="p">]</span><span class="o">*</span><span class="mi">18</span>
+<span class="n">row4</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">Guide_cell_universe</span>
+<span class="n">row4</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="n">GD_cell_universe</span>
+<span class="n">row4</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span> <span class="o">=</span> <span class="n">Guide_cell_universe</span>
+
+<span class="n">row5</span> <span class="o">=</span> <span class="p">[</span><span class="n">U_cell_universe</span><span class="p">]</span><span class="o">*</span><span class="mi">18</span>
+<span class="n">row5</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">GD_cell_universe</span>
+<span class="n">row5</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">Guide_cell_universe</span>
+<span class="n">row5</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="n">Guide_cell_universe</span>
+<span class="n">row5</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span> <span class="o">=</span> <span class="n">GD_cell_universe</span>
+
+<span class="n">row6</span> <span class="o">=</span> <span class="p">[</span><span class="n">U_cell_universe</span><span class="p">]</span><span class="o">*</span><span class="mi">18</span>
+<span class="n">row6</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">Guide_cell_universe</span>
+<span class="n">row6</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">=</span> <span class="n">Guide_cell_universe</span>
+
+<span class="n">row7</span> <span class="o">=</span> <span class="p">[</span><span class="n">U_cell_universe</span><span class="p">]</span><span class="o">*</span><span class="mi">18</span>
+<span class="n">row7</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">Guide_cell_universe</span>
+<span class="n">row7</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span> <span class="o">=</span> <span class="n">Guide_cell_universe</span>
+
+<span class="n">row8</span> <span class="o">=</span>  <span class="p">[</span><span class="n">U_cell_universe</span><span class="p">]</span><span class="o">*</span><span class="mi">18</span>
+<span class="n">row8</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">Guide_cell_universe</span>
+<span class="n">row8</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span> <span class="o">=</span> <span class="n">Guide_cell_universe</span>
+
+<span class="n">row9</span> <span class="o">=</span> <span class="p">[</span><span class="n">U_cell_universe</span><span class="p">]</span><span class="o">*</span><span class="mi">18</span>
+<span class="n">row9</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">GD_cell_universe</span>
+
+<span class="n">row10</span> <span class="o">=</span> <span class="p">[</span><span class="n">U_cell_universe</span><span class="p">]</span><span class="o">*</span><span class="mi">18</span>
+<span class="n">row10</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span> <span class="o">=</span> <span class="n">GD_cell_universe</span>
+
+<span class="n">row11</span> <span class="o">=</span> <span class="p">[</span><span class="n">U_cell_universe</span><span class="p">]</span><span class="o">*</span><span class="mi">18</span>
+<span class="n">row11</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">Guide_cell_universe</span>
+<span class="n">row11</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="n">Measured_cell_universe</span>
+<span class="n">row11</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span> <span class="o">=</span> <span class="n">Guide_cell_universe</span>
+
+<span class="n">row15</span> <span class="o">=</span> <span class="p">[</span><span class="n">U_cell_universe</span><span class="p">]</span><span class="o">*</span><span class="mi">18</span>
+<span class="n">row15</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">Guide_cell_universe</span>
+<span class="n">row15</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">GD_cell_universe</span>
+<span class="n">row15</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span> <span class="o">=</span> <span class="n">Guide_cell_universe</span>
 
 
-# Create Geometry and set root Universe
-openmc_geometry = openmc.Geometry(root_universe)
+<span class="n">lattice</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">RectLattice</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Lattice&#39;</span><span class="p">)</span>
+<span class="n">lattice</span><span class="o">.</span><span class="n">pitch</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.27</span><span class="p">,</span> <span class="mf">1.27</span><span class="p">]</span>
+<span class="n">lattice</span><span class="o">.</span><span class="n">lower_left</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">11.43</span><span class="p">,</span> <span class="o">-</span><span class="mf">11.43</span><span class="p">]</span>
+<span class="n">lattice</span><span class="o">.</span><span class="n">universes</span> <span class="o">=</span> <span class="p">[</span><span class="n">row1</span><span class="p">,</span> <span class="n">row1</span><span class="p">,</span> <span class="n">row3</span><span class="p">,</span> <span class="n">row4</span><span class="p">,</span> <span class="n">row5</span><span class="p">,</span> <span class="n">row6</span><span class="p">,</span> <span class="n">row7</span><span class="p">,</span> <span class="n">row8</span><span class="p">,</span> <span class="n">row9</span><span class="p">,</span> <span class="n">row10</span><span class="p">,</span> <span class="n">row11</span><span class="p">,</span> <span class="n">row7</span><span class="p">,</span> <span class="n">row6</span><span class="p">,</span> <span class="n">row5</span><span class="p">,</span> <span class="n">row15</span><span class="p">,</span> <span class="n">row3</span><span class="p">,</span> <span class="n">row1</span><span class="p">,</span> <span class="n">row1</span><span class="p">]</span>
 
-# Export to &quot;geometry.xml&quot;
-openmc_geometry.export_to_xml()
+<span class="c1"># Create root Cell</span>
+<span class="n">assembly_rect</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">rectangular_prism</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mf">22.86</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">22.86</span><span class="p">,</span> <span class="n">boundary_type</span><span class="o">=</span><span class="s1">&#39;periodic&#39;</span><span class="p">)</span>
+<span class="n">root_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;root cell&#39;</span><span class="p">)</span>
+<span class="n">root_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="n">assembly_rect</span>
+<span class="n">root_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">lattice</span>
+
+
+<span class="c1"># Create root Universe</span>
+<span class="n">root_universe</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">universe_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;root universe&#39;</span><span class="p">)</span>
+<span class="n">root_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">root_cell</span><span class="p">)</span>
+<span class="n">region</span> <span class="o">=</span> <span class="n">root_cell</span><span class="o">.</span><span class="n">region</span>
+
+
+<span class="c1"># Create Geometry and set root Universe</span>
+<span class="n">openmc_geometry</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Geometry</span><span class="p">(</span><span class="n">root_universe</span><span class="p">)</span>
+
+<span class="c1"># Export to &quot;geometry.xml&quot;</span>
+<span class="n">openmc_geometry</span><span class="o">.</span><span class="n">export_to_xml</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -757,16 +758,16 @@ openmc_geometry.export_to_xml()
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Instantiate a Plot
-plot = openmc.Plot(plot_id=1)
-plot.filename = &#39;materials-xy&#39;
-plot.origin = [0, 0, 0]
-plot.width = [24, 24]
-plot.pixels = [1000, 1000]
-plot.color_by = &#39;material&#39;
+<span></span><span class="c1"># Instantiate a Plot</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Plot</span><span class="p">(</span><span class="n">plot_id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;materials-xy&#39;</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">origin</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="p">[</span><span class="mi">24</span><span class="p">,</span> <span class="mi">24</span><span class="p">]</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">pixels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">color_by</span> <span class="o">=</span> <span class="s1">&#39;material&#39;</span>
 
-# Show plot
-openmc.plot_inline(plot)
+<span class="c1"># Show plot</span>
+<span class="n">openmc</span><span class="o">.</span><span class="n">plot_inline</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -794,25 +795,25 @@ openmc.plot_inline(plot)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># OpenMC simulation parameters
-batches = 100
-inactive = 10
-particles = 10000
+<span></span><span class="c1"># OpenMC simulation parameters</span>
+<span class="n">batches</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">inactive</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">particles</span> <span class="o">=</span> <span class="mi">10000</span>
 
 
-#Instantiate a Settings object
-settings_file = openmc.Settings()
-settings_file.batches = batches
-settings_file.inactive = inactive
-settings_file.particles = particles
+<span class="c1">#Instantiate a Settings object</span>
+<span class="n">settings_file</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Settings</span><span class="p">()</span>
+<span class="n">settings_file</span><span class="o">.</span><span class="n">batches</span> <span class="o">=</span> <span class="n">batches</span>
+<span class="n">settings_file</span><span class="o">.</span><span class="n">inactive</span> <span class="o">=</span> <span class="n">inactive</span>
+<span class="n">settings_file</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">particles</span>
 
-# Create an initial uniform spatial source distribution over fissionable zones
-bounds = [-11.43, -11.43, -0.5, 11.43, 11.43, 0.5]
-uniform_dist = openmc.stats.Box(bounds[:3], bounds[3:], only_fissionable=True)
-settings_file.source = openmc.source.Source(space=uniform_dist)
+<span class="c1"># Create an initial uniform spatial source distribution over fissionable zones</span>
+<span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">11.43</span><span class="p">,</span> <span class="o">-</span><span class="mf">11.43</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">11.43</span><span class="p">,</span> <span class="mf">11.43</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+<span class="n">uniform_dist</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">bounds</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">3</span><span class="p">:],</span> <span class="n">only_fissionable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">settings_file</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">Source</span><span class="p">(</span><span class="n">space</span><span class="o">=</span><span class="n">uniform_dist</span><span class="p">)</span>
 
-# Export to &quot;settings.xml&quot;
-settings_file.export_to_xml()
+<span class="c1"># Export to &quot;settings.xml&quot;</span>
+<span class="n">settings_file</span><span class="o">.</span><span class="n">export_to_xml</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -830,18 +831,18 @@ settings_file.export_to_xml()
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>cycle5 = [0.1, 1, 2, 3, 6.0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 295.4,310]
-down5 = [332]
-cycle6 = [338.0, 362.0, 392.0, 422.0, 452.0, 482.0, 512.0, 542.0, 572.0, 602.0, 632.0, 662.0, 687.0, 718.7]
-down6 = [735.7]
-cycle7 = [741.7, 765.7, 795.7, 825.7, 855.7, 885.7, 915.7, 945.7, 975.7, 1005.7, 1044.6, 1083.6]
-down7 = [1098.6]
-cycle8 = [1104.6, 1128.6, 1158.6, 1188.6, 1218.6,1248.6, 1278.6, 1308.6, 1338.6, 1368.6, 1411.0, 1445.4]
-down8 =  [2600+1445.4, 2601+1445.4, 2635+1445.4, 2648+1445.4, 2672+1445.4, 2735+1445.4, 2753+1445.4, 2760+1445.4, 2813+1445.4, 2846+1445.4]
+<span></span><span class="n">cycle5</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">210</span><span class="p">,</span> <span class="mi">240</span><span class="p">,</span> <span class="mi">270</span><span class="p">,</span> <span class="mf">295.4</span><span class="p">,</span><span class="mi">310</span><span class="p">]</span>
+<span class="n">down5</span> <span class="o">=</span> <span class="p">[</span><span class="mi">332</span><span class="p">]</span>
+<span class="n">cycle6</span> <span class="o">=</span> <span class="p">[</span><span class="mf">338.0</span><span class="p">,</span> <span class="mf">362.0</span><span class="p">,</span> <span class="mf">392.0</span><span class="p">,</span> <span class="mf">422.0</span><span class="p">,</span> <span class="mf">452.0</span><span class="p">,</span> <span class="mf">482.0</span><span class="p">,</span> <span class="mf">512.0</span><span class="p">,</span> <span class="mf">542.0</span><span class="p">,</span> <span class="mf">572.0</span><span class="p">,</span> <span class="mf">602.0</span><span class="p">,</span> <span class="mf">632.0</span><span class="p">,</span> <span class="mf">662.0</span><span class="p">,</span> <span class="mf">687.0</span><span class="p">,</span> <span class="mf">718.7</span><span class="p">]</span>
+<span class="n">down6</span> <span class="o">=</span> <span class="p">[</span><span class="mf">735.7</span><span class="p">]</span>
+<span class="n">cycle7</span> <span class="o">=</span> <span class="p">[</span><span class="mf">741.7</span><span class="p">,</span> <span class="mf">765.7</span><span class="p">,</span> <span class="mf">795.7</span><span class="p">,</span> <span class="mf">825.7</span><span class="p">,</span> <span class="mf">855.7</span><span class="p">,</span> <span class="mf">885.7</span><span class="p">,</span> <span class="mf">915.7</span><span class="p">,</span> <span class="mf">945.7</span><span class="p">,</span> <span class="mf">975.7</span><span class="p">,</span> <span class="mf">1005.7</span><span class="p">,</span> <span class="mf">1044.6</span><span class="p">,</span> <span class="mf">1083.6</span><span class="p">]</span>
+<span class="n">down7</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1098.6</span><span class="p">]</span>
+<span class="n">cycle8</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1104.6</span><span class="p">,</span> <span class="mf">1128.6</span><span class="p">,</span> <span class="mf">1158.6</span><span class="p">,</span> <span class="mf">1188.6</span><span class="p">,</span> <span class="mf">1218.6</span><span class="p">,</span><span class="mf">1248.6</span><span class="p">,</span> <span class="mf">1278.6</span><span class="p">,</span> <span class="mf">1308.6</span><span class="p">,</span> <span class="mf">1338.6</span><span class="p">,</span> <span class="mf">1368.6</span><span class="p">,</span> <span class="mf">1411.0</span><span class="p">,</span> <span class="mf">1445.4</span><span class="p">]</span>
+<span class="n">down8</span> <span class="o">=</span>  <span class="p">[</span><span class="mi">2600</span><span class="o">+</span><span class="mf">1445.4</span><span class="p">,</span> <span class="mi">2601</span><span class="o">+</span><span class="mf">1445.4</span><span class="p">,</span> <span class="mi">2635</span><span class="o">+</span><span class="mf">1445.4</span><span class="p">,</span> <span class="mi">2648</span><span class="o">+</span><span class="mf">1445.4</span><span class="p">,</span> <span class="mi">2672</span><span class="o">+</span><span class="mf">1445.4</span><span class="p">,</span> <span class="mi">2735</span><span class="o">+</span><span class="mf">1445.4</span><span class="p">,</span> <span class="mi">2753</span><span class="o">+</span><span class="mf">1445.4</span><span class="p">,</span> <span class="mi">2760</span><span class="o">+</span><span class="mf">1445.4</span><span class="p">,</span> <span class="mi">2813</span><span class="o">+</span><span class="mf">1445.4</span><span class="p">,</span> <span class="mi">2846</span><span class="o">+</span><span class="mf">1445.4</span><span class="p">]</span>
 
-macrostep_vector = cycle5 + down5 + cycle6 + down6 + cycle7 + down7 + cycle8 + down8
+<span class="n">macrostep_vector</span> <span class="o">=</span> <span class="n">cycle5</span> <span class="o">+</span> <span class="n">down5</span> <span class="o">+</span> <span class="n">cycle6</span> <span class="o">+</span> <span class="n">down6</span> <span class="o">+</span> <span class="n">cycle7</span> <span class="o">+</span> <span class="n">down7</span> <span class="o">+</span> <span class="n">cycle8</span> <span class="o">+</span> <span class="n">down8</span>
 
-macrostep_unit = &#39;d&#39;
+<span class="n">macrostep_unit</span> <span class="o">=</span> <span class="s1">&#39;d&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -853,14 +854,14 @@ macrostep_unit = &#39;d&#39;
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>norma_vector_cycle5 = [162]*len(cycle5)
-norma_vector_cycle6 = [139]*len(cycle6)
-norma_vector_cycle7 = [118.8]*len(cycle7)
-norma_vector_cycle8 = [33.5]*len(cycle8)
-norma_vector_down8 = [0.0]*len(down8)
+<span></span><span class="n">norma_vector_cycle5</span> <span class="o">=</span> <span class="p">[</span><span class="mi">162</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">cycle5</span><span class="p">)</span>
+<span class="n">norma_vector_cycle6</span> <span class="o">=</span> <span class="p">[</span><span class="mi">139</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">cycle6</span><span class="p">)</span>
+<span class="n">norma_vector_cycle7</span> <span class="o">=</span> <span class="p">[</span><span class="mf">118.8</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">cycle7</span><span class="p">)</span>
+<span class="n">norma_vector_cycle8</span> <span class="o">=</span> <span class="p">[</span><span class="mf">33.5</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">cycle8</span><span class="p">)</span>
+<span class="n">norma_vector_down8</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">down8</span><span class="p">)</span>
 
-norma_vector = norma_vector_cycle5 + [0.0] + norma_vector_cycle6 + [0.0] + norma_vector_cycle7 + [0.0] + norma_vector_cycle8 + norma_vector_down8
-norma_unit = &#39;power&#39;
+<span class="n">norma_vector</span> <span class="o">=</span> <span class="n">norma_vector_cycle5</span> <span class="o">+</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">+</span> <span class="n">norma_vector_cycle6</span> <span class="o">+</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">+</span> <span class="n">norma_vector_cycle7</span> <span class="o">+</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">+</span> <span class="n">norma_vector_cycle8</span> <span class="o">+</span> <span class="n">norma_vector_down8</span>
+<span class="n">norma_unit</span> <span class="o">=</span> <span class="s1">&#39;power&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -870,7 +871,7 @@ norma_unit = &#39;power&#39;
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>microstep_vector = [3]*len(macrostep_vector)
+<span></span><span class="n">microstep_vector</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">macrostep_vector</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -881,10 +882,20 @@ norma_unit = &#39;power&#39;
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>sequence1 = Sequence(1)
-sequence1.set_macrostep(macrostep_vector, macrostep_unit)
-sequence1.set_norma(norma_vector, norma_unit)
-sequence1.microstep_vector = microstep_vector
+<span></span><span class="n">sequence1</span> <span class="o">=</span> <span class="n">onix</span><span class="o">.</span><span class="n">Sequence</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_macrostep</span><span class="p">(</span><span class="n">macrostep_vector</span><span class="p">,</span> <span class="n">macrostep_unit</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_norma</span><span class="p">(</span><span class="n">norma_vector</span><span class="p">,</span> <span class="n">norma_unit</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">microstep_vector</span> <span class="o">=</span> <span class="n">microstep_vector</span>
+</pre></div>
+</div>
+</div>
+<p>Finally, we need to define the way ONIX approximate the neutron flux for each microstep. In the current version, the only option is to take the initial value (‘iv’) of the flux for the microstep.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">sequence1</span><span class="o">.</span><span class="n">flux_approximation</span> <span class="o">=</span><span class="s1">&#39;iv&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -899,111 +910,111 @@ sequence1.microstep_vector = microstep_vector
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>moderator_B10_online_change = {
-6:          9.736672674935091e-05,
-7 :         8.69924941707639e-05,
-8 :         7.572967636060627e-05,
-9 :         6.477786338149834e-05,
-10 :        5.4359201541332796e-05,
-11 :        4.45292274170828e-05,
-12 :        3.4243853361652844e-05,
-13 :        2.298103555149521e-05,
-14 :        1.104067150226498e-05,
-15 :        1.1107315394632776e-06,
-16 :        1.1107315394632776e-06,
-18 :        0.0001306109217254868,
-19 :        0.0001209475573321563,
-20 :        0.00011093986616159216,
-21 :        9.983255076695937e-05,
-22 :        8.88807377878515e-05,
-23 :        7.842875400150202e-05,
-24 :        6.856545793106812e-05,
-25 :        5.879102038379128e-05,
-26 :        4.798360250481359e-05,
-27 :        3.59543799324263e-05,
-28 :        2.359193789820002e-05,
-29 :        1.1307247071736167e-05,
-30 :        1.1107315394632774e-06,
-31 :        1.1107315394632774e-06,
-33 :        0.00011285032440946899,
-34 :        0.00010290927713127266,
-35 :        9.261279576044808e-05,
-36 :        8.13388706348958e-05,
-37 :        7.027598450184157e-05,
-38 :        5.969071293075653e-05,
-39 :        4.970523639098166e-05,
-40 :        3.950872085870877e-05,
-41 :        2.8323654256313578e-05,
-42 :        1.6505470676424304e-05,
-43 :        8.663706007813565e-07,
-44 :        8.663706007813565e-07,
-46 :        0.0001364977988846422,
-47 :        0.00012439082510449245,
-48 :        0.00011121754904645799,
-49 :        9.711125849527437e-05,
-50 :        8.321600693658877e-05,
-51 :        6.967618947053139e-05,
-52 :        5.654734267407547e-05,
-53 :        4.3918325070378e-05,
-54 :        3.138927330523223e-05,
-55 :        1.881579227850792e-05,
-56 :        1.3217705319613002e-06,
-57 :        1.3217705319613002e-06
-}
+<span></span><span class="n">moderator_B10_online_change</span> <span class="o">=</span> <span class="p">{</span>
+<span class="mi">6</span><span class="p">:</span>          <span class="mf">9.736672674935091e-05</span><span class="p">,</span>
+<span class="mi">7</span> <span class="p">:</span>         <span class="mf">8.69924941707639e-05</span><span class="p">,</span>
+<span class="mi">8</span> <span class="p">:</span>         <span class="mf">7.572967636060627e-05</span><span class="p">,</span>
+<span class="mi">9</span> <span class="p">:</span>         <span class="mf">6.477786338149834e-05</span><span class="p">,</span>
+<span class="mi">10</span> <span class="p">:</span>        <span class="mf">5.4359201541332796e-05</span><span class="p">,</span>
+<span class="mi">11</span> <span class="p">:</span>        <span class="mf">4.45292274170828e-05</span><span class="p">,</span>
+<span class="mi">12</span> <span class="p">:</span>        <span class="mf">3.4243853361652844e-05</span><span class="p">,</span>
+<span class="mi">13</span> <span class="p">:</span>        <span class="mf">2.298103555149521e-05</span><span class="p">,</span>
+<span class="mi">14</span> <span class="p">:</span>        <span class="mf">1.104067150226498e-05</span><span class="p">,</span>
+<span class="mi">15</span> <span class="p">:</span>        <span class="mf">1.1107315394632776e-06</span><span class="p">,</span>
+<span class="mi">16</span> <span class="p">:</span>        <span class="mf">1.1107315394632776e-06</span><span class="p">,</span>
+<span class="mi">18</span> <span class="p">:</span>        <span class="mf">0.0001306109217254868</span><span class="p">,</span>
+<span class="mi">19</span> <span class="p">:</span>        <span class="mf">0.0001209475573321563</span><span class="p">,</span>
+<span class="mi">20</span> <span class="p">:</span>        <span class="mf">0.00011093986616159216</span><span class="p">,</span>
+<span class="mi">21</span> <span class="p">:</span>        <span class="mf">9.983255076695937e-05</span><span class="p">,</span>
+<span class="mi">22</span> <span class="p">:</span>        <span class="mf">8.88807377878515e-05</span><span class="p">,</span>
+<span class="mi">23</span> <span class="p">:</span>        <span class="mf">7.842875400150202e-05</span><span class="p">,</span>
+<span class="mi">24</span> <span class="p">:</span>        <span class="mf">6.856545793106812e-05</span><span class="p">,</span>
+<span class="mi">25</span> <span class="p">:</span>        <span class="mf">5.879102038379128e-05</span><span class="p">,</span>
+<span class="mi">26</span> <span class="p">:</span>        <span class="mf">4.798360250481359e-05</span><span class="p">,</span>
+<span class="mi">27</span> <span class="p">:</span>        <span class="mf">3.59543799324263e-05</span><span class="p">,</span>
+<span class="mi">28</span> <span class="p">:</span>        <span class="mf">2.359193789820002e-05</span><span class="p">,</span>
+<span class="mi">29</span> <span class="p">:</span>        <span class="mf">1.1307247071736167e-05</span><span class="p">,</span>
+<span class="mi">30</span> <span class="p">:</span>        <span class="mf">1.1107315394632774e-06</span><span class="p">,</span>
+<span class="mi">31</span> <span class="p">:</span>        <span class="mf">1.1107315394632774e-06</span><span class="p">,</span>
+<span class="mi">33</span> <span class="p">:</span>        <span class="mf">0.00011285032440946899</span><span class="p">,</span>
+<span class="mi">34</span> <span class="p">:</span>        <span class="mf">0.00010290927713127266</span><span class="p">,</span>
+<span class="mi">35</span> <span class="p">:</span>        <span class="mf">9.261279576044808e-05</span><span class="p">,</span>
+<span class="mi">36</span> <span class="p">:</span>        <span class="mf">8.13388706348958e-05</span><span class="p">,</span>
+<span class="mi">37</span> <span class="p">:</span>        <span class="mf">7.027598450184157e-05</span><span class="p">,</span>
+<span class="mi">38</span> <span class="p">:</span>        <span class="mf">5.969071293075653e-05</span><span class="p">,</span>
+<span class="mi">39</span> <span class="p">:</span>        <span class="mf">4.970523639098166e-05</span><span class="p">,</span>
+<span class="mi">40</span> <span class="p">:</span>        <span class="mf">3.950872085870877e-05</span><span class="p">,</span>
+<span class="mi">41</span> <span class="p">:</span>        <span class="mf">2.8323654256313578e-05</span><span class="p">,</span>
+<span class="mi">42</span> <span class="p">:</span>        <span class="mf">1.6505470676424304e-05</span><span class="p">,</span>
+<span class="mi">43</span> <span class="p">:</span>        <span class="mf">8.663706007813565e-07</span><span class="p">,</span>
+<span class="mi">44</span> <span class="p">:</span>        <span class="mf">8.663706007813565e-07</span><span class="p">,</span>
+<span class="mi">46</span> <span class="p">:</span>        <span class="mf">0.0001364977988846422</span><span class="p">,</span>
+<span class="mi">47</span> <span class="p">:</span>        <span class="mf">0.00012439082510449245</span><span class="p">,</span>
+<span class="mi">48</span> <span class="p">:</span>        <span class="mf">0.00011121754904645799</span><span class="p">,</span>
+<span class="mi">49</span> <span class="p">:</span>        <span class="mf">9.711125849527437e-05</span><span class="p">,</span>
+<span class="mi">50</span> <span class="p">:</span>        <span class="mf">8.321600693658877e-05</span><span class="p">,</span>
+<span class="mi">51</span> <span class="p">:</span>        <span class="mf">6.967618947053139e-05</span><span class="p">,</span>
+<span class="mi">52</span> <span class="p">:</span>        <span class="mf">5.654734267407547e-05</span><span class="p">,</span>
+<span class="mi">53</span> <span class="p">:</span>        <span class="mf">4.3918325070378e-05</span><span class="p">,</span>
+<span class="mi">54</span> <span class="p">:</span>        <span class="mf">3.138927330523223e-05</span><span class="p">,</span>
+<span class="mi">55</span> <span class="p">:</span>        <span class="mf">1.881579227850792e-05</span><span class="p">,</span>
+<span class="mi">56</span> <span class="p">:</span>        <span class="mf">1.3217705319613002e-06</span><span class="p">,</span>
+<span class="mi">57</span> <span class="p">:</span>        <span class="mf">1.3217705319613002e-06</span>
+<span class="p">}</span>
 
-moderator_B11_online_change = {
-6:          0.00038946690699740366,
-7 :         0.0003479699766830556,
-8 :         0.00030291870544242507,
-9 :         0.00025911145352599336,
-10 :        0.00021743680616533118,
-11 :        0.0001781169096683312,
-12 :        0.00013697541344661137,
-13 :        9.192414220598085e-05,
-14 :        4.416268600905992e-05,
-15 :        4.442926157853111e-06,
-16 :        4.442926157853111e-06,
-18 :        0.0005224436869019473,
-19 :        0.0004837902293286252,
-20 :        0.00044375946464636864,
-21 :        0.0003993302030678375,
-22 :        0.000355522951151406,
-23 :        0.0003137150160060081,
-24 :        0.0002742618317242725,
-25 :        0.00023516408153516512,
-26 :        0.00019193441001925436,
-27 :        0.0001438175197297052,
-28 :        9.436775159280008e-05,
-29 :        4.5228988286944666e-05,
-30 :        4.44292615785311e-06,
-31 :        4.44292615785311e-06,
-33 :        0.00045140129763787597,
-34 :        0.0004116371085250906,
-35 :        0.00037045118304179233,
-36 :        0.0003253554825395832,
-37 :        0.0002811039380073663,
-38 :        0.00023876285172302612,
-39 :        0.00019882094556392663,
-40 :        0.0001580348834348351,
-41 :        0.00011329461702525431,
-42 :        6.602188270569722e-05,
-43 :        3.465482403125426e-06,
-44 :        3.465482403125426e-06,
-46 :        0.0005459911955385687,
-47 :        0.0004975633004179698,
-48 :        0.00044487019618583194,
-49 :        0.00038844503398109746,
-50 :        0.00033286402774635506,
-51 :        0.00027870475788212555,
-52 :        0.00022618937069630187,
-53 :        0.000175673300281512,
-54 :        0.00012555709322092893,
-55 :        7.526316911403169e-05,
-56 :        5.287082127845201e-06,
-57 :        5.287082127845201e-06
-}
+<span class="n">moderator_B11_online_change</span> <span class="o">=</span> <span class="p">{</span>
+<span class="mi">6</span><span class="p">:</span>          <span class="mf">0.00038946690699740366</span><span class="p">,</span>
+<span class="mi">7</span> <span class="p">:</span>         <span class="mf">0.0003479699766830556</span><span class="p">,</span>
+<span class="mi">8</span> <span class="p">:</span>         <span class="mf">0.00030291870544242507</span><span class="p">,</span>
+<span class="mi">9</span> <span class="p">:</span>         <span class="mf">0.00025911145352599336</span><span class="p">,</span>
+<span class="mi">10</span> <span class="p">:</span>        <span class="mf">0.00021743680616533118</span><span class="p">,</span>
+<span class="mi">11</span> <span class="p">:</span>        <span class="mf">0.0001781169096683312</span><span class="p">,</span>
+<span class="mi">12</span> <span class="p">:</span>        <span class="mf">0.00013697541344661137</span><span class="p">,</span>
+<span class="mi">13</span> <span class="p">:</span>        <span class="mf">9.192414220598085e-05</span><span class="p">,</span>
+<span class="mi">14</span> <span class="p">:</span>        <span class="mf">4.416268600905992e-05</span><span class="p">,</span>
+<span class="mi">15</span> <span class="p">:</span>        <span class="mf">4.442926157853111e-06</span><span class="p">,</span>
+<span class="mi">16</span> <span class="p">:</span>        <span class="mf">4.442926157853111e-06</span><span class="p">,</span>
+<span class="mi">18</span> <span class="p">:</span>        <span class="mf">0.0005224436869019473</span><span class="p">,</span>
+<span class="mi">19</span> <span class="p">:</span>        <span class="mf">0.0004837902293286252</span><span class="p">,</span>
+<span class="mi">20</span> <span class="p">:</span>        <span class="mf">0.00044375946464636864</span><span class="p">,</span>
+<span class="mi">21</span> <span class="p">:</span>        <span class="mf">0.0003993302030678375</span><span class="p">,</span>
+<span class="mi">22</span> <span class="p">:</span>        <span class="mf">0.000355522951151406</span><span class="p">,</span>
+<span class="mi">23</span> <span class="p">:</span>        <span class="mf">0.0003137150160060081</span><span class="p">,</span>
+<span class="mi">24</span> <span class="p">:</span>        <span class="mf">0.0002742618317242725</span><span class="p">,</span>
+<span class="mi">25</span> <span class="p">:</span>        <span class="mf">0.00023516408153516512</span><span class="p">,</span>
+<span class="mi">26</span> <span class="p">:</span>        <span class="mf">0.00019193441001925436</span><span class="p">,</span>
+<span class="mi">27</span> <span class="p">:</span>        <span class="mf">0.0001438175197297052</span><span class="p">,</span>
+<span class="mi">28</span> <span class="p">:</span>        <span class="mf">9.436775159280008e-05</span><span class="p">,</span>
+<span class="mi">29</span> <span class="p">:</span>        <span class="mf">4.5228988286944666e-05</span><span class="p">,</span>
+<span class="mi">30</span> <span class="p">:</span>        <span class="mf">4.44292615785311e-06</span><span class="p">,</span>
+<span class="mi">31</span> <span class="p">:</span>        <span class="mf">4.44292615785311e-06</span><span class="p">,</span>
+<span class="mi">33</span> <span class="p">:</span>        <span class="mf">0.00045140129763787597</span><span class="p">,</span>
+<span class="mi">34</span> <span class="p">:</span>        <span class="mf">0.0004116371085250906</span><span class="p">,</span>
+<span class="mi">35</span> <span class="p">:</span>        <span class="mf">0.00037045118304179233</span><span class="p">,</span>
+<span class="mi">36</span> <span class="p">:</span>        <span class="mf">0.0003253554825395832</span><span class="p">,</span>
+<span class="mi">37</span> <span class="p">:</span>        <span class="mf">0.0002811039380073663</span><span class="p">,</span>
+<span class="mi">38</span> <span class="p">:</span>        <span class="mf">0.00023876285172302612</span><span class="p">,</span>
+<span class="mi">39</span> <span class="p">:</span>        <span class="mf">0.00019882094556392663</span><span class="p">,</span>
+<span class="mi">40</span> <span class="p">:</span>        <span class="mf">0.0001580348834348351</span><span class="p">,</span>
+<span class="mi">41</span> <span class="p">:</span>        <span class="mf">0.00011329461702525431</span><span class="p">,</span>
+<span class="mi">42</span> <span class="p">:</span>        <span class="mf">6.602188270569722e-05</span><span class="p">,</span>
+<span class="mi">43</span> <span class="p">:</span>        <span class="mf">3.465482403125426e-06</span><span class="p">,</span>
+<span class="mi">44</span> <span class="p">:</span>        <span class="mf">3.465482403125426e-06</span><span class="p">,</span>
+<span class="mi">46</span> <span class="p">:</span>        <span class="mf">0.0005459911955385687</span><span class="p">,</span>
+<span class="mi">47</span> <span class="p">:</span>        <span class="mf">0.0004975633004179698</span><span class="p">,</span>
+<span class="mi">48</span> <span class="p">:</span>        <span class="mf">0.00044487019618583194</span><span class="p">,</span>
+<span class="mi">49</span> <span class="p">:</span>        <span class="mf">0.00038844503398109746</span><span class="p">,</span>
+<span class="mi">50</span> <span class="p">:</span>        <span class="mf">0.00033286402774635506</span><span class="p">,</span>
+<span class="mi">51</span> <span class="p">:</span>        <span class="mf">0.00027870475788212555</span><span class="p">,</span>
+<span class="mi">52</span> <span class="p">:</span>        <span class="mf">0.00022618937069630187</span><span class="p">,</span>
+<span class="mi">53</span> <span class="p">:</span>        <span class="mf">0.000175673300281512</span><span class="p">,</span>
+<span class="mi">54</span> <span class="p">:</span>        <span class="mf">0.00012555709322092893</span><span class="p">,</span>
+<span class="mi">55</span> <span class="p">:</span>        <span class="mf">7.526316911403169e-05</span><span class="p">,</span>
+<span class="mi">56</span> <span class="p">:</span>        <span class="mf">5.287082127845201e-06</span><span class="p">,</span>
+<span class="mi">57</span> <span class="p">:</span>        <span class="mf">5.287082127845201e-06</span>
+<span class="p">}</span>
 
-moderator_isotopic_change = {&#39;B-11&#39;: moderator_B11_online_change, &#39;B-10&#39;: moderator_B10_online_change}
+<span class="n">moderator_isotopic_change</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;B-11&#39;</span><span class="p">:</span> <span class="n">moderator_B11_online_change</span><span class="p">,</span> <span class="s1">&#39;B-10&#39;</span><span class="p">:</span> <span class="n">moderator_B10_online_change</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -1013,10 +1024,10 @@ moderator_isotopic_change = {&#39;B-11&#39;: moderator_B11_online_change, &#39;B
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>fuel_temperature_change = {17: 904.25, 32:819.69, 46:646.13}
-moderator_temperature_change = {17: 598.98, 32:593.34, 46:574.23}
+<span></span><span class="n">fuel_temperature_change</span> <span class="o">=</span> <span class="p">{</span><span class="mi">17</span><span class="p">:</span> <span class="mf">904.25</span><span class="p">,</span> <span class="mi">32</span><span class="p">:</span><span class="mf">819.69</span><span class="p">,</span> <span class="mi">46</span><span class="p">:</span><span class="mf">646.13</span><span class="p">}</span>
+<span class="n">moderator_temperature_change</span> <span class="o">=</span> <span class="p">{</span><span class="mi">17</span><span class="p">:</span> <span class="mf">598.98</span><span class="p">,</span> <span class="mi">32</span><span class="p">:</span><span class="mf">593.34</span><span class="p">,</span> <span class="mi">46</span><span class="p">:</span><span class="mf">574.23</span><span class="p">}</span>
 
-moderator_density_change = {17:0.06670624284397361, 32:0.06831120507781357, 46:0.07272485122087348}
+<span class="n">moderator_density_change</span> <span class="o">=</span> <span class="p">{</span><span class="mi">17</span><span class="p">:</span><span class="mf">0.06670624284397361</span><span class="p">,</span> <span class="mi">32</span><span class="p">:</span><span class="mf">0.06831120507781357</span><span class="p">,</span> <span class="mi">46</span><span class="p">:</span><span class="mf">0.07272485122087348</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -1026,26 +1037,26 @@ moderator_density_change = {17:0.06670624284397361, 32:0.06831120507781357, 46:0
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>sequence1.set_isotopic_change(U_moderator_cell, moderator_isotopic_change, unit = &#39;atom fraction&#39;)
-sequence1.set_isotopic_change(GD_moderator_cell, moderator_isotopic_change, unit = &#39;atom fraction&#39;)
-sequence1.set_isotopic_change(Measured_moderator_cell, moderator_isotopic_change, unit = &#39;atom fraction&#39;)
-sequence1.set_isotopic_change(Guide_moderator_in_cell, moderator_isotopic_change, unit = &#39;atom fraction&#39;)
-sequence1.set_isotopic_change(Guide_moderator_out_cell, moderator_isotopic_change, unit = &#39;atom fraction&#39;)
+<span></span><span class="n">sequence1</span><span class="o">.</span><span class="n">set_isotopic_change</span><span class="p">(</span><span class="n">U_moderator_cell</span><span class="p">,</span> <span class="n">moderator_isotopic_change</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;atom fraction&#39;</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_isotopic_change</span><span class="p">(</span><span class="n">GD_moderator_cell</span><span class="p">,</span> <span class="n">moderator_isotopic_change</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;atom fraction&#39;</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_isotopic_change</span><span class="p">(</span><span class="n">Measured_moderator_cell</span><span class="p">,</span> <span class="n">moderator_isotopic_change</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;atom fraction&#39;</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_isotopic_change</span><span class="p">(</span><span class="n">Guide_moderator_in_cell</span><span class="p">,</span> <span class="n">moderator_isotopic_change</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;atom fraction&#39;</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_isotopic_change</span><span class="p">(</span><span class="n">Guide_moderator_out_cell</span><span class="p">,</span> <span class="n">moderator_isotopic_change</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;atom fraction&#39;</span><span class="p">)</span>
 
-sequence1.set_density_change(U_moderator_cell, moderator_density_change)
-sequence1.set_density_change(GD_moderator_cell, moderator_density_change)
-sequence1.set_density_change(Measured_moderator_cell, moderator_density_change)
-sequence1.set_density_change(Guide_moderator_in_cell, moderator_density_change)
-sequence1.set_density_change(Guide_moderator_out_cell, moderator_density_change)
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_density_change</span><span class="p">(</span><span class="n">U_moderator_cell</span><span class="p">,</span> <span class="n">moderator_density_change</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_density_change</span><span class="p">(</span><span class="n">GD_moderator_cell</span><span class="p">,</span> <span class="n">moderator_density_change</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_density_change</span><span class="p">(</span><span class="n">Measured_moderator_cell</span><span class="p">,</span> <span class="n">moderator_density_change</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_density_change</span><span class="p">(</span><span class="n">Guide_moderator_in_cell</span><span class="p">,</span> <span class="n">moderator_density_change</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_density_change</span><span class="p">(</span><span class="n">Guide_moderator_out_cell</span><span class="p">,</span> <span class="n">moderator_density_change</span><span class="p">)</span>
 
-sequence1.set_temperature_change(U_cell, fuel_temperature_change)
-sequence1.set_temperature_change(GD_cell, fuel_temperature_change)
-sequence1.set_temperature_change(Measured_cell, fuel_temperature_change)
-sequence1.set_temperature_change(U_moderator_cell, moderator_temperature_change)
-sequence1.set_temperature_change(GD_moderator_cell, moderator_temperature_change)
-sequence1.set_temperature_change(Measured_moderator_cell, moderator_temperature_change)
-sequence1.set_temperature_change(Guide_moderator_in_cell, moderator_temperature_change)
-sequence1.set_temperature_change(Guide_moderator_out_cell, moderator_temperature_change)
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_temperature_change</span><span class="p">(</span><span class="n">U_cell</span><span class="p">,</span> <span class="n">fuel_temperature_change</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_temperature_change</span><span class="p">(</span><span class="n">GD_cell</span><span class="p">,</span> <span class="n">fuel_temperature_change</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_temperature_change</span><span class="p">(</span><span class="n">Measured_cell</span><span class="p">,</span> <span class="n">fuel_temperature_change</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_temperature_change</span><span class="p">(</span><span class="n">U_moderator_cell</span><span class="p">,</span> <span class="n">moderator_temperature_change</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_temperature_change</span><span class="p">(</span><span class="n">GD_moderator_cell</span><span class="p">,</span> <span class="n">moderator_temperature_change</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_temperature_change</span><span class="p">(</span><span class="n">Measured_moderator_cell</span><span class="p">,</span> <span class="n">moderator_temperature_change</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_temperature_change</span><span class="p">(</span><span class="n">Guide_moderator_in_cell</span><span class="p">,</span> <span class="n">moderator_temperature_change</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_temperature_change</span><span class="p">(</span><span class="n">Guide_moderator_out_cell</span><span class="p">,</span> <span class="n">moderator_temperature_change</span><span class="p">)</span>
 
 </pre></div>
 </div>
@@ -1060,7 +1071,7 @@ sequence1.set_temperature_change(Guide_moderator_out_cell, moderator_temperature
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>couple = Couple_openmc()
+<span></span><span class="n">couple</span> <span class="o">=</span> <span class="n">onix</span><span class="o">.</span><span class="n">couple</span><span class="o">.</span><span class="n">Couple_openmc</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1071,7 +1082,7 @@ sequence1.set_temperature_change(Guide_moderator_out_cell, moderator_temperature
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>couple.set_bounding_box([-11.43, -11.43, -0.5], [11.43, 11.43, 0.5])
+<span></span><span class="n">couple</span><span class="o">.</span><span class="n">set_bounding_box</span><span class="p">([</span><span class="o">-</span><span class="mf">11.43</span><span class="p">,</span> <span class="o">-</span><span class="mf">11.43</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">11.43</span><span class="p">,</span> <span class="mf">11.43</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1081,7 +1092,7 @@ sequence1.set_temperature_change(Guide_moderator_out_cell, moderator_temperature
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>couple.openmc_bin_path = &#39;/home/julien/virtualenvs/py3/bin/openmc&#39;
+<span></span><span class="n">couple</span><span class="o">.</span><span class="n">openmc_bin_path</span> <span class="o">=</span> <span class="s1">&#39;/home/julien/virtualenvs/py3/bin/openmc&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -1091,7 +1102,7 @@ sequence1.set_temperature_change(Guide_moderator_out_cell, moderator_temperature
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>couple.select_bucells([U_cell, GD_cell, Measured_cell, U_moderator_cell,GD_moderator_cell, Measured_moderator_cell, Guide_moderator_in_cell, Guide_moderator_out_cell ])
+<span></span><span class="n">couple</span><span class="o">.</span><span class="n">select_bucells</span><span class="p">([</span><span class="n">U_cell</span><span class="p">,</span> <span class="n">GD_cell</span><span class="p">,</span> <span class="n">Measured_cell</span><span class="p">,</span> <span class="n">U_moderator_cell</span><span class="p">,</span><span class="n">GD_moderator_cell</span><span class="p">,</span> <span class="n">Measured_moderator_cell</span><span class="p">,</span> <span class="n">Guide_moderator_in_cell</span><span class="p">,</span> <span class="n">Guide_moderator_out_cell</span> <span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1101,7 +1112,7 @@ sequence1.set_temperature_change(Guide_moderator_out_cell, moderator_temperature
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>couple.import_openmc(root_cell)
+<span></span><span class="n">couple</span><span class="o">.</span><span class="n">import_openmc</span><span class="p">(</span><span class="n">root_cell</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1112,8 +1123,8 @@ sequence1.set_temperature_change(Guide_moderator_out_cell, moderator_temperature
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>couple.set_decay_lib(&#39;/home/julien/ONIX/ONIX/onix/data/other_libs/origen2.2/decay_lib&#39;)
-couple.set_user_fy_lib(&#39;/home/julien/ONIX/ONIX/onix/data/other_libs/origen2.2/fy_lib&#39;, complete=True)
+<span></span><span class="n">couple</span><span class="o">.</span><span class="n">set_decay_lib</span><span class="p">(</span><span class="s1">&#39;/home/julien/ONIX/ONIX/onix/data/other_libs/origen2.2/decay_lib&#39;</span><span class="p">)</span>
+<span class="n">couple</span><span class="o">.</span><span class="n">set_user_fy_lib</span><span class="p">(</span><span class="s1">&#39;/home/julien/ONIX/ONIX/onix/data/other_libs/origen2.2/fy_lib&#39;</span><span class="p">,</span> <span class="n">complete</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1123,8 +1134,8 @@ couple.set_user_fy_lib(&#39;/home/julien/ONIX/ONIX/onix/data/other_libs/origen2.
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>vol_dict = {&#39;U1&#39;: 139.9573369652652, &#39;GD1&#39;: 5.148932129156914, &#39;cell1&#39;: 0.4680847390142649, &#39;cell24&#39;: 0.4680847390142649, &#39;total volume&#39;:482.342}
-couple.set_vol(vol_dict)
+<span></span><span class="n">vol_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;U1&#39;</span><span class="p">:</span> <span class="mf">139.9573369652652</span><span class="p">,</span> <span class="s1">&#39;GD1&#39;</span><span class="p">:</span> <span class="mf">5.148932129156914</span><span class="p">,</span> <span class="s1">&#39;cell1&#39;</span><span class="p">:</span> <span class="mf">0.4680847390142649</span><span class="p">,</span> <span class="s1">&#39;cell24&#39;</span><span class="p">:</span> <span class="mf">0.4680847390142649</span><span class="p">,</span> <span class="s1">&#39;total volume&#39;</span><span class="p">:</span><span class="mf">482.342</span><span class="p">}</span>
+<span class="n">couple</span><span class="o">.</span><span class="n">set_vol</span><span class="p">(</span><span class="n">vol_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1134,7 +1145,7 @@ couple.set_vol(vol_dict)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>couple.set_sequence(sequence1)
+<span></span><span class="n">couple</span><span class="o">.</span><span class="n">set_sequence</span><span class="p">(</span><span class="n">sequence1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1144,7 +1155,7 @@ couple.set_vol(vol_dict)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>couple.burn()
+<span></span><span class="n">couple</span><span class="o">.</span><span class="n">burn</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1161,7 +1172,7 @@ couple.set_vol(vol_dict)
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="largo6_nb.html" class="btn btn-neutral float-right" title="Irradiation of a slab of U-238" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="5MWe_reactor_nb.html" class="btn btn-neutral float-right" title="5-MWe - reactor simulation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="pincell_nb.html" class="btn btn-neutral float-left" title="Fuel pin-cell simulation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

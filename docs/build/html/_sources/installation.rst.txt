@@ -25,6 +25,7 @@ Now we need to clone ONIX repository. You should go directly to the GitHub repos
 .. code-block:: sh
 
     git clone https://github.com/jlanversin/ONIX.git
+    git checkout master
 
 Finally, navigate into ONIX folder and install ONIX on your computer:
 

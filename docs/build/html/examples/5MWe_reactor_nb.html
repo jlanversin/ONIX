@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Fuel pin-cell simulation &mdash; ONIX Documentation</title>
+  <title>5-MWe - reactor simulation &mdash; ONIX Documentation</title>
   
 
   
@@ -39,8 +39,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Assembly simulation" href="assembly_nb.html" />
-    <link rel="prev" title="Examples" href="index.html" /> 
+    <link rel="next" title="Irradiation of a slab of U-238" href="largo6_nb.html" />
+    <link rel="prev" title="Assembly simulation" href="assembly_nb.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,9 +95,9 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="index.html#reactor-simulation">Reactor Simulation</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="index.html#coupled-simulations">Coupled simulations</a><ul class="current">
-<li class="toctree-l4 current"><a class="current reference internal" href="#">Fuel pin-cell simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pincell_nb.html">Fuel pin-cell simulation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="assembly_nb.html">Assembly simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="5MWe_reactor_nb.html">5-MWe - reactor simulation</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">5-MWe - reactor simulation</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="index.html#standalone-simulation">Standalone simulation</a></li>
@@ -156,13 +156,13 @@
         
           <li><a href="index.html">Examples</a> &raquo;</li>
         
-      <li>Fuel pin-cell simulation</li>
+      <li>5-MWe - reactor simulation</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/examples/pincell_nb.ipynb.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/examples/5MWe_reactor_nb.ipynb.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -430,12 +430,11 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<div class="section" id="Fuel-pin-cell-simulation">
-<h1>Fuel pin-cell simulation<a class="headerlink" href="#Fuel-pin-cell-simulation" title="Permalink to this headline">¶</a></h1>
-<p>This notebook shows how ONIX can be used to run a coupled simulation of a simple fuel pin-cell. Since this model uses coupling with OpenMC, it is necessary to have OpenMC installed.</p>
+<div class="section" id="5-MWe---reactor-simulation">
+<h1>5-MWe - reactor simulation<a class="headerlink" href="#5-MWe---reactor-simulation" title="Permalink to this headline">¶</a></h1>
+<p>This notebook shows the input file for modeling and simulating the 5-MWe reactor in North Korea with ONIX.</p>
 <div class="section" id="OpenMC-input-part">
 <h2>OpenMC input part<a class="headerlink" href="#OpenMC-input-part" title="Permalink to this headline">¶</a></h2>
-<p>ONIX python input commands should be located just after OpenMC python commands in the same python input file. The OpenMC part of the input file is the same as the one you would use to launch an OpenMC simulation. Users should refer to OpenMC documentation for the corresponding Python API. In this example, however, the OpenMC part of the input file is included to better explain the articulation of ONIX with OpenMC.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -460,42 +459,57 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-red-fg">ModuleNotFoundError</span>: No module named &#39;openmc&#39;
 </pre></div></div>
 </div>
-<p>This part of the OpenMC input commands create the materials that will fill the OpenMC cells.</p>
-<p><strong>Important to note</strong>: since ONIX cannot handle elements but only isotopes, users should only use the command “add_nuclide” for materials that are going to be depleted by ONIX. Other materials not depleted by ONIX can use “add_element”.</p>
+<p>The 5-MWe is made of graphite blocks with fuel channels through which carbon dioxyde gas flows to cool the fuel rod. The fuel rod is made of natural uranium and is cladded with magnox alloy (an alloy of magnesium with small amount of aluminum and other metals).</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">MOX_mat</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Material</span><span class="p">()</span>
-<span class="n">MOX_mat</span><span class="o">.</span><span class="n">set_density</span><span class="p">(</span><span class="s1">&#39;atom/b-cm&#39;</span><span class="p">,</span> <span class="n">density</span> <span class="o">=</span> <span class="mf">0.06987922652</span> <span class="p">)</span>
-<span class="n">MOX_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;U234&#39;</span><span class="p">,</span> <span class="mf">2.5952E-7</span><span class="p">)</span>
-<span class="n">MOX_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;U235&#39;</span><span class="p">,</span> <span class="mf">5.4287E-5</span><span class="p">)</span>
-<span class="n">MOX_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;U238&#39;</span><span class="p">,</span> <span class="mf">2.1387E-2</span><span class="p">)</span>
-<span class="n">MOX_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;Pu238&#39;</span><span class="p">,</span> <span class="mf">4.6610E-5</span><span class="p">)</span>
-<span class="n">MOX_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;Pu239&#39;</span><span class="p">,</span> <span class="mf">1.0156E-3</span><span class="p">)</span>
-<span class="n">MOX_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;Pu240&#39;</span><span class="p">,</span> <span class="mf">4.8255E-4</span><span class="p">)</span>
-<span class="n">MOX_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;Pu241&#39;</span><span class="p">,</span> <span class="mf">1.7491E-4</span><span class="p">)</span>
-<span class="n">MOX_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;Pu242&#39;</span><span class="p">,</span> <span class="mf">1.3201E-4</span><span class="p">)</span>
-<span class="n">MOX_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;O16&#39;</span><span class="p">,</span> <span class="mf">4.6586E-2</span><span class="p">)</span>
+<span></span><span class="n">natU_mat</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Material</span><span class="p">()</span>
+<span class="n">natU_mat</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">800</span>
+<span class="n">natU_mat</span><span class="o">.</span><span class="n">set_density</span><span class="p">(</span><span class="s1">&#39;g/cc&#39;</span><span class="p">,</span> <span class="n">density</span> <span class="o">=</span> <span class="mf">17.98</span><span class="p">)</span>
+<span class="n">natU_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;U234&#39;</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">NATURAL_ABUNDANCE</span><span class="p">[</span><span class="s1">&#39;U234&#39;</span><span class="p">])</span>
+<span class="n">natU_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;U235&#39;</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">NATURAL_ABUNDANCE</span><span class="p">[</span><span class="s1">&#39;U235&#39;</span><span class="p">])</span>
+<span class="n">natU_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;U238&#39;</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">NATURAL_ABUNDANCE</span><span class="p">[</span><span class="s1">&#39;U238&#39;</span><span class="p">])</span>
 
 <span class="n">clad_mat</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Material</span><span class="p">()</span>
-<span class="n">clad_mat</span><span class="o">.</span><span class="n">set_density</span><span class="p">(</span><span class="s1">&#39;atom/b-cm&#39;</span><span class="p">,</span> <span class="n">density</span> <span class="o">=</span> <span class="mf">0.038858703999999994</span> <span class="p">)</span>
-<span class="n">clad_mat</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="s1">&#39;Zr&#39;</span><span class="p">,</span><span class="mf">3.8657E-2</span><span class="p">)</span>
-<span class="n">clad_mat</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="s1">&#39;Fe&#39;</span><span class="p">,</span><span class="mf">1.3345E-4</span><span class="p">)</span>
-<span class="n">clad_mat</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="s1">&#39;Cr&#39;</span><span class="p">,</span><span class="mf">6.8254E-5</span><span class="p">)</span>
+<span class="n">clad_mat</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">700</span>
+<span class="n">Mg_frac</span> <span class="o">=</span> <span class="mf">98.95</span>
+<span class="n">Al_frac</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">Be_frac</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">clad_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;Mg24&#39;</span><span class="p">,</span><span class="mf">0.79</span><span class="o">*</span><span class="n">Mg_frac</span><span class="p">)</span>
+<span class="n">clad_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;Mg25&#39;</span><span class="p">,</span><span class="mf">0.10</span><span class="o">*</span><span class="n">Mg_frac</span><span class="p">)</span>
+<span class="n">clad_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;Mg26&#39;</span><span class="p">,</span><span class="mf">0.11</span><span class="o">*</span><span class="n">Mg_frac</span><span class="p">)</span>
+<span class="n">clad_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;Al27&#39;</span><span class="p">,</span><span class="mi">1</span><span class="o">*</span><span class="n">Al_frac</span><span class="p">)</span>
+<span class="n">clad_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;Be9&#39;</span><span class="p">,</span><span class="mi">1</span><span class="o">*</span><span class="n">Be_frac</span><span class="p">)</span>
+<span class="n">clad_mat</span><span class="o">.</span><span class="n">set_density</span><span class="p">(</span><span class="s1">&#39;g/cc&#39;</span><span class="p">,</span> <span class="n">density</span> <span class="o">=</span> <span class="mf">1.65</span><span class="p">)</span>
 
 <span class="n">mod_mat</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Material</span><span class="p">()</span>
-<span class="n">mod_mat</span><span class="o">.</span><span class="n">set_density</span><span class="p">(</span><span class="s1">&#39;atom/b-cm&#39;</span><span class="p">,</span> <span class="n">density</span> <span class="o">=</span> <span class="mf">0.0726512136</span><span class="p">)</span>
-<span class="n">mod_mat</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="s1">&#39;H&#39;</span><span class="p">,</span><span class="mf">4.8414E-2</span><span class="p">)</span>
-<span class="n">mod_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;O16&#39;</span><span class="p">,</span><span class="mf">2.4213E-2</span><span class="p">)</span>
-<span class="n">mod_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;B10&#39;</span><span class="p">,</span> <span class="mf">4.7896E-6</span><span class="p">)</span>
-<span class="n">mod_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;B11&#39;</span><span class="p">,</span> <span class="mf">1.9424E-5</span><span class="p">)</span>
-<span class="n">mod_mat</span><span class="o">.</span><span class="n">add_s_alpha_beta</span><span class="p">(</span><span class="s1">&#39;c_H_in_H2O&#39;</span><span class="p">)</span>
+<span class="n">mod_mat</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">650</span>
+<span class="n">mod_mat</span><span class="o">.</span><span class="n">set_density</span><span class="p">(</span><span class="s1">&#39;g/cc&#39;</span><span class="p">,</span> <span class="n">density</span> <span class="o">=</span> <span class="mf">1.628</span><span class="p">)</span>
+<span class="n">mod_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;C12&#39;</span><span class="p">,</span><span class="mf">0.989</span><span class="p">)</span>
+<span class="n">mod_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;C13&#39;</span><span class="p">,</span><span class="mf">0.011</span><span class="p">)</span>
+<span class="n">mod_mat</span><span class="o">.</span><span class="n">add_s_alpha_beta</span><span class="p">(</span><span class="s1">&#39;c_Graphite&#39;</span><span class="p">)</span>
 
+<span class="n">sample_mat</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Material</span><span class="p">()</span>
+<span class="n">sample_mat</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">650</span>
+<span class="n">sample_mat</span><span class="o">.</span><span class="n">set_density</span><span class="p">(</span><span class="s1">&#39;g/cc&#39;</span><span class="p">,</span> <span class="n">density</span> <span class="o">=</span> <span class="mf">1.628</span><span class="p">)</span>
+<span class="n">sample_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;C12&#39;</span><span class="p">,</span><span class="mf">0.989</span><span class="p">)</span>
+<span class="n">sample_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;C13&#39;</span><span class="p">,</span><span class="mf">0.011</span><span class="p">)</span>
+<span class="n">sample_mat</span><span class="o">.</span><span class="n">add_s_alpha_beta</span><span class="p">(</span><span class="s1">&#39;c_Graphite&#39;</span><span class="p">)</span>
+
+<span class="n">cool_mat</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Material</span><span class="p">()</span>
+<span class="n">cool_mat</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">650</span>
+<span class="n">cool_mat</span><span class="o">.</span><span class="n">set_density</span><span class="p">(</span><span class="s1">&#39;g/cc&#39;</span><span class="p">,</span> <span class="n">density</span> <span class="o">=</span> <span class="mf">1.628</span><span class="p">)</span>
+<span class="n">C_frac</span> <span class="o">=</span> <span class="mf">33.33</span>
+<span class="n">O_frac</span> <span class="o">=</span> <span class="mf">66.66</span>
+<span class="n">cool_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;C12&#39;</span><span class="p">,</span><span class="n">C_frac</span><span class="o">*</span><span class="mf">0.989</span><span class="p">)</span>
+<span class="n">cool_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;C13&#39;</span><span class="p">,</span><span class="n">C_frac</span><span class="o">*</span><span class="mf">0.011</span><span class="p">)</span>
+<span class="n">cool_mat</span><span class="o">.</span><span class="n">add_nuclide</span><span class="p">(</span><span class="s1">&#39;O16&#39;</span><span class="p">,</span><span class="n">O_frac</span><span class="o">*</span><span class="mf">0.9976</span><span class="p">)</span>
 <span class="c1"># Instantiate a Materials collection</span>
-<span class="n">materials_file</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Materials</span><span class="p">([</span><span class="n">MOX_mat</span><span class="p">,</span> <span class="n">clad_mat</span><span class="p">,</span> <span class="n">mod_mat</span><span class="p">])</span>
-<span class="n">materials_file</span><span class="o">.</span><span class="n">cross_sections</span> <span class="o">=</span> <span class="s1">&#39;/home/julien/cross-sections/mcnp_endfb70/cross_sections.xml&#39;</span>
+<span class="n">materials_file</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Materials</span><span class="p">([</span><span class="n">natU_mat</span><span class="p">,</span> <span class="n">clad_mat</span><span class="p">,</span> <span class="n">cool_mat</span><span class="p">,</span> <span class="n">mod_mat</span><span class="p">,</span> <span class="n">sample_mat</span><span class="p">])</span>
+<span class="c1">#materials_file.cross_sections = &#39;/tigress/jdtdl/openmc/mcnp_endfb70/cross_sections.xml&#39;</span>
+<span class="n">materials_file</span><span class="o">.</span><span class="n">cross_sections</span> <span class="o">=</span> <span class="s1">&#39;/home/groups/rewing1/cross-sections/lib80x_hdf5/cross_sections.xml&#39;</span>
 
 <span class="c1"># Export to &quot;materials.xml&quot;</span>
 <span class="n">materials_file</span><span class="o">.</span><span class="n">export_to_xml</span><span class="p">()</span>
@@ -503,47 +517,60 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <p>The following commands define the geometry and the cells.</p>
-<p><strong>Important to note</strong>: ONIX requires the user to define a root cell that is named “root cell”. This root cell will be used to fill the root universe.</p>
+<p>In order to measure neutronics parameters toward the edges of the fuel channels (against the wall of the graphite block), a sample cell is added. This cell allows to tally reaction rates and neutron flux for nuclear archaeology methods that would use a monitor tag located in this region.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Create cylinders for the fuel and clad</span>
-<span class="n">fuel_outer_radius</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">ZCylinder</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">0.410</span><span class="p">)</span>
-<span class="n">clad_outer_radius</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">ZCylinder</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">0.475</span><span class="p">)</span>
+<span class="n">fuel_outer_radius</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">ZCylinder</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">1.45</span><span class="p">)</span>
+<span class="n">clad_outer_radius</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">ZCylinder</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">1.50</span><span class="p">)</span>
+<span class="n">coolant_outer_radius</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">ZCylinder</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">3.25</span><span class="p">)</span>
+
+<span class="c1">#Create cylinder of the sample</span>
+<span class="n">sample_cylinder</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">ZCylinder</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mf">3.35</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 
 <span class="c1"># Create boundary planes to surround the geometry</span>
-<span class="n">min_x</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">XPlane</span><span class="p">(</span><span class="n">x0</span><span class="o">=-</span><span class="mf">0.65635</span><span class="p">,</span> <span class="n">boundary_type</span><span class="o">=</span><span class="s1">&#39;reflective&#39;</span><span class="p">)</span>
-<span class="n">max_x</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">XPlane</span><span class="p">(</span><span class="n">x0</span><span class="o">=+</span><span class="mf">0.65635</span><span class="p">,</span> <span class="n">boundary_type</span><span class="o">=</span><span class="s1">&#39;reflective&#39;</span><span class="p">)</span>
-<span class="n">min_y</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">YPlane</span><span class="p">(</span><span class="n">y0</span><span class="o">=-</span><span class="mf">0.65635</span><span class="p">,</span> <span class="n">boundary_type</span><span class="o">=</span><span class="s1">&#39;reflective&#39;</span><span class="p">)</span>
-<span class="n">max_y</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">YPlane</span><span class="p">(</span><span class="n">y0</span><span class="o">=+</span><span class="mf">0.65635</span><span class="p">,</span> <span class="n">boundary_type</span><span class="o">=</span><span class="s1">&#39;reflective&#39;</span><span class="p">)</span>
-<span class="n">min_z</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">ZPlane</span><span class="p">(</span><span class="n">z0</span><span class="o">=-</span><span class="mf">0.65635</span><span class="p">,</span> <span class="n">boundary_type</span><span class="o">=</span><span class="s1">&#39;reflective&#39;</span><span class="p">)</span>
-<span class="n">max_z</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">ZPlane</span><span class="p">(</span><span class="n">z0</span><span class="o">=+</span><span class="mf">0.65635</span><span class="p">,</span> <span class="n">boundary_type</span><span class="o">=</span><span class="s1">&#39;reflective&#39;</span><span class="p">)</span>
+<span class="n">min_x</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">XPlane</span><span class="p">(</span><span class="n">x0</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">boundary_type</span><span class="o">=</span><span class="s1">&#39;reflective&#39;</span><span class="p">)</span>
+<span class="n">max_x</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">XPlane</span><span class="p">(</span><span class="n">x0</span><span class="o">=+</span><span class="mi">10</span><span class="p">,</span> <span class="n">boundary_type</span><span class="o">=</span><span class="s1">&#39;reflective&#39;</span><span class="p">)</span>
+<span class="n">min_y</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">YPlane</span><span class="p">(</span><span class="n">y0</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">boundary_type</span><span class="o">=</span><span class="s1">&#39;reflective&#39;</span><span class="p">)</span>
+<span class="n">max_y</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">YPlane</span><span class="p">(</span><span class="n">y0</span><span class="o">=+</span><span class="mi">10</span><span class="p">,</span> <span class="n">boundary_type</span><span class="o">=</span><span class="s1">&#39;reflective&#39;</span><span class="p">)</span>
+<span class="n">min_z</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">ZPlane</span><span class="p">(</span><span class="n">z0</span><span class="o">=-</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">boundary_type</span><span class="o">=</span><span class="s1">&#39;reflective&#39;</span><span class="p">)</span>
+<span class="n">max_z</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">ZPlane</span><span class="p">(</span><span class="n">z0</span><span class="o">=+</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">boundary_type</span><span class="o">=</span><span class="s1">&#39;reflective&#39;</span><span class="p">)</span>
 
 <span class="c1"># Create a Universe to encapsulate the fuel pin</span>
-<span class="n">pin_cell_universe</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;MOX Fuel Pin&#39;</span><span class="p">)</span>
+<span class="n">pin_cell_universe</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Fuel Pin&#39;</span><span class="p">)</span>
 
-<span class="c1"># Create fuel Cell</span>
-<span class="n">MOX_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;MOX fuel&#39;</span><span class="p">)</span>
-<span class="n">MOX_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">MOX_mat</span>
-<span class="n">MOX_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">-</span><span class="n">fuel_outer_radius</span>
-<span class="n">MOX_cell</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">900</span>
-<span class="n">pin_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">MOX_cell</span><span class="p">)</span>
+<span class="c1"># Create fuel1 Cell</span>
+<span class="n">fuel_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;fuel&#39;</span><span class="p">)</span>
+<span class="n">fuel_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">natU_mat</span>
+<span class="n">fuel_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">-</span><span class="n">fuel_outer_radius</span>
+<span class="n">pin_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">fuel_cell</span><span class="p">)</span>
 
-<span class="c1"># Create a clad Cell</span>
+<span class="c1"># Create a clad Cell for 1</span>
 <span class="n">clad_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Clad&#39;</span><span class="p">)</span>
 <span class="n">clad_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">clad_mat</span>
 <span class="n">clad_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">+</span><span class="n">fuel_outer_radius</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">clad_outer_radius</span>
-<span class="n">clad_cell</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">600</span>
 <span class="n">pin_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">clad_cell</span><span class="p">)</span>
 
-<span class="c1"># Create a moderator Cell</span>
+<span class="c1"># Create a coolant Cell for 1</span>
+<span class="n">cool_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Cool&#39;</span><span class="p">)</span>
+<span class="n">cool_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">cool_mat</span>
+<span class="n">cool_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">+</span><span class="n">clad_outer_radius</span> <span class="o">&amp;</span> <span class="o">-</span> <span class="n">coolant_outer_radius</span>
+<span class="n">pin_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">cool_cell</span><span class="p">)</span>
+
+<span class="c1"># Create a moderator Cell for 1</span>
 <span class="n">mod_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Mod&#39;</span><span class="p">)</span>
 <span class="n">mod_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">mod_mat</span>
-<span class="n">mod_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">+</span><span class="n">clad_outer_radius</span>
-<span class="n">mod_cell</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">600</span>
+<span class="n">mod_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">+</span><span class="n">coolant_outer_radius</span> <span class="o">&amp;</span> <span class="o">+</span><span class="n">sample_cylinder</span>
 <span class="n">pin_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">mod_cell</span><span class="p">)</span>
+
+<span class="c1"># Create sample cell</span>
+<span class="n">sample_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Sample&#39;</span><span class="p">)</span>
+<span class="n">sample_cell</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">sample_mat</span>
+<span class="n">sample_cell</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="o">-</span><span class="n">sample_cylinder</span>
+<span class="n">pin_cell_universe</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">sample_cell</span><span class="p">)</span>
 
 <span class="c1"># Create root Cell</span>
 <span class="n">root_cell</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;root cell&#39;</span><span class="p">)</span>
@@ -557,6 +584,8 @@ div.rendered_html tbody tr:hover {
 <span class="c1"># Create Geometry and set root Universe</span>
 <span class="n">openmc_geometry</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">Geometry</span><span class="p">(</span><span class="n">root_universe</span><span class="p">)</span>
 
+<span class="c1"># Export to &quot;materials.xml&quot;</span>
+<span class="n">materials_file</span><span class="o">.</span><span class="n">export_to_xml</span><span class="p">()</span>
 <span class="c1"># Export to &quot;geometry.xml&quot;</span>
 <span class="n">openmc_geometry</span><span class="o">.</span><span class="n">export_to_xml</span><span class="p">()</span>
 </pre></div>
@@ -581,11 +610,10 @@ div.rendered_html tbody tr:hover {
 <span class="n">settings_file</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">particles</span>
 
 <span class="c1"># Create an initial uniform spatial source distribution over fissionable zones</span>
-<span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.65635</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.65635</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.65635</span><span class="p">,</span> <span class="mf">0.65635</span><span class="p">,</span> <span class="mf">0.65635</span><span class="p">,</span> <span class="mf">0.65635</span><span class="p">]</span>
-<span class="n">uniform_dist</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">bounds</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">3</span><span class="p">:],</span> <span class="n">only_fissionable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">settings_file</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">Source</span><span class="p">(</span><span class="n">space</span><span class="o">=</span><span class="n">uniform_dist</span><span class="p">)</span>
-
-<span class="c1">#settings_file.temperature = {&#39;method&#39;:&#39;interpolation&#39;}</span>
+<span class="c1">#bounds = [-0.65635, -0.65635, -0.65635, 0.65635, 0.65635, 0.65635]</span>
+<span class="c1">#uniform_dist = openmc.stats.Box(bounds[:3], bounds[3:], only_fissionable=True)</span>
+<span class="n">point_dist</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">xyz</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+<span class="n">settings_file</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">openmc</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">Source</span><span class="p">(</span><span class="n">space</span><span class="o">=</span><span class="n">point_dist</span><span class="p">)</span>
 
 <span class="c1"># Export to &quot;settings.xml&quot;</span>
 <span class="n">settings_file</span><span class="o">.</span><span class="n">export_to_xml</span><span class="p">()</span>
@@ -598,33 +626,27 @@ div.rendered_html tbody tr:hover {
 <p>This section describes the input commands for ONIX.</p>
 <div class="section" id="Defning-a-sequence">
 <h3>Defning a sequence<a class="headerlink" href="#Defning-a-sequence" title="Permalink to this headline">¶</a></h3>
-<p>The first thing to define is the sequence of burnup points or time points that ONIX should follow when iterating between OpenMC simulations and depletion calculations.</p>
-<p>We first define the macrostep vector in burnup units (MWd/kg) or time units (“s” for seconds, “m” for minutes, “d” for days, “y” for years). These points defines when OpenMC simulations update the neutron flux and reaction rates.</p>
-<p>There is no need to define the initial point (which would be 0 in burnup or time units).</p>
+<p>As we assume that the 5-MWe reactor has never been operated to a burnup higher than 0.7 MWd/kg, we define a burnup interval up to that value. With a total active volume of approximately 166 cubic meters and a nominal thermal power output of 25 MWth, the volumic power density is set to 0.15 kW/l (other power densities yield almost identical neutronics results and therefore this value can be used for other thermal power values).</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">macrostep_vector</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">210</span><span class="p">,</span> <span class="mi">240</span><span class="p">,</span> <span class="mi">270</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">330</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="mi">390</span><span class="p">,</span> <span class="mi">420</span><span class="p">]</span>
-<span class="n">macrostep_unit</span> <span class="o">=</span> <span class="s1">&#39;d&#39;</span>
+<span></span><span class="n">macrostep_vector</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0087</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">]</span>
+<span class="n">macrostep_unit</span> <span class="o">=</span> <span class="s1">&#39;MWd/kg&#39;</span>
 </pre></div>
 </div>
 </div>
-<p>We then define a vector for power of flux normalization. This vector indicates what is the value or the flux or power density to use for each macrostep. The user choose between flux and power density by defining the unit of the vector, “flux” or “power”.</p>
-<p>The flux should be in units of <span class="math notranslate nohighlight">\(cm^{-2}\cdot s^{-1}\)</span>, the power should be in units of <span class="math notranslate nohighlight">\(kW/l\)</span>.</p>
-<p><strong>Important to note</strong>: the power density is the total power of the system divided by the <strong>total</strong> volume of the system, including non-nuclear elements such as moderator, cladding etc.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">norma_vector</span> <span class="o">=</span> <span class="p">[</span><span class="mf">108.93</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">macrostep_vector</span><span class="p">)</span>
+<span></span><span class="n">norma_vector</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.15</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">macrostep_vector</span><span class="p">)</span>
 <span class="n">norma_unit</span> <span class="o">=</span> <span class="s1">&#39;power&#39;</span>
 </pre></div>
 </div>
 </div>
-<p>The last element of the sequence object that we need to define is the number of microsteps within each macrostep. Below, we indicate to ONIX that there should be 3 microsteps that divide each and every macrosteps.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
@@ -634,8 +656,6 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p>We then instantiate a sequence object and fill it with the vectors we defined above.</p>
-<p><strong>Important to note</strong>: since ONIX enables the user to define multiple sequence objects within one input file, the user needs to associate each sequence object with a number id as below.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
@@ -648,7 +668,6 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p>Finally, we need to define the way ONIX approximate the neutron flux for each microstep. In the current version, the only option is to take the initial value (‘iv’) of the flux for the microstep.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
@@ -658,11 +677,6 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="Coupling-with-OpenMC">
-<h3>Coupling with OpenMC<a class="headerlink" href="#Coupling-with-OpenMC" title="Permalink to this headline">¶</a></h3>
-<p>Once the sequence objects are defined, we can import parameters from OpenMC to construct ONIX depletion systems</p>
-<p>We first need to instantiate a couple object. This object will operate all communication between OpenMC and ONIX.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
@@ -672,18 +686,15 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p>ONIX will run a dummy OpenMC volume simulation. Because this “pre run” simulation calculates volumes, it is necessary to provide a bounding box to ONIX.</p>
-<p><strong>Important to note</strong>: ONIX can use the volume provided by this simulation for the burnup regions that the user wants to deplete. However, due to non-negligible errors in the stochastic volume calculation of OpenMC, it is recommended</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">couple</span><span class="o">.</span><span class="n">set_bounding_box</span><span class="p">([</span><span class="o">-</span><span class="mf">0.65635</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.65635</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.65635</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.65635</span><span class="p">,</span> <span class="mf">0.65635</span><span class="p">,</span> <span class="mf">0.65635</span><span class="p">])</span>
+<span></span><span class="n">couple</span><span class="o">.</span><span class="n">set_bounding_box</span><span class="p">([</span><span class="o">-</span><span class="mf">10.16</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.16</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">10.16</span><span class="p">,</span> <span class="mf">10.16</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
-<p><strong>[Optional]</strong>: simulations on HPC clusters require to explicitly define the path to the OpenMC executable in the openmc.run() command. The user should indicate the path to OpenMC executable to ONIX with the following command:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
@@ -693,17 +704,15 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p>The user can select which OpenMC cells will be depleted by adding the names of the cell objects defined above in the command below. Cells that are selected for depletion are called BUCells in ONIX.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">couple</span><span class="o">.</span><span class="n">select_bucells</span><span class="p">([</span><span class="n">MOX_cell</span><span class="p">])</span>
+<span></span><span class="n">couple</span><span class="o">.</span><span class="n">select_bucells</span><span class="p">([</span><span class="n">fuel_cell</span><span class="p">,</span> <span class="n">sample_cell</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
-<p>The following command indicate to ONIX which OpenMC cell is the root cell. ONIX will use this cell to extract information on OpenMC materials and cells.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
@@ -713,30 +722,16 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p><strong>[Optional]</strong> By default, ONIX will use ENDF/B-VIII.0 libraries for decay and fission yields data. If users want to use other libraries, they can use the following commands:</p>
-<p><strong>Important to note</strong>: if users want to complement the fission yield data library they are defining with the data from ENDF/B-VIII.0, they should set the <em>complete</em> parameter to True in the set_user_fy_lib command.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">couple</span><span class="o">.</span><span class="n">set_decay_lib</span><span class="p">(</span><span class="s1">&#39;/home/julien/ONIX/ONIX/onix/data/other_libs/origen2.2/decay_lib&#39;</span><span class="p">)</span>
-<span class="n">couple</span><span class="o">.</span><span class="n">set_user_fy_lib</span><span class="p">(</span><span class="s1">&#39;/home/julien/ONIX/ONIX/onix/data/other_libs/origen2.2/fy_lib&#39;</span><span class="p">,</span> <span class="n">complete</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<p>As explained above, OpenMC volume calculations are not always reliable, especially for complex geometry. The user can dedice to manually set volumes for each BUCell.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vol_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;MOX fuel&#39;</span><span class="p">:</span> <span class="mf">0.69323</span><span class="p">,</span> <span class="s1">&#39;total volume&#39;</span><span class="p">:</span><span class="mf">2.26197</span><span class="p">}</span>
+<span></span><span class="n">vol_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fuel&#39;</span><span class="p">:</span> <span class="mf">6.6051</span><span class="p">,</span> <span class="s1">&#39;Sample&#39;</span><span class="p">:</span><span class="mf">0.03141</span> <span class="p">,</span><span class="s1">&#39;total volume&#39;</span><span class="p">:</span><span class="mi">400</span><span class="p">}</span>
 <span class="n">couple</span><span class="o">.</span><span class="n">set_vol</span><span class="p">(</span><span class="n">vol_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p>Now we can indicate to the couple object which sequence it should use for the simulation.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
@@ -769,10 +764,10 @@ div.rendered_html tbody tr:hover {
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="assembly_nb.html" class="btn btn-neutral float-right" title="Assembly simulation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="largo6_nb.html" class="btn btn-neutral float-right" title="Irradiation of a slab of U-238" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="assembly_nb.html" class="btn btn-neutral float-left" title="Assembly simulation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

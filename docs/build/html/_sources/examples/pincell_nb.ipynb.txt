@@ -290,10 +290,26 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "sequence1 = Sequence(1)\n",
+    "sequence1 = onix.Sequence(1)\n",
     "sequence1.set_macrostep(macrostep_vector, macrostep_unit)\n",
     "sequence1.set_norma(norma_vector, norma_unit)\n",
     "sequence1.microstep_vector = microstep_vector"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Finally, we need to define the way ONIX approximate the neutron flux for each microstep. In the current version, the only option is to take the initial value ('iv') of the flux for the microstep."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sequence1.flux_approximation ='iv'"
    ]
   },
   {
@@ -318,7 +334,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "couple = Couple_openmc()"
+    "couple = onix.couple.Couple_openmc()"
    ]
   },
   {

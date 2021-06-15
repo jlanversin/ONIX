@@ -4,6 +4,8 @@ import math as m
 import numpy as np
 import time
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
+from matplotlib.ticker import ScalarFormatter
 import openmc
 import itertools
 
@@ -160,7 +162,7 @@ def review_all_ratio_candidates(NAX_cell, operation_history, path, ratio_uncerta
         # plot_ng_chain_ratio_derivative_history(ratio_evolution, ratio_derivative_dict, history_mid_fluence, combine_indexes)
 
 
-def review_selected_ratio_candidates(NAX_cell, operation_history, path, selected_list, ratio_uncertainty, cut_off=None):
+def review_selected_ratio_candidates(NAX_cell, operation_history, path, selected_list, ratio_uncertainty, cut_off=None, invert=None):
 
     """This function plots a series of graphs containing isotopic ratios evolution and their associated relative errors on fluence for a selected list of provided ratios  and for a given operation history. It can be used to identify potential good fluence indicators.
 
@@ -184,6 +186,7 @@ def review_selected_ratio_candidates(NAX_cell, operation_history, path, selected
     chain_dict = list_NAX_ng_chain_from_output(path ,NAX_cell, 2)
     selected_fluence_derivative_dict = {}
     selected_ratio_dict = {}
+    selected_duo_dict = {}
     z_to_name_dict = d.nuc_zz_dic
 
     for z in chain_dict:
@@ -211,6 +214,7 @@ def review_selected_ratio_candidates(NAX_cell, operation_history, path, selected
         history_matrix = concatenate_history_matrix(history_matrix_list)
         history_fluence = concatenate_history_fluence(history_matrix_list)
         ratio_evolution = get_ratio_evolution(chain, history_matrix)
+        duo_evolution = get_duo_evolution(chain, history_matrix)
 
         ratio_name_list = ratio_evolution[1]
         print (ratio_name_list)
@@ -222,26 +226,37 @@ def review_selected_ratio_candidates(NAX_cell, operation_history, path, selected
         if ratios == []:
             continue
 
-
+        # To get data for ploting ratio vs plutonium
         for ratio in ratios:
             print (ratio)
-            if ratio == 'Dy-163/Dy-161':
-                print (ratio)
-                print (ratio_evolution[0][ratio])
-                print (history_fluence)
-            if ratio == 'Fe-57/Fe-56':
-                print (ratio)
-                print (ratio_evolution[0][ratio])
-                #print (history_fluence)
-            # if ratio == 'Fe-57/e-56':
-            #   print (ratio)
-            #   print (ratio_evolution[0][ratio])
-            #   print (history_fluence)
-            if ratio == 'Dy-164/Dy-163':
-                print (ratio)
-                print (ratio_evolution[0][ratio])
-                #print (history_fluence)
+            # if ratio == 'B-11/B-10':
+            #     print (ratio)
+            #     print (ratio_evolution[0][ratio])
+            #     #print (history_fluence)
+            # if ratio == 'Sm-149/Sm-148':
+            #     print (ratio)
+            #     print (ratio_evolution[0][ratio])
+            #     #print (history_fluence)
+            # if ratio == 'Sm-148/Sm-147':
+            #     print (ratio)
+            #     print (ratio_evolution[0][ratio])
+            # if ratio == 'Dy-164/Dy-163':
+            #     print (ratio)
+            #     print (ratio_evolution[0][ratio])
+            #     print ('fluence_seq',history_fluence)
 
+            if ratio == 'Gd-158/Gd-157':
+                print (ratio)
+                print (ratio_evolution[0][ratio])
+                #print (history_fluence)
+            if ratio == 'Sm-149/Sm-148':
+                print (ratio)
+                print (ratio_evolution[0][ratio])
+                #print (history_fluence)
+            if ratio == 'Cd-114/Cd-113':
+                print (ratio)
+                print (ratio_evolution[0][ratio])
+                print ('fluence_seq',history_fluence)
 
         ratio_derivative_dict = get_ratio_derivative_dict(ratio_evolution, history_fluence, batch_break_indexes, step_break_indexes)
         fluence_derivative_dict = get_fluence_derivative_dict(ratio_derivative_dict)
@@ -250,11 +265,14 @@ def review_selected_ratio_candidates(NAX_cell, operation_history, path, selected
         for ratio in ratios:
             selected_fluence_derivative_dict[ratio] = fluence_derivative_dict[ratio]
             selected_ratio_dict[ratio] = ratio_evolution[0][ratio]
+            selected_duo_dict[ratio] = duo_evolution[0][ratio]
 
     #quit()
 
-    plot_selected_ratio_history(selected_list, selected_ratio_dict, history_fluence, batch_break_indexes = batch_break_indexes2)
-    plot_selected_ratio_history_sup1(selected_list, selected_ratio_dict, history_fluence, batch_break_indexes = batch_break_indexes2)
+    plot_selected_ratio_history(selected_list, selected_ratio_dict, history_fluence, batch_break_indexes = batch_break_indexes2, invert = invert)
+    # plot_selected_ratio_history_sup1(selected_list, selected_ratio_dict, history_fluence, batch_break_indexes = batch_break_indexes2)
+
+    plot_selected_duo_history(selected_list, selected_duo_dict, history_fluence, batch_break_indexes = batch_break_indexes2)
 
     plot_selected_fluence_relative_error_history(selected_list, selected_ratio_dict, selected_fluence_derivative_dict, history_mid_fluence, combine_indexes, ratio_uncertainty, cut_off = cut_off, batch_break_indexes = batch_break_indexes2)
         #plot_fluence_relative_error_with_ratio_history(ratio_evolution, fluence_derivative_dict, history_mid_fluence, combine_indexes, chain, history_matrix, history_fluence)
@@ -642,7 +660,7 @@ def get_history_matrix_list(operation_history, chain, cell):
 
     abun = get_nat_abun_list_from_chain(chain)
 
-    dphi = 1E19
+    dphi = 1E18
 
     history_matrix_list = []
     for data in operation_history:
@@ -969,6 +987,27 @@ def get_ratio_evolution(chain, history_matrix):
 
     return ratio_evolution_dict, ratio_name_list
 
+def get_duo_evolution(chain, history_matrix):
+
+    duo_evolution_dict = {}
+    duo_name_list = []
+
+    for i in range(len(chain)-1):
+        data = chain[i]
+        nucl1_name = data[0]
+        nucl1_evolution = history_matrix[i]
+        for j in range(i+1, len(chain)):
+            data = chain[j]
+            nucl2_name = data[0]
+            nucl2_evolution = history_matrix[j]
+            duo_evolution = [x+y for x,y in zip(nucl1_evolution, nucl2_evolution)]
+            duo_name = '{}/{}'.format(nucl2_name, nucl1_name)
+            duo_evolution_dict[duo_name] = duo_evolution
+            duo_name_list.append(duo_name)
+
+
+    return duo_evolution_dict, duo_name_list
+
 def invert_ratio(ratio_evolution_dict, ratio_name_list):
 
     for i in range(len(ratio_name_list)):
@@ -1168,13 +1207,16 @@ def plot_chain_fluence_relative_error_history(ratio_evolution, fluence_derivativ
 
 def plot_selected_fluence_relative_error_history(selected_list, selected_ratio_dict, selected_fluence_derivative_dict, history_mid_fluence, sampled_index, ratio_uncertainty, cut_off=None, batch_break_indexes= None):
 
-    plt.style.use('dark_background')
+    #plt.style.use('dark_background')
 
     ratio_name_list = selected_list
     sampled_history_fluence = sample_data_with_sample_indexes(sampled_index, history_mid_fluence)
 
     marker_list = ['.', 'x']
     linestyle_list = [':', '--']
+
+    # normalize history_mid_fluence (to remove scientific notation)
+    history_mid_fluence_norm = [i/1E21 for i in history_mid_fluence]
 
     fig, ax = plt.subplots()
     count = 0
@@ -1204,22 +1246,23 @@ def plot_selected_fluence_relative_error_history(selected_list, selected_ratio_d
             #relative_error_seq = [x*ratio_uncertainty/y for x, y in zip(fluence_derivative, history_mid_fluence)]
             smooth_relative_error_seq = utils.moving_average(relative_error_seq, 100)
             x_seq = [i for i in range(len(history_mid_fluence))]
+
+
             # Non sampled
             if cut != None:
-                plt.plot(history_mid_fluence[:cut], relative_error_seq[:cut], linestyle = linestyle, label = ratio_name)
+                plt.plot(history_mid_fluence_norm[:cut], relative_error_seq[:cut], linestyle = linestyle, label = ratio_name)
             else:
-                plt.plot(history_mid_fluence, relative_error_seq, linestyle = linestyle, label = ratio_name)
+                plt.plot(history_mid_fluence_norm, relative_error_seq, linestyle = linestyle, label = ratio_name)
                 #plt.plot(x_seq, relative_error_seq, linestyle = linestyle, label = ratio_name)
 
             # Threeshold line
-            line = [1E-2 for x in range(len(history_mid_fluence))]
-            plt.plot(history_mid_fluence, line, 'r', linestyle = '--')
+            line = [1E-2 for x in range(len(history_mid_fluence_norm))]
+            plt.plot(history_mid_fluence_norm, line, 'r', linestyle = '--')
 
 
         if sample == 'yes':
-        ########### NON SAMPLED
-
-            ########## SAMPLED
+        ########## SAMPLED
+            print ('\n\n\nAH\n\n\n')
 
             sampled_mid_ratio_evolution = sample_data_with_sample_indexes(sampled_index, mid_ratio_evolution)
             sampled_fluence_derivative = sample_data_with_sample_indexes(sampled_index, fluence_derivative)
@@ -1238,30 +1281,27 @@ def plot_selected_fluence_relative_error_history(selected_list, selected_ratio_d
             line = [1E-2 for x in range(len(sampled_history_fluence))]
             plt.plot(sampled_history_fluence, line, 'r', linestyle = '--')
 
-
-
-
-        ### Old cut off
-        # if cut_off != None:
-        #   if ratio_name in cut_off:
-        #       cut = cut_off[ratio_name]
-        #       plt.plot(history_mid_fluence[:cut], relative_error_seq[:cut], linestyle = linestyle, label = ratio_name)
-        #       #plt.plot(sampled_history_fluence[:cut], relative_error_seq[:cut], linestyle = linestyle, label = ratio_name)
-        #   else:
-        #       plt.plot(history_mid_fluence, relative_error_seq, linestyle = linestyle, label = ratio_name)
-        # else:
-        #   x_seq = [i for i in range(len(history_mid_fluence))]
-        #   #plt.plot(history_mid_fluence, relative_error_seq, linestyle = linestyle, label = ratio_name)
-        #   plt.plot(x_seq, relative_error_seq, linestyle = linestyle, label = ratio_name)
-        #   #plt.plot(sampled_history_mid_fluence[:cut], relative_error_seq[:cut], linestyle = linestyle, label = ratio_name)
         
         count +=1
 
-    #Fluence at each batch break point
-    batch_break_fluence = [history_mid_fluence[i] for i in batch_break_indexes]
-    #plt.axvline(x=0, linestyle = '--', color ='grey')
-    for fluence in batch_break_fluence:
+
+
+
+    # ##Fluence at each batch break point
+
+    # batch_break_fluence = [history_mid_fluence_norm[i] for i in batch_break_indexes]
+    # #plt.axvline(x=0, linestyle = '--', color ='grey')
+    # for fluence in batch_break_fluence:
+    #     plt.axvline(x=fluence, linestyle = '--', color ='grey')
+
+
+    ####Custom vertical lines with labels
+
+    # 3 years operation for monitor tag with each year labelled
+    tag_yearly_label = [history_mid_fluence_norm[-1]/3*(i+1) for i in range(3)]
+    for fluence in tag_yearly_label:
         plt.axvline(x=fluence, linestyle = '--', color ='grey')
+
 
 
 
@@ -1269,19 +1309,32 @@ def plot_selected_fluence_relative_error_history(selected_list, selected_ratio_d
     ax.grid(color = 'dimgray')
     ax.yaxis.get_offset_text().set_fontsize(16)
     ax.xaxis.get_offset_text().set_fontsize(16)
-    plt.legend(prop={'size': 12})
+    ax.set_ylim(bottom = 1E-4,top=1)
+    plt.legend(ncol = 4, loc='upper center', bbox_to_anchor=(0.5, 1.2),prop={'size': 12})
     plt.ticklabel_format(style='sci', axis='y',scilimits=(0,0))
     plt.tick_params(labelsize=15)
-    plt.xlabel('Fluence [cm/cm$^{3}$]', fontsize=16)
+    plt.xlabel('Fluence [10$^{21}$ $\\times$ cm/cm$^{3}$]', fontsize=16)
     plt.yscale('log')
 
 
     # Put these freaking Shutdown dates on the top
+
     ax3 = ax.twiny()
     ax3.set_xlim(ax.get_xlim())
-    ax3.set_xticks(batch_break_fluence)
     ax3.tick_params(labelsize=11)
-    ax3.set_xticklabels(['Shutdown\nApril 1994', 'Shutdown\nApril 2005', 'Shutdown\nJuly 2007', 'Shutdown\nOctober 2015', 'Shutdown\nMarch 2018'])
+
+
+    # ## Batch breaks
+
+    # ax3.set_xticks(batch_break_fluence)
+    # ax3.set_xticklabels(['Shutdown\nApril 1994', 'Shutdown\nApril 2005', 'Shutdown\nJuly 2007', 'Shutdown\nOctober 2015', 'Shutdown\nMarch 2018'])
+
+
+    ### Custom labels
+
+    ax3.set_xticks(tag_yearly_label)
+    ax3.set_xticklabels(['1 year', '2 years', '3 years'])
+
 
     #plt.xscale('log')
     plt.show()
@@ -1396,25 +1449,45 @@ def plot_ng_chain_ratio_history(chain, ratio_evolution, history_fluence):
         ax.set_xlabel('Fluence')
         plt.show()
 
-def plot_selected_ratio_history(selected_list, selected_ratio_dict, history_fluence, batch_break_indexes=None):
+def plot_selected_ratio_history(selected_list, selected_ratio_dict, history_fluence, batch_break_indexes=None, invert=None):
 
     ratio_name_list = selected_list
-    plt.style.use('dark_background')
+    #plt.style.use('dark_background')
 
+    # normalize history_mid_fluence (to remove scientific notation)
+    history_fluence = [i/1E21 for i in history_fluence]
+    print ('fluence',history_fluence)
     f, ax = plt.subplots()
     for i in range(len(ratio_name_list)):
         ratio_name = ratio_name_list[i]
-        ratio = selected_ratio_dict[ratio_name]
+        ratio = selected_ratio_dict[ratio_name].copy()
+        if invert != None:
+            if ratio_name in invert:
+                ratio = [1/i for i in ratio]
+                ratio_name = ratio_name.split('/')[1]+'/'+ratio_name.split('/')[0]
         ax.plot(history_fluence, ratio, label = ratio_name)
 
-    #Fluence at each batch break point
-    batch_break_fluence = [history_fluence[i] for i in batch_break_indexes]
-    #plt.axvline(x=0, linestyle = '--', color ='grey')
-    for fluence in batch_break_fluence:
-        print (fluence)
+
+
+
+    # ##Fluence at each batch break point
+
+    # batch_break_fluence = [history_fluence[i] for i in batch_break_indexes]
+
+    # #plt.axvline(x=0, linestyle = '--', color ='grey')
+    # for fluence in batch_break_fluence:
+    #     print (fluence)
+    #     plt.axvline(x=fluence, linestyle = '--', color ='grey')
+
+
+    ###Custom vertical lines with labels
+
+    # 3 years operation for monitor tag with each year labelled
+    tag_yearly_label = [history_fluence[-1]/3*(i+1) for i in range(3)]
+    for fluence in tag_yearly_label:
         plt.axvline(x=fluence, linestyle = '--', color ='grey')
 
-    #quit()
+
 
 
 
@@ -1423,26 +1496,105 @@ def plot_selected_ratio_history(selected_list, selected_ratio_dict, history_flue
 
 
     ax.set_ylabel('Ratio', fontsize=16)
+    plt.xlabel('Fluence [10$^{21}$ $\\times$ cm/cm$^{3}$]', fontsize=16)
+    ax.yaxis.get_offset_text().set_fontsize(16)
+    ax.xaxis.get_offset_text().set_fontsize(16)
+    plt.ticklabel_format(style='sci', axis='y',scilimits=(0,0))
+    ax.grid(color = 'dimgray')
+    plt.tick_params(labelsize=15)
+
+    y_formatter = ScalarFormatter(useOffset=False)
+    ax.yaxis.set_major_formatter(y_formatter)
+    #ax.yaxis.set_major_formatter(MathTextSciFormatter("%1.2e"))
+
+    #ax.set_ylim(bottom = 0, top=3.1)
+
+    #ax.set_ylim(bottom = 0, top=3000)
+    #plt.legend(prop={'size': 12})
+
+
+    #Put these freaking Shutdown dates on the top
+
+    ax3 = ax.twiny()
+    ax3.set_xlim(ax.get_xlim())
+    ax3.tick_params(labelsize=11)
+
+
+    # # ## Batch breaks
+
+    # ax3.set_xticks(batch_break_fluence)
+    # ax3.set_xticklabels(['Shutdown\nApril 1994', 'Shutdown\nApril 2005', 'Shutdown\nJuly 2007', 'Shutdown\nOctober 2015', 'Shutdown\nMarch 2018'])
+
+    # ### Custom labels
+
+    ax3.set_xticks(tag_yearly_label)
+    ax3.set_xticklabels(['1 year', '2 years', '3 years'])
+
+
+    #ax3.set_ylim(bottom = 0, top=3.1)
+
+    plt.show()
+
+
+def plot_selected_duo_history(selected_list, selected_duo_dict, history_fluence, batch_break_indexes=None):
+
+    duo_name_list = selected_list
+    #plt.style.use('dark_background')
+
+    f, ax = plt.subplots()
+    for i in range(len(duo_name_list)):
+        duo_name = duo_name_list[i]
+        duo = selected_duo_dict[duo_name].copy()
+        ax.plot(history_fluence, duo, label = duo_name)
+
+    ####Fluence at each batch break point
+    # batch_break_fluence = [history_fluence[i] for i in batch_break_indexes]
+
+    # #plt.axvline(x=0, linestyle = '--', color ='grey')
+    # for fluence in batch_break_fluence:
+    #     print (fluence)
+    #     plt.axvline(x=fluence, linestyle = '--', color ='grey')
+
+    ####Custom vertical lines with labels
+
+    # 3 years operation for monitor tag with each year labelled
+    tag_yearly_label = [history_fluence[-1]/3*(i+1) for i in range(3)]
+    for fluence in tag_yearly_label:
+        plt.axvline(x=fluence, linestyle = '--', color ='grey')
+
+
+    # plt.axvspan(batch_break_fluence[0], batch_break_fluence[2], alpha=0.2, color='grey')
+    # plt.axvspan(batch_break_fluence[9], batch_break_fluence[12], alpha=0.2, color='grey')
+
+
+    ax.set_ylabel('Duo fraction', fontsize=16)
     ax.set_xlabel('Fluence [cm/cm$^{3}$]', fontsize=16)
     ax.yaxis.get_offset_text().set_fontsize(16)
     ax.xaxis.get_offset_text().set_fontsize(16)
     plt.ticklabel_format(style='sci', axis='y',scilimits=(0,0))
     ax.grid(color = 'dimgray')
     plt.tick_params(labelsize=15)
-    ax.set_ylim(bottom = 0, top=3.1)
+    #ax.set_ylim(bottom = 0, top=3.1)
+    #ax.set_ylim(bottom = 0, top=60)
     plt.legend(prop={'size': 12})
 
     # Put these freaking Shutdown dates on the top
     ax3 = ax.twiny()
     ax3.set_xlim(ax.get_xlim())
-    ax3.set_xticks(batch_break_fluence)
     ax3.tick_params(labelsize=11)
-    ax3.set_xticklabels(['Shutdown\nApril 1994', 'Shutdown\nApril 2005', 'Shutdown\nJuly 2007', 'Shutdown\nOctober 2015', 'Shutdown\nMarch 2018'])
+
+    ### Batch breaks
+    #ax3.set_xticks(batch_break_fluence)
+    #ax3.set_xticklabels(['Shutdown\nApril 1994', 'Shutdown\nApril 2005', 'Shutdown\nJuly 2007', 'Shutdown\nOctober 2015', 'Shutdown\nMarch 2018'])
+
+    ### Custom labels
+    ax3.set_xticks(tag_yearly_label)
+    ax3.set_xticklabels(['1 year', '2 years', '3 years'])
+
 
     #ax3.set_ylim(bottom = 0, top=3.1)
 
     plt.show()
-
 
 def plot_selected_ratio_history_sup1(selected_list, selected_ratio_dict, history_fluence, batch_break_indexes=None):
 
@@ -1453,8 +1605,18 @@ def plot_selected_ratio_history_sup1(selected_list, selected_ratio_dict, history
     for i in range(len(ratio_name_list)):
         ratio_name = ratio_name_list[i]
         ratio = selected_ratio_dict[ratio_name]
-        ratio_sup1 = convert_ratio_to_sup1(ratio)
+        ratio_sup1 = convert_ratio_to_sup1(ratio)[0]
+        switch_indexes = convert_ratio_to_sup1(ratio)[1]
+        switch_x  = [history_fluence[i] for i in switch_indexes]
+        switch_y = [ratio_sup1[i] for i in switch_indexes]
         ax.plot(history_fluence, ratio_sup1, label = ratio_name)
+        print (ratio_name, 'switch')
+        print ('ratio', ratio)
+        print (switch_indexes)
+        print (switch_x)
+        print (switch_y)
+        if len(switch_x) != 0: 
+            ax.scatter(switch_x, switch_y, marker='x', color='black')
 
     #Fluence at each batch break point
     batch_break_fluence = [history_fluence[i] for i in batch_break_indexes]
@@ -1476,7 +1638,7 @@ def plot_selected_ratio_history_sup1(selected_list, selected_ratio_dict, history
     plt.ticklabel_format(style='sci', axis='y',scilimits=(0,0))
     ax.grid(color = 'dimgray')
     plt.tick_params(labelsize=15)
-    ax.set_ylim(bottom = 0, top=100)
+    ax.set_ylim(bottom = 0, top=60)
     plt.legend(prop={'size': 12})
 
     # Put these freaking Shutdown dates on the top
@@ -1492,12 +1654,21 @@ def plot_selected_ratio_history_sup1(selected_list, selected_ratio_dict, history
 
 def convert_ratio_to_sup1(ratio):
 
+    indexes = []
+    converted_ratio = ratio.copy()
+
     for i in range(len(ratio)):
         ratio_value = ratio[i]
         if ratio_value < 1:
-            ratio[i] = 1/ratio_value
+            converted_ratio[i] = 1/ratio_value
+        if i > 0:
+            if ratio_value < 1 and ratio[i-1] >=1:
+                indexes.append(i)
+            elif ratio_value > 1 and ratio[i-1] <=1:
+                indexes.append(i)
 
-    return ratio
+
+    return converted_ratio, indexes
 
 def plot_ng_chain_densities_history(chain, history_matrix, history_fluence, different_axes):
 
@@ -1757,6 +1928,10 @@ def plot_mass_pu_cum_prod_against_fluence(mass_pu_prod_history_matrix, concatena
             tot_pu += mass_pu_prod_history_matrix[j][i]
         tot_pu_seq.append(tot_pu)
 
+    print ('tot_pu_seq',tot_pu_seq)
+    print ('fluence_seq',concatenate_history_fluence)
+    quit()
+
     f, ax1 = plt.subplots()
     # for i in range(len(Pu_isotopes)):
     #   ax.plot(concatenate_history_fluence, mass_pu_prod_history_matrix[i], label = Pu_isotopes[i])
@@ -1815,6 +1990,26 @@ def plot_mass_pu_prod_against_ratio(ratio_name, sampled_ratio, mass_pu_prod):
     plt.legend()
 
     plt.show()
+
+# To force scientific notation in each tick
+class MathTextSciFormatter(mticker.Formatter):
+    def __init__(self, fmt="%1.2e"):
+        self.fmt = fmt
+    def __call__(self, x, pos=None):
+        s = self.fmt % x
+        decimal_point = '.'
+        positive_sign = '+'
+        tup = s.split('e')
+        significand = tup[0].rstrip(decimal_point)
+        sign = tup[1][0].replace(positive_sign, '')
+        exponent = tup[1][1:].lstrip('0')
+        if exponent:
+            exponent = '10^{%s%s}' % (sign, exponent)
+        if significand and exponent:
+            s =  r'%s{\times}%s' % (significand, exponent)
+        else:
+            s =  r'%s%s' % (significand, exponent)
+        return "${}$".format(s)
 
 #N1972367430
 

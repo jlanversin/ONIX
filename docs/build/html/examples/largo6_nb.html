@@ -39,8 +39,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Python API" href="../pythonapi/index.html" />
-    <link rel="prev" title="Assembly simulation" href="assembly_nb.html" /> 
+    <link rel="next" title="5-MWe - nuclear archaeology" href="5MWe_NAX_nb.html" />
+    <link rel="prev" title="5-MWe - reactor simulation" href="5MWe_reactor_nb.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -436,7 +436,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>import onix
+<span></span><span class="kn">import</span> <span class="nn">onix</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
 </div>
@@ -463,8 +464,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>macrostep_vector = np.logspace(-1.0, 1.0)
-macrostep_unit = &#39;d&#39;
+<span></span><span class="n">macrostep_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">macrostep_unit</span> <span class="o">=</span> <span class="s1">&#39;d&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -475,8 +476,8 @@ macrostep_unit = &#39;d&#39;
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>norma_vector = [1e14]*len(macrostep_vector)
-norma_unit = &#39;flux&#39;
+<span></span><span class="n">norma_vector</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e14</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">macrostep_vector</span><span class="p">)</span>
+<span class="n">norma_unit</span> <span class="o">=</span> <span class="s1">&#39;flux&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -486,7 +487,7 @@ norma_unit = &#39;flux&#39;
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>microstep_vector = [3]*len(macrostep_vector)
+<span></span><span class="n">microstep_vector</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">macrostep_vector</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -497,10 +498,20 @@ norma_unit = &#39;flux&#39;
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>sequence1 = onix.Sequence(1)
-sequence1.set_macrostep(macrostep_vector, macrostep_unit)
-sequence1.set_norma(norma_vector, norma_unit)
-sequence1.microstep_vector = microstep_vector
+<span></span><span class="n">sequence1</span> <span class="o">=</span> <span class="n">onix</span><span class="o">.</span><span class="n">Sequence</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_macrostep</span><span class="p">(</span><span class="n">macrostep_vector</span><span class="p">,</span> <span class="n">macrostep_unit</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">set_norma</span><span class="p">(</span><span class="n">norma_vector</span><span class="p">,</span> <span class="n">norma_unit</span><span class="p">)</span>
+<span class="n">sequence1</span><span class="o">.</span><span class="n">microstep_vector</span> <span class="o">=</span> <span class="n">microstep_vector</span>
+</pre></div>
+</div>
+</div>
+<p>Finally, we need to define the way ONIX approximate the neutron flux for each microstep. In the current version, the only option is to take the initial value (‘iv’) of the flux for the microstep.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">sequence1</span><span class="o">.</span><span class="n">flux_approximation</span> <span class="o">=</span><span class="s1">&#39;iv&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -508,14 +519,22 @@ sequence1.microstep_vector = microstep_vector
 <div class="section" id="Defining-a-BUCell">
 <h2>Defining a BUCell<a class="headerlink" href="#Defining-a-BUCell" title="Permalink to this headline">¶</a></h2>
 <p>Now we can define the BUCell that corresponds to the burnup region we want to deplete, that is, the slab of uranium-238.</p>
-<p>bucell = onix.Cell(1, ‘slab’)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">bucell</span> <span class="o">=</span> <span class="n">onix</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;slab&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 <p>We use the BUCell object to define the initial density of our slab in atm per <span class="math notranslate nohighlight">\(cm^{3}\)</span>. In this example, we set the density to an arbitrary value.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>bucell.set_initial_dens({&#39;922380&#39;: 1.00E+12})
+<span></span><span class="n">bucell</span><span class="o">.</span><span class="n">set_initial_dens</span><span class="p">({</span><span class="s1">&#39;922380&#39;</span><span class="p">:</span> <span class="mf">1.00E+12</span><span class="p">})</span>
 </pre></div>
 </div>
 </div>
@@ -529,7 +548,7 @@ sequence1.microstep_vector = microstep_vector
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>decay1 = onix.utils.decay_lib(1)
+<span></span><span class="n">decay1</span> <span class="o">=</span> <span class="n">onix</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">decay_lib</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -539,14 +558,14 @@ sequence1.microstep_vector = microstep_vector
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>decay1.add_data(&#39;922380&#39;, half_life =1.4099935680E+17 )
-decay1.add_data(&#39;922390&#39;, betaneg = 0.0004926419193745169)
-decay1.add_data(&#39;932390&#39;, betaneg = 3.405151448232769e-06 )
-decay1.add_data(&#39;942390&#39;, half_life = 7.60853735110E+11)
-decay1.add_data(&#39;942400&#39;, half_life = 2.0704941360E+11)
-decay1.add_data(&#39;531350&#39;, betaneg = 2.9306070546251702e-05)
-decay1.add_data(&#39;541350&#39;, betaneg = 2.1065742176025568e-05 )
-decay1.add_data(&#39;551350&#39;, half_life = 7.2582480E+13 )
+<span></span><span class="n">decay1</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="s1">&#39;922380&#39;</span><span class="p">,</span> <span class="n">half_life</span> <span class="o">=</span><span class="mf">1.4099935680E+17</span> <span class="p">)</span>
+<span class="n">decay1</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="s1">&#39;922390&#39;</span><span class="p">,</span> <span class="n">betaneg</span> <span class="o">=</span> <span class="mf">0.0004926419193745169</span><span class="p">)</span>
+<span class="n">decay1</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="s1">&#39;932390&#39;</span><span class="p">,</span> <span class="n">betaneg</span> <span class="o">=</span> <span class="mf">3.405151448232769e-06</span> <span class="p">)</span>
+<span class="n">decay1</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="s1">&#39;942390&#39;</span><span class="p">,</span> <span class="n">half_life</span> <span class="o">=</span> <span class="mf">7.60853735110E+11</span><span class="p">)</span>
+<span class="n">decay1</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="s1">&#39;942400&#39;</span><span class="p">,</span> <span class="n">half_life</span> <span class="o">=</span> <span class="mf">2.0704941360E+11</span><span class="p">)</span>
+<span class="n">decay1</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="s1">&#39;531350&#39;</span><span class="p">,</span> <span class="n">betaneg</span> <span class="o">=</span> <span class="mf">2.9306070546251702e-05</span><span class="p">)</span>
+<span class="n">decay1</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="s1">&#39;541350&#39;</span><span class="p">,</span> <span class="n">betaneg</span> <span class="o">=</span> <span class="mf">2.1065742176025568e-05</span> <span class="p">)</span>
+<span class="n">decay1</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="s1">&#39;551350&#39;</span><span class="p">,</span> <span class="n">half_life</span> <span class="o">=</span> <span class="mf">7.2582480E+13</span> <span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -556,9 +575,9 @@ decay1.add_data(&#39;551350&#39;, half_life = 7.2582480E+13 )
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>xs1 = onix.utils.xs_lib(1)
-xs1.add_data(&#39;922380&#39;, ngamma = 1e5, fission = 1e4 )
-xs1.add_data(&#39;942390&#39;, ngamma = 1e5)
+<span></span><span class="n">xs1</span> <span class="o">=</span> <span class="n">onix</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">xs_lib</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">xs1</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="s1">&#39;922380&#39;</span><span class="p">,</span> <span class="n">ngamma</span> <span class="o">=</span> <span class="mf">1e5</span><span class="p">,</span> <span class="n">fission</span> <span class="o">=</span> <span class="mf">1e4</span> <span class="p">)</span>
+<span class="n">xs1</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="s1">&#39;942390&#39;</span><span class="p">,</span> <span class="n">ngamma</span> <span class="o">=</span> <span class="mf">1e5</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -568,13 +587,13 @@ xs1.add_data(&#39;942390&#39;, ngamma = 1e5)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>fy1 = onix.utils.fy_lib(1)
-I135_fy_dict = {&#39;922380&#39;:1.2}
-Xe135_fy_dict = {&#39;922380&#39;:0.2}
-Cs135_fy_dict = {&#39;922380&#39;:1.8E-5}
-fy1.add_data(&#39;531350&#39;, I135_fy_dict)
-fy1.add_data(&#39;541350&#39;, Xe135_fy_dict)
-fy1.add_data(&#39;551350&#39;, Cs135_fy_dict)
+<span></span><span class="n">fy1</span> <span class="o">=</span> <span class="n">onix</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">fy_lib</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">I135_fy_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;922380&#39;</span><span class="p">:</span><span class="mf">1.2</span><span class="p">}</span>
+<span class="n">Xe135_fy_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;922380&#39;</span><span class="p">:</span><span class="mf">0.2</span><span class="p">}</span>
+<span class="n">Cs135_fy_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;922380&#39;</span><span class="p">:</span><span class="mf">1.8E-5</span><span class="p">}</span>
+<span class="n">fy1</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="s1">&#39;531350&#39;</span><span class="p">,</span> <span class="n">I135_fy_dict</span><span class="p">)</span>
+<span class="n">fy1</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="s1">&#39;541350&#39;</span><span class="p">,</span> <span class="n">Xe135_fy_dict</span><span class="p">)</span>
+<span class="n">fy1</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="s1">&#39;551350&#39;</span><span class="p">,</span> <span class="n">Cs135_fy_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -587,7 +606,7 @@ fy1.add_data(&#39;551350&#39;, Cs135_fy_dict)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>SA = standalone.Stand_alone()
+<span></span><span class="n">SA</span> <span class="o">=</span> <span class="n">onix</span><span class="o">.</span><span class="n">Stand_alone</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -597,7 +616,7 @@ fy1.add_data(&#39;551350&#39;, Cs135_fy_dict)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>SA.add_bucell(bucell)
+<span></span><span class="n">SA</span><span class="o">.</span><span class="n">add_bucell</span><span class="p">(</span><span class="n">bucell</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -607,8 +626,8 @@ fy1.add_data(&#39;551350&#39;, Cs135_fy_dict)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>vol_dict = {&#39;slab&#39;: 1 ,&#39;total volume&#39;:1}
-SA.set_vol(vol_dict)
+<span></span><span class="n">vol_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;slab&#39;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">,</span><span class="s1">&#39;total volume&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
+<span class="n">SA</span><span class="o">.</span><span class="n">set_vol</span><span class="p">(</span><span class="n">vol_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -618,9 +637,9 @@ SA.set_vol(vol_dict)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>SA.set_decay_from_object(&#39;fuel&#39;, decay1)
-SA.set_xs_from_object(&#39;fuel&#39;, xs1)
-SA.set_fy_from_object(&#39;fuel&#39;, fy1)
+<span></span><span class="n">SA</span><span class="o">.</span><span class="n">set_decay_from_object</span><span class="p">(</span><span class="s1">&#39;slab&#39;</span><span class="p">,</span> <span class="n">decay1</span><span class="p">)</span>
+<span class="n">SA</span><span class="o">.</span><span class="n">set_xs_from_object</span><span class="p">(</span><span class="s1">&#39;slab&#39;</span><span class="p">,</span> <span class="n">xs1</span><span class="p">)</span>
+<span class="n">SA</span><span class="o">.</span><span class="n">set_fy_from_object</span><span class="p">(</span><span class="s1">&#39;slab&#39;</span><span class="p">,</span> <span class="n">fy1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -630,7 +649,7 @@ SA.set_fy_from_object(&#39;fuel&#39;, fy1)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>SA.set_sequence(sequence1)
+<span></span><span class="n">SA</span><span class="o">.</span><span class="n">set_sequence</span><span class="p">(</span><span class="n">sequence1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -640,7 +659,7 @@ SA.set_fy_from_object(&#39;fuel&#39;, fy1)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>SA.burn()
+<span></span><span class="n">SA</span><span class="o">.</span><span class="n">burn</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -656,10 +675,10 @@ SA.set_fy_from_object(&#39;fuel&#39;, fy1)
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../pythonapi/index.html" class="btn btn-neutral float-right" title="Python API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="5MWe_NAX_nb.html" class="btn btn-neutral float-right" title="5-MWe - nuclear archaeology" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="assembly_nb.html" class="btn btn-neutral float-left" title="Assembly simulation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="5MWe_reactor_nb.html" class="btn btn-neutral float-left" title="5-MWe - reactor simulation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

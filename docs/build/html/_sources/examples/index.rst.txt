@@ -20,6 +20,7 @@ Coupled simulations
     
     pincell_nb
     assembly_nb
+    5MWe_reactor_nb
 
 Standalone simulation
 ---------------------
@@ -32,3 +33,8 @@ Standalone simulation
 -------------------
 Nuclear Archaeology
 -------------------
+
+.. toctree::
+    :maxdepth: 1
+    
+    5MWe_NAX_nb

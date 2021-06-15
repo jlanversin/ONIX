@@ -609,8 +609,8 @@ def plot_lethargy_spectrum_bu_evolution_from_path(bucell_list, steps_list, path)
             index += 1
 
 
-        plt.xlabel('BU in MWd/kg')
-        plt.ylabel('Eff. XS in barn')
+        plt.xlabel('eV')
+        plt.ylabel('Neutron spectrum [lethargy unit]')
         plt.legend()
         plt.xscale('log')
         plt.yscale('log')

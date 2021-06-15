@@ -163,6 +163,8 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.ticker</span> <span class="k">as</span> <span class="nn">mticker</span>
+<span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="kn">import</span> <span class="n">ScalarFormatter</span>
 <span class="kn">import</span> <span class="nn">openmc</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
 
@@ -319,7 +321,7 @@
         <span class="c1"># plot_ng_chain_ratio_derivative_history(ratio_evolution, ratio_derivative_dict, history_mid_fluence, combine_indexes)</span>
 
 
-<div class="viewcode-block" id="review_selected_ratio_candidates"><a class="viewcode-back" href="../../../pythonapi/generated/onix.nax.review_selected_ratio_candidates.html#onix.nax.review_selected_ratio_candidates">[docs]</a><span class="k">def</span> <span class="nf">review_selected_ratio_candidates</span><span class="p">(</span><span class="n">NAX_cell</span><span class="p">,</span> <span class="n">operation_history</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">selected_list</span><span class="p">,</span> <span class="n">ratio_uncertainty</span><span class="p">,</span> <span class="n">cut_off</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="review_selected_ratio_candidates"><a class="viewcode-back" href="../../../pythonapi/generated/onix.nax.review_selected_ratio_candidates.html#onix.nax.review_selected_ratio_candidates">[docs]</a><span class="k">def</span> <span class="nf">review_selected_ratio_candidates</span><span class="p">(</span><span class="n">NAX_cell</span><span class="p">,</span> <span class="n">operation_history</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">selected_list</span><span class="p">,</span> <span class="n">ratio_uncertainty</span><span class="p">,</span> <span class="n">cut_off</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;This function plots a series of graphs containing isotopic ratios evolution and their associated relative errors on fluence for a selected list of provided ratios  and for a given operation history. It can be used to identify potential good fluence indicators.</span>
 
@@ -343,6 +345,7 @@
     <span class="n">chain_dict</span> <span class="o">=</span> <span class="n">list_NAX_ng_chain_from_output</span><span class="p">(</span><span class="n">path</span> <span class="p">,</span><span class="n">NAX_cell</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">selected_fluence_derivative_dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">selected_ratio_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">selected_duo_dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">z_to_name_dict</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nuc_zz_dic</span>
 
     <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">chain_dict</span><span class="p">:</span>
@@ -370,6 +373,7 @@
         <span class="n">history_matrix</span> <span class="o">=</span> <span class="n">concatenate_history_matrix</span><span class="p">(</span><span class="n">history_matrix_list</span><span class="p">)</span>
         <span class="n">history_fluence</span> <span class="o">=</span> <span class="n">concatenate_history_fluence</span><span class="p">(</span><span class="n">history_matrix_list</span><span class="p">)</span>
         <span class="n">ratio_evolution</span> <span class="o">=</span> <span class="n">get_ratio_evolution</span><span class="p">(</span><span class="n">chain</span><span class="p">,</span> <span class="n">history_matrix</span><span class="p">)</span>
+        <span class="n">duo_evolution</span> <span class="o">=</span> <span class="n">get_duo_evolution</span><span class="p">(</span><span class="n">chain</span><span class="p">,</span> <span class="n">history_matrix</span><span class="p">)</span>
 
         <span class="n">ratio_name_list</span> <span class="o">=</span> <span class="n">ratio_evolution</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="nb">print</span> <span class="p">(</span><span class="n">ratio_name_list</span><span class="p">)</span>
@@ -381,26 +385,37 @@
         <span class="k">if</span> <span class="n">ratios</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="k">continue</span>
 
-
+        <span class="c1"># To get data for ploting ratio vs plutonium</span>
         <span class="k">for</span> <span class="n">ratio</span> <span class="ow">in</span> <span class="n">ratios</span><span class="p">:</span>
             <span class="nb">print</span> <span class="p">(</span><span class="n">ratio</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">ratio</span> <span class="o">==</span> <span class="s1">&#39;Dy-163/Dy-161&#39;</span><span class="p">:</span>
-                <span class="nb">print</span> <span class="p">(</span><span class="n">ratio</span><span class="p">)</span>
-                <span class="nb">print</span> <span class="p">(</span><span class="n">ratio_evolution</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ratio</span><span class="p">])</span>
-                <span class="nb">print</span> <span class="p">(</span><span class="n">history_fluence</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">ratio</span> <span class="o">==</span> <span class="s1">&#39;Fe-57/Fe-56&#39;</span><span class="p">:</span>
-                <span class="nb">print</span> <span class="p">(</span><span class="n">ratio</span><span class="p">)</span>
-                <span class="nb">print</span> <span class="p">(</span><span class="n">ratio_evolution</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ratio</span><span class="p">])</span>
-                <span class="c1">#print (history_fluence)</span>
-            <span class="c1"># if ratio == &#39;Fe-57/e-56&#39;:</span>
-            <span class="c1">#   print (ratio)</span>
-            <span class="c1">#   print (ratio_evolution[0][ratio])</span>
-            <span class="c1">#   print (history_fluence)</span>
-            <span class="k">if</span> <span class="n">ratio</span> <span class="o">==</span> <span class="s1">&#39;Dy-164/Dy-163&#39;</span><span class="p">:</span>
-                <span class="nb">print</span> <span class="p">(</span><span class="n">ratio</span><span class="p">)</span>
-                <span class="nb">print</span> <span class="p">(</span><span class="n">ratio_evolution</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ratio</span><span class="p">])</span>
-                <span class="c1">#print (history_fluence)</span>
+            <span class="c1"># if ratio == &#39;B-11/B-10&#39;:</span>
+            <span class="c1">#     print (ratio)</span>
+            <span class="c1">#     print (ratio_evolution[0][ratio])</span>
+            <span class="c1">#     #print (history_fluence)</span>
+            <span class="c1"># if ratio == &#39;Sm-149/Sm-148&#39;:</span>
+            <span class="c1">#     print (ratio)</span>
+            <span class="c1">#     print (ratio_evolution[0][ratio])</span>
+            <span class="c1">#     #print (history_fluence)</span>
+            <span class="c1"># if ratio == &#39;Sm-148/Sm-147&#39;:</span>
+            <span class="c1">#     print (ratio)</span>
+            <span class="c1">#     print (ratio_evolution[0][ratio])</span>
+            <span class="c1"># if ratio == &#39;Dy-164/Dy-163&#39;:</span>
+            <span class="c1">#     print (ratio)</span>
+            <span class="c1">#     print (ratio_evolution[0][ratio])</span>
+            <span class="c1">#     print (&#39;fluence_seq&#39;,history_fluence)</span>
 
+            <span class="k">if</span> <span class="n">ratio</span> <span class="o">==</span> <span class="s1">&#39;Gd-158/Gd-157&#39;</span><span class="p">:</span>
+                <span class="nb">print</span> <span class="p">(</span><span class="n">ratio</span><span class="p">)</span>
+                <span class="nb">print</span> <span class="p">(</span><span class="n">ratio_evolution</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ratio</span><span class="p">])</span>
+                <span class="c1">#print (history_fluence)</span>
+            <span class="k">if</span> <span class="n">ratio</span> <span class="o">==</span> <span class="s1">&#39;Sm-149/Sm-148&#39;</span><span class="p">:</span>
+                <span class="nb">print</span> <span class="p">(</span><span class="n">ratio</span><span class="p">)</span>
+                <span class="nb">print</span> <span class="p">(</span><span class="n">ratio_evolution</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ratio</span><span class="p">])</span>
+                <span class="c1">#print (history_fluence)</span>
+            <span class="k">if</span> <span class="n">ratio</span> <span class="o">==</span> <span class="s1">&#39;Cd-114/Cd-113&#39;</span><span class="p">:</span>
+                <span class="nb">print</span> <span class="p">(</span><span class="n">ratio</span><span class="p">)</span>
+                <span class="nb">print</span> <span class="p">(</span><span class="n">ratio_evolution</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ratio</span><span class="p">])</span>
+                <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;fluence_seq&#39;</span><span class="p">,</span><span class="n">history_fluence</span><span class="p">)</span>
 
         <span class="n">ratio_derivative_dict</span> <span class="o">=</span> <span class="n">get_ratio_derivative_dict</span><span class="p">(</span><span class="n">ratio_evolution</span><span class="p">,</span> <span class="n">history_fluence</span><span class="p">,</span> <span class="n">batch_break_indexes</span><span class="p">,</span> <span class="n">step_break_indexes</span><span class="p">)</span>
         <span class="n">fluence_derivative_dict</span> <span class="o">=</span> <span class="n">get_fluence_derivative_dict</span><span class="p">(</span><span class="n">ratio_derivative_dict</span><span class="p">)</span>
@@ -409,11 +424,14 @@
         <span class="k">for</span> <span class="n">ratio</span> <span class="ow">in</span> <span class="n">ratios</span><span class="p">:</span>
             <span class="n">selected_fluence_derivative_dict</span><span class="p">[</span><span class="n">ratio</span><span class="p">]</span> <span class="o">=</span> <span class="n">fluence_derivative_dict</span><span class="p">[</span><span class="n">ratio</span><span class="p">]</span>
             <span class="n">selected_ratio_dict</span><span class="p">[</span><span class="n">ratio</span><span class="p">]</span> <span class="o">=</span> <span class="n">ratio_evolution</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ratio</span><span class="p">]</span>
+            <span class="n">selected_duo_dict</span><span class="p">[</span><span class="n">ratio</span><span class="p">]</span> <span class="o">=</span> <span class="n">duo_evolution</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ratio</span><span class="p">]</span>
 
     <span class="c1">#quit()</span>
 
-    <span class="n">plot_selected_ratio_history</span><span class="p">(</span><span class="n">selected_list</span><span class="p">,</span> <span class="n">selected_ratio_dict</span><span class="p">,</span> <span class="n">history_fluence</span><span class="p">,</span> <span class="n">batch_break_indexes</span> <span class="o">=</span> <span class="n">batch_break_indexes2</span><span class="p">)</span>
-    <span class="n">plot_selected_ratio_history_sup1</span><span class="p">(</span><span class="n">selected_list</span><span class="p">,</span> <span class="n">selected_ratio_dict</span><span class="p">,</span> <span class="n">history_fluence</span><span class="p">,</span> <span class="n">batch_break_indexes</span> <span class="o">=</span> <span class="n">batch_break_indexes2</span><span class="p">)</span>
+    <span class="n">plot_selected_ratio_history</span><span class="p">(</span><span class="n">selected_list</span><span class="p">,</span> <span class="n">selected_ratio_dict</span><span class="p">,</span> <span class="n">history_fluence</span><span class="p">,</span> <span class="n">batch_break_indexes</span> <span class="o">=</span> <span class="n">batch_break_indexes2</span><span class="p">,</span> <span class="n">invert</span> <span class="o">=</span> <span class="n">invert</span><span class="p">)</span>
+    <span class="c1"># plot_selected_ratio_history_sup1(selected_list, selected_ratio_dict, history_fluence, batch_break_indexes = batch_break_indexes2)</span>
+
+    <span class="n">plot_selected_duo_history</span><span class="p">(</span><span class="n">selected_list</span><span class="p">,</span> <span class="n">selected_duo_dict</span><span class="p">,</span> <span class="n">history_fluence</span><span class="p">,</span> <span class="n">batch_break_indexes</span> <span class="o">=</span> <span class="n">batch_break_indexes2</span><span class="p">)</span>
 
     <span class="n">plot_selected_fluence_relative_error_history</span><span class="p">(</span><span class="n">selected_list</span><span class="p">,</span> <span class="n">selected_ratio_dict</span><span class="p">,</span> <span class="n">selected_fluence_derivative_dict</span><span class="p">,</span> <span class="n">history_mid_fluence</span><span class="p">,</span> <span class="n">combine_indexes</span><span class="p">,</span> <span class="n">ratio_uncertainty</span><span class="p">,</span> <span class="n">cut_off</span> <span class="o">=</span> <span class="n">cut_off</span><span class="p">,</span> <span class="n">batch_break_indexes</span> <span class="o">=</span> <span class="n">batch_break_indexes2</span><span class="p">)</span></div>
         <span class="c1">#plot_fluence_relative_error_with_ratio_history(ratio_evolution, fluence_derivative_dict, history_mid_fluence, combine_indexes, chain, history_matrix, history_fluence)</span>
@@ -801,7 +819,7 @@
 
     <span class="n">abun</span> <span class="o">=</span> <span class="n">get_nat_abun_list_from_chain</span><span class="p">(</span><span class="n">chain</span><span class="p">)</span>
 
-    <span class="n">dphi</span> <span class="o">=</span> <span class="mf">1E19</span>
+    <span class="n">dphi</span> <span class="o">=</span> <span class="mf">1E18</span>
 
     <span class="n">history_matrix_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">operation_history</span><span class="p">:</span>
@@ -1128,6 +1146,27 @@
 
     <span class="k">return</span> <span class="n">ratio_evolution_dict</span><span class="p">,</span> <span class="n">ratio_name_list</span>
 
+<span class="k">def</span> <span class="nf">get_duo_evolution</span><span class="p">(</span><span class="n">chain</span><span class="p">,</span> <span class="n">history_matrix</span><span class="p">):</span>
+
+    <span class="n">duo_evolution_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">duo_name_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">chain</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">chain</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">nucl1_name</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">nucl1_evolution</span> <span class="o">=</span> <span class="n">history_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">chain</span><span class="p">)):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">chain</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">nucl2_name</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">nucl2_evolution</span> <span class="o">=</span> <span class="n">history_matrix</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">duo_evolution</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">nucl1_evolution</span><span class="p">,</span> <span class="n">nucl2_evolution</span><span class="p">)]</span>
+            <span class="n">duo_name</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nucl2_name</span><span class="p">,</span> <span class="n">nucl1_name</span><span class="p">)</span>
+            <span class="n">duo_evolution_dict</span><span class="p">[</span><span class="n">duo_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">duo_evolution</span>
+            <span class="n">duo_name_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">duo_name</span><span class="p">)</span>
+
+
+    <span class="k">return</span> <span class="n">duo_evolution_dict</span><span class="p">,</span> <span class="n">duo_name_list</span>
+
 <span class="k">def</span> <span class="nf">invert_ratio</span><span class="p">(</span><span class="n">ratio_evolution_dict</span><span class="p">,</span> <span class="n">ratio_name_list</span><span class="p">):</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ratio_name_list</span><span class="p">)):</span>
@@ -1327,13 +1366,16 @@
 
 <span class="k">def</span> <span class="nf">plot_selected_fluence_relative_error_history</span><span class="p">(</span><span class="n">selected_list</span><span class="p">,</span> <span class="n">selected_ratio_dict</span><span class="p">,</span> <span class="n">selected_fluence_derivative_dict</span><span class="p">,</span> <span class="n">history_mid_fluence</span><span class="p">,</span> <span class="n">sampled_index</span><span class="p">,</span> <span class="n">ratio_uncertainty</span><span class="p">,</span> <span class="n">cut_off</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_break_indexes</span><span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;dark_background&#39;</span><span class="p">)</span>
+    <span class="c1">#plt.style.use(&#39;dark_background&#39;)</span>
 
     <span class="n">ratio_name_list</span> <span class="o">=</span> <span class="n">selected_list</span>
     <span class="n">sampled_history_fluence</span> <span class="o">=</span> <span class="n">sample_data_with_sample_indexes</span><span class="p">(</span><span class="n">sampled_index</span><span class="p">,</span> <span class="n">history_mid_fluence</span><span class="p">)</span>
 
     <span class="n">marker_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">]</span>
     <span class="n">linestyle_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">]</span>
+
+    <span class="c1"># normalize history_mid_fluence (to remove scientific notation)</span>
+    <span class="n">history_mid_fluence_norm</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">/</span><span class="mf">1E21</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">history_mid_fluence</span><span class="p">]</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
     <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1363,22 +1405,23 @@
             <span class="c1">#relative_error_seq = [x*ratio_uncertainty/y for x, y in zip(fluence_derivative, history_mid_fluence)]</span>
             <span class="n">smooth_relative_error_seq</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">moving_average</span><span class="p">(</span><span class="n">relative_error_seq</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
             <span class="n">x_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">history_mid_fluence</span><span class="p">))]</span>
+
+
             <span class="c1"># Non sampled</span>
             <span class="k">if</span> <span class="n">cut</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history_mid_fluence</span><span class="p">[:</span><span class="n">cut</span><span class="p">],</span> <span class="n">relative_error_seq</span><span class="p">[:</span><span class="n">cut</span><span class="p">],</span> <span class="n">linestyle</span> <span class="o">=</span> <span class="n">linestyle</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">ratio_name</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history_mid_fluence_norm</span><span class="p">[:</span><span class="n">cut</span><span class="p">],</span> <span class="n">relative_error_seq</span><span class="p">[:</span><span class="n">cut</span><span class="p">],</span> <span class="n">linestyle</span> <span class="o">=</span> <span class="n">linestyle</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">ratio_name</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history_mid_fluence</span><span class="p">,</span> <span class="n">relative_error_seq</span><span class="p">,</span> <span class="n">linestyle</span> <span class="o">=</span> <span class="n">linestyle</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">ratio_name</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history_mid_fluence_norm</span><span class="p">,</span> <span class="n">relative_error_seq</span><span class="p">,</span> <span class="n">linestyle</span> <span class="o">=</span> <span class="n">linestyle</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">ratio_name</span><span class="p">)</span>
                 <span class="c1">#plt.plot(x_seq, relative_error_seq, linestyle = linestyle, label = ratio_name)</span>
 
             <span class="c1"># Threeshold line</span>
-            <span class="n">line</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1E-2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">history_mid_fluence</span><span class="p">))]</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history_mid_fluence</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span><span class="p">)</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1E-2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">history_mid_fluence_norm</span><span class="p">))]</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history_mid_fluence_norm</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span><span class="p">)</span>
 
 
         <span class="k">if</span> <span class="n">sample</span> <span class="o">==</span> <span class="s1">&#39;yes&#39;</span><span class="p">:</span>
-        <span class="c1">########### NON SAMPLED</span>
-
-            <span class="c1">########## SAMPLED</span>
+        <span class="c1">########## SAMPLED</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n\n</span><span class="s1">AH</span><span class="se">\n\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
             <span class="n">sampled_mid_ratio_evolution</span> <span class="o">=</span> <span class="n">sample_data_with_sample_indexes</span><span class="p">(</span><span class="n">sampled_index</span><span class="p">,</span> <span class="n">mid_ratio_evolution</span><span class="p">)</span>
             <span class="n">sampled_fluence_derivative</span> <span class="o">=</span> <span class="n">sample_data_with_sample_indexes</span><span class="p">(</span><span class="n">sampled_index</span><span class="p">,</span> <span class="n">fluence_derivative</span><span class="p">)</span>
@@ -1397,30 +1440,27 @@
             <span class="n">line</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1E-2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sampled_history_fluence</span><span class="p">))]</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sampled_history_fluence</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span><span class="p">)</span>
 
-
-
-
-        <span class="c1">### Old cut off</span>
-        <span class="c1"># if cut_off != None:</span>
-        <span class="c1">#   if ratio_name in cut_off:</span>
-        <span class="c1">#       cut = cut_off[ratio_name]</span>
-        <span class="c1">#       plt.plot(history_mid_fluence[:cut], relative_error_seq[:cut], linestyle = linestyle, label = ratio_name)</span>
-        <span class="c1">#       #plt.plot(sampled_history_fluence[:cut], relative_error_seq[:cut], linestyle = linestyle, label = ratio_name)</span>
-        <span class="c1">#   else:</span>
-        <span class="c1">#       plt.plot(history_mid_fluence, relative_error_seq, linestyle = linestyle, label = ratio_name)</span>
-        <span class="c1"># else:</span>
-        <span class="c1">#   x_seq = [i for i in range(len(history_mid_fluence))]</span>
-        <span class="c1">#   #plt.plot(history_mid_fluence, relative_error_seq, linestyle = linestyle, label = ratio_name)</span>
-        <span class="c1">#   plt.plot(x_seq, relative_error_seq, linestyle = linestyle, label = ratio_name)</span>
-        <span class="c1">#   #plt.plot(sampled_history_mid_fluence[:cut], relative_error_seq[:cut], linestyle = linestyle, label = ratio_name)</span>
         
         <span class="n">count</span> <span class="o">+=</span><span class="mi">1</span>
 
-    <span class="c1">#Fluence at each batch break point</span>
-    <span class="n">batch_break_fluence</span> <span class="o">=</span> <span class="p">[</span><span class="n">history_mid_fluence</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">batch_break_indexes</span><span class="p">]</span>
-    <span class="c1">#plt.axvline(x=0, linestyle = &#39;--&#39;, color =&#39;grey&#39;)</span>
-    <span class="k">for</span> <span class="n">fluence</span> <span class="ow">in</span> <span class="n">batch_break_fluence</span><span class="p">:</span>
+
+
+
+    <span class="c1"># ##Fluence at each batch break point</span>
+
+    <span class="c1"># batch_break_fluence = [history_mid_fluence_norm[i] for i in batch_break_indexes]</span>
+    <span class="c1"># #plt.axvline(x=0, linestyle = &#39;--&#39;, color =&#39;grey&#39;)</span>
+    <span class="c1"># for fluence in batch_break_fluence:</span>
+    <span class="c1">#     plt.axvline(x=fluence, linestyle = &#39;--&#39;, color =&#39;grey&#39;)</span>
+
+
+    <span class="c1">####Custom vertical lines with labels</span>
+
+    <span class="c1"># 3 years operation for monitor tag with each year labelled</span>
+    <span class="n">tag_yearly_label</span> <span class="o">=</span> <span class="p">[</span><span class="n">history_mid_fluence_norm</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">fluence</span> <span class="ow">in</span> <span class="n">tag_yearly_label</span><span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">fluence</span><span class="p">,</span> <span class="n">linestyle</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
+
 
 
 
@@ -1428,19 +1468,32 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;dimgray&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">get_offset_text</span><span class="p">()</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">get_offset_text</span><span class="p">()</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">})</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bottom</span> <span class="o">=</span> <span class="mf">1E-4</span><span class="p">,</span><span class="n">top</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">ncol</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper center&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">),</span><span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">})</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">&#39;sci&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="n">scilimits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Fluence [cm/cm$^</span><span class="si">{3}</span><span class="s1">$]&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Fluence [10$^</span><span class="si">{21}</span><span class="s1">$ $</span><span class="se">\\</span><span class="s1">times$ cm/cm$^</span><span class="si">{3}</span><span class="s1">$]&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
 
 
     <span class="c1"># Put these freaking Shutdown dates on the top</span>
+
     <span class="n">ax3</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">twiny</span><span class="p">()</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">())</span>
-    <span class="n">ax3</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">batch_break_fluence</span><span class="p">)</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
-    <span class="n">ax3</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">&#39;Shutdown</span><span class="se">\n</span><span class="s1">April 1994&#39;</span><span class="p">,</span> <span class="s1">&#39;Shutdown</span><span class="se">\n</span><span class="s1">April 2005&#39;</span><span class="p">,</span> <span class="s1">&#39;Shutdown</span><span class="se">\n</span><span class="s1">July 2007&#39;</span><span class="p">,</span> <span class="s1">&#39;Shutdown</span><span class="se">\n</span><span class="s1">October 2015&#39;</span><span class="p">,</span> <span class="s1">&#39;Shutdown</span><span class="se">\n</span><span class="s1">March 2018&#39;</span><span class="p">])</span>
+
+
+    <span class="c1"># ## Batch breaks</span>
+
+    <span class="c1"># ax3.set_xticks(batch_break_fluence)</span>
+    <span class="c1"># ax3.set_xticklabels([&#39;Shutdown\nApril 1994&#39;, &#39;Shutdown\nApril 2005&#39;, &#39;Shutdown\nJuly 2007&#39;, &#39;Shutdown\nOctober 2015&#39;, &#39;Shutdown\nMarch 2018&#39;])</span>
+
+
+    <span class="c1">### Custom labels</span>
+
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">tag_yearly_label</span><span class="p">)</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">&#39;1 year&#39;</span><span class="p">,</span> <span class="s1">&#39;2 years&#39;</span><span class="p">,</span> <span class="s1">&#39;3 years&#39;</span><span class="p">])</span>
+
 
     <span class="c1">#plt.xscale(&#39;log&#39;)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1555,25 +1608,45 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Fluence&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">plot_selected_ratio_history</span><span class="p">(</span><span class="n">selected_list</span><span class="p">,</span> <span class="n">selected_ratio_dict</span><span class="p">,</span> <span class="n">history_fluence</span><span class="p">,</span> <span class="n">batch_break_indexes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">plot_selected_ratio_history</span><span class="p">(</span><span class="n">selected_list</span><span class="p">,</span> <span class="n">selected_ratio_dict</span><span class="p">,</span> <span class="n">history_fluence</span><span class="p">,</span> <span class="n">batch_break_indexes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
     <span class="n">ratio_name_list</span> <span class="o">=</span> <span class="n">selected_list</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;dark_background&#39;</span><span class="p">)</span>
+    <span class="c1">#plt.style.use(&#39;dark_background&#39;)</span>
 
+    <span class="c1"># normalize history_mid_fluence (to remove scientific notation)</span>
+    <span class="n">history_fluence</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">/</span><span class="mf">1E21</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">history_fluence</span><span class="p">]</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;fluence&#39;</span><span class="p">,</span><span class="n">history_fluence</span><span class="p">)</span>
     <span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ratio_name_list</span><span class="p">)):</span>
         <span class="n">ratio_name</span> <span class="o">=</span> <span class="n">ratio_name_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="n">ratio</span> <span class="o">=</span> <span class="n">selected_ratio_dict</span><span class="p">[</span><span class="n">ratio_name</span><span class="p">]</span>
+        <span class="n">ratio</span> <span class="o">=</span> <span class="n">selected_ratio_dict</span><span class="p">[</span><span class="n">ratio_name</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">invert</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ratio_name</span> <span class="ow">in</span> <span class="n">invert</span><span class="p">:</span>
+                <span class="n">ratio</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ratio</span><span class="p">]</span>
+                <span class="n">ratio_name</span> <span class="o">=</span> <span class="n">ratio_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="n">ratio_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history_fluence</span><span class="p">,</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">ratio_name</span><span class="p">)</span>
 
-    <span class="c1">#Fluence at each batch break point</span>
-    <span class="n">batch_break_fluence</span> <span class="o">=</span> <span class="p">[</span><span class="n">history_fluence</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">batch_break_indexes</span><span class="p">]</span>
-    <span class="c1">#plt.axvline(x=0, linestyle = &#39;--&#39;, color =&#39;grey&#39;)</span>
-    <span class="k">for</span> <span class="n">fluence</span> <span class="ow">in</span> <span class="n">batch_break_fluence</span><span class="p">:</span>
-        <span class="nb">print</span> <span class="p">(</span><span class="n">fluence</span><span class="p">)</span>
+
+
+
+    <span class="c1"># ##Fluence at each batch break point</span>
+
+    <span class="c1"># batch_break_fluence = [history_fluence[i] for i in batch_break_indexes]</span>
+
+    <span class="c1"># #plt.axvline(x=0, linestyle = &#39;--&#39;, color =&#39;grey&#39;)</span>
+    <span class="c1"># for fluence in batch_break_fluence:</span>
+    <span class="c1">#     print (fluence)</span>
+    <span class="c1">#     plt.axvline(x=fluence, linestyle = &#39;--&#39;, color =&#39;grey&#39;)</span>
+
+
+    <span class="c1">###Custom vertical lines with labels</span>
+
+    <span class="c1"># 3 years operation for monitor tag with each year labelled</span>
+    <span class="n">tag_yearly_label</span> <span class="o">=</span> <span class="p">[</span><span class="n">history_fluence</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">fluence</span> <span class="ow">in</span> <span class="n">tag_yearly_label</span><span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">fluence</span><span class="p">,</span> <span class="n">linestyle</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
 
-    <span class="c1">#quit()</span>
+
 
 
 
@@ -1582,26 +1655,105 @@
 
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Ratio&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Fluence [10$^</span><span class="si">{21}</span><span class="s1">$ $</span><span class="se">\\</span><span class="s1">times$ cm/cm$^</span><span class="si">{3}</span><span class="s1">$]&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">get_offset_text</span><span class="p">()</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">get_offset_text</span><span class="p">()</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">&#39;sci&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="n">scilimits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;dimgray&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+
+    <span class="n">y_formatter</span> <span class="o">=</span> <span class="n">ScalarFormatter</span><span class="p">(</span><span class="n">useOffset</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">y_formatter</span><span class="p">)</span>
+    <span class="c1">#ax.yaxis.set_major_formatter(MathTextSciFormatter(&quot;%1.2e&quot;))</span>
+
+    <span class="c1">#ax.set_ylim(bottom = 0, top=3.1)</span>
+
+    <span class="c1">#ax.set_ylim(bottom = 0, top=3000)</span>
+    <span class="c1">#plt.legend(prop={&#39;size&#39;: 12})</span>
+
+
+    <span class="c1">#Put these freaking Shutdown dates on the top</span>
+
+    <span class="n">ax3</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">twiny</span><span class="p">()</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">())</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+
+
+    <span class="c1"># # ## Batch breaks</span>
+
+    <span class="c1"># ax3.set_xticks(batch_break_fluence)</span>
+    <span class="c1"># ax3.set_xticklabels([&#39;Shutdown\nApril 1994&#39;, &#39;Shutdown\nApril 2005&#39;, &#39;Shutdown\nJuly 2007&#39;, &#39;Shutdown\nOctober 2015&#39;, &#39;Shutdown\nMarch 2018&#39;])</span>
+
+    <span class="c1"># ### Custom labels</span>
+
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">tag_yearly_label</span><span class="p">)</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">&#39;1 year&#39;</span><span class="p">,</span> <span class="s1">&#39;2 years&#39;</span><span class="p">,</span> <span class="s1">&#39;3 years&#39;</span><span class="p">])</span>
+
+
+    <span class="c1">#ax3.set_ylim(bottom = 0, top=3.1)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">plot_selected_duo_history</span><span class="p">(</span><span class="n">selected_list</span><span class="p">,</span> <span class="n">selected_duo_dict</span><span class="p">,</span> <span class="n">history_fluence</span><span class="p">,</span> <span class="n">batch_break_indexes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+    <span class="n">duo_name_list</span> <span class="o">=</span> <span class="n">selected_list</span>
+    <span class="c1">#plt.style.use(&#39;dark_background&#39;)</span>
+
+    <span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">duo_name_list</span><span class="p">)):</span>
+        <span class="n">duo_name</span> <span class="o">=</span> <span class="n">duo_name_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">duo</span> <span class="o">=</span> <span class="n">selected_duo_dict</span><span class="p">[</span><span class="n">duo_name</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history_fluence</span><span class="p">,</span> <span class="n">duo</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">duo_name</span><span class="p">)</span>
+
+    <span class="c1">####Fluence at each batch break point</span>
+    <span class="c1"># batch_break_fluence = [history_fluence[i] for i in batch_break_indexes]</span>
+
+    <span class="c1"># #plt.axvline(x=0, linestyle = &#39;--&#39;, color =&#39;grey&#39;)</span>
+    <span class="c1"># for fluence in batch_break_fluence:</span>
+    <span class="c1">#     print (fluence)</span>
+    <span class="c1">#     plt.axvline(x=fluence, linestyle = &#39;--&#39;, color =&#39;grey&#39;)</span>
+
+    <span class="c1">####Custom vertical lines with labels</span>
+
+    <span class="c1"># 3 years operation for monitor tag with each year labelled</span>
+    <span class="n">tag_yearly_label</span> <span class="o">=</span> <span class="p">[</span><span class="n">history_fluence</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">fluence</span> <span class="ow">in</span> <span class="n">tag_yearly_label</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">fluence</span><span class="p">,</span> <span class="n">linestyle</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
+
+
+    <span class="c1"># plt.axvspan(batch_break_fluence[0], batch_break_fluence[2], alpha=0.2, color=&#39;grey&#39;)</span>
+    <span class="c1"># plt.axvspan(batch_break_fluence[9], batch_break_fluence[12], alpha=0.2, color=&#39;grey&#39;)</span>
+
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Duo fraction&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Fluence [cm/cm$^</span><span class="si">{3}</span><span class="s1">$]&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">get_offset_text</span><span class="p">()</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">get_offset_text</span><span class="p">()</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">&#39;sci&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="n">scilimits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;dimgray&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bottom</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">3.1</span><span class="p">)</span>
+    <span class="c1">#ax.set_ylim(bottom = 0, top=3.1)</span>
+    <span class="c1">#ax.set_ylim(bottom = 0, top=60)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">})</span>
 
     <span class="c1"># Put these freaking Shutdown dates on the top</span>
     <span class="n">ax3</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">twiny</span><span class="p">()</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">())</span>
-    <span class="n">ax3</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">batch_break_fluence</span><span class="p">)</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
-    <span class="n">ax3</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">&#39;Shutdown</span><span class="se">\n</span><span class="s1">April 1994&#39;</span><span class="p">,</span> <span class="s1">&#39;Shutdown</span><span class="se">\n</span><span class="s1">April 2005&#39;</span><span class="p">,</span> <span class="s1">&#39;Shutdown</span><span class="se">\n</span><span class="s1">July 2007&#39;</span><span class="p">,</span> <span class="s1">&#39;Shutdown</span><span class="se">\n</span><span class="s1">October 2015&#39;</span><span class="p">,</span> <span class="s1">&#39;Shutdown</span><span class="se">\n</span><span class="s1">March 2018&#39;</span><span class="p">])</span>
+
+    <span class="c1">### Batch breaks</span>
+    <span class="c1">#ax3.set_xticks(batch_break_fluence)</span>
+    <span class="c1">#ax3.set_xticklabels([&#39;Shutdown\nApril 1994&#39;, &#39;Shutdown\nApril 2005&#39;, &#39;Shutdown\nJuly 2007&#39;, &#39;Shutdown\nOctober 2015&#39;, &#39;Shutdown\nMarch 2018&#39;])</span>
+
+    <span class="c1">### Custom labels</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">tag_yearly_label</span><span class="p">)</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">&#39;1 year&#39;</span><span class="p">,</span> <span class="s1">&#39;2 years&#39;</span><span class="p">,</span> <span class="s1">&#39;3 years&#39;</span><span class="p">])</span>
+
 
     <span class="c1">#ax3.set_ylim(bottom = 0, top=3.1)</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
 
 <span class="k">def</span> <span class="nf">plot_selected_ratio_history_sup1</span><span class="p">(</span><span class="n">selected_list</span><span class="p">,</span> <span class="n">selected_ratio_dict</span><span class="p">,</span> <span class="n">history_fluence</span><span class="p">,</span> <span class="n">batch_break_indexes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
@@ -1612,8 +1764,18 @@
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ratio_name_list</span><span class="p">)):</span>
         <span class="n">ratio_name</span> <span class="o">=</span> <span class="n">ratio_name_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="n">ratio</span> <span class="o">=</span> <span class="n">selected_ratio_dict</span><span class="p">[</span><span class="n">ratio_name</span><span class="p">]</span>
-        <span class="n">ratio_sup1</span> <span class="o">=</span> <span class="n">convert_ratio_to_sup1</span><span class="p">(</span><span class="n">ratio</span><span class="p">)</span>
+        <span class="n">ratio_sup1</span> <span class="o">=</span> <span class="n">convert_ratio_to_sup1</span><span class="p">(</span><span class="n">ratio</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">switch_indexes</span> <span class="o">=</span> <span class="n">convert_ratio_to_sup1</span><span class="p">(</span><span class="n">ratio</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">switch_x</span>  <span class="o">=</span> <span class="p">[</span><span class="n">history_fluence</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">switch_indexes</span><span class="p">]</span>
+        <span class="n">switch_y</span> <span class="o">=</span> <span class="p">[</span><span class="n">ratio_sup1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">switch_indexes</span><span class="p">]</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history_fluence</span><span class="p">,</span> <span class="n">ratio_sup1</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">ratio_name</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="n">ratio_name</span><span class="p">,</span> <span class="s1">&#39;switch&#39;</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;ratio&#39;</span><span class="p">,</span> <span class="n">ratio</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="n">switch_indexes</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="n">switch_x</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="n">switch_y</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">switch_x</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span> 
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">switch_x</span><span class="p">,</span> <span class="n">switch_y</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
 
     <span class="c1">#Fluence at each batch break point</span>
     <span class="n">batch_break_fluence</span> <span class="o">=</span> <span class="p">[</span><span class="n">history_fluence</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">batch_break_indexes</span><span class="p">]</span>
@@ -1635,7 +1797,7 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">&#39;sci&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="n">scilimits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;dimgray&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bottom</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bottom</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">})</span>
 
     <span class="c1"># Put these freaking Shutdown dates on the top</span>
@@ -1651,12 +1813,21 @@
 
 <span class="k">def</span> <span class="nf">convert_ratio_to_sup1</span><span class="p">(</span><span class="n">ratio</span><span class="p">):</span>
 
+    <span class="n">indexes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">converted_ratio</span> <span class="o">=</span> <span class="n">ratio</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ratio</span><span class="p">)):</span>
         <span class="n">ratio_value</span> <span class="o">=</span> <span class="n">ratio</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">ratio_value</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">ratio</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">ratio_value</span>
+            <span class="n">converted_ratio</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">ratio_value</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ratio_value</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">ratio</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">indexes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">ratio_value</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">ratio</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">indexes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">ratio</span>
+
+    <span class="k">return</span> <span class="n">converted_ratio</span><span class="p">,</span> <span class="n">indexes</span>
 
 <span class="k">def</span> <span class="nf">plot_ng_chain_densities_history</span><span class="p">(</span><span class="n">chain</span><span class="p">,</span> <span class="n">history_matrix</span><span class="p">,</span> <span class="n">history_fluence</span><span class="p">,</span> <span class="n">different_axes</span><span class="p">):</span>
 
@@ -1916,6 +2087,10 @@
             <span class="n">tot_pu</span> <span class="o">+=</span> <span class="n">mass_pu_prod_history_matrix</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
         <span class="n">tot_pu_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tot_pu</span><span class="p">)</span>
 
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;tot_pu_seq&#39;</span><span class="p">,</span><span class="n">tot_pu_seq</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;fluence_seq&#39;</span><span class="p">,</span><span class="n">concatenate_history_fluence</span><span class="p">)</span>
+    <span class="n">quit</span><span class="p">()</span>
+
     <span class="n">f</span><span class="p">,</span> <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
     <span class="c1"># for i in range(len(Pu_isotopes)):</span>
     <span class="c1">#   ax.plot(concatenate_history_fluence, mass_pu_prod_history_matrix[i], label = Pu_isotopes[i])</span>
@@ -1974,6 +2149,26 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># To force scientific notation in each tick</span>
+<span class="k">class</span> <span class="nc">MathTextSciFormatter</span><span class="p">(</span><span class="n">mticker</span><span class="o">.</span><span class="n">Formatter</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%1.2e</span><span class="s2">&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fmt</span> <span class="o">=</span> <span class="n">fmt</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fmt</span> <span class="o">%</span> <span class="n">x</span>
+        <span class="n">decimal_point</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
+        <span class="n">positive_sign</span> <span class="o">=</span> <span class="s1">&#39;+&#39;</span>
+        <span class="n">tup</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;e&#39;</span><span class="p">)</span>
+        <span class="n">significand</span> <span class="o">=</span> <span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="n">decimal_point</span><span class="p">)</span>
+        <span class="n">sign</span> <span class="o">=</span> <span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">positive_sign</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">exponent</span> <span class="o">=</span> <span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">exponent</span><span class="p">:</span>
+            <span class="n">exponent</span> <span class="o">=</span> <span class="s1">&#39;10^{</span><span class="si">%s%s</span><span class="s1">}&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sign</span><span class="p">,</span> <span class="n">exponent</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">significand</span> <span class="ow">and</span> <span class="n">exponent</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span>  <span class="sa">r</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">{\times}</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">significand</span><span class="p">,</span> <span class="n">exponent</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span>  <span class="sa">r</span><span class="s1">&#39;</span><span class="si">%s%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">significand</span><span class="p">,</span> <span class="n">exponent</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;$</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 
 <span class="c1">#N1972367430</span>
 
