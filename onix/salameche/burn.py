@@ -200,6 +200,8 @@ def burn_microstep(bucell, B, C, N, s, ss, ssn, mode, reac_rank):
 
     # Generate the allreacsdic for each nuclide
     if reac_rank == 'on':
+        # print ('pika')
+        # quit()
         bucell._set_allreacs_dic(s, ss, ssn)
 
     return N

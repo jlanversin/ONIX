@@ -1,4 +1,4 @@
-name: sphinx_test3
+name: sphinx_test6
 channels:
   - conda-forge
   - defaults
@@ -128,5 +128,5 @@ dependencies:
     - pyzmq==19.0.2
     - sphinx-rtd-theme==0.5.0
     - webencodings==0.5.1
-prefix: /home/julien/anaconda3/envs/sphinx_test3
+prefix: /home/julien/anaconda3/envs/sphinx_test6
 

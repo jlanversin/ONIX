@@ -187,8 +187,9 @@ def plot_bucell_nuclide_network(nuclide, step, path, cell, threshold):
     pos[nuclide] = np.array([0, 0])
     nx.draw_networkx_edge_labels(G,pos,edge_labels=edge_labels)
     nx.draw_networkx_labels(G,pos)
-    nx.draw_networkx_edges(G,pos, edges = edges)
-    nx.draw(G,pos, node_size=4000, node_color = node_color, fontsize = 6)
+    #nx.draw_networkx_edges(G,pos, edges = edges)
+    nx.draw_networkx_edges(G,pos)
+    nx.draw(G,pos, node_size=4000, node_color = node_color, font_size = 6)
 
     plt.show()
 

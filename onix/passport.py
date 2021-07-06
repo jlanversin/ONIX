@@ -735,7 +735,7 @@ class Passport(object):
         return self._destruction_dic
 
     @destruction_dic.setter
-    def _destruction_dic(self, destruction_dic):
+    def destruction_dic(self, destruction_dic):
         """Sets a dictionnary of all the destruction terms of the nuclide"""
         self._destruction_dic = destruction_dic
 
@@ -748,7 +748,7 @@ class Passport(object):
         return self._creation_dic
 
     @creation_dic.setter
-    def _creation_dic(self, creation_dic):
+    def creation_dic(self, creation_dic):
 
         self._creation_dic = creation_dic
 
@@ -758,7 +758,7 @@ class Passport(object):
         return self._allreacs_dic
 
     @allreacs_dic.setter
-    def _allreacs_dic(self, allreacs_dic):
+    def allreacs_dic(self, allreacs_dic):
 
         self._allreacs_dic = allreacs_dic
 

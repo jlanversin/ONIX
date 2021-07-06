@@ -192,6 +192,9 @@ class Couple_openmc(object):
     def reac_rank_on(self):
         """Calling this function will tell ONIX to produce reaction rates ranking and print them for each BUCells
         By default ONIX does not produce reaction rates ranking as it takes a lot of memory.
+
+        Important: In the current version of ONIX, this function needs to be called before couple.import_openmc() is called other
+        wise the function will not work.
         """
         self._reac_rank = 'on'
 
@@ -211,7 +214,7 @@ class Couple_openmc(object):
         bucell_list: list of openmc.Cell or list of tuples
             Defines the list of cells that should be depleted by ONIX.
 
-            For example, the user can set *bucell_list = [(fuel_cell, ['U-235', 'Pu-239'], (cladding_cell, ['Al-27'])]*
+            For example, the user can set *bucell_list = [(fuel_cell, ['U-235', 'Pu-239']), (cladding_cell, ['Al-27'])]*
         """
         self.selected_bucells_name_list = []
         self.selected_bucells_nucl_list_dict = {}
@@ -1080,7 +1083,7 @@ class Couple_openmc(object):
                 self.inactive = int(child.text)
 
         settings.output = {'tallies': False}
-        settings.temperature = {'method': 'interpolation'}
+        #settings.temperature = {'method': 'interpolation'}
 
         ll = self.bounding_box[0]
         ur = self.bounding_box[1]

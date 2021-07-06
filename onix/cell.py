@@ -1361,7 +1361,7 @@ class Cell(object):
         # because time to bu requires total power but total power is only known once you have the subseq
         # evolution of all cells
         system_bu_subseq = sequence.system_bu_subseq_mat[s]
-        
+
         bucell_bu_subseq = sequence.bucell_bu_subseq_mat[s]
         flux_subseq = sequence.flux_subseq_mat[s]
         pow_dens_subseq = sequence.pow_dens_subseq_mat[s]
