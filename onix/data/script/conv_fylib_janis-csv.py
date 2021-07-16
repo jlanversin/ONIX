@@ -1,7 +1,7 @@
-# Convert the jeff3.3 fission yield file into an OpenBU fy file
-from openbu.passport import Passport
-import openbu.utils as utils
-import openbu.data as data
+
+from onix.passport import Passport
+import onix.utils as utils
+import onix.data as data
 
 def is_number(s):
     try:
@@ -63,7 +63,10 @@ fathers_name = ['Th227',
 'Es254',
 'Fm255']
 
-fathers_zamid = [utils.name_to_zamid(utils.openmc_name_to_openbu_name(x)) for x in fathers_name]
+father_name_fast = ['Th232','Pa231','U233','U233','U234','U235','U236','U237','U238','Np237','Np238','Pu238','Pu239','Pu240','Pu241','Pu242','Am241','Am243','Cm242','Cm243','Cm244','Cm246','Cm248'
+]
+
+fathers_zamid = [utils.name_to_zamid(utils.openmc_name_to_onix_name(x)) for x in father_name_fast]
 reduced_nucl_set = data.reduced_nucl_set
 
 
@@ -73,12 +76,18 @@ reduced_nucl_set = data.reduced_nucl_set
 # obu_name_list = utils.mc_namelist_to_bu_namelist(fathers_name)
 # zamid_list = utils.name_list_to_zamid_list(obu_name_list)
 
-path_to_jeff33_lib = '/home/julien/Open-Burnup.dev/openbu/data/other_libs/ENDFVIII/ENDFVIII_ind_fy_noheader.csv'
+#path_to_jeff33_lib = '/home/julien/Open-Burnup.dev/openbu/data/other_libs/ENDFVIII/ENDFVIII_ind_fy_noheader.csv'
+path_to_ENDF8_fast = '/home/julien/ONIX/ONIX/onix/data/other_libs/ENDFVIII/original/ENDFVIII_ind_fy_fast.csv'
 
-jeff33_lib = open(path_to_jeff33_lib)
-jeff33_line = jeff33_lib.readlines()
+# jeff33_lib = open(path_to_jeff33_lib)
+# jeff33_line = jeff33_lib.readlines()
 
-obu_fy_lib = open('/home/julien/Open-Burnup.dev/openbu/data/other_libs/ENDFVIII/obu_endfVIII_fy_lib', 'w')
+ENDF8_fast_lib = open(path_to_ENDF8_fast)
+ENDF8_fast_line = ENDF8_fast_lib.readlines()
+
+#obu_fy_lib = open('/home/julien/Open-Burnup.dev/openbu/data/other_libs/ENDFVIII/obu_endfVIII_fy_lib', 'w')
+onix_fy_fast_lib = open('/home/julien/ONIX/ONIX/onix/data/other_libs/ENDFVIII/original/onix_endfVIII_fy_fast_lib', 'w')
+
 
 #fathers_zamid = ['902320','922330','922350','922380', '942390','942410','962450','982490']
 #fathers_name = ['Th232', 'U233', 'U234', 'U235', 'U236', 'U238', 'Np237', 'Np238', 'Pu238', 'Pu239', 'Pu240', 'Pu241', 'Pu242', 'Am241', 'Am243', 'Cm243', 'Cm244', 'Cm245']
@@ -89,8 +98,8 @@ fp_data = []
 
 
 fp_index = 0
-for i in range(len(jeff33_line)):
-    line = jeff33_line[i]
+for i in range(len(ENDF8_fast_line)):
+    line = ENDF8_fast_line[i]
     #fp_data.append([])
     line = line.split(';')
     new_line = ['0.0' if x in ['', '\n'] else x for x in line]
@@ -111,7 +120,7 @@ fp_txt += '=====================================================================
 for i in range(len(fp_data)):
     print (i)
     name = fp_data[i][0]
-    obu_name = utils.openmc_name_to_openbu_name(name)
+    obu_name = utils.openmc_name_to_onix_name(name)
     print (fp_data[i])
     zamid = utils.name_to_zamid(obu_name)
     # if zamid not in reduced_nucl_set:
@@ -134,4 +143,4 @@ for i in range(len(fp_data)):
         fp_txt += '\n'
 
 
-obu_fy_lib.write(fp_txt)
+onix_fy_fast_lib.write(fp_txt)
