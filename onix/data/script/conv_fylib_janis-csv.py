@@ -63,7 +63,8 @@ fathers_name = ['Th227',
 'Es254',
 'Fm255']
 
-father_name_fast = ['Th232','Pa231','U233','U233','U234','U235','U236','U237','U238','Np237','Np238','Pu238','Pu239','Pu240','Pu241','Pu242','Am241','Am243','Cm242','Cm243','Cm244','Cm246','Cm248'
+
+father_name_fast = ['Th232','Pa231','U233','U234','U235','U236','U237','U238','Np237','Np238','Pu238','Pu239','Pu240','Pu241','Pu242','Am241','Am243','Cm242','Cm243','Cm244','Cm246','Cm248'
 ]
 
 fathers_zamid = [utils.name_to_zamid(utils.openmc_name_to_onix_name(x)) for x in father_name_fast]
@@ -86,7 +87,7 @@ ENDF8_fast_lib = open(path_to_ENDF8_fast)
 ENDF8_fast_line = ENDF8_fast_lib.readlines()
 
 #obu_fy_lib = open('/home/julien/Open-Burnup.dev/openbu/data/other_libs/ENDFVIII/obu_endfVIII_fy_lib', 'w')
-onix_fy_fast_lib = open('/home/julien/ONIX/ONIX/onix/data/other_libs/ENDFVIII/original/onix_endfVIII_fy_fast_lib', 'w')
+onix_fy_fast_lib = open('/home/julien/ONIX/ONIX/onix/data/other_libs/ENDFVIII/original/onix_endfVIII_fy_fast_lib2', 'w')
 
 
 #fathers_zamid = ['902320','922330','922350','922380', '942390','942410','962450','982490']
