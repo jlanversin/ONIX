@@ -126,6 +126,9 @@ class Couple_openmc(object):
         # By default, ONIX does not compute reactions rates ranking (it takes a lot of memory)
         self._reac_rank = 'off'
 
+        # By default tolerance value is set to 500 K for treating intermediate temperatures.
+        self._tolerance = 500.0
+
         # Old way of defaulting MC_input_path to cwd
         # if args:
         #   self._MC_input_path = arg[0]
@@ -351,6 +354,16 @@ class Couple_openmc(object):
         """
         self._bounding_box = [ll, ur]
 
+    @property
+    def tolerance(self):
+        return self._tolerance
+
+    def set_tolerance(self, tolerance):
+        """For treating intermediate temperatures,'tolerance' indicates
+        a range of temperature within which cross sections may be used.
+        """
+        self._tolerance = tolerance
+
     # def _set_material_nuclides(self, cell):
 
     #   cell_id = cell.id
@@ -428,6 +441,7 @@ class Couple_openmc(object):
 
         settings = openmc.Settings()
         settings.volume_calculations = [vol1]
+        settings.temperature = {'method':'nearest', 'tolerance': self.tolerance}
         settings.run_mode='volume'
         settings.export_to_xml(path = pre_run_path + '/settings.xml')
 
@@ -1083,7 +1097,7 @@ class Couple_openmc(object):
                 self.inactive = int(child.text)
 
         settings.output = {'tallies': False}
-        #settings.temperature = {'method': 'interpolation'}
+        settings.temperature = {'method':'nearest', 'tolerance': self.tolerance}
 
         ll = self.bounding_box[0]
         ur = self.bounding_box[1]
