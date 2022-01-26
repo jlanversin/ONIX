@@ -1084,6 +1084,7 @@ class Couple_openmc(object):
         tree = ET.parse(file_path)
         root = tree.getroot()
         settings = openmc.Settings()
+        source = None
 
         for child in root:
             if child.tag == 'particles':
