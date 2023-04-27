@@ -908,7 +908,8 @@ class Couple_openmc(object):
                 onix_nucl = utils.openmc_name_to_onix_name(nucl)
                 # if nucl is one of the initial non-zero initial nuclide, pass the density
                 if nucl in init_nucl:
-                    onix_dens_dict[onix_nucl] = openmc_dens_dict[nucl][1]
+                    # onix_dens_dict[onix_nucl] = openmc_dens_dict[nucl][1]
+                    onix_dens_dict[onix_nucl] = openmc_dens_dict[nucl] # Changed in openmc version 0.13.1: The values in the dictionary created from material.get_nuclide_atom_densities() were changed from a tuple containing the nuclide name and the density to just the density.
                 # if nucl is not one of the non-zero initial nuclide, set densiy to zero
                 else:
                     onix_dens_dict[onix_nucl] = 0.0
