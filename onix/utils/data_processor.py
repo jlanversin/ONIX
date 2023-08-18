@@ -1328,7 +1328,7 @@ def read_dens_nucl(path, cell):
     nucl_zamid_list = []
     for line in lines[7:]:
         line = line.split()
-        nucl_zamid_list.append(line[0])
+        nucl_zamid_list.append(line[1])
 
     dens_file.close()
 

@@ -279,7 +279,6 @@ def zamid_to_name(zamid):
         z-a-m id of a nuclide
     """
     dic = d.nuc_name_dic
-
     if len(zamid) == 5:
         nz = int(zamid[0:1])
         na = int(zamid[1:4])
