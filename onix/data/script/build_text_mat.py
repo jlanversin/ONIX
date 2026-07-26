@@ -109,13 +109,13 @@ for i in range(len(passlist)):
     zamid = nuc_pass.nuc_zzaaam
     FAM = nuc_pass.check_FAM()
     if FAM == 'FP' and zamid in xs_nucl:
-    	# I consder FP as z<89 but there are non FP for z<89. Since I don't want to follow ORIGEN classification of
-    	# FP, I use a try statement
-    	try:
+        # I consder FP as z<89 but there are non FP for z<89. Since I don't want to follow ORIGEN classification of
+        # FP, I use a try statement
+        try:
             fy = d.default_fy_lib[zamid]
             nuc_pass.set_fy(fy)
         except KeyError:
-        	pass
+            pass
 #pass_decay(passlist)
 
 # U5_pointer = pointer_dic['922350']
@@ -197,6 +197,5 @@ for child in passlist:
 
 C = open('Ctxt', 'w')
 C.write(Ctxt)
-
 
 

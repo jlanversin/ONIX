@@ -1,4 +1,6 @@
+from . import compute
 from . import couple
+from onix.compute import *
 from onix.passport import *
 from onix.sequence import *
 from onix.cell import *

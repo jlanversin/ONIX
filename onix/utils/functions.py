@@ -143,10 +143,7 @@ def is_list_redundant(l):
     l: List
         List to check
     """
-    result = False
-    l_set = set(l)
-    if len(l) > len(l_set):
-        result = True
+    return len(l) > len(set(l))
 
 def get_list_redundant_elt(l):
 
@@ -159,9 +156,11 @@ def get_list_redundant_elt(l):
     """
 
     count_elt = []
+    redundant_elt = []
     for elt in l:
         if elt in count_elt:
-            redundant_elt.append(elt)
+            if elt not in redundant_elt:
+                redundant_elt.append(elt)
         else:
             count_elt.append(elt)
 

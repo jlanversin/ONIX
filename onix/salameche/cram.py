@@ -1,7 +1,8 @@
 """Compute the solution of the matricial depletion equation using the CRAM method"""
-import numpy as np
 import warnings
 import time
+
+import onix.compute as compute
 
 def CRAM16(At,N_0):
     """CRAM uses a Chebishev Rational Approximation Method of order 16 to compute the solution of the matricial depletion equation.
@@ -18,45 +19,50 @@ def CRAM16(At,N_0):
     t0 = time.time()
 
     lN = len(N_0)
+    xp = compute.get_array_module()
 
-    theta = np.array([
-    -1.0843917078696988026e1 +1.9277446167181652284e1j,
-    -5.2649713434426468895 +1.6220221473167927305e1j,
-    +5.9481522689511774808 +3.5874573620183222829j,
-    +3.5091036084149180974 +8.4361989858843750826j,
-    +6.4161776990994341923 +1.1941223933701386874j,
-    +1.4193758971856659786 +1.0925363484496722585e1j,
-    +4.9931747377179963991 +5.9968817136039422260j,
-    -1.4139284624888862114 +1.3497725698892745389e1j], dtype = np.complex256)
+    with compute.backend_device():
+        At_backend = compute.asarray(At)
+        N_0_backend = compute.asarray(N_0)
 
-    alpha_0 = np.complex256(2.1248537104952237488e-16 + 0.0j) 
+        theta = xp.array([
+        -1.0843917078696988026e1 +1.9277446167181652284e1j,
+        -5.2649713434426468895 +1.6220221473167927305e1j,
+        +5.9481522689511774808 +3.5874573620183222829j,
+        +3.5091036084149180974 +8.4361989858843750826j,
+        +6.4161776990994341923 +1.1941223933701386874j,
+        +1.4193758971856659786 +1.0925363484496722585e1j,
+        +4.9931747377179963991 +5.9968817136039422260j,
+        -1.4139284624888862114 +1.3497725698892745389e1j], dtype=xp.complex128)
 
-    alpha = np.array([
-    -5.0901521865224915650e-7 -2.4220017652852287970e-5j,
-    +2.1151742182466030907e-4 +4.3892969647380673918e-3j,
-    +1.1339775178483930527e2 +1.0194721704215856450e2j,
-    +1.5059585270023467528e1 -5.7514052776421819979j,
-    -6.4500878025539646595e1 -2.2459440762652096056e2j,
-    -1.4793007113557999718 +1.7686588323782937906j,
-    -6.2518392463207918892e1 -1.1190391094283228480e1j,
-    +4.1023136835410021273e-2 -1.5743466173455468191e-1j], dtype = np.complex256)
+        alpha_0 = xp.complex128(2.1248537104952237488e-16 + 0.0j)
 
-    l = len(theta)
-    N = N_0*0
-    _N = np.zeros((lN),dtype=np.complex128)
+        alpha = xp.array([
+        -5.0901521865224915650e-7 -2.4220017652852287970e-5j,
+        +2.1151742182466030907e-4 +4.3892969647380673918e-3j,
+        +1.1339775178483930527e2 +1.0194721704215856450e2j,
+        +1.5059585270023467528e1 -5.7514052776421819979j,
+        -6.4500878025539646595e1 -2.2459440762652096056e2j,
+        -1.4793007113557999718 +1.7686588323782937906j,
+        -6.2518392463207918892e1 -1.1190391094283228480e1j,
+        +4.1023136835410021273e-2 -1.5743466173455468191e-1j], dtype=xp.complex128)
 
-    for i in range(l):
-        term1 = At - theta[i]*np.identity(np.shape(At)[0])
-        term2 = alpha[i]*N_0
-        _N += np.linalg.solve(term1,term2)
-        
-    N = 2*_N.real
-    N = N + alpha_0*N_0
-    # For some reason here N is still complex and not only real
+        l = len(theta)
+        eye = xp.identity(At_backend.shape[0], dtype=xp.complex128)
+        _N = xp.zeros((lN), dtype=xp.complex128)
+
+        for i in range(l):
+            term1 = At_backend - theta[i]*eye
+            term2 = alpha[i]*N_0_backend
+            _N += xp.linalg.solve(term1, term2)
+
+        N = 2*_N.real
+        N = N + alpha_0*N_0_backend
+        compute.synchronize()
 
     print('CRAM took:{} s'.format(time.time() - t0))
 
-    return N.real
+    return compute.to_numpy(N.real)
 
 # CRAM is yielding non zero values for nuclides that should be at zero because no one is producing them
 # This algorithm check which nuclide are in this situation and set their density to zero
@@ -161,8 +167,6 @@ def CRAM_density_check(bucell, N):
 
     print(('There are {} negative'.format(negative_count)))
     print(('There are {} too small'.format(small_count)))
-
-
 
 
 

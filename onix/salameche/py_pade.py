@@ -1,7 +1,14 @@
-from scipy import linalg
+import onix.compute as compute
 
 def pade(At, N):
 
-	expAt = linalg.expm(At)
+	linalg = compute.get_expm_module()
 
-	return expAt.dot(N)
+	with compute.backend_device():
+		At_backend = compute.asarray(At)
+		N_backend = compute.asarray(N)
+		expAt = linalg.expm(At_backend)
+		result = expAt.dot(N_backend)
+		compute.synchronize()
+
+	return compute.to_numpy(result)

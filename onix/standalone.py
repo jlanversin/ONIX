@@ -10,6 +10,7 @@ import time
 
 import openmc
 import openmc.mgxs as mgxs
+import onix.compute as compute
 from onix.cell import Cell
 from onix.system import System
 from onix import salameche
@@ -62,6 +63,15 @@ class Stand_alone(object):
 		self.sequence = sequence
 		system = self.system
 		system.set_sequence(sequence, mode = 'stand alone')
+
+	@property
+	def compute_backend(self):
+		"""Returns the active numerical backend."""
+		return compute.get_compute_backend()
+
+	def set_compute_backend(self, backend='cpu', device_id=0):
+		"""Sets the numerical backend used for depletion solves."""
+		return self.system.set_compute_backend(backend, device_id=device_id)
 
 	def set_decay_lib(self, decay_lib_path):
 		"""Sets a decay library chosen by the user that will be used in the simulation
@@ -188,6 +198,7 @@ class Stand_alone(object):
 		At the end of the simulation, burn will print various information on the system in the output_summary folder
 		 """
 		start_time = time.time()
+		print ('\n\n\n----  Compute backend: {}  ----\n'.format(compute.describe_compute_backend()))
 
 		# If no decay libs and fy libs have been set, set default libs
 		if self._decay_lib_set == 'no':

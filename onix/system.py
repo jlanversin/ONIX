@@ -1,4 +1,5 @@
 import onix.utils as utils
+import onix.compute as compute
 from . import salameche
 import os
 
@@ -111,12 +112,23 @@ class System(object):
     def reac_rank(self):
 
         return self._reac_rank
+
+    @property
+    def compute_backend(self):
+        """Returns the active numerical backend."""
+
+        return compute.get_compute_backend()
     
     def reac_rank_on(self):
         """Calling this method will tell ONIX to produce production and destrubtion reaction rates ranking for each nuclide and print the data for each BUCells.
         By default ONIX does not produce reaction rates ranking as it takes a lot of memory.
         """
         self._reac_rank = 'on'
+
+    def set_compute_backend(self, backend='cpu', device_id=0):
+        """Sets the numerical backend used for depletion solves."""
+
+        return compute.set_compute_backend(backend, device_id=device_id)
 
     @property
     def total_vol(self):
@@ -401,7 +413,6 @@ class System(object):
 
         summary_path = self._output_summary_path
         file_name = summary_path + '/kinf'
-        write_file = open(file_name, 'w')
         sequence = self.sequence
         time_seq = sequence.time_seq
         system_bu_seq = sequence.system_bu_seq
@@ -435,15 +446,14 @@ class System(object):
         for s in range(steps_number):
             txt += '{:<13.5E}'.format(kinf_seq[s+1].s)
 
-        write_file.write(txt)
-        write_file.close()
+        with open(file_name, 'w', encoding='utf-8') as write_file:
+            write_file.write(txt)
 
 
     def _print_summary_param(self):
 
         summary_path = self._output_summary_path
         file_name = summary_path + '/system_parameters'
-        write_file = open(file_name, 'w')
         txt = 'System Volume [cm³] = {}\n'.format(self.total_vol)
         txt += 'System IHM [g] = {}\n\n'.format(self.get_tot_ihm())
         for bucell_id in self.bucell_dict:
@@ -451,8 +461,8 @@ class System(object):
             txt += 'BuCell {}\n'.format(bucell.name)
             txt += 'Volume [cm³] = {}\n'.format(bucell.vol)
             txt += 'IHM [g] = {}\n\n'.format(bucell.ihm)
-        write_file.write(txt)
-        write_file.close()
+        with open(file_name, 'w', encoding='utf-8') as write_file:
+            write_file.write(txt)
 
     def _copy_cell_folders_to_step_folder(self, s):
 

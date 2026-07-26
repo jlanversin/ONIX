@@ -11,6 +11,7 @@ from copy import deepcopy
 
 import openmc
 import openmc.mgxs as mgxs
+import onix.compute as compute
 from onix.cell import Cell
 from onix.system import System
 from onix import salameche
@@ -191,6 +192,12 @@ class Couple_openmc(object):
     def reac_rank(self):
 
         return self._reac_rank
+
+    @property
+    def compute_backend(self):
+        """Returns the active numerical backend."""
+
+        return compute.get_compute_backend()
     
     def reac_rank_on(self):
         """Calling this function will tell ONIX to produce reaction rates ranking and print them for each BUCells
@@ -200,6 +207,14 @@ class Couple_openmc(object):
         wise the function will not work.
         """
         self._reac_rank = 'on'
+
+    def set_compute_backend(self, backend='cpu', device_id=0):
+        """Sets the numerical backend used for depletion solves."""
+
+        if hasattr(self, '_system'):
+            return self.system.set_compute_backend(backend, device_id=device_id)
+
+        return compute.set_compute_backend(backend, device_id=device_id)
 
     def select_bucells(self, bucell_list):
         """Selects the cells from the OpenMC input that should be depleted.
@@ -231,27 +246,48 @@ class Couple_openmc(object):
             else:
                 self.selected_bucells_name_list.append(arg.name)
 
-    def _get_nucl_to_be_tallied(self, bucell):
+    @staticmethod
+    def _dedupe_preserve_order(values):
+        return list(dict.fromkeys(values))
 
-        # If the user has provided a list of nuclide to be tallied
-        if bucell.name in self.selected_bucells_nucl_list_dict:
-            nucl_list_input = self.selected_bucells_nucl_list_dict[bucell.name]
+    def _normalize_tally_nuclide_name(self, nuclide_name):
+        nuclide_name = '{}'.format(nuclide_name)
+        if utils.is_zamid(nuclide_name):
+            return utils.zamid_to_name(nuclide_name)
+        if utils.is_name(nuclide_name):
+            return nuclide_name
+
+        return utils.openmc_name_to_onix_name(nuclide_name)
+
+    def _normalize_tally_nuclide_list(self, nuclide_list):
+        normalized_nuclides = []
+        for nuclide_name in nuclide_list:
+            normalized_nuclides.append(self._normalize_tally_nuclide_name(nuclide_name))
+
+        return self._dedupe_preserve_order(normalized_nuclides)
+
+    def _get_tally_nuclides_for_cell(self, cell_name, init_nucl):
+        init_nucl = self._normalize_tally_nuclide_list(init_nucl)
+        mc_xs_nucl_list = self._normalize_tally_nuclide_list(self.MC_XS_nucl_list)
+        selected_bucells_nucl_list_dict = self.selected_bucells_nucl_list_dict or {}
+
+        if cell_name in selected_bucells_nucl_list_dict:
+            nucl_list_input = selected_bucells_nucl_list_dict[cell_name]
             if nucl_list_input == 'initial nuclides':
-                nucl_list = bucell.init_nucl
+                nucl_list = init_nucl
             elif nucl_list_input == 'NAX':
                 NAX_nucl_list_name = utils.zamid_list_to_name_list(data.NAX_nucl_list)
-                NAX_nucl_list_name_new_format = utils.bu_namelist_to_mc_namelist(NAX_nucl_list_name)
-                # I add init_nucl because I believe it is important for init nuclides to be tallied
-                # Their density is usually high enough that their change can influence spectrum etc...
-                nucl_list = [x for x in NAX_nucl_list_name_new_format if x in self.MC_XS_nucl_list] + bucell.init_nucl
-                # Here we remove the potential duplicates
-                nucl_list = list(dict.fromkeys(nucl_list))
+                nucl_list = [x for x in NAX_nucl_list_name if x in mc_xs_nucl_list] + init_nucl
             else:
-                nucl_list = nucl_list_input
+                nucl_list = self._normalize_tally_nuclide_list(nucl_list_input)
         else:
-            nucl_list = self.MC_XS_nucl_list
+            nucl_list = mc_xs_nucl_list
 
-        return nucl_list
+        return self._dedupe_preserve_order(nucl_list)
+
+    def _get_nucl_to_be_tallied(self, bucell):
+
+        return self._get_tally_nuclides_for_cell(bucell.name, bucell.init_nucl)
 
     @property
     def system(self):
@@ -672,36 +708,17 @@ class Couple_openmc(object):
         material = deepcopy(material_dict[list(material_dict.keys())[0]])   
 
         init_nucl = material.get_nuclides()
+        init_nucl_onix = self._normalize_tally_nuclide_list(init_nucl)
         cell_name = cell.name
         mat_name = material.name
-        # Not sure if this is necessary
-        if self.selected_bucells_nucl_list_dict != {}:
-            if cell_name in self.selected_bucells_nucl_list_dict:
-                nucl_list_input = self.selected_bucells_nucl_list_dict[cell_name]
-                if nucl_list_input == 'initial nuclides':
-                    nucl_list = init_nucl
-                elif nucl_list_input == 'NAX':
-                    NAX_nucl_list_name = utils.zamid_list_to_name_list(data.NAX_nucl_list)
-                    NAX_nucl_list_name_new_format = utils.bu_namelist_to_mc_namelist(NAX_nucl_list_name)
-                    # I add init_nucl because I believe it is important for init nuclides to be tallied
-                    # Their density is usually high enough that their change can influence spectrum etc...
-                    nucl_list = [x for x in NAX_nucl_list_name_new_format if x in self.MC_XS_nucl_list] + init_nucl
-                    # Here we remove the potential duplicates
-                    nucl_list = list(dict.fromkeys(nucl_list))
-                else:
-                     nucl_list = nucl_list_input
-            else:
-                nucl_list = self.MC_XS_nucl_list
-                #nucl_list = utils.bu_namelist_to_mc_namelist(nucl_list)
+        nucl_list = self._get_tally_nuclides_for_cell(cell_name, init_nucl)
 
-        else:
-            nucl_list = self.MC_XS_nucl_list
-
-        if not utils.is_lista_in_listb(init_nucl, nucl_list):
+        if not utils.is_lista_in_listb(init_nucl_onix, nucl_list):
             raise Initial_nuclides_not_in_nuclide_list('Some initial nuclides in cell {} material {} are not included in nucl_list'.format(cell_name, mat_name))
         for nucl in nucl_list:
-            if nucl not in init_nucl:
-                material.add_nuclide(nucl, self.zero_dens_1_atm)
+            openmc_nucl_name = utils.onix_name_to_openmc_name(nucl)
+            if openmc_nucl_name not in init_nucl:
+                material.add_nuclide(openmc_nucl_name, self.zero_dens_1_atm)
 
         # Material is rename 'cell name' + 'mat'
         # New material id is 'mat id' + 'cell id'
@@ -1526,7 +1543,7 @@ class Couple_openmc(object):
         bucell_dict = system.bucell_dict
         for bucell_id in bucell_dict:
             bucell = bucell_dict[bucell_id]
-            tally_nucl_list = utils.mc_namelist_to_bu_namelist(self._get_nucl_to_be_tallied(bucell))
+            tally_nucl_list = self._get_nucl_to_be_tallied(bucell)
             cell = summary.geometry.get_cells_by_name(bucell.name)[0]
             material_dict = cell.get_all_materials()
             material = material_dict[list(material_dict.keys())[0]]
@@ -1562,6 +1579,7 @@ class Couple_openmc(object):
         """
 
         start_time = time.time()
+        print ('\n\n\n----  Compute backend: {}  ----\n'.format(compute.describe_compute_backend()))
 
         # If no decay libs have been set, set default libs
         if self._decay_lib_set == 'no':
